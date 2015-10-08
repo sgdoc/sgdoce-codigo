@@ -1,0 +1,128 @@
+<?php $sqTratamento = NULL; ?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Interessado</h3>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-interessado-modal" method="post">
+            <fieldset>
+            <input class="" type="hidden" name="sqPessoaFuncao" id="sqPessoaFuncao"
+                   value="<?php echo \Core_Configuration::getSgdocePessoaFuncaoInteressado(); ?>" />
+            <div class="control-group">
+                <label class="control-label"><span class="required"
+                    title="Required field">*</span> Interessado</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="tpInterno" id="chekInterno" value="interno" >
+                        Interno
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="tpInterno" id="chekExterno" value="externo" >
+                        Externo
+                    </label>
+                        <input type="checkbox"
+                       id="anexo"
+                       name="anexo"
+                       class="hidden required"
+                       value="1"
+                       />
+                </div>
+            </div>
+            <div class="control-group tpInteressado">
+                <label class="control-label" for="select01"><span class="required"
+                    title="Required field">*</span> Tipo de Pessoa</label>
+                <div class="controls">
+                    <?php
+                    unset($this->tipoPessoa[3]);
+                    unset($this->tipoPessoa[4]);
+                    unset($this->tipoPessoa[6]);
+                    echo $this->ComboCustom('sqTipoPessoaInteressado', NULL, array('class' => 'input-xxlarge required'), $this->tipoPessoa); ?>
+                </div>
+            </div>
+            <div class="control-group divGeralEstrangeiro hide" >
+                <label class="control-label"><span class="required"
+                    title="Required field">*</span> Nacionalidade Brasileira?</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="TipoNacionalidade" id="pessoaBrasilieira" value="1" checked="checked">
+                        Sim
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name=TipoNacionalidade id="pessoaEstrangeira" value="3" >
+                        Não
+                    </label>
+                </div>
+            </div>
+            <div class="control-group divGeralNomeInteressado">
+                <label class="control-label" id="dvLabelNomeInteressado"></label>
+                <div class="controls">
+                    <div class="input-append dropdown">
+                    <?php
+                    echo $this->formText('sqPessoaInteressado','', array('class' => 'input-xxlarge','maxlength' => 60));
+                    ?>
+                    <button type="button" class="btn right divMultiplaPJInter" data-toggle="dropdown" title="Opções"><i class="icon-cog"></i></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#visualizarPJ" id="visualizarPJInter" data-toggle="modal" data-dismiss="modal">Visualizar</a></li>
+                        <li><a id="alterarPJInter" target="_blank">Alterar</a></li>
+                        <li><a href="/auxiliar/pessoa-juridica/create/form/form-interessado-modal/campoPessoa/sqPessoaInteressado/campoCnpj/nuCNPJInteressado" target="_blank">Cadastrar (PJ)</a></li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group divGeralNomeInteressadoInterna">
+                <label class="control-label" id="dvLabelNomeInteressadoInterna"></label>
+                <div class="controls">
+                    <?php
+                    echo $this->formText('sqPessoaInteressadoInterna','', array('class' => 'input-xxlarge','maxlength' => 60));
+                    ?>
+                </div>
+            </div>
+            <div class="control-group divGeralNomeInteressadoPF">
+                <label class="control-label" id="dvLabelNomeInteressadoPf"></label>
+                <div class="controls">
+                    <div class="input-append dropdown">
+                    <?php
+                    echo $this->formText('sqPessoaInteressadoPf','', array('class' => 'input-xxlarge','maxlength' => 60));
+                    ?>
+                    <button type="button" class="btn right divMultiplaPF" data-toggle="dropdown" title="Opções"><i class="icon-cog"></i></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#visualizarPF" id="visualizarPFInter" data-toggle="modal" data-dismiss="modal">Visualizar</a></li>
+                        <li><a id="alterarPFInter" target="_blank">Alterar</a></li>
+                        <li><a href="/auxiliar/pessoa-fisica/create/form/form-interessado-modal/campoPessoa/sqPessoaInteressadoPf/campoCpf/nuCPFInteressado" target="_blank">Cadastrar (PF)</a></li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group divGeralCPFInteressado">
+                <label class="control-label" id="dvLabelCPFInteressado">CPF</label>
+                <div class="controls">
+                    <input class="cpf" type="text" name="nuCPFInteressado" id="nuCPFInteressado"
+                        value="" maxlength="14" mask="cpf"/>
+                </div>
+            </div>
+            <div class="control-group divGeralCNPJInteressado">
+                <label class="control-label" id="dvLabelCNPJInteressado">CNPJ</label>
+                <div class="controls">
+                    <input class="cnpj" type="text" name="nuCNPJInteressado" id="nuCNPJInteressado"
+                        value="" maxlength="18" mask="cnpj"/>
+                </div>
+            </div>
+            <div class="control-group divGeralPassaporteInteressado">
+                <label class="control-label" id="dvLabelPassaporteInteressado">Nº do Passaporte</label>
+                <div class="controls">
+                    <input type="text" name="nuPassaporteInteressado" id="nuPassaporteInteressado"
+                        value="" maxlength="60" mask="numeric"/>
+                </div>
+            </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirInteressado" id="btnConcluirInteressado" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarInteressado" data-dismiss="modal" title="Cancelar">Cancelar</a>
+</div>
+<script type="text/javascript" src="/js/app/artefato/minuta-eletronica/interessado.js"></script>
+<script type="text/javascript" src="/js/components/validation.js"></script>

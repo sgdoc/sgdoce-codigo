@@ -1,0 +1,61 @@
+<?php
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/sequnidorg/index.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/library/jquery.simpleautocomplete.js');
+echo $this->headScript();
+?>
+
+<h1>Pesquisar Sequencial de Unidade Organizacional</h1>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>" method="post" id="form-seq-unid-org">
+
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <fieldset>
+        <legend>Filtros</legend>
+
+        <div class="control-group">
+            <label class="control-label">* Unidade Organizacional</label>
+            <div class="controls">
+                <input class="span6 required" type="text" name="noPessoa" id="noPessoa" />
+            </div>
+        </div>
+        <div class="control-group hide" id="divNup">
+            <label class="control-label">Número Nup</label>
+            <div class="controls">
+                <input class="span6 required" type="text" id="nup" readonly="readonly" name="nup"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Ano</label>
+            <div class="controls">
+                <?php
+                    $anoAtual = date('Y');
+                    echo $this->ComboYear('nuAno',$anoAtual);
+                ?>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="icon-search icon-white"></i>
+                Pesquisar</button>
+        </div>
+
+    </fieldset>
+    <input type="hidden" name="gridLength" value="<?php echo $this->gridLength;?>" />
+</form>
+
+<!-- GRID -->
+<div class="control-group hidden">
+    <table id="table-grid-sequnidorg">
+        <thead>
+            <tr>
+                <th width="10%">Ano</th>
+                <th width="40%">Tipo de Documento</th>
+                <th width="40%">Sequencial</th>
+                <th width="10%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<!-- GRID -->

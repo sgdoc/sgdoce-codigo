@@ -1,0 +1,47 @@
+<script type="text/javascript" src="js/app/auxiliar/sequnidorg/index.js"></script>
+<script type="text/javascript" src="js/app/auxiliar/sequnidorg/form.js"></script>
+
+<h1>Alterar Sequencial de Unidade Organizacional </h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-manter-seq-unid-org">
+    <input type="hidden" name="sqSequencialArtefato" value="<?php echo $this->data->getSqSequencialArtefato();?>" />
+    <input type="hidden" name="sqTipoDocumento"      value="<?php echo $this->data->getSqTipoDocumento()->getSqTipoDocumento();?>" />
+    <input type="hidden" name="sqTipoArtefato"       value="<?php echo $this->data->getSqTipoArtefato()->getSqTipoArtefato();?>" />
+    <input type="hidden" name="sqUnidadeOrg"         value="<?php echo $this->data->getSqUnidadeOrg()->getSqUnidadeOrg();?>" />
+    <input type="hidden" name="sqPessoa"             value="<?php echo $this->data->getSqUnidadeOrg()->getSqUnidadeOrg();?>" />
+    <input type="hidden" name="gridLength"           value="<?php echo $this->gridLength;?>" />
+    <input type="hidden" name="coUorg" type="text" name="coUorg" />
+    <fieldset>
+        <br>
+            <div class="control-group">
+        <?php $desabilita = FALSE; ?>
+            <label class="control-label">* Tipo Documento</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoDocumento', $this->data->getSqTipoDocumento()->getSqTipoDocumento(), array('class'=>'span3 required' ,'disable'=>$desabilita), $this->items); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">* Sequencial</label>
+            <div class="controls">
+                <input type="hidden" id="nuSequencialHidden" name="nuSequencialHidden" value="<?php echo $this->data->getNuSequencial();?>"/>
+                <input class="required" type="text" name="nuSequencial" id="nuSequencial" maxlength="7" value="<?php echo $this->data->getNuSequencial();?>" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Ano</label>
+            <div class="controls">
+                <input class="required" type="text" name="nuAno" id="nuAno" readonly="readonly" value ="<?php echo $this->data->getNuAno(); ?>"/>
+            </div>
+        </div>
+
+        <div class="form-actions">
+                <button class="btn btn-primary">Salvar</button>
+                <a href="/auxiliar/sequnidorg/index/gridLength/<?php echo $this->gridLength;?>" class="btn" id="voltar">
+                <i class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+    </fieldset>
+</form>

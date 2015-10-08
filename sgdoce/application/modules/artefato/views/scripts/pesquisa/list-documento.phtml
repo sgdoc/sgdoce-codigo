@@ -1,0 +1,45 @@
+<?php
+
+$view = $this;
+$params = $this->params;
+
+$acao = function($row) use ($view, $params) {
+    $arrBtn = array();
+    if (!isset($params['noDelete'])) {
+        $arrBtn[] = $view->actionButton('Imagem', 'Documento.fnc.imagem', array($row['sqArtefato']), 'eye-open');
+        $arrBtn[] = $view->actionButton('Detalhes', 'Documento.fnc.detalhar', array($row['sqArtefato']), 'list-alt');
+    }
+    return $view->buttonGroup(join(' ', $arrBtn), count($arrBtn));
+};
+
+$movimentacao = function($row) {
+    $movimentacao_line = "";
+    if (mb_strlen($row['txMovimentacao'],'utf-8') > 50) {
+        $movimentacao_line = mb_substr($row['txMovimentacao'], 0, 50,'utf-8');        
+        return $movimentacao_line . " <a href='javascript:void(0);' title='{$row['txMovimentacao']}' class='tooltip_grid'>...</a>";
+    } else {
+        return $row['txMovimentacao'];
+    }
+};
+
+$dtArtefato = function($row) {
+    $zendDate = new \Zend_Date($row['dtArtefato']);
+    return $zendDate->get(\Zend_Date::DATE_MEDIUM);
+};
+
+$configArray = array('columns' => array(
+        0 => array('column' => 'nuDigital'),
+        1 => array('column' => 'txAssunto'),
+        2 => array('column' => 'nuArtefato'),
+        3 => array('column' => 'noTipoDocumento'),
+        4 => array('column' => 'noPessoaOrigem'),
+        5 => array('column' => $dtArtefato),
+        6 => array('column' => $movimentacao),
+        7 => array('column' => $acao)
+        ));
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data = $parse->parse($this->result);
+
+echo json_encode($data);

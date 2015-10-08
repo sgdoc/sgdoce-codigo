@@ -1,0 +1,203 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3 class="title-main">Alterar Documento</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div class="alert alert-error hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Campos de preenchimento obrigatório não foram preenchidos.
+        </div>
+
+        <form class="form-horizontal" id="form-documento-modal" action="/auxiliar/documento/upload-documento" method="post" enctype="multipart/form-data">
+            <?php
+                echo '<input type="hidden" name="sqPessoa" id="sqPessoa-modal" value="' . $this->sqPessoa . '" />';
+                echo '<input type="hidden" name="sqPessoaSgdoce" id="sqPessoaSgdoce-modal" value="' . $this->sqPessoaSgdoce . '" />';
+                echo '<input type="hidden" name="verificador" id="verificador" value="true" />'
+            ?>
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="tpDocumento" >* Tipo de Documento </label>
+                    <div class="controls">
+                        <?php
+                            echo $this->formHidden('sqTipoDocumento', $this->sqTipoDocumento);
+                            echo $this->ComboCustom('sqTipoDocumentoEdit', $this->sqTipoDocumento, array('disabled' => 'disabled'), $this->lista['sqTipoDocumento']);
+                        ?>
+                    </div>
+                </div>
+                <?php foreach ($this->lista['tipoDocumento'] as $tpDocumento) { ?>
+                    <?php foreach ($tpDocumento->getSqATributoTipoDocumento() as $atributoTpDocumento) { ?>
+                        <div class="control-group tipo-documento-<?php echo $tpDocumento->getSqTipoDocumento(); ?>">
+                            <label class="control-label">
+                                <?php
+                                $titulo = $atributoTpDocumento->getSqAtributoDocumento()->getNoAtributoDocumento();
+                                $titulo = ucwords($titulo);
+                                switch($tpDocumento->getSqTipoDocumento()){
+                                    case 2:
+                                        if ($atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento() == 1){
+                                            $titulo = 'N° do Documento ';
+                                        }
+                                        break;
+                                    case 4:
+                                        if ($atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento() == 1){
+                                            $titulo = 'N° do Documento ';
+                                        }
+                                        break;
+                                    case 5:
+                                        if ($atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento() == 1){
+                                            $titulo = 'N° do Registro ';
+                                        }
+                                        break;
+                                }
+                                echo $titulo;
+                                ?>
+                            </label>
+                            <div class="controls">
+                                <?php
+                                $nameRand = 'input_' . rand(0, 99999);
+                                $sqAtributoTipoDocumento = $atributoTpDocumento->getSqAtributoTipoDocumento();
+
+                                $class = array('class' => $tpDocumento->getSqTipoDocumento());
+
+                                foreach($this->arrDoc as $docPessoa) {
+                                    if(
+                                        $docPessoa->getSqAtributoTipoDocumento()->getSqTipoDocumento()->getSqTipoDocumento()
+                                        == $tpDocumento->getSqTipoDocumento()
+                                    ) {
+                                        if (
+                                            $docPessoa->getSqAtributoTipoDocumento()->getSqAtributoDocumento()->getSqAtributoDocumento()
+                                            == $atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento()
+                                        ) {
+                                            // IFs dentro do SWITCH são necessários por conta das regras de requisitos
+                                            // Se for do tipo 2 (título eleitoral) e atributoTipoDocumento igual a Data Expedição e Série
+                                            // Se for do tipo 4 (carteira de trabalho) e atributoTipoDocumento igual a UF
+                                            // Se for do tipo 5 (carteira de motorista) e atributoTipoDocumento igual a Registro
+                                            switch ($atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento()) {
+                                                case \Core_Configuration::getCorpAtributoDocumentoNumero():
+                                                    $attrs['class'] = 'span7 numeric required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['maxlength'] = 30;
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs);
+                                                    break;
+
+                                                case \Core_Configuration::getCorpAtributoDocumentoUf() :
+                                                    if(
+                                                        $tpDocumento->getSqTipoDocumento() == 4
+                                                        || $tpDocumento->getSqTipoDocumento() == 2
+                                                    ) {
+                                                        echo '<div class="hide hide-parent"></div>';
+
+                                                        break;
+                                                    }
+
+                                                    $attrs['class'] = 'required ' . $tpDocumento->getSqTipoDocumento();
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->comboCustom($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs, $this->lista['sqEstado']);
+                                                    break;
+
+                                                case \Core_Configuration::getCorpAtributoDocumentoPrimeiraHabilitacao():
+                                                case \Core_Configuration::getCorpAtributoDocumentoDataExpedicao():
+                                                case \Core_Configuration::getCorpAtributoDocumentoValidade():
+                                                    if($tpDocumento->getSqTipoDocumento() == 2) {
+                                                        echo '<div class="hide hide-parent"></div>';
+
+                                                        break;
+                                                    }
+
+                                                    $attrs['class'] = 'input-small dateBR datepicker required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['mask']  = 'date';
+                                                    $attrs['style'] = 'margin:0;';
+                                                    $attrs['data-format'] = 'dd/mm/yyyy';
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+
+                                                    echo '<div class="input-append date">' .
+                                                            $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs) .
+                                                            '<span class="add-on"><i class="icon-calendar"></i></span>' .
+                                                        '</div>';
+
+                                                    break;
+
+                                                case \Core_Configuration::getCorpAtributoDocumentoRegistro():
+                                                    $attrs['class'] = 'span4 required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['maxlength'] = 30;
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs);
+                                                    break;
+
+                                                case \Core_Configuration::getCorpAtributoDocumentoCategoria():
+
+                                                    $attrs['class'] = 'span2 required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['maxlength'] = 5;
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs);
+                                                    break;
+
+                                                case \Core_Configuration::getCorpAtributoDocumentoSerie():
+                                                    if($tpDocumento->getSqTipoDocumento() == 2) {
+                                                        echo '<div class="hide hide-parent"></div>';
+
+                                                        break;
+                                                    }
+
+                                                    $attrs['class'] = 'span4 obrigatorio required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['maxlength'] = 50;
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs);
+
+                                                    break;
+
+                                                default:
+                                                    $attrs['class'] = 'span4 required ' . $tpDocumento->getSqTipoDocumento();
+                                                    $attrs['maxlength'] = 50;
+
+                                                    echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                                    echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                                    echo $this->formHidden($nameRand . '[sqDocumento]', $docPessoa->getSqDocumento(), $class);
+                                                    echo $this->formText($nameRand . '[txValor]', $docPessoa->getTxValor(), $attrs);
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+
+                    <div class="control-group hide img-upload-container">
+                		<label class="control-label" for="txImagem">Imagem</label>
+                		<div class="controls">
+                			<input type="file" name="txImagem" id="txImagem" >
+                			<span class="help-block hide"></span>
+                		</div>
+                	</div>
+                </fieldset>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-adicionar" data-dismiss="modal">Concluir</a>
+        <a href="#" class="btn" data-dismiss="modal">Fechar</a>
+</div>
+    <?php echo $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/documento/modal.js'); ?>

@@ -1,0 +1,240 @@
+<script src="<?php echo $this->assetUrl('library/jquery.jqEasyCharCounter.js', array('address' => 'asset'));?>"></script>
+<script src="<?php echo $this->assetUrl('components/limit.js', array('address' => 'asset'));?>"></script>
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('action' => 'save')) ?>" id="form-pessoa">
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="nuCpf">CPF</label>
+            <div class="controls">
+                <?php
+                echo $this->formHidden('aba', $this->aba);
+                echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+                echo $this->formHidden('stRegistroAtivo', $this->data->getSqPessoa()->getStRegistroAtivo());
+                echo $this->formHidden('', \Core_Configuration::getCorpTipoPessoaFisica(), array('id' => 'sqTipoPessoa'));
+                echo $this->formText('nuCpf', $this->data->getNuCpf(), array('class' => 'span3 cpf', 'mask' => 'cpf', 'AUTOCOMPLETE' => 'OFF'));
+                ?>
+
+                <?php if ($this->data->getSqPessoa()->getSqCadastroSemCpf()->getSqCadastroSemCpf()) { ?>
+                    <button title="Visualizar Justificativa" class="btn right viewJustificativa" type="button">
+                        <i class="icon-eye-open"></i>
+                    </button>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="noPessoa"><span title="Campo Obrigatório"
+ class="required">*</span> Nome</label>
+            <div class="controls">
+                <?php
+                echo $this->formHidden('noPessoa_hidden', $this->data->getSqPessoa()->getNoPessoa(),
+                        array('class' => 'span9 required',));
+                echo $this->formText('noPessoa',
+                        $this->noPessoa ? $this->noPessoa : $this->data->getSqPessoa()->getNoPessoa(),
+                        array('class' => 'span9 required',
+                            'maxlength' => 120,
+                            'title' => 'Informe o nome completo',
+                            'AUTOCOMPLETE' => 'OFF'));
+                ?>
+            </div>
+        </div>
+        <div class="control-group hide" id="groupTxJustificativaInfoconv">
+            <label class="control-label" for="txJustificativaInfoconv">
+                <span title="Campo Obrigatório" class="required">*</span> Justificativa
+            </label>
+            <div class="controls">
+                <?php
+                    $sqPessoaAutoraInfoconv = $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getSqPessoaAutora()->getSqPessoa();
+
+                    echo $this->formHidden('dtIntegracaoInfoconv',
+                            $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getDtIntegracao(),
+                            array('class' => 'input-small dateBR datepicker',
+                                'mask' => 'date',
+                                'name'=>'sqIntegracaoPessoaInfoconv_dtIntegracao') );
+                    //
+                    echo $this->formHidden('sqPessoaAutoraInfoconv',
+                            $sqPessoaAutoraInfoconv,
+                            array('name'=>'sqIntegracaoPessoaInfoconv_sqPessoaAutora'));
+                    //
+                    echo $this->formText('txJustificativaInfoconv',
+                            $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getTxJustificativa(),
+                            array('class' => 'span9 required',
+                                'maxlength' => 250,
+                                'AUTOCOMPLETE' => 'OFF',
+                                'name'=>'sqIntegracaoPessoaInfoconv_txJustificativa') );
+                ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dtNascimento">Data de Nascimento</label>
+            <div class="controls">
+                <?php
+                if($sqPessoaAutoraInfoconv):
+                    echo $this->formText('dtNascimento', $this->data->getDtNascimento(), array('class' => 'input-small', 'mask' => 'date'));
+                else:
+                    $dtNascimentoAttr = array('class' => 'input-small dateBR datepicker', 'mask' => 'date');
+                    echo $this->formText('dtNascimento', $this->data->getDtNascimento(), $dtNascimentoAttr);
+                ?>
+                    <button type="button" class="btn right datepicker-icon" title="Calendário">
+                        <i class="icon-calendar"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="sqEstadoCivil" >Estado Civil</label>
+            <div class="controls">
+                <?php
+                echo $this->ComboCustom('sqEstadoCivil', $this->data->getSqEstadoCivil()->getSqEstadoCivil(), array(), $this->cmb['sqEstadoCivil']);
+                ?>
+            </div>
+        </div>
+        <!-- /** Início do ajuste solicitado no ticket #11092 */ -->
+        <div class="control-group">
+            <label class="control-label" for="">
+                <span title="Campo Obrigatório" class="required">* </span> Nacionalidade Brasileira?</label>
+            <div class="controls">
+                <span class="sqTipoPessoaNascSim">
+                    <input type="radio" name="nacionalidade" id="sqTipoPessoaNascSim" class="required" value="1" <?php echo ($this->data->getSqPais()->getSqPais() && $this->data->getSqPais()->getNoPais() == 'Brasil') ? 'checked="checked"' : '' ?> />
+                    Sim
+                </span>
+                <span class="sqTipoPessoaNascNao">
+                    <input type="radio" name="nacionalidade" id="sqTipoPessoaNascNao" class="required" value="2" <?php echo ($this->data->getSqPais()->getSqPais() && $this->data->getSqPais()->getNoPais() != 'Brasil') ? 'checked="checked"' : '' ?> />
+                    Não
+                </span>
+            </div>
+        </div>
+        <div class="control-group nacSim">
+            <label class="control-label" for="sqEstado">Estado Naturalidade</label>
+            <div class="controls">
+                <?php
+                echo $this->ComboCustom('sqEstado', $this->data->getSqMunicipio()->getSqEstado()->getSqEstado(), array(), $this->cmb['sqEstado']);
+                ?>
+            </div>
+        </div>
+        <div class="control-group nacSim">
+            <label class="control-label" for="sqMunicipio">Município Naturalidade</label>
+            <div class="controls">
+                <?php
+                echo $this->ComboCustom('sqMunicipio', $this->data->getSqMunicipio()->getSqMunicipio(), array(), $this->cmb['sqMunicipio']);
+                ?>
+            </div>
+        </div>
+        <!-- /** Fim do ajuste solicitado no ticket #11092 */ -->
+        <div class="control-group nacNao">
+            <label class="control-label" for="sqPais">
+                <span title="Campo Obrigatório" class="required">* </span>País de Origem</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqPais', $this->data->getSqPais()->getSqPais(), array('class' => 'required'), $this->cmb['sqPais']); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="sgSexo" >
+                <span title="Campo Obrigatório" class="required">* </span>Sexo</label>
+            <div class="controls">
+                <?php
+                    $list = array('M' => 'Masculino', 'F' => 'Feminino');
+
+                    $sqSexo = $this->data->getSgSexo();
+                    $sexoAttr = array('class' => 'required');
+
+                    if ($sqPessoaAutoraInfoconv && $sqSexo) {
+                        $sexoAttr['name'] = 'sgSexoFake';
+                        $sexoAttr['disabled'] = 'disabled';
+                        echo $this->formHidden('sgSexo',$sqSexo,array('id'=>'sgSexoFake'));
+                    }
+
+                    echo $this->ComboCustom('sgSexo', $sqSexo, $sexoAttr, $list);
+                ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="noPai">Nome do Pai</label>
+            <div class="controls inline">
+                <?php echo $this->formText('noPai', $this->data->getNoPai(), array('class' => 'span9', 'maxlength' => 120)); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="noMae">Nome da Mãe</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('noMae', $this->data->getNoMae(), array('class' => 'span9', 'maxlength' => 120));
+                ?>
+            </div>
+        </div>
+    </fieldset>
+    <br/>
+
+    <div class="form-actions">
+        <button  id="btnAnterior" class="btn disabled" type="button">
+            <span class="icon-chevron-left"></span> Anterior
+        </button>
+        <button  id="btnProximo" class="btn btn-primary" type="button" title="Salva e segue para a próxima aba.">
+            Próxima <span class="icon-chevron-right icon-white"></span>
+        </button>
+        <button  id="btnSalvar" class="btn" type="button" title="Salva e permanece na mesma aba.">
+            <span class=""></span> Salvar
+        </button>
+        <button  id="btnConcluir" class="btn" type="button" title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <button  id="btnIntegrationInfoconv" class="btn" type="button" title="Atualiza os dados básicos conforme o cadastro da Receita Federal">
+            <i class="icon-leao"></i> Sincronizar RF
+        </button>
+        <a class="btn" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+    <div id="modal-justificativa" class="modal hide fade">
+        <div class="modal-header">
+            <a title="Fechar" data-dismiss="modal" class="close">×</a>
+            <?php if ($this->data->getSqPessoa()->getSqCadastroSemCpf()->getSqCadastroSemCpf()) { ?>
+                <h3>Visualizar Justificativa</h3>
+            <?php } else { ?>
+                <h3>Justificativa do Responsável</h3>
+            <?php } ?>
+        </div>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <fieldset>
+                    <?php if (!$this->data->getSqPessoa()->getSqCadastroSemCpf()->getSqCadastroSemCpf()) { ?>
+                        <p>Você, <b><?php echo $this->perfil->getNoPessoa(); ?></b>, está cadastrando uma pessoa no ambiente corporativo do ICMBio sem o número do CPF. Esta informação será registrada para análise posterior.</p>
+                        <br />
+                    <?php } ?>
+                    <div class="control-group">
+                        <label for="cpfResponsavel" class="control-label">CPF do usuário interno</label>
+                        <div class="controls">
+                            <?php
+                            echo $this->formText('nuCpf', $this->maskNumber($this->perfil->getSqPessoaFisica()->getNuCpf(), 'cpf'), array('class' => 'span5', 'disabled' => 'disabled'));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="nmUsuarioInterno" class="control-label">Nome do usuário interno</label>
+                        <div class="controls">
+                            <?php
+                            echo $this->formText('noPessoa', $this->perfil->getNoPessoa(), array('class' => 'span11', 'disabled' => 'disabled'));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="justificativa" class="control-label"><span title="Campo Obrigatório"
+ class="required">*</span> Justificativa</label>
+                        <div class="controls">
+                            <?php
+                            echo $this->formTextarea('txJustificativa', $this->data->getSqPessoa()->getSqCadastroSemCpf()->getTxJustificativa(), array('class' => 'span11', 'rows' => 4, 'maxlength' => 200));
+                            ?>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <?php if ($this->data->getSqPessoa()->getSqCadastroSemCpf()->getSqCadastroSemCpf()) { ?>
+                <a href="#" class="btn btn-primary" data-dismiss="modal" title="Fechar">Fechar</a>
+            <?php } else { ?>
+                <a href="#" class="btn btn-primary btnConcluirJustificativa" data-dismiss="modal" title="Concluir">Concluir</a>
+                <a href="#" class="btn btnCancelarJustificativa" data-dismiss="modal" title="Fechar">Fechar</a>
+            <?php } ?>
+        </div>
+    </div>
+</form>
+<script src="<?php echo $this->assetUrl('sica/pessoa-fisica/justificativa.js') ?>" type="text/javascript"></script>

@@ -1,0 +1,25 @@
+<?php
+    $this->headScript()->setFile($this->baseUrl() . '/js/app/auxiliar/pessoa/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-juridica/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-juridica/form-control.js');
+
+    echo $this->headScript();
+?>
+<div class="alert alert-success fade in hide msgSalvar">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+	Dados salvos com sucesso.
+</div>
+
+<h1>Cadastrar Pessoa Jurídica</h1>
+
+<br/>
+
+<?php
+    echo $this->partial('/pessoa-juridica/form.phtml', array(
+        'data'  => $this->data,
+        'combo' => $this->combo,
+        'campoPessoa'=>$this->campoPessoa,
+        'campoCnpj'=>$this->campoCnpj,
+        'form'=>$this->form
+    ));
+ ?>

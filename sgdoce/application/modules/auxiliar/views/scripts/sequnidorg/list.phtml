@@ -1,0 +1,49 @@
+<?php
+
+    $view = $this;
+    $acao = function($row) use ($view) {
+        $anoAtual = date('Y');
+        if (!empty($row['sqTipoArtefato']) && $row['sqTipoArtefato']->getSqTipoArtefato() == \Core_Configuration::getSgdoceTipoArtefatoProcesso()){
+            return $view->actionButton('Alterar',
+                'SequencialArtefato.alterar',
+                array($row['sqSequencialArtefato'], $view->params['noPessoa'] ),'pencil');
+        }
+
+        if ($view->params['nuAno'] == $anoAtual && isset($row['stAtivo']) && $row['stAtivo']) {
+            if ($row['sqSequencialArtefato']) {
+                return $view->actionButton('Alterar',
+                                           'SequencialArtefato.alterar',
+                                           array($row['sqSequencialArtefato'], $view->params['noPessoa'] ),'pencil');
+            } else {
+                return $view->actionButton('Alterar',
+                        'SequencialArtefato.adicionar',
+                        array($view->params['noPessoa'], $view->params['nuAno'], $row['sqTipoDocumento']),'pencil');
+            }
+
+        } else {
+            return null;
+        }
+    };
+    $ano = function($row) use ($view) {
+        return ($row['nuAno'] == null) ? $view->params['nuAno'] : $row['nuAno'];
+    };
+    $seq = function($row) use ($view) {
+        return ($row['nuSequencial'] == null) ? null : $row['nuSequencial'];
+    };
+
+    $nomeTipoDocumento = function ($row) use ($view) {
+        return isset($row['noTipoDocumento']) ? $row['noTipoDocumento'] : 'PROCESSO';
+    };
+
+    $array = array('columns' => array(0 => array('column' => $ano),
+                                      1 => array('column' => $nomeTipoDocumento),
+                                      2 => array('column' => $seq),
+                                      3 => array('column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($array);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);
+?>

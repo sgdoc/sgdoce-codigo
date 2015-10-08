@@ -1,0 +1,12 @@
+<?php
+$this->headScript()->appendFile($this->assetUrl('library/jquery.ui.touch-punch.min.js', array('address' => 'js')));
+?>
+<div class="tab-pane" id="dadosImagem"></div>
+<script type="text/javascript">
+    $(document).ready(function(){
+       $( ".thumbnails" ).sortable();
+       $( ".thumbnails" ).disableSelection();
+    });
+</script>
+
+

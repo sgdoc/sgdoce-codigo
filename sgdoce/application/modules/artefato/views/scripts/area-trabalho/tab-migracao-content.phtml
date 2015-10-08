@@ -1,0 +1,19 @@
+<form class="form-horizontal"
+      action="<?php echo $this->urlMigracao; ?>"
+      method="post"
+      id="form-visualizar-area-trabalho-migracao">
+    <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_migracao_box')); ?>
+    <?php echo $this->formHidden('typeView', 'search', array('id'=>'type_view')); ?>
+    <?php echo $this->formHidden('migration_box', $this->migration_box); ?>
+    <?php echo $this->formHidden('search', $this->nuArtefato); ?>
+</form>
+<form id="migration_box-form_multiple_actions" name="migration_box-form_multiple_actions" method="post">
+    <div class="span12"></div>
+    <table id="table-grid-area-trabalho-migracao">
+        <?php echo $this->render('area-trabalho/table-header-migration.phtml'); ?>
+    </table>
+</form>
+
+<div>
+    <a href="javascript:AreaTrabalho.loadSearchMigracao();" class="btn btn-primary"><i class="icon icon-refresh"></i> Nova Pesquisa</a>
+</div>

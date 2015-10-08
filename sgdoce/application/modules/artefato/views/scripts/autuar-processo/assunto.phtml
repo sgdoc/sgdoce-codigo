@@ -1,0 +1,104 @@
+<div class="tab-pane" id="assunto">
+    <fieldset>
+        <div class="control-group">
+        <label class="control-label" for="select01">
+            <span class="required">*</span> Assunto
+        </label>
+        <div class="controls">
+            <?php
+                $sqAssunto_hidden = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getSqAssunto() : NULL;
+                $sqAssunto = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto() : NULL;
+                echo $this->formHidden('sqAssunto_hidden',$sqAssunto_hidden);
+                echo $this->formText('sqAssunto',$sqAssunto,array('class'=> 'required span8'))
+             ?>
+        </div>
+    </div>
+        <div class="control-group">
+            <label class="control-label" for="unidIcmbio">Assunto Complementar</label>
+            <div class="controls">
+                <?php
+                $attibutes['maxlength'] = '250';
+                $attibutes['class'] = 'span11';
+                $attibutes['rows'] = 3;
+                echo $this->formTextarea('txAssuntoComplementar', $this->data->getTxAssuntoComplementar(), $attibutes);?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nuDiasPrazo">
+                <span class="required"title="Required field">* </span>Prazo de Entrega</label>
+            <div class="controls">
+                <?php echo $this->formSelect('sqPrazo',NULL,
+                        array('class'=>'input-small span2'),
+                        array('' => 'Selecione','1' => 'Data', '2' => 'Dias')); ?>
+            </div>
+        </div>
+        <?php
+        $dtPrazo = $this->data->getDtPrazo();
+        if ($this->dataPost['dtPrazo']){
+            $dtPrazo = $this->dataPost['dtPrazo'];
+        }
+        $nuDiasPrazo = $this->data->getNuDiasPrazo();
+        if ($this->dataPost['nuDiasPrazo']){
+            $nuDiasPrazo = $this->dataPost['nuDiasPrazo'];
+        }
+
+        ?>
+        <input class="" type="hidden" name="inDiasCorridos"
+            id="inDiasCorridos" value="" />
+        <div class="control-group dvDataPrazo" hidden="true">
+            <label class="control-label" for="appendedInputButton"><span
+                class="required" title="Required field">*</span> Data do Prazo</label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                    <input value="<?php echo $dtPrazo;?>" class="input-small dateBR required" id="dtPrazo" maxlength="60"
+                        name="dtPrazo" mask="date" type="text"/>
+                        <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="control-group dvDiasPrazo" hidden="true">
+            <label class="control-label" for="nuDiasPrazo"><span class="required"
+                title="Required field">*</span> Dias</label>
+            <div class="controls">
+                <?php
+                $value = NULL;
+                if ($this->data->getInDiasCorridos() == '0' || $this->data->getInDiasCorridos() == '1'){
+                    $value = ($this->data->getInDiasCorridos()) ? '2' : '1';
+                }
+                if ($this->dataPost['inDias']){
+                    $value = $this->dataPost['inDias'];
+                }
+                echo $this->formSelect('inDias',$value,
+                        array('class'=>'required'),
+                        array('' => 'Selecione','1' => 'Úteis', '2' => 'Corridos')); ?>
+                <input type="text" class="input-small inline required" id="nuDiasPrazo" name="nuDiasPrazo"
+                    maxlength="4" value="<?php echo $nuDiasPrazo; ?>" />
+            </div>
+        </div>
+       <div class="control-group">
+            <label class="control-label" for="select01">
+                <span class="required" title="Required field">*</span> Prioridade
+            </label>
+            <div class="controls">
+                <?php
+                $sqPrioridade = $this->data->getSqTipoPrioridade() != NULL ? $this->data->getSqTipoPrioridade()->getSqPrioridade()->getSqPrioridade() : NULL;
+                $txPrioridade = $this->data->getSqTipoPrioridade() != NULL ? $this->data->getSqTipoPrioridade()->getTxTipoPrioridade() : NULL;
+                echo $this->ComboCustom('sqPrioridade', $sqPrioridade, array('class' => 'required'), $this->prioridade);
+                ?>
+            </div>
+        </div>
+        <div class="control-group TipoPrioridade hide">
+            <label class="control-label" for="select01">
+                <span class="required" title="Required field">*</span> Descrição da Prioridade
+            </label>
+            <div class="controls" id="divTipoPrioridade">
+                <?php
+                $sqTipoPrioridade = $this->data->getSqTipoPrioridade() != NULL ? $this->data->getSqTipoPrioridade()->getSqTipoPrioridade() : NULL;
+                echo $this->ComboCustom('sqTipoPrioridade',$sqTipoPrioridade,array('class'=>''),$this->tipoPrioridade);
+                ?>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div id="modal-capa-processo" class="modal modal-large hide fade"></div>
+<div id="modal-termo-renumerado" class="modal modal-large hide fade"></div>

@@ -1,0 +1,39 @@
+<?php
+    echo $this->headScript()
+              ->appendFile($this->baseUrl('/js/app/artefato/comentario/form.js'));
+?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Cadastrar Comentário</h1>
+            <div class="alert alert-error campos-obrigatorios hidden"></div>
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            <form class="form-horizontal" method="post" id="formComentario" name="formComentario">
+            
+                <?php echo $this->formHidden('sqArtefato', $this->sqArtefato); ?>
+                <?php echo $this->formHidden('backUrl',$this->backUrl); ?>
+            
+                <br />
+                <div class="control-group">
+                    <label class="control-label" for="txComentario">
+                        <span class="required">* </span>Comentário
+                    </label>
+                    <div class="controls">
+                        <textarea name="txComentario" id="txComentario"
+                                  class="txComentario span10 required" data-validate="notEmpty"
+                                  maxlength="2000" rows="5" cols="60"></textarea>
+                    </div>
+                </div>
+            
+                <div class="form-actions" id="form-comentario-artefato">
+                    <a class="btn btn-primary" id="btnSubmit"><i class=""></i> Salvar </a>
+                    <button class="btn" id="cancelarForm"><i class="icon-remove"></i> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

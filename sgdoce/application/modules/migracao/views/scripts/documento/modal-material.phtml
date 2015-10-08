@@ -1,0 +1,74 @@
+<div class="modal-header">
+	<a class="close" data-dismiss="modal">×</a>
+	<h3>Adicionar Material de Apoio</h3>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+	<div class="row-fluid">
+		<div id="error-material"></div>
+		<form enctype="multipart/form-data" class="form-horizontal-modal" id="formModalMaterial"
+			method="post" action="artefato/documento/material" >
+			<fieldset>
+				<div class="control-group">
+					<input type="hidden" id="sqArtefato" name="sqArtefato"
+						value="<?php echo $this->sqArtefato; ?>">
+					<input type="hidden" id="inInserir" name="inInserir"
+						value="materialApoio">
+					<label class="control-label"> <span class="required">*</span> Tipo de Suporte</label>
+					<div class="controls">
+						<?php echo $this->ComboCustom('sqTipoAnexo', 'sqTipoAnexo', array('class' => 'span9 required'), $this->listTipoAnexo)
+						?>
+						<span class="help-block hide">Campo de preenchimento obrigatório.</span>
+					</div>
+				</div>
+				<div id="outroTipo" class="control-group hidden">
+					<label class="control-label"> <span class="required">*</span> Outro
+						Tipo
+					</label>
+					<div class="controls">
+						<input type="text" name="txOutroTipo" id="txOutroTipo"
+							class="span9" value="" maxlength="20" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="digital2"> <span class="required"
+						title="Required field">*</span> Digital
+					</label>
+					<div class="controls">
+						<input type="text" class="span9 required" id="nuDigital"
+							name="nuDigital" readonly = "readonly"  value="<?php echo $this->nuDigital; ?>"> <span class="help-block hide">Campo de
+							preenchimento obrigatório.</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="arquivoFile"> <span
+						class="required" title="Campo obrigatório">*</span> Selecionar
+						Arquivo(s)
+					</label>
+					<div class="controls">
+						<input type="file" name="arquivoFile[]" id="arquivoFile" class="span9 required"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"> <span class="required">*</span>Titulo
+					</label>
+					<div class="controls">
+						<input type="text" name="noTituloAnexo" id="noTituloAnexo"
+							class="span9 required" value="" maxlength="150" />
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+<div class="modal-footer">
+	<a class="btn btn-primary" id="concluirUpload">Concluir</a>
+	<a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    Material.materialAutoComplete();
+    Material.materialFuncoes();
+    Material.OutroTipo();
+</script>
+<script	type="text/javascript" src="/js/components/validation.js"></script>
+<script	type="text/javascript" src="/js/library/jquery.form.js"></script>

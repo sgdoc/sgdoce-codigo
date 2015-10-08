@@ -1,0 +1,60 @@
+<?php
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+            $codigo = array($row['sqPessoaVinculo'], $row['sqPessoa']);
+
+            $button = $view->actionButton('Alterar', 'PessoaVinculo.alterar', $codigo, 'pencil')
+                    . $view->actionButton(
+                            $row['stRegistroAtivo'] ? 'Inativar' : 'Reativar'
+                            , 'PessoaVinculo.alterarStatus'
+                            , array($row['sqPessoaVinculo'], $row['stRegistroAtivo'] ? 0 : 1)
+                            , $row['stRegistroAtivo'] ? 'inativado' : 'ativado'
+            );
+
+            return $button;
+        };
+
+$data = function ($row) use ($view) {
+            if ($row['dtInicioVinculo']) {
+                return '<div class="center">' . $row['dtInicioVinculo']->get('dd/MM/YYYY') . '</div>';
+            } else {
+                return '';
+            }
+        };
+
+$dataFim = function ($row) use ($view) {
+            if ($row['dtFimVinculo']) {
+                return '<div class="center">' . $row['dtFimVinculo']->get('dd/MM/YYYY') . '</div>';
+            } else {
+                return '';
+            }
+        };
+
+$status = function ($row) use ($view) {
+            if ($row['stRegistroAtivo']) {
+                return 'Ativo';
+            } else {
+                return 'Inativo';
+            }
+        };
+
+$mask = function ($row) use ($view) {
+            return $view->maskNumber($row['nuCpf'], 'cpf');
+        };
+
+
+$configArray = array();
+$configArray['columns'][0]['column'] = 'noTipoVinculo';
+$configArray['columns'][1]['column'] = $mask;
+$configArray['columns'][2]['column'] = 'noPessoa';
+$configArray['columns'][3]['column'] = $data;
+$configArray['columns'][4]['column'] = $dataFim;
+$configArray['columns'][5]['column'] = $status;
+$configArray['columns'][6]['column'] = $acao;
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

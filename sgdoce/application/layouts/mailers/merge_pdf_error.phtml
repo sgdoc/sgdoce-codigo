@@ -1,0 +1,19 @@
+<?php
+    $sqSolicitacao  = $this->entSolicitacao->getSqSolicitacaoDownloadImagem();
+    $entArtefato    = $this->entSolicitacao->getSqArtefato();
+    $noTipoArtefato = $entArtefato->getSqTipoArtefatoAssunto()->getSqTipoArtefato()->getNoTipoArtefato();
+
+    $helper         = new Sgdoce_View_Helper_NuArtefato();
+    $nuArtefato     = $helper->nuArtefato($entArtefato);
+
+    $tentativas     = $this->qtdeTentativa - $this->entSolicitacao->getInTentativa();
+    $plural         = ($tentativas > 1) ? 's':'';
+?>
+<?php echo $this->render('header.phtml'); ?>
+
+<p>Caro usuário.</p>
+<br />
+<p>O SGDoc-e teve dificuldade em disponibilizar o pdf para download do <?php echo $noTipoArtefato; ?> <b><?php echo $nuArtefato; ?></b>.</p>
+<p>O sistema fará mais <?php echo $tentativas; ?> tentativa<?php echo $plural; ?> de processamento. Caso não receber email com a conclusão da solicitação, favor entrar em contato
+    com o suporte informando o número #<?php echo $sqSolicitacao; ?> do pedido para download.</p>
+

@@ -1,0 +1,21 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        return $view->actionButton('Excluir', 'Interessado.deletar', array($row['sqPessoa']),'trash');
+    };
+
+    $array = array(
+        'columns' => array(
+            array(
+                'column' => 'noPessoa',
+            ),
+            array(
+                'column' => $acao
+            )
+        )
+    );
+
+    $this->grid->setConfig($array);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

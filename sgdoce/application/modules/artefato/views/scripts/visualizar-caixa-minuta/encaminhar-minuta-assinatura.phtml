@@ -1,0 +1,30 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl().'/js/library/jquery.simpleautocomplete.js');
+    $this->headScript()->appendFile($this->baseUrl().'/js/app/artefato/visualizar-caixa-minuta/encaminhar-minuta-assinatura.js');
+    echo $this->headScript();
+?>
+
+<form class="form-horizontal">
+<input type="hidden" name="inAssinatura" id="inAssinatura" value="1" />
+<input type="hidden" name="sqArtefatoAssinatura" id="sqArtefatoAssinatura" value="<?php echo !empty($this->sqArtefato) ? $this->sqArtefato : '' ?>" />
+<div class="control-group">
+    <label class="control-label">
+        <span title="Required field" class="required">*</span> Nome da Unidade
+    </label>
+    <div class="controls">
+    <input type="hidden" name="sqUnidadeOrg" id="sqUnidadeOrg_hidden" value="0" />
+    <input class="span11 required" type="text" name="sqUnidadeOrg" id="sqUnidadeOrg" />
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label">
+        <span title="Required field" class="required">*</span> Nome do Usuário
+    </label>
+    <div class="controls">
+    <input type="hidden" name="view" id="view" value="" />
+    <input type="hidden" name="noPessoa" id="noPessoa_hidden" value="" />
+    <input class="span11 required" type="text" name="noPessoa" id="noPessoa" />
+    </div>
+</div>
+</form>

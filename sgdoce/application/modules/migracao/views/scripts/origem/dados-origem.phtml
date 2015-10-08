@@ -1,0 +1,263 @@
+<?php
+$sqArtefato = (count($this->dadosOrigem)) ? $this->dadosOrigem[0]->getSqArtefato()->getSqArtefato() : NULL;
+$tipoPessoa = NULL;
+$nuCpfCnpjPassaporte = NULL;
+$sqPessoaOrigem_hidden = NULL;
+$sqPessoaOrigem = NULL;
+$procedenciaInterno = NULL;
+$nacionalidadeOrigem = NULL;
+
+if (!empty($sqArtefato)) {
+    if( isset($this->dadosOrigem[1]) ){
+        $procedenciaInterno     = $this->dadosOrigem[1];
+    }
+    
+    if( isset($this->dadosOrigem[0]) ){
+        $tipoPessoa             = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqTipoPessoa()->getSqTipoPessoa();
+        $nuCpfCnpjPassaporte    = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getNuCpfCnpjPassaporte();
+        $sqPessoaOrigem_hidden  = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa();
+        $sqPessoaOrigem         = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getNoPessoa();
+        $nacionalidadeOrigem    = $this->nacionalidadeOrigem;
+    }
+}else{
+    $tipoPessoa = 4; //só pra já vir preenchido quando for cadastro de novo documento, uma vez que só existe 1 opção
+}
+
+if (isset($this->isSIC) && $this->isSIC) {
+    $procedenciaInterno     = 3;
+    $tipoPessoa             = \Core_Configuration::getCorpTipoPessoaUnidadeExt();
+    $nuCpfCnpjPassaporte    = $this->maskNumber($this->CGU->getNuCnpj(), '99.999.999/9999-99');
+    $sqPessoaOrigem_hidden  = $this->CGU->getSqPessoa()->getSqPessoa();
+    $sqPessoaOrigem         = $this->CGU->getNoPessoa();
+}
+?>
+<div class="control-group <?php echo (!$procedenciaInterno) ? "error" : null; ?>">
+    <label class="control-label">
+        <span class="required">*</span> Procedência
+    </label>
+    <div class="controls radios-inline">
+            <input type="radio" name="procedenciaInterno" id="chekProcedenciaInterno" value="interno"
+               <?php echo ($procedenciaInterno == 1) ? 'checked="checked"' : NULL ?> />
+            <label for="chekProcedenciaInterno">Interna</label>
+
+            <input  type="radio" name="procedenciaInterno" id="chekProcedenciaExterno" value="externo"
+               <?php echo ($procedenciaInterno == 3) ? 'checked="checked"' : NULL ?> />
+            <label for="chekProcedenciaExterno">Externa</label>
+
+        <input type="checkbox" id="anexo" name="anexo" class="hidden " value="1" />
+    </div>
+</div>
+
+<div class="control-group divOrigemTipoPessoaIcmbio">
+    <label class="control-label" for="sqTipoPessoaOrigemIcmbio">
+        <span class="required">*</span> Tipo de Pessoa
+    </label>
+    <div class="controls">
+        <?php
+        //24/11/2014
+        //retirada a opção "Funcionario" pois o sgdocF não existe esta opção
+//        $pessoa = array('1' => 'Funcionário', '4' => 'Unidade Organizacional');
+        $pessoa = array('4' => 'Unidade Organizacional');
+        echo $this->ComboCustom('sqTipoPessoaOrigemIcmbio', $tipoPessoa, array('class' => 'span7 cmTipoPessoa'), $pessoa);
+        ?>
+    </div>
+</div>
+
+<div class="control-group divOrigemSqPessoaIcmbio">
+    <label class="control-label" id="dvLabelSqPessoaIcmbio">
+        <span class="required">*</span>
+        Nome
+    </label>
+    <div class="controls">
+        <?php echo $this->formHidden('sqPessoaIcmbio_hidden') ?>
+        <?php echo $this->formText('sqPessoaIcmbio', null, array('class' => 'span7')) ?>
+    </div>
+</div>
+
+<div class="control-group divOrigemTipoPessoa">
+    <label class="control-label" id="testepessoa" for="select01">
+        <span class="required">*</span>
+        Tipo de Pessoa
+    </label>
+    <div class="controls">
+        <?php
+            unset($this->tipoPessoa[3]);
+            unset($this->tipoPessoa[4]);
+            unset($this->tipoPessoa[6]);
+
+            $attibutesTipoPessoaOrigem =array('class' => 'span7 cmTipoPessoa');
+            if($this->isSIC){
+                $attibutesTipoPessoaOrigem['disabled'] ='disabled';
+                echo $this->formHidden('sqTipoPessoaOrigem',$tipoPessoa,array('id'=>'sqTipoPessoaOrigemHidden'));
+            }
+            echo $this->ComboCustom('sqTipoPessoaOrigem', $tipoPessoa, $attibutesTipoPessoaOrigem , $this->tipoPessoa);
+        ?>
+    </div>
+</div>
+
+<div class="control-group divNacionalidade">
+    <label class="control-label"><span class="required">*</span> Nacionalidade Brasileira? </label>
+    <div class="controls radios-inline">
+        <input type="radio" id="nacionalidadeBrasileira" name="tpNacionalidade"
+               value="1" class="required" <?php echo ($nacionalidadeOrigem == 1) ? "checked='checked'" : '' ?> />
+        <label for="nacionalidadeBrasileira">Sim</label>
+
+        <input type="radio" id="nacionalidadeExtrangeira" name="tpNacionalidade" value="0"
+               class="required"<?php echo ($nacionalidadeOrigem == 2) ? "checked='checked'" : '' ?> />
+        <label for="nacionalidadeExtrangeira">Não</label>
+    </div>
+    <input type="hidden" name="extraParam" id="extraParam" value="" />
+</div>
+
+<div class="control-group divOrigemSqPessoa">
+    <label class="control-label" id="dvLabelSqPessoa">
+        <span class="required">*</span> Nome
+    </label>
+    <div class="controls">
+
+        <?php
+            $attributePessoaOrigem = array('class' => 'span7');
+            if($this->isSIC){
+                $attributePessoaOrigem['readonly'] = 'readonly';
+            }
+            echo $this->formHidden('sqPessoaOrigem_hidden');
+            echo $this->formText('sqPessoaOrigem', null, $attributePessoaOrigem) ;
+        ?>
+
+        <div class="input-append dropdown">
+            <button type="button" id="btnCadastraPessoa"
+                    class="btn right divCadastraPessoa" data-toggle="dropdown"
+                    title="Opções">
+                <i class="icon-cog"></i>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li class="liPessoaFisica">
+                    <a href="/auxiliar/pessoa-fisica/create/form/form-cadastro-documento/campoPessoa/sqPessoaOrigem/campoCpf/nuCPFOrigem"
+                       target="_blank">Cadastrar PF</a>
+                </li>
+                <li class="liPessoaJuridica">
+                    <a href="/auxiliar/pessoa-juridica/create/form/form-cadastro-documento/campoPessoa/sqPessoaOrigem/campoCnpj/nuCNPJOrigem"
+                       target="_blank">Cadastrar PJ</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="control-group divOrigemCPF">
+    <label class="control-label" id="dvLabelCPF">
+        CPF
+    </label>
+    <div class="controls">
+        <?php echo $this->formText('nuCPFOrigem',
+                                   $nuCpfCnpjPassaporte,
+                                   array('class' => 'cpf span4', 'mask' => 'cpf', 'maxlength'=>'14')) ?>
+    </div>
+</div>
+
+<div class="control-group divOrigemCNPJ">
+    <label class="control-label" id="dvLabelCNPJ">
+        <span class="required">*</span> CNPJ
+    </label>
+    <div class="controls">
+        <?php echo $this->formText('nuCNPJOrigem',
+                                   $nuCpfCnpjPassaporte,
+                                   array('class' => 'cnpj span4', 'mask' => 'cnpj', 'maxlength'=>'18')) ?>
+    </div>
+</div>
+
+<div class="control-group divOrigemPassaporte">
+    <label class="control-label" id="dvLabelPassaporteOrigem"> <span
+            class="required">*</span> Nº do Passaporte
+    </label>
+    <div class="controls">
+        <?php echo $this->formText('nuPassaporteOrigem',
+                                   $nuCpfCnpjPassaporte,
+                                   array('class' =>'span4 passaporte', 'maxlength'=>'30')) ?>
+    </div>
+</div>
+
+<div id="modalDuplicidade" class="modal hide fade">
+    <div class="modal-header">
+        <a title="Fechar" data-dismiss="modal" class="close">×</a>
+        <h3>Não permitido duplicidades</h3>
+        <h5>Já existe documento cadastrado com essas informações:</h5>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label">
+                <span class="required">*</span> Tipo
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('md-tipo', null,
+                                           array('class'=>'input-xlarge required',
+                                               'readonly' => 'readonly')) ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"> <span
+                    class="required">*</span> Número
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('md-numero', null,
+                                           array('class'=>'input-xlarge required',
+                                               'readonly' => 'readonly')) ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"> <span
+                    class="required">*</span> Origem
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('md-origem', null,
+                                           array('class'=>'input-xlarge required',
+                                               'readonly' => 'readonly')) ?>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="close-button btn btn-primary" id="btnFecharDuplicidade">Fechar</a>
+        </div>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label"></label>
+    <div class="controls">
+        <div class="alert alert-info left span7">
+            <b>No cadastro anterior:</b>
+            <?php if(!empty($this->listProcedenciaFisico[$this->dataSgdocFisico['procedencia']])): ?>
+            <br />
+            <i>Procedência:</i> <?php echo $this->listProcedenciaFisico[$this->dataSgdocFisico['procedencia']]; ?><br />
+            <i>Origem:</i> <?php echo $this->dataSgdocFisico['origem']; ?>
+            <?php else: ?>
+            Não informado.
+            <?php endif; ?>
+        </div>
+    </div>
+</div>        
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#nacionalidadeBrasileira').attr('checked', true);
+        $('#sqPessoaIcmbio,#sqPessoaOrigem,#nuCNPJOrigem,#nuCPFOrigem').blur(function() {
+            setTimeout(function() {
+                if ($('li.active').attr('id') == 'liDadosOrigem') {
+                    Assunto.validaDados();
+                }
+            }, 500);
+        });
+
+<?php if ($procedenciaInterno == 3): ?>
+        <?php if( $sqPessoaOrigem_hidden ): ?>
+            $('#sqPessoaOrigem_hidden').val('<?php echo $sqPessoaOrigem_hidden ?>');
+            $('#sqPessoaOrigem').val('<?php echo $sqPessoaOrigem ?>');
+        <?php endif; ?>
+<?php endif; ?>
+<?php if ($procedenciaInterno == 1): ?>
+        <?php if( $sqPessoaOrigem_hidden ): ?>
+            $('#sqPessoaIcmbio_hidden').val('<?php echo $sqPessoaOrigem_hidden ?>');
+            $('#sqPessoaIcmbio').val('<?php echo $sqPessoaOrigem ?>');
+        <?php endif; ?>
+<?php endif; ?>
+    });
+</script>

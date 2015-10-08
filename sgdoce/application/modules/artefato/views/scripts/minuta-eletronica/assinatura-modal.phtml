@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Assinatura</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-assinatura-modal" method="post">
+            <fieldset>
+                <div class="control-group">
+                     <label class="control-label">
+                          <span class="required" title="Required field">*</span> Tipo de Unidade
+                     </label>
+                     <div class="controls">
+                          <input type="text" class="span9 required" name="sqTipoUnidadeOrgg" id="sqTipoUnidadeOrgg">
+                     </div>
+                </div>
+                <div class="control-group">
+                     <label class="control-label"><span class="required"     title="Required field">*</span> Nome da Unidade</label>
+                     <div class="controls">
+                          <input type="text" class="span9 required" name="sqUnidadeOrgg" id="sqUnidadeOrgg">
+                     </div>
+                </div>
+                <div class="control-group">
+                     <label class="control-label"><span class="required"     title="Required field">*</span> Nome do Responsável</label>
+                     <div class="controls">
+                          <input type="text" class="span9 required" name="sqPessoaAssinatura" id="sqPessoaAssinatura">
+                     </div>
+                </div>
+                <div class="control-group dv3-sqMotivacao" hidden="true" >
+                     <label class="control-label" for="sqTipoMotivacao"> Motivação</label>
+                     <div class="controls" id="divVocativo">
+                          <?php echo $this->formSelect('sqTipoMotivacao',NULL,array('class'=>'span9'), $this->tipoMotivacao); ?>
+                     </div>
+                </div>
+                <div class="control-group dv3-txMotivacao" hidden="true">
+                     <label class="control-label">Texto da Motivação</label>
+                         <div class="controls">
+                            <?php
+                                $attibutes['maxlength'] = '250';
+                                $attibutes['rows'] = '3';
+                                $attibutes['class'] = 'span9 deMotivacao';
+                                echo $this->formTextarea('deMotivacao', NULL, $attibutes);
+                            ?>
+                          </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirAssinatura" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarAssinatura" data-dismiss="modal" title="Cancelar">Cancelar</a>
+</div>
+<script type="text/javascript" src="/js/app/artefato/minuta-eletronica/assinatura.js"></script>

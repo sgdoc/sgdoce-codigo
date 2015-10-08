@@ -1,0 +1,176 @@
+<script src="<?php echo $this->assetUrl('library/jquery.jqEasyCharCounter.js', array('address' => 'asset'));?>"></script>
+<script src="<?php echo $this->assetUrl('components/limit.js', array('address' => 'asset'));?>"></script>
+<script src="<?php echo $this->assetUrl('sica/sistema/form.js');?>"></script>
+
+<form class="form-horizontal"
+      name="form-sistema"
+      action="<?php echo $this->url(array('controller'=>'sistema', 'action'=>'save')); ?>"
+      enctype="multipart/form-data"
+      method="post">
+
+    <input type="hidden" name="sqSistema" value="<?php echo $this->data->getSqSistema()?>">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+
+    <fieldset>
+        <!-- INPUT INÍCIO -->
+        <div class="control-group">
+            <label class="control-label" for="sgSistema"><span class="required">*</span> Sigla</label>
+            <div class="controls">
+                <input type="text"
+                       class="input-small required"
+                       value="<?php echo htmlentities($this->data->getSgSistema(),ENT_QUOTES,'UTF-8'); ?>"
+                       maxlength="12"
+                       id="sgSistema"
+                       name="sgSistema"
+                />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="noSistema"><span class="required">*</span> Sistema</label>
+            <div class="controls">
+                <input type="text"
+                       name="noSistema"
+                       value="<?php echo htmlentities($this->data->getNoSistema(),ENT_QUOTES,'UTF-8'); ?> "
+                       maxlength="80"
+                       class="input-xxlarge required"
+                       id="noSistema"
+                >
+            </div>
+        </div>
+
+         <div class="control-group">
+            <label class="control-label" for="txUrl"><span class="required">*</span> URL</label>
+            <div class="controls">
+                <input type="text"
+                       class="input-xxlarge required"
+                       value="<?php echo $this->data->getTxUrl()?>"
+                       maxlength="80"
+                       id="txUrl"
+                       name="txUrl"
+                />
+            </div>
+        </div>
+
+         <div class="control-group">
+            <label class="control-label" for="txDescricao"><span class="required">*</span> Descrição</label>
+            <div class="controls">
+                <textarea name="txDescricao"
+                          maxlength="200"
+                          class="input-xxlarge required"
+                          id="txDescricao"><?php echo $this->data->getTxDescricao()?></textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="sqArquitetura">Tipo de Arquitetura</label>
+            <div class="controls">
+                <?php echo $this->comboArquitetura('sqArquitetura', $this->data->getSqArquitetura()->getSqArquitetura(), array(), $this->architetures)?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="inLeiauteNovo"><span class="required">*</span> Tipo de Leiaute</label>
+            <div class="controls">
+                <?php echo $this->comboLeiaute('sqLeiaute', $this->data->getSqLeiaute()->getSqLeiaute(), array('class' => 'required'), $this->layouts)?>
+            </div>
+        </div>
+
+        <div class="control-group">
+             <label for="noResponsavel" class="control-label"><span class="required">*</span> Nome do Responsável</label>
+             <div class="controls">
+                 <input type="hidden"
+                        value="<?php echo $this->responsavel['sqPessoa'] ?>"
+                        id="noResponsavel_hidden"
+                        name="sqPessoaResponsavel">
+
+                 <input type="text"
+                        value="<?php echo $this->responsavel['noPessoa'] ?>"
+                        name="noResponsavel"
+                        maxlength="80"
+                        class="input-xxlarge required"
+                        id="noResponsavel" />
+             </div>
+        </div>
+
+        <div class="control-group">
+             <label class="control-label"><span class="required">*</span> CPF do Responsável</label>
+             <div class="controls">
+                 <input type="text"
+                        name="nuCpf"
+                        value="<?php echo $this->responsavel['nuCpf'] ?>"
+                        class="input-xlarge uneditable-input responsavel"
+                        readonly="readonly"
+                        id="nuCpf" />
+             </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="DDD"><span class="required">*</span> Telefone Institucional</label>
+            <div class="controls">
+                <input type="text"
+                       class="input-small inline responsavel"
+                       id="nuDdd"
+                       name="nuDdd"
+                       value="<?php echo $this->responsavel['nuDdd'] ?>"
+                       readonly="readonly" />
+                <input type="text"
+                       class="input-mini30 inline responsavel"
+                       id="nuTelefone"
+                       name="nuTelefone"
+                       value="<?php echo $this->responsavel['nuTelefone'] ?>"
+                       readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="email"><span class="required">*</span> E-mail</label>
+            <div class="controls">
+                <div class="input-prepend">
+                    <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text"
+                           class="input-xlarge uneditable-input responsavel"
+                           id="txEmail"
+                           readonly="readonly"
+                           value="<?php echo $this->responsavel['txEmail'] ?>"
+                     />
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="email">Imagem</label>
+            <div class="controls">
+                <div class="thumbnails span4">
+                 <input type="file" name="txEnderecoImagem" class="input-file" id="imagem"/>
+                   <?php if ($this->data->getSqSistema()): ?>
+                   <img class="thumbnail"
+                        src="<?php echo $this->urlCurrent(array('action' => 'render-logo', 'id' => $this->data->getSqSistema()))?>"
+                        alt="<?php echo $this->data->getTxEnderecoImagem()?>" />
+                   <?php endif;?>
+                   <input type="hidden" name="txEnderecoImagem" value="<?php echo $this->data->getTxEnderecoImagem()?>"/>
+               </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="urlHelp"> URL do Help</label>
+            <div class="controls">
+                <input type="text"
+                       class="input-xxlarge"
+                       id="txUrlHelp"
+                       name="txUrlHelp"
+                       maxlength="200"
+                       value="<?php echo $this->data->getTxUrlHelp()?>"
+                />
+            </div>
+        </div>
+   </fieldset>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Concluir</button>
+        <a class="btn" href="<?php echo $this->urlCurrent(array('action' => 'index'))?>"><i class="icon-remove"></i> Cancelar</a>
+    </div>
+</form>
+
+

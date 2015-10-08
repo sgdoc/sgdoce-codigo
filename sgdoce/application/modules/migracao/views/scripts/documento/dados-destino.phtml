@@ -1,0 +1,81 @@
+<script type="text/javascript" src="/js/app/migracao/origem/origem.js"></script>
+<script type="text/javascript" src="/js/app/artefato/documento/origem.js"></script>
+<script type="text/javascript" src="/js/app/artefato/destino/destino.js"></script>
+<script type="text/javascript" src="/js/app/artefato/documento/destino.js"></script>
+<script type="text/javascript" src="/js/app/migracao/destino/encaminhado.js"></script>
+
+
+<?php
+$withoutNumber   = '';
+$automaticNumber = 'checked="checked"';
+$nuArtefato      = $this->data->getNuArtefato();
+$attrNuArtefato  = 'readonly="readonly"';
+$classNuArtefato = 'required ';
+$labelNumber     =  'Número';
+
+if ($this->isSIC):
+    $attrNuArtefato =  'mask="numeric"';
+    $labelNumber    =  'Protocolo CGU';
+    if( !$nuArtefato ) {
+        $classNuArtefato = 'canPaste';
+    } else {
+        $classNuArtefato .= 'canPaste';    
+    }
+else:
+    if( !$nuArtefato ) {
+        $classNuArtefato = '';
+    } 
+endif;
+
+
+
+?>
+
+<div class="tab-pane" id="dadosDestino">
+	<fieldset id="origem">
+		<legend>Origem</legend>
+		<?php echo $this->render('origem/dados-origem.phtml');?>
+
+                <div class="control-group">
+                    <label class="control-label"> <span class="required">* </span><?php echo $labelNumber?></label>
+                    <div class="controls">
+
+                        <?php if (count($this->dadosOrigem) && $this->data->getSqTipoArtefatoAssunto()->getSqTipoArtefatoAssunto() && !$this->isSI): //update ?>
+                            <?php // if ($procedenciaInterno == 3 && $withoutNumber==''): //externo?>
+
+                                <!--input sem o disabled -->
+<!--                                <input type="text" name="nuArtefato" id="nuArtefato"
+                                       class="span4 inline required <?php echo $classNuArtefato; ?>" maxlength="30"
+                                       value="<?php echo $nuArtefato; ?>" />-->
+                                <?php // echo $this->formHidden('nuArtefatoHidden',null,array('name'=>'')); ?>
+
+                            <?php // else: ?>
+
+                                <!--input sem o NAME -->
+                                <input type="text" <?php echo $attrNuArtefato; ?> id="nuArtefato"
+                                       class="span4 inline <?php echo $classNuArtefato; ?>" maxlength="30"
+                                       value="<?php echo $nuArtefato; ?>" />
+
+                                <?php echo $this->formHidden('nuArtefatoHidden',$nuArtefato,array('name'=>'nuArtefato')); ?>
+                            <?php // endif; ?>
+                        <?php else: ?>
+                            <input type="text" name="nuArtefato" <?php echo $attrNuArtefato; ?> id="nuArtefato"
+                                   class="span4 inline <?php echo $classNuArtefato; ?>" maxlength="120"
+                                   value="<?php echo $nuArtefato; ?>" />
+                        <?php endif; ?>
+
+                        <?php if (!$this->isSIC && !$nuArtefato): ?>
+                            <?php $isHidden = ($this->isDocWVDuplicity) ? " hide" : ""; ?>
+                            <label class="checkbox inline<?php echo $isHidden; ?>">
+                                <input id="optionsCheckbox1" type="checkbox" <?php echo $withoutNumber; ?> value="option1" name="numeracao">
+                                Documento sem número
+                            </label>
+                        <?php endif;?>
+                    </div>
+		</div>
+	</fieldset>
+	<fieldset id="destino">
+		<legend>Destino</legend>
+		<?php echo $this->render('destino/dados-destino.phtml');?>
+	</fieldset>
+</div>

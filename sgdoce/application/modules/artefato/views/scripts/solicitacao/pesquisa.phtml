@@ -1,0 +1,118 @@
+<h1>Pesquisar Demandas de Suporte</h1>
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+<br />
+<form class="form-horizontal"
+      id="form-pesquisa-demandas"
+      name="form-pesquisa-demandas"
+      action="<?php echo $this->url(array('action' => 'list-pesquisar')); ?>"
+      method="post">
+    <?php echo $this->formHidden('sqUnidadeOrgAbertura', \Core_Integration_Sica_User::getUserUnit()); ?>
+    <?php echo $this->formHidden('sqPessoaAbertura', \Core_Integration_Sica_User::getPersonId()); ?>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <!--<p class="requiredLegend pull-left">Pelo menos um dos filtros deve ser preenchido.</p>-->
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">
+                        Cadastrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Filtros</legend>
+
+        <div class="control-group">
+           <label class="control-label"><span class="required">*</span> Artefato</label>
+           <div class="controls">
+                <label for="sqTipoArtefatoProcesso" class="radio inline">
+                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>"
+                            class="required" id="sqTipoArtefatoProcesso"/>
+                    Processo
+                </label>
+                <label for="sqTipoArtefatoDocumento" class="radio inline">
+                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>"
+                           checked="checked" class="required" id="sqTipoArtefatoDocumento"/>
+                    Documento
+                </label>
+                <label for="sqTipoArtefatoOutro" class="radio inline">
+                    <input type="radio" name="sqTipoArtefato" value="0" class="required" id="sqTipoArtefatoOutro"/>
+                    Outros
+                </label>
+           </div>
+       </div>
+
+        <div class="control-group">
+            <label class="control-label">Data </label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                    <input value="" class="input-small dateBR" maxlength="60"
+                        id="dtSolicitacao" name="dtSolicitacao" mask="date" type="text"/>
+                    <a href="#" class="btn add-on right" title="Calendário"><i class="icon-calendar" title="Calendário"></i></a>
+                </div>
+            </div>
+        </div>
+	<div class="control-group">
+            <label for="no_assunto" class="control-label">
+            Assunto
+            </label>
+            <div class="controls">
+                <?php echo $this->formText( 'sqTipoAssuntoSolicitacao', null, array('class' => 'span6')); ?>
+
+            </div>
+	</div>
+        <div class="control-group">
+            <label class="control-label required">
+                Documento / Processo
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('nuArtefato', null, array('class' => 'span6')); ?>
+<!--                <div id="sqTipoArtefatoContainer">
+                    <input type="radio" name="sqTipoArtefato" value="<?php //echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>"
+                           checked="checked" class="required sqTipoArtefato" id="sqTipoArtefatoProcesso" />
+                    <label for="sqTipoArtefatoProcesso" style="display: inline; font-size: 1em;">Processo</label>
+                    <input type="radio" name="sqTipoArtefato" value="<?php //echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>"
+                           class="required sqTipoArtefato" id="sqTipoArtefatoDocumento" />
+                    <label for="sqTipoArtefatoDocumento" style="display: inline; font-size: 1em;">Digital</label>
+                </div>-->
+            </div>
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btnPesquisar">Pesquisar</button>
+        <button type="button" class="btn" id="btnClear">Limpar</button>
+    </div>
+</form>
+
+<div class="control-group" id="grid-documento-container">
+    <fieldset>
+        <legend>
+            Resultado da Pesquisa
+        </legend>
+    </fieldset>
+    <table id="table-grid-demandas" class="table-wrapword">
+        <thead>
+            <tr>
+                <th width="5%">#</th>
+                <th width="12%">Processo/Digital</th>
+                <th width="9%">Abertura</th>
+                <th width="13%">Assunto</th>
+                <th width="23%">Descrição</th>
+                <th width="13%">Atendente</th>
+                <th width="9%">Finalização</th>
+                <th width="10%">Situação</th>
+                <th width="6%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="modal_container" class="modal hide fade modal-medium"></div>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl("/js/app/artefato/solicitacao/pesquisa.js"); ?>"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Pesquisa.init();
+    });
+</script>

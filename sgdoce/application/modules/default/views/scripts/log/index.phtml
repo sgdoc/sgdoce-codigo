@@ -1,0 +1,62 @@
+<div class="span9">
+    <h2>Verificação de Log</h2>
+</div>
+<br>
+<form class="form-horizontal form-processo-eletronico" name="form-create" action="/log/detalhe" method="post">
+    <br>
+    <br>
+    <div class="control-group">
+        <label for="nuDigital" class="control-label"> Codigo
+        </label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="text" maxlength="15" id="id" name="id" class="input-large">
+            </div>
+        </div>
+    </div>
+    <div class="form-actions" id="formButtonsPrincipal">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+</form>
+<div class="row-fluid">
+    <div class="span12">
+        <div role="grid" class="dataTables_wrapper form-inline" id="table-grid_wrapper">
+            <table class="table table-striped table-bordered ">
+                <thead>
+                    <th>Cod</th>
+                    <th>Data</th>
+                    <th>Usuário</th>
+                    <th colspan="2">Operação</th>
+                </thead>
+                <tbody>
+                <?php foreach($this->logs as $log){ ?>
+                <tr>
+                    <td><?php echo $log['sqAuditoria'];?></td>
+                    <td><?php echo $log['dtDataHora'] ?></td>
+                    <td><?php echo $log['sqUsuario'];?></td>
+                    <td>
+                    <?php
+                        switch ($log['sgOperacao']) {
+                            case "I": echo 'INSERÇÃO'; break;
+                            case "U": echo 'ALTERAÇÃO'; break;
+                            case "D": echo 'EXCLUSÃO'; break;
+                            default: echo $this->trilha['sgOperacao'];
+                        }
+                    ?>
+                    </td>
+                    <td class="">
+                        <div style="max-width: 112px;" class="btn-group pull-left">
+                            <a href="/log/detalhe/id/<?php echo $log['sqAuditoria'];?>" title="Visualizar Log" class="btn btn-mini"><span class="icon-eye-open"></span> </a>
+                        </div>
+                    </td>
+                </tr>
+                <?php }?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+

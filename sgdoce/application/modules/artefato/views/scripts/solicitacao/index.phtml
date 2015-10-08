@@ -1,0 +1,207 @@
+<?php
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/solicitacao/index.js');
+        $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/area-trabalho/index.js');
+	echo $this->headScript();
+?>
+<h1>Demandas de Suporte</h1>
+<br />
+<div class="accordion" id="accordion1">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                Demandas
+            </a>
+        </div>
+        <div id="collapseOne" data-grid="demands" class="accordion-body collapse <?php echo ($this->caixa == 'collapseOne') ? 'in' : ''; ?>">
+           <div class="accordion-inner">
+                <form id="demands_box-form" action="<?php echo $this->url(array('action' => 'list-gerenciar')); ?>" name="demands_box-form" method="post">
+                    <div class="span12">
+                        <div class="pull-left">
+                            <div class="btn-group">
+                                <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMultDemandas">
+                                    <i class="icon-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a id="unit_box-acaoTriarMult" class="acaoTriarMult">Triar</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="input-append pull-right">
+                            <?php echo $this->formText('search',null,array('id'=>'unit_search','placeholder'=>'Pesquisar...'))?>
+                            <?php echo $this->formHidden('sqPessoaResponsavelIsNull', 'NULL'); ?>
+                            <?php echo $this->formHidden('sqTipoStatusSolicitacaoNot', \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada()); ?>
+                            <?php echo $this->formHidden('noAction', FALSE); ?>
+                            <?php echo $this->formHidden('wtCheckbox', TRUE); ?>
+                            <button type="submit" class="btn right" title="Filtrar">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <table id="table-grid-demands" class="table-wrapword">
+                        <thead>
+                            <tr>
+                                <th class="sorting_disabled">
+                                    <input type="checkbox" class="allSqSolicitacao" value="" />
+                                </th>
+                                <th>#</th>
+                                <th>Abertura</th>
+                                <th>Usuário</th>
+                                <th>Setor</th>
+                                <th>Nº do Artefato</th>
+                                <th>Assunto</th>
+                                <th>Descrição</th>
+                                <th width="15%">Ações</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+           </div>
+        </div>
+    </div>
+    <br/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo">
+                Minhas Demandas
+            </a>
+        </div>
+        <div id="collapseTwo" data-grid="my-demands" class="accordion-body collapse <?php echo ($this->caixa == 'collapseTwo') ? 'in' : ''; ?>">
+           <div class="accordion-inner">
+                <form id="my-demands_box-form" action="<?php echo $this->url(array('action' => 'list-gerenciar-minha')); ?>" name="my-demands_box-form" method="post">
+                    <div class="span12">
+                        <div class="pull-left">
+                            <div class="btn-group">
+                                <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                    <i class="icon-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a id="unit_box-acaoMultRecTram" class="acaoMultRecDevolver">Devolver</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="input-append pull-right">
+                            <?php echo $this->formText('search',null,array('id'=>'unit_search','placeholder'=>'Pesquisar...'))?>
+                            <?php echo $this->formHidden('sqPessoaResponsavel', \Core_Integration_Sica_User::getPersonId()); ?>
+                            <?php echo $this->formHidden('sqTipoStatusSolicitacaoNot', \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada()); ?>
+                            <?php echo $this->formHidden('noAction', FALSE); ?>
+                            <button type="submit" class="btn right" title="Filtrar">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <table id="table-grid-my-demands" class="table-wrapword">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="cboxGridMyDemands" class="cboxAll" /></th>
+                                <th>#</th>
+                                <th>Abertura</th>
+                                <th>Usuário</th>
+                                <th>Setor</th>
+                                <th>Nº do Artefato</th>
+                                <th>Assunto</th>
+                                <th>Descrição</th>
+                                <th width="15%">Ações</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+           </div>
+        </div>
+    </div>
+    <br/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTree">
+                Histórico de Demandas
+            </a>
+        </div>
+        <div id="collapseTree" data-grid="demands-history" class="accordion-body collapse <?php echo ($this->caixa == 'collapseTree') ? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <div class="span12">
+                    <form id="demands-history_box-form" class="form-horizontal"
+                          action="<?php echo $this->url(array('action' => 'list-historico')); ?>"
+                          name="demands-history_box-form" method="post">
+
+                        <div class="control-group">
+                            <label class="control-label"><span class="required">*</span> Artefato</label>
+                            <div class="controls">
+                                <label for="sqTipoArtefatoProcesso" class="radio inline">
+                                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>"
+                                            class="required" id="sqTipoArtefatoProcesso"/>
+                                    Processo
+                                </label>
+                                <label for="sqTipoArtefatoDocumento" class="radio inline">
+                                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>"
+                                           checked="checked" class="required" id="sqTipoArtefatoDocumento"/>
+                                    Documento
+                                </label>
+                                <label for="sqTipoArtefatoOutro" class="radio inline">
+                                    <input type="radio" name="sqTipoArtefato" value="0" class="required" id="sqTipoArtefatoOutro"/>
+                                    Outros
+                                </label>
+                            </div>
+                        </div>
+
+                        <?php $now = \Zend_Date::now()->get('dd/MM/yyyy'); ?>
+
+                        <div class="control-group">
+                            <label class="control-label">Data </label>
+                            <div class="controls">
+                                <div data-date="<?php echo $now; ?>"
+                                    data-date-format="dd/mm/yyyy" data-date-enddate="<?php echo $now; ?>" class="input-append date">
+                                       <input value="<?php echo $now; ?>"
+                                              class="input-small dateBR endDate" id="dtSolicitacao"
+                                              name="dtSolicitacao" mask="date" type="text" />
+                                       <a class="btn add-on right" title="Calendário"> <i class="icon-calendar"></i></a>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="no_assunto" class="control-label">Assunto</label>
+                            <div class="controls">
+                                <?php echo $this->formText( 'sqTipoAssuntoSolicitacao', null, array('class' => 'span6')); ?>
+
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label required">
+                                Documento / Processo
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText('nuArtefato', null, array('class' => 'span6')); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="btnPesquisar">Pesquisar</button>
+                            <button type="button" class="btn" id="btnClear">Limpar</button>
+                        </div>
+                    </form>
+
+                    <fieldset>
+                        <legend> Resultado da Pesquisa </legend>
+                    </fieldset>
+                    <table id="table-grid-demands-history" class="table-wrapword">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Abertura</th>
+                                <th>Situação</th>
+                                <th>Usuário</th>
+                                <th>Setor</th>
+                                <th>Nº do Artefato</th>
+                                <th>Assunto</th>
+                                <th>Descrição</th>
+                                <th width="5%">Ações</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal_container" class="modal hide fade modal-medium"></div>
+<div id="modal_container_xl_size" class="modal hide fade modal-large force-xl-size"></div>
+<div id="modal_container_medium" class="modal hide fade modal-medium"></div>

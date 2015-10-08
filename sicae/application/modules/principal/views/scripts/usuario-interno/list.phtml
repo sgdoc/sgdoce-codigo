@@ -1,0 +1,84 @@
+<?php
+
+$view = $this;
+$acao = function($row) use ($view) {
+            $toggleIcon = 'ativado';
+            $titleIcon = 'Reativar';
+
+            if ($row['stAtivo']) {
+                $toggleIcon = 'inativado';
+                $titleIcon = 'Inativar';
+            }
+
+            $urlToggle = $view->urlCurrent(array(
+                'controller' => 'usuario-interno',
+                'action' => 'toggle-status',
+                'id' => $row['sqUsuario']
+            ));
+
+            return '<div class="btn-group">' . $view->actionButton('Atribuir Perfil', 'UsuarioInterno.bind', array($row['sqUsuario']), 'user')
+                    . $view->actionButton('Visualizar', $view->urlCurrent(
+                                    array('action' => 'view',
+                                        'id' => $row['sqUsuario']
+                                    )
+                            ), array(), 'eye-open', NULL, array(
+                        'data-toggle' => 'modal',
+                        'data-target' => '#modal-view',
+                        'data-keyboard' => 'false',
+                        'data-backdrop' => 'static'
+                            ), 'href')
+                    . $view->actionButton($titleIcon, $urlToggle, array(), $toggleIcon, NULL, array('active' => $row['stAtivo'],
+                        'msgActive' => Core_Registry::getMessage()->translate('MN070'),
+                        'msgInactive' => Core_Registry::getMessage()->translate('MN072'),
+                        'titleActive' => 'Reativar',
+                        'titleInactive' => 'Inativar',
+                        'class' => 'active-inactive',
+                            ), 'href',array('action'=>'toggle-status'));
+            '</div>';
+        };
+
+$array = array(
+    'columns' => array(
+        array(
+            'column' => function($row) use($view) {
+                return '<div class="center">' . $view->maskNumber($row['nuCpf'], 'cpf') . '</div>';
+            },
+        ),
+        array(
+            'column' => 'noPessoa',
+        ),
+        array(
+            'column' => 'txEmail',
+        ),
+        array(
+            'column' => function($row) use($view) {
+                $ddd = '(' . $row['nuDdd'] . ') ';
+
+                $telefone = $row['nuTelefone'];
+                if (strlen($row['nuTelefone']) >= 8) {
+                    $telefone = substr($row['nuTelefone'], 0, 4) . '-' . substr($row['nuTelefone'], 4, 8);
+                }
+
+                if (!$row['nuTelefone']) {
+                    $ddd = '';
+                    $telefone = '';
+                }
+
+                return '<div class="center">' . $ddd . $telefone . '</div>';
+            },
+        ),
+        array(
+            'column' => function($row) use($view) {
+                return $row['stAtivo'] ? 'Ativo' : 'Inativo';
+            },
+        ),
+        array(
+            'column' => $acao
+        )
+    )
+);
+
+$this->grid->setConfig($array);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

@@ -1,0 +1,47 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/solicitacao/form.js');
+    echo $this->headScript();
+?>
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h1>Devolver Demanda</h1>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div id="error-material"></div>
+        <form enctype="multipart/form-data"
+              class="form-horizontal"
+              id="formModalSolicitacao"
+              method="post"
+              action="<?php echo $this->url(array('action' => 'save-status')); ?>" >
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"> Protocolo(s): </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("dsIdSolicitacao", implode(", ", $this->arrSqSolicitacao), array( 'rows' => 1, 'class' => 'span9 required', 'readonly' => 'readonly')); ?>
+                        <?php foreach( $this->arrSqSolicitacao as $sqSolicitacao ): ?>
+                            <?php echo $this->formHidden('sqSolicitacao[]', $sqSolicitacao); ?>
+                        <?php endforeach; ?>
+                        <?php echo $this->formHidden("sqTipoStatusSolicitacao", \Core_Configuration::getSgdoceTipoStatusSolicitacaoDevolvidaTriagem()); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"> <span class="required">*</span> Motivo: </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("txComentario", null, array( 'rows' => 3, 'class' => 'span9 required')); ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-primary" id="btnSubmit">Devolver</a>
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

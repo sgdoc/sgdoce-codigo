@@ -1,0 +1,39 @@
+<script type="text/javascript" src="/js/app/artefato/documento/index.js"></script>
+<h1>Validar Digital</h1>
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="tab-pane" id="dadosValidacao">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+        <br />
+        <div class="control-group">
+            <label class="control-label">
+                <span class="required">* </span>Documento
+            </label>
+            <div class="controls radios-inline">
+                <input type="radio" id="tpFisico" name="tipoDigital"
+                       value="<?php echo $this->tipoEtiquetaFisica; ?>" class="required" checked="checked"/>
+                <label for="tpFisico" style="display: inline; font-size: 1em;">Físico</label>
+                <input type="radio" id="tpEletronico" name="tipoDigital"
+                       value="<?php echo $this->tipoEtiquetaEletronica; ?>" class="required" disabled="disabled" />
+                <label for="tpEletronico" style="display: inline; font-size: 1em;">Eletrônico</label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nuDigitalValida">
+                <span class="required digitalRequired">* </span>Digital
+            </label>
+            <div class="controls">
+                <div class="input-append">
+                    <input type="text" class="input-large required" mask="digital" name="nuDigitalValida" id="nuDigitalValida" maxlength="11" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions" id="formButtonsPrincipal__">
+        <button id="btValidar" class="btn btn-primary"><i class=""></i>Validar</button>
+        <button id="cancelar"  class="btn"><i class="icon-remove"></i> Cancelar </button>
+    </div>
+</form>

@@ -1,0 +1,24 @@
+<?php
+$artTipoDoc      = \Core_Configuration::getSgdoceTipoArtefatoDocumento();
+$artTipoDossie   = \Core_Configuration::getSgdoceTipoArtefatoDossie();
+$artTipoProcesso = \Core_Configuration::getSgdoceTipoArtefatoProcesso();
+?>
+<div class="row-fluid">
+    <h1 class="pull-left">Artefato -
+        <?php
+        Zend_Wildfire_Plugin_FirePhp::send($this->artefato,'Artefato');
+        Zend_Wildfire_Plugin_FirePhp::send($this->artefatoProcesso,'ArtefatoProcesso');
+        $this->nuArtefato($this->artefato);
+        ?>
+    </h1>
+    <br />
+</div>
+
+<div class="form-actions">
+    <a href="/artefato/area-trabalho" class="btn">
+        <i class="icon-remove"></i> Desmembrar
+    </a>
+    <a href="/artefato/area-trabalho" class="btn">
+        <i class="icon-remove"></i> Desentranhar
+    </a>
+</div>

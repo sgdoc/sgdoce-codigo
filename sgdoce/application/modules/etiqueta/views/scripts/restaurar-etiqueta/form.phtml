@@ -1,0 +1,50 @@
+<script type="text/javascript" src="/js/app/etiqueta/restaurar-etiqueta/form.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Adicionar Digital</h1>
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+</div>
+<div class="modal-body" style="height:195px;">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-digital" method="post" style="margin-top:5px;">
+            <div class="control-group">
+                <label class="control-label" for="inLoteComNupSiorg">
+                    <span class="required" title="Required field">* </span>
+                    Lote com NUP
+                </label>
+                <div class="controls">
+                    <?php
+                        echo $this->ComboCustom('inLoteComNupSiorg', null, array('class' => 'required'), array(
+                            1 => 'Sim',
+                            0 => 'Não'
+                        ));
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required" title="Required field">* </span>
+                    Digital
+                </label>
+                <div class="controls">
+                    <div class="input-append">
+                        <input type="text" class="span7 required" ondrop="javascript:return false;" name="nuEtiqueta" id="nuEtiqueta" mask="numeric" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluir" data-dismiss="modal">Concluir</a>
+    <a href="#" class="btn btnCancelar" data-dismiss="modal"><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

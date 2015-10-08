@@ -1,0 +1,51 @@
+<div class="tab-pane" id="dadosAssinatura">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <fieldset>
+        <legend>Dados da Assinatura</legend>
+        <div class="control-group">
+            <?php
+            if(isset($this->campos[3])) {
+                foreach($this->campos[3] as $value) { ?>
+                <?php
+                if ((substr(strtolower($value['noCampo']),0,3) != 'log')
+                       && (substr(strtolower($value['noCampo']),0,12) != 'assinatura e')) :?>
+                   <div class="controls">
+                        <label class="checkbox inline"> <input type="checkbox" class="tipoAssinaturaCamp"
+                            id="sqPadraoModeloDocumentoCam" name="sqPadraoModeloDocumentoCam[]"
+                            value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                            <?php echo ($value['checked']) ? 'checked="checked"' : ''?>> <?php echo $value['noCampo'];?>
+                        </label><br>
+                    </div>
+                    <?php endif; ?>
+                <?php  }?>
+            <?php  }?>
+            </div>
+        </fieldset><br>
+        <fieldset>
+            <legend>Tipo de Assinatura</legend>
+            <div class="control-group">
+                <?php
+                if(isset($this->campos[3])) {
+                    foreach($this->campos[3] as $value) { ?>
+                        <?php
+                        if ((substr(strtolower($value['noCampo']),0,3) == 'log')
+                            || (substr(strtolower($value['noCampo']),0,12) == 'assinatura e')) :?>
+                        <div class="controls">
+                                <label class="checkbox inline"> <input type="checkbox" class=""
+                                    id="sqPadraoModeloDocumentoCam" name="sqPadraoModeloDocumentoCam[]"
+                                    value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                                    <?php echo ($value['checked']) ? 'checked="checked"' : ''?>> <?php echo $value['noCampo'];?>
+                                </label><br>
+                        </div>
+                        <?php endif; ?>
+                    <?php  }?>
+                <?php  }?>
+            </div>
+        </fieldset>
+</div>
+
+
+
+

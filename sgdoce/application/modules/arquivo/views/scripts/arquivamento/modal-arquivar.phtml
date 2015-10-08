@@ -1,0 +1,38 @@
+<script type="text/javascript" src="/js/app/arquivo/arquivamento/modal-arquivar.js"></script>
+
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Arquivar Artefato <?php echo $this->nuArtefato($this->entityArtefato); ?></h1> <!--deve ser h1 para o validador saber onde coloca a mensagem-->
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form_artefato_arquivar"
+              action="<?php echo $this->urlCurrent(array(
+                  'module'=>'arquivo',
+                  'controller'=>'caixa',
+                  'action' => 'list-caixa-aberta')); ?>">
+            <?php
+                echo $this->formHidden('sqArtefato',$this->entityArtefato->getSqArtefato());
+                echo $this->formHidden('sqClassificacao',$this->entityArtefato->getSqArtefatoClassificacao()
+                        ->getSqClassificacao()->getSqClassificacao());
+            ?>
+            <table id="grid_caixa">
+                <thead >
+                    <tr>
+                        <th width="5%" class="sorting_disabled">&nbsp;</th>
+                        <th>Caixa</th>
+                        <th>Ano</th>
+                        <th>Classificacao</th>
+                        <th>Unidade</th>
+                        <th>Data</th>
+                        <th>Docs. Arquivados</th>
+                    </tr>
+                </thead>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" id="btnSave" class="btn btn-primary btnConcluirClassificacao" title="Salvar">Salvar</button>
+    <a href="#" class="btn btnCancelarClassificacao" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

@@ -1,0 +1,194 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl().'/js/library/jquery.simpleautocomplete.js');
+$this->headScript()->appendFile($this->baseUrl().'/js/app/artefato/minuta-eletronica/form.js');
+echo $this->headScript();
+?>
+<h1 id="divTitulo"></h1>
+<br />
+   <input class="required" type="hidden" name="divEdit" id="divEdit" value="" />
+<div
+    class="alert alert-error campos-obrigatorios hidden"></div>
+<div
+    class="alert alert-success mensagem-sucesso hidden"></div>
+<form class="form-horizontal"
+    action="<?php echo $this->urlCurrent(array('action' => 'save'))?>"
+    enctype="multipart/form-data"
+    method="post" id="form-cadastrar-artefato">
+    <ul class="nav nav-tabs tabsForm">
+        <li class="active"><a href="#1" data-toggle="tab" class="tab">Dados
+                Gerais</a></li>
+        <li id="botao_aba5" hidden="true"><a href="#2" data-toggle="tab"
+            class="tab">Destinatário</a>
+        </li>
+        <li id="botao_aba7" hidden="true"><a href="#3" data-toggle="tab" class="tab">Interessados</a>
+        </li>
+        <li id="botao_aba2" hidden="true"><a href="#4" data-toggle="tab"
+            class="tab">Texto</a>
+        </li>
+        <li id="botao_aba6" hidden="true"><a href="#5" data-toggle="tab"
+            class="tab">Rodapé</a>
+        </li>
+        <li id="botao_aba3" hidden="true"><a href="#6" data-toggle="tab"
+            class="tab">Assinatura</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="1" class="tab-pane active">
+            <?php
+            $sqTipoArtefatoAssunto = $this->data->getSqArtefato()->getSqTipoArtefatoAssunto()->getSqTipoArtefatoAssunto() ? : $this->dataPost['sqTipoArtefatoAssunto'];
+            $sqTratamento = '';
+            $sqGrauAcesso = ($this->dataGrauAcesso != NULL ? $this->dataGrauAcesso->getSqGrauAcesso()->getSqGrauAcesso() : '');
+
+            if(!$sqGrauAcesso) {
+                $sqGrauAcesso = ($this->grau != NULL ? $this->grau : '');
+            }
+
+            $sqEstado           = $this->data->getSqMunicipio() ? $this->data->getSqMunicipio()->getSqEstado()->getSqEstado() : '';
+            $sqMunicipioHidden  = $this->data->getSqMunicipio() ? $this->data->getSqMunicipio()->getSqMunicipio() : '';
+            $sqMunicipio        = $this->data->getSqMunicipio() ? $this->data->getSqMunicipio()->getNoMunicipio() : '';
+
+            if($this->dataPost['sqMunicipio']){
+                $sqMunicipioHidden = $this->dataPost['sqMunicipio'];
+                $sqMunicipio       = $this->dataPost['sqMunicipio_autocomplete'];
+            }
+            if($this->dataPost['sqEstado']){
+                $sqEstado = $this->dataPost['sqEstado'];
+            }
+            if($this->dataPost['dtArtefato']){
+                $dtArtefato = $this->dataPost['dtArtefato'];
+            }else{
+                $dtArtefato = $this->dataArtefato;
+            }
+            ?>
+            <input class="" type="hidden" name="sqTipoArtefatoAssunto"
+                id="sqTipoArtefatoAssunto"
+                value="<?php echo $sqTipoArtefatoAssunto ?>" />
+            <input class="required" type="hidden" name="sqAssunto" id="sqAssunto"
+                value="<?php echo $this->assunto->getSqAssunto(); ?>" /> <input
+                class="required" type="hidden" name="sqTipoDocumento"
+                id="sqTipoDocumento"
+                value="<?php echo $this->tipoDocumento->getSqTipoDocumento(); ?>" />
+            <input class="" type="hidden" name="sqArtefato" id="sqArtefato"
+                value="<?php echo $this->data->getSqArtefato()->getSqArtefato(); ?>" />
+            <input class="" type="hidden" name="sqModeloDocumento" id="sqModeloDocumento"
+                value="<?php echo $this->data->getSqModeloDocumento()->getSqModeloDocumento(); ?>" />
+            <input class="" type="hidden" name="sqTipoVisualizacao" id="sqTipoVisualizacao"
+                value="<?php echo $this->tipoVisualizacao; ?>" />
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            <fieldset>
+                <br />
+                <div class="control-group">
+                    <label class="control-label" for="input01"><span
+                        class="required" title="Required field">*</span> Tipo de Documento</label>
+                    <div class="controls">
+                        <input type="text" size="50" disabled class="span6 disabled"
+                            id="input01"
+                            value="<?php echo $this->tipoDocumento->getNoTipoDocumento(); ?>">
+                    </div>
+                </div>
+                <div class="control-group dv1-nuArtefato1" hidden="true">
+                    <label class="control-label" for="input01">Número do documento</label>
+                    <div class="controls">
+                        <input type="text" size="30" disabled class="span3 disabled"
+                            id="input01">
+                    </div>
+                </div>
+                <div class="control-group" hidden="true">
+                    <label class="control-label" for="input01">Origem</label>
+                    <div class="controls">
+                        <?php echo $this->formText('origem', $this->unidadeOrg->getNoUnidadeOrg(),
+                            array('class' => 'required', 'maxlength' => 100));?>
+                    </div>
+                </div>
+                <div class="control-group dv1-sqMunicipio" hidden="true">
+                    <label class="control-label" for="select01"><span class="required"
+                        title="Required field">*</span> Estado</label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqEstado', $sqEstado, array('class'=>'required span3'), $this->estado); ?>
+                    </div>
+                </div>
+
+                <div class="control-group dv1-sqMunicipio" hidden="true">
+                    <label class="control-label"><span class="required"
+                        title="Required field">*</span> Local</label>
+                    <div class="controls">
+                        <input id="sqMunicipio_hidden" type="hidden" name="sqMunicipio"
+                            value="<?php echo $sqMunicipioHidden; ?>"> <input
+                            name="sqMunicipio" id="sqMunicipio" type="text" class=""
+                            value="<?php echo $sqMunicipio; ?>">
+                    </div>
+                </div>
+                <div class="control-group dv1-dtArtefato" hidden="true">
+                    <label class="control-label" for="appendedInputButton"><span
+                        class="required" title="Required field">*</span> Data</label>
+                    <div class="controls">
+                        <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                            <input value="<?php echo $dtArtefato;?>" class="input-small dateBR" id="dtArtefato"
+                                name="dtArtefato" mask="date" type="text"/>
+                                <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="select01"><span class="required"
+                        title="Required field">*</span> Grau de Acesso</label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqGrauAcesso', $sqGrauAcesso, array('class'=>'required span3'), $this->grauAcesso); ?>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="tab-pane abaDestInterno" id="2">
+            <?php echo $this->partial('minuta-eletronica/destinatario-interno.phtml', array('tipoPessoa' => $this->tipoPessoa, 'tratamento' => $this->tratamento, 'data' => $this->data));?>
+        </div>
+        <div class="tab-pane abaDestExterno" id="2">
+            <?php echo $this->partial('minuta-eletronica/destinatario-externo.phtml', array('tipoPessoa' => $this->tipoPessoa, 'tratamento' => $this->tratamento, 'vocativo' => $this->vocativo));?>
+        </div>
+        <div class="tab-pane abaInteressado" id="3">
+            <?php echo $this->partial('minuta-eletronica/interessado.phtml', array('tipoPessoa' => $this->tipoPessoa, 'tratamento' => $this->tratamento));?>
+        </div>
+        <div class="tab-pane abaTexto" id="4">
+            <?php echo $this->partial('minuta-eletronica/texto.phtml', array('data' => $this->data, 'assunto' => $this->assunto, 'fecho' => $this->fecho , 'dataPost' => $this->dataPost));?>
+        </div>
+        <div class="tab-pane abaRodape" id="5">
+            <?php echo $this->partial('minuta-eletronica/rodape.phtml',array('dados' => $this->dadosOrigem, 'unidadeOrg' => $this->unidadeOrg ,
+                    'telefone' => $this->telefone,'email' => $this->email , 'rodape' => $this->rodape ,'data' => $this->data,'dataPost' => $this->dataPost ));?>
+        </div>
+        <div class="tab-pane abaAssinatura" id="6">
+            <?php echo $this->partial('minuta-eletronica/assinatura.phtml',array('tipoMotivacao' => $this->tipoMotivacao));?>
+        </div>
+        <div class="tab-pane abaAssinaturaUnica" id="6">
+            <?php echo $this->partial('minuta-eletronica/assinatura-unica.phtml',array('assinaturaUnica' => $this->assinaturaUnica,'assinaturaSetor' => $this->assinaturaSetor, 'assinantesUnicos' => $this->assinantesUnicos));?>
+        </div>
+        <?php echo $this->render('minuta-eletronica/form-action.phtml');?>
+    </div>
+    <input type="hidden" id="unicoDestino" value="<?php echo $this->unicoDestino; ?>">
+</form>
+<div
+    id="modal-destinatario" class="modal hide fade in modal-large"></div>
+<div
+    id="modal-destinatario-interno" class="modal hide fade in modal-large"></div>
+<div
+    id="modal-interessado" class="modal hide fade in modal-large"></div>
+<div
+    id="modal-assinatura" class="modal hide fade in modal-large"></div>
+    <!--MODAL PESSOA FISICA-->
+<div  id="visualizarPF" class="modal hide fade in modal-medium"></div>
+<!-- FIM MODAL PESSOA FISICA -->
+    <!--MODAL PESSOA FISICA-->
+<div  id="visualizarPJ" class="modal hide fade in modal-medium"></div>
+<!-- FIM MODAL PESSOA FISICA -->
+<script
+    type="text/javascript" src="/js/app/artefato/minuta-eletronica/menuprocesso.js"></script>
+<script
+    type="text/javascript" src="/js/app/artefato/minuta-eletronica/create.js"></script>
+<script
+    type="text/javascript" src="/js/app/artefato/minuta-eletronica/interessado.js"></script>
+<script
+    type="text/javascript" src="/js/app/artefato/minuta-eletronica/assinatura.js"></script>
+    <script
+    type="text/javascript" src="/js/app/artefato/minuta-eletronica/destinatario.js"></script>

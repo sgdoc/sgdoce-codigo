@@ -1,0 +1,127 @@
+<?php
+
+use \Principal\Service\Pessoa;
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+            if ($row['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_JURIDICA) {
+                $param = array($row['sqPessoa'], TRUE);
+                $nuCpfCnpj = $row['nuCnpj'];
+            } else {
+                $param = array($row['sqPessoa']);
+                $nuCpfCnpj = $row['nuCpf'];
+            }
+
+            $button = '<div class="btn-group">' . $view->actionButton(
+                            'Alterar'
+                            , 'PessoaPesquisar.alterar'
+                            , $param
+                            , 'pencil'
+                    )
+                    . $view->actionButton(
+                            'Visualizar'
+                            , 'PessoaPesquisar.visualizar'
+                            , $param
+                            , 'eye-open'
+                    )
+                    . $view->actionButton(
+                            $row['stRegistroAtivo'] ? 'Inativar' : 'Reativar'
+                            , 'PessoaPesquisar.alterarStatus'
+                            , array($row['sqPessoa'], $row['noPessoa'],$nuCpfCnpj, $row['stRegistroAtivo'] ? 0 : 1)
+                            , $row['stRegistroAtivo'] ? 'inativado' : 'ativado'
+                            , null
+                            , array()
+                            , 'js'
+                            , array('action'=>'save-form-web-service')
+                    )
+                    . '</div>';
+
+            return $button;
+        };
+
+$mask = function ($row) use ($view) {
+            if ($row['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_FISICA) {
+                return '<div class="center">' . $view->maskNumber($row['nuCpf'], 'cpf') . '</div>';
+            }
+
+            if ($row['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_JURIDICA) {
+                return '<div class="center">' . $view->maskNumber($row['nuCnpj'], 'cnpj') . '</div>';
+            }
+
+            return '';
+        };
+
+$date = function ($row) use ($view) {
+            if ($row['dtNascimento']) {
+                return '<div class="center">' . $row['dtNascimento']->get('dd/MM/YYYY') . '</div>';
+            } else {
+                return '';
+            }
+        };
+
+$sexo = function ($row) use ($view) {
+            if (strtoupper($row['sgSexo']) == 'F') {
+                return 'Feminino';
+            } else {
+                return 'Masculino';
+            }
+        };
+
+$status = function ($row) use ($view) {
+            if ($row['stRegistroAtivo']) {
+                return 'Ativo';
+            } else {
+                return 'Inativo';
+            }
+        };
+
+$column = function ($row) use ($view) {
+            return '<p class="column"></>';
+        };
+
+$sqPessoa = function ($row) {
+            return '<div class="center">' . $row['sqPessoa'] . '</div>';
+        };
+
+$configArray = array();
+
+switch ($this->sqTipoPessoa) {
+    case Pessoa::SQ_TIPO_PESSOA_FISICA:
+        $configArray['columns'][0]['column'] = 'noPessoa';
+        $configArray['columns'][1]['column'] = $mask;
+        $configArray['columns'][2]['column'] = $date;
+        $configArray['columns'][3]['column'] = $sexo;
+        $configArray['columns'][4]['column'] = $sqPessoa;
+        $configArray['columns'][5]['column'] = $status;
+        $configArray['columns'][6]['column'] = $acao;
+
+        break;
+
+    case Pessoa::SQ_TIPO_PESSOA_JURIDICA:
+        $configArray['columns'][0]['column'] = 'noFantasia';
+        $configArray['columns'][1]['column'] = $mask;
+        $configArray['columns'][2]['column'] = 'noPessoa';
+        $configArray['columns'][3]['column'] = $column;
+        $configArray['columns'][4]['column'] = $sqPessoa;
+        $configArray['columns'][5]['column'] = $status;
+        $configArray['columns'][6]['column'] = $acao;
+
+        break;
+
+    default:
+        $configArray['columns'][0]['column'] = 'noTipoPessoa';
+        $configArray['columns'][1]['column'] = 'noPessoa';
+        $configArray['columns'][2]['column'] = $mask;
+        $configArray['columns'][3]['column'] = $column;
+        $configArray['columns'][4]['column'] = $sqPessoa;
+        $configArray['columns'][5]['column'] = $status;
+        $configArray['columns'][6]['column'] = $acao;
+
+        break;
+}
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

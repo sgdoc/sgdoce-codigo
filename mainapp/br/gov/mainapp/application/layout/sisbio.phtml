@@ -1,0 +1,67 @@
+<?php
+use br\gov\sial\core\output\screen\html\Text;
+
+$cdn        = $this->bootstrap->config('app.layout.cdn');
+$authSystem = $this->bootstrap->config('app.authSystem');
+
+$param = json_encode(array_merge($param, array('cdn' => $cdn, 'urlSystem' => $authSystem)));
+$scriptDocReady = new Text(sprintf('<script>$(document).ready(function () {layoutICMBio.mountLayout(%1$s);});</script>', $param));
+
+//Menu flutuante Lateral
+$divMenuLeft = $this->saf->create('div')
+                         ->attr('id','floating-menu');
+
+//Menu do Sisbio
+$navMenu = $this->saf->create('div')
+                     ->add($menuV);
+
+$divContent = $this->saf->create('div')
+                        ->attr('id','mainContainer');
+
+$divRow = $this->saf->create('div')
+                    ->addClass('row-fluid');
+
+//Diferenças no Layout Para usuário externo e interno
+if ($isExterno) {
+    $navMenu->addClass('custom-nav-bar');
+    $divContent->addClass('span12');
+} else {
+    $divContent->addClass('span9');
+    $divRow->add($navMenu);
+}
+
+$divRow->add($divContent);
+$divContainer = $this->saf->create('div')
+                          ->addClass('container-fluid');
+
+if ($isExterno)
+    $divContainer->add($navMenu);
+$divContainer->add($divRow);
+
+#Meta
+$this->add('title',   (object) array('content'   => 'SISBIO - ICMBio'), 'head')
+     ->add('meta',    (object) array('http-equiv'=> 'Content-Type', 'content' => 'text/html; charset=utf-8'), 'head')
+     ->add('meta',    (object) array('name'      => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'), 'head');
+
+#CSS
+$this->add('stylesheet', (object) array('href' => $cdn.'common/css/style.css'            , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet', (object) array('href' => $cdn.'common/css/style-correct.css'    , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet', (object) array('href' => $cdn.'common/css/nestedAccordion.css'  , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet', (object) array('href' => $cdn.'component/css/SAFSmartFilter.css', 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet', (object) array('href' => '/media/sisicmbio/sisbio/css/sisbio.css', 'media'=> 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head');
+
+#Scripts
+$this->add('javascript', (object) array('src' => $cdn.'common/js/jquery.js'), 'head')
+     ->add('javascript', (object) array('src' => $cdn.'bootstrap/js/bootstrap.js'), 'head')
+     ->add('javascript', (object) array('src' => $cdn.'common/js/alert.js'), 'head')
+     ->add('javascript', (object) array('src' => '/media/js/systemAndPassword.js'), 'head')
+     ->add('javascript', (object) array('src' => '/media/js/layoutICMBio.js'), 'head')
+     ->add('javascript', (object) array('src' => '/media/sisicmbio/sisbio/js/sisbio.menu.js'), 'head')
+     ->add('javascript', (object) array('src' => '/media/sisicmbio/sisbio/js/mensagem.js'), 'head')
+     ->add('javascript', (object) array('src' => '/media/sisicmbio/sisbio/js/sisfunction.js'), 'head');
+
+#Elementos Padrões
+$this->add($menuH)
+     ->add($divMenuLeft)
+     ->add($divContainer)
+     ->add($scriptDocReady);

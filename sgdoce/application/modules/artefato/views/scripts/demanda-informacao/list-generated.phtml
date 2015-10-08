@@ -1,0 +1,66 @@
+<?php
+    $view = $this;
+    $params = $this->params;
+    
+    $nuArtefato = function($row) use ($view, $params) {
+        if( $row['nuDigital'] != '' ){
+            return $row['nuDigital'];
+        } else {
+            return $row['nuArtefato'];
+        }
+    };
+    
+    $txSolicitacao = function($row) use ($view, $params) {
+        $txSolicitacao = $row['txSolicitacao'];
+        if(strlen($txSolicitacao) > 100){
+            $txSolicitacao = substr($row['txSolicitacao'], 0, 100) . "...";
+        }         
+        return $txSolicitacao;
+    };
+    
+    $txSituacao = function($row) use ($view, $params) {
+        $txLabelSituacao = "Pendente";
+        if( !is_null($row['dtResposta']) ) {
+            if( (integer)$row['naoRespondidos'] > 0 ) {
+                $txLabelSituacao = "Respondido";
+            } else {
+                $txLabelSituacao = "Finalizado";
+            }
+        }
+        return $txLabelSituacao; 
+    };
+    
+    $dtPrazo = function($row) use ($view, $params) {
+        $objDtPrazo = new \Zend_Date($row['dtPrazo']);
+        return $objDtPrazo->get('dd/MM/yyyy');
+    };
+    
+    $dtResposta = function($row) use ($view, $params) {
+        if(!is_null($row['dtResposta'])) {
+            $objDtPrazo = new \Zend_Date($row['dtResposta']);
+            return $objDtPrazo->get('dd/MM/yyyy');
+        } else {
+            return ' - ';
+        }
+    };
+    
+    $acao = function($row) use ($view, $params) {   
+        $rtn = $view->actionButton('Visualizar',  'DemandaInformacaoMain.Acoes.Visualizar', array($row['sqPrazo']),'eye-open');        
+        return $rtn;
+    };
+    
+    $configArray = array('columns' => array(0 => array( 'column' => $nuArtefato),
+                                            1 => array( 'column' => 'txPessoaOrigem'),
+                                            2 => array( 'column' => 'txPessoaDestino'),
+                                            3 => array( 'column' => $txSolicitacao),
+                                            4 => array( 'column' => $dtPrazo),
+                                            5 => array( 'column' => $dtResposta),
+                                            6 => array( 'column' => $txSituacao),
+                                            7 => array( 'column' => $acao)
+    ));
+    
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

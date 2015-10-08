@@ -1,0 +1,142 @@
+<div class="tab-pane active" id="dadosDocumento">
+    <?php
+    $sqGrauAcesso = (!empty($this->dataGrauAcesso)) ? $this->dataGrauAcesso->getSqGrauAcesso()->getSqGrauAcesso() : '';
+    if (!$sqGrauAcesso) {
+        $sqGrauAcesso = ($this->grau != NULL ? $this->grau : \Core_Configuration::getSgdoceGrauAcessoPublico());
+    }
+
+    $stMigracao = $this->data->getStMigracao();
+
+    ?>
+
+    <fieldset>
+        <?php if (true === $this->isLoteEletronico && !$this->data->getNuDigital()): ?>
+            <?php echo $this->formHidden('nuDigital'); ?>
+            <?php echo $this->formHidden('sqLoteEtiqueta'); ?>
+            <?php echo $this->formHidden('nuNup'); ?>
+
+        <?php else: ?>
+            <div class="control-group">
+                <label class="control-label" for="nuDigital">Digital</label>
+                <div class="controls">
+                    <?php
+                    if($this->data->getSqLoteEtiqueta() && $this->data->getNuDigital()): //edit
+
+                        $sqLoteEtiqueta = $this->data->getSqLoteEtiqueta()->getSqLoteEtiqueta()->getSqLoteEtiqueta();
+                        $nuDigital      = $this->data->getNuDigital()->getNuEtiqueta();
+                        if ($stMigracao && strlen($nuDigital) < 7) {
+                            $nuDigital = str_pad($nuDigital, 7, '0', STR_PAD_LEFT);
+                        }
+
+                        $nuNup          = $this->data->getNuDigital()->getNuNupSiorg(true);
+                    else: //create new document
+                        $sqLoteEtiqueta = $this->eDigital->getSqLoteEtiqueta()->getSqLoteEtiqueta();
+                        $nuDigital      = $this->eDigital->getNuEtiqueta();
+                        $nuNup          = $this->eDigital->getNuNupSiorg(true);
+                    endif;
+
+                    echo $this->formHidden('sqLoteEtiqueta',$sqLoteEtiqueta);
+                    echo $this->formText('nuDigital',$nuDigital,array('id'=>'digital','readonly'=>'readonly','class'=>'input-large span5'));
+
+                    ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="nuDigital">NUP</label>
+                <div class="controls">
+                    <?php
+
+                        /*
+                         * se tiver nup, independente do lote ter ou não nup, mostra o campo desabilitado.
+                         *
+                         * se o lote não for com NUP mas existe um nup associado a digital é por que a digital
+                         * é de documento externo que possui NUP gerado por orgão externo
+                         */
+                        if ($nuNup) {
+                            echo $this->formText('nuNup',$nuNup,array('readonly'=>'readonly','class'=>'input-large span5'));
+                        } else if (!$this->eDigital->getSqLoteEtiqueta()->getInLoteComNupSiorg()) {
+                            /*
+                             * se lote não for com NUP só pode cadastrar documento com origem externa, e nesse caso,
+                             * o documento pode conter um NUP.
+                             *
+                             * libera o campo para preenchimento do NUP
+                             */
+                            $attr = array('mask'=>"nup-siorg", 'class'=>'input-large span5 nupSiorg');
+                            if ($stMigracao || (!$nuNup && $this->data->getSqArtefato())) {
+                                $attr['readonly'] = 'readonly';
+                            }
+                            echo $this->formText('nuNup', null, $attr);
+                        }
+                    ?>
+                </div>
+            </div>
+        <?php endif;?>
+
+        <?php if (!$this->isSIC): // quando é sic o documento sera sempre publico ?>
+            <div class="control-group">
+                <label class="control-label" for="sqGrauAcesso"><span class="required">* </span>Grau de Acesso</label>
+                <div class="controls">
+                    <?php echo $this->ComboCustom('sqGrauAcesso', $sqGrauAcesso, array('class' => 'span5 required'), $this->grauAcesso); ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <div class="control-group">
+            <label class="control-label"><span class="required">* </span>Tipo</label>
+            <div class="controls">
+                <?php
+                    if ($this->isSIC) {
+                        $arrAttribs = array('class'=>'span5','disabled'=>'disabled');
+
+                        $sqTipoDocumento_hidden = $this->docSIC->getSqTipoDocumento();
+                        $sqTipoDocumento        = $this->docSIC->getNoTipoDocumento();
+                    } else {
+                        $sqTipoDocumento_hidden = ( $this->data->getSqTipoDocumento()) ?
+                                                    $this->data->getSqTipoDocumento()->getSqTipoDocumento() :
+                                                        NULL;
+                        $sqTipoDocumento        = ( $this->data->getSqTipoDocumento() ) ?
+                                                    $this->data->getSqTipoDocumento()->getNoTipoDocumento() :
+                                                        NULL;
+                        $arrAttribs = array('class'=>'required span5');
+                    }
+
+                    echo $this->formHidden('sqTipoDocumento_hidden', $sqTipoDocumento_hidden);
+                    echo $this->formText('sqTipoDocumento', $sqTipoDocumento, $arrAttribs);
+                ?>
+
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="appendedInputButton"><span class="required">* </span>Data do Documento</label>
+            <div class="controls">
+                <?php
+                    $dtArtefato = null;
+                    if ($this->data->getDtArtefato()){
+                        $dtArtefato = $this->data->getDtArtefato()->get('dd/MM/yyyy');
+                    }
+
+                    if ($this->isLoteEletronico) {
+                        $dtArtefato = \Zend_Date::now()->get('dd/MM/yyyy');
+                    }
+
+                ?>
+
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy') ?>"
+                     data-date-format="dd/mm/yyyy" data-date-enddate="<?php echo \Zend_Date::now()->get('dd/MM/yyyy');?>" class="input-append date">
+                    <?php if (true === $this->isLoteEletronico && !$this->isSIC): ?>
+                        <input value="<?php echo $dtArtefato; ?>"
+                               class="input-small dateBR endDate required" id="dtArtefato"
+                               name="dtArtefato" mask="date" type="text" readonly="readonly" />
+                    <?php else: ?>
+                        <input value="<?php echo $dtArtefato; ?>"
+                               class="input-small dateBR endDate required" id="dtArtefato"
+                               name="dtArtefato" mask="date" type="text" />
+                        <a class="btn add-on right" title="Calendário"> <i class="icon-calendar"></i></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+</div>

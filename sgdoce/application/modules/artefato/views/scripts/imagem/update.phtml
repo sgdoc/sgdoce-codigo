@@ -1,0 +1,48 @@
+<?php
+$this->echoComponentResources(array('pdfViewer','uploader'));
+$previewClasses = ($this->hasImage) ? '' : 'hide showAfterUpload';
+?>
+
+<h1>Imagem do Artefato</h1>
+
+
+    <div class="alert alert-block" style="margin-top: 35px;">
+
+        <h4 id="titleText">Subir uma nova imagem para o artefato.</h4>
+
+        <span class="hide showAfterUpload">Se não,</span>
+        <span id="jokerLetter">C</span>lique
+        <a href="javascript:void(0);" id="selectImage" class="defaultText">aqui</a>
+        <a href="javascript:void(0);" onclick="$('#btnClear').focus();" class="otherText hide">no botão <em>Limpar</em> abaixo</a>
+        <span class="defaultText">para selecionar um arquivo no formato PDF.</span>
+        <span class="otherText hide">para reiniciar a visualização.</span>
+    </div>
+
+    <input type="hidden" value="<?php echo $this->sqArtefato; ?>" id="sqArtefato" />
+    <div style="display:block; height: 20px;">
+        <div id="uploadProgress" class="progress hide">
+            <div class="bar bar-warning" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <fieldset>
+        <legend class="<?php echo $previewClasses; ?>">Visualização</legend>
+        <div id="pdfViewerContainer" class="<?php echo $previewClasses; ?>"></div>
+    </fieldset>
+
+    <script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/imagem/index.js', array('address' => 'js')); ?>"></script>
+    <script type="text/javascript">
+        Imagem.canAlterImage = <?php echo $this->canAlterImage; ?>;
+        Imagem.urlRedirect = '<?php echo $this->backUrl; ?>';
+    </script>
+
+    <?php if (isset($this->backUrl)): ?>
+        <div class="form-actions">
+            <button type="button" id="btnSave" class="hide showAfterUpload btn btn-primary">Salvar</button>
+            <button onclick="javascript:window.location.reload();" id="btnClear" class="hide showAfterUpload btn">Limpar</button>
+            <a href="<?php echo $this->backUrl; ?>" id="btnBack" class="btn">
+                <i class="icon-remove"></i>
+                Cancelar
+            </a>
+        </div>
+    <?php endif; ?>

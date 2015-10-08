@@ -1,0 +1,16 @@
+<?php
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-fisica/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-fisica/form-control.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/library/jquery.simpleautocomplete.js');
+
+    echo $this->headScript();
+?>
+
+<h1>Cadastrar Pessoa Física</h1>
+
+<br/>
+
+<?php
+    echo $this->partial('/pessoa-fisica/form.phtml');
+ ?>

@@ -1,0 +1,140 @@
+<?php
+    echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/visualizar-caixa-minuta/index.js');
+
+    $view = ($this->view ? $this->view : '0');
+    $sqArtefato = ($this->sqArtefato ? $this->sqArtefato : '');
+?>
+<div class="alert alert-error hidden minutas-nao-selecionadas">
+    <button data-dismiss="alert" class="close" type="button">×</button>
+    Não há minutas selecionadas. Selecione ao menos uma para realizar a ação.
+</div>
+
+<h2>Visualizar Caixa de Minutas</h2>
+<br/>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>" method="post" id="form-visualizar-caixa-minuta">
+    <input type="hidden" id="sqPessoa" name="sqPessoa" value="<?php echo $this->sqPessoa ?>">
+    <input type="hidden" id="sqArtefato" name="sqArtefato" value="<?php echo $sqArtefato ?>">
+    <input type="hidden" id="view" name="view" value="<?php echo $view ?>">
+    <input class="span6" type="hidden" id="semUnidadeExercicio" value="<?php echo $this->semUnidadeExercicio?>" />
+    <ul class="nav nav-pills">
+        <li id="viewRecebidas" class="<?php echo empty($view) || $view == 1 ? 'active': ''?>">
+            <a href="/artefato/visualizar-caixa-minuta/index/view/1">Recebidas</a>
+        </li>
+        <li id="viewEnviadas" class="<?php echo $view == 2 ? 'active': ''?>">
+            <a href="/artefato/visualizar-caixa-minuta/index/view/2">Enviadas</a>
+        </li>
+        <li id="viewAcompanhamento" class="<?php echo $view == 4 ? 'active': ''?>">
+            <a href="/artefato/visualizar-caixa-minuta/index/view/4">Em Acompanhamento</a>
+        </li>
+        <li id="viewProduzidas" class="<?php echo $view == 3 ? 'active': ''?>">
+            <a href="/artefato/visualizar-caixa-minuta/index/view/3">Produzidas</a>
+        </li>
+
+        <li class="pull-right">
+            <div class="input-append">
+                <label class="control-label" for="dataSearch"></label>
+                <div class="controls">
+                        <input type="text" class="" name="dataSearch" id="dataSearch" placeholder="Pesquisar..." value="" />
+                        <button class="btn btn right" id="filtrar"><i class="icon-search"></i></button>
+                </div>
+            </div>
+        </li>
+    </ul>
+</form>
+<br/>
+
+
+<form id="form-minuta-acoes-multiplas" name="form-minuta-acoes-multiplas" method="post">
+    <div class="span12">
+        <?php if(empty($this->view) || $this->view == 1 || $this->view == 4 || $this->view == 3): ?>
+        <div class="btn-group">
+            <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                <i class="icon-cog"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <?php if(empty($this->view) || $this->view == 1 || $this->view == 3): ?>
+                <li><a id="acaoMultAcompMin">Acompanhar Minutas</a></li>
+                <li><a id="acaoMultEncAnalise">Encaminhar para Análise</a></li>
+                <li><a id="acaoMultEncAssin">Encaminhar para Assinatura</a></li>
+                <?php endif; ?>
+                <?php if($this->view == 4): ?>
+                <li><a id="acaoMultDesacompMuin">Desacompanhar Minutas</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <?php
+        if($view == 2){
+            $disabled = 'disabled="disabled"';
+        }
+        else{
+            $disabled = '';
+        }
+    ?>
+
+<table id="table-grid-visualizar-caixa-minuta">
+    <thead>
+        <tr>
+            <th width="5%" class="sorting_disabled"> <input type="checkbox" name="allSqArtefato" id="allSqArtefato" value="" <?php echo $disabled ?> /> </th>
+            <th width="15%">Data da Criação</th>
+            <th width="15%">Tipo</th>
+            <th width="5%">Origem</th>
+            <th width="10%">Assunto</th>
+            <th width="10%">Autor</th>
+            <th width="10%">Prazo</th>
+            <th width="5%">Status</th>
+            <th width="25%" class="sorting_disabled">Ações</th>
+        </tr>
+    </thead>
+</table>
+<input type = "hidden" name="sqOcorrencia" id="sqOcorrencia" value="" />
+<input type = "hidden" name="view" id="view" value="" />
+<input type = "hidden" name="sqPessoa" id="sqPessoa" value="" />
+<input type = "hidden" name="sqUnidadeOrgCorp" id="sqUnidadeOrgCorp" value="" />
+</form>
+
+<!-- Div aonde as modais serão abertas-->
+<div class="modal hide" id="modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" id="closeModal">×</button>
+        <h3 id="modal-title"></h3>
+    </div>
+    <div class="modal-body">
+    </div>
+
+<!-- footerDevolverMinuta -->
+    <div class="modal-footer" id="footerDevolverMinuta" hidden="true">
+        <button class="btn btn-primary" id="btDevolver" type="submit">
+            <span class="icon-chevron-right icon-search icon-white"></span> Devolver
+        </button>
+        <a data-dismiss="modal" class="btn" href="#"><i class="icon-remove"></i>Cancelar</a>
+    </div>
+
+<!-- footerEncaminharAnalise -->
+    <div class="modal-footer" id="footerEncaminharMinutaAnalise" hidden="true">
+        <a href="javascript:AcoesMinuta.encaminharMinutaAnalise()" id="btEncaminharAnalise" class="btn btn-primary">
+            <i class="icon-white"></i>
+            Encaminhar
+        </a>
+        <a href="#" class="btn" data-dismiss="modal" id="btFechar">
+            <i class="icon-remove"></i>
+            Cancelar
+        </a>
+    </div>
+
+<!-- footerEncaminharAssinatura -->
+    <div class="modal-footer" id="footerEncaminharMinutaAssinatura" hidden="true">
+        <a href="javascript:AcoesMinuta.encaminharMinutaAssinatura()" id="btEncaminharAssinatura" class="btn btn-primary">
+            <i class="icon-white"></i>
+            Encaminhar
+        </a>
+        <a href="#" class="btn" data-dismiss="modal" id="btFechar">
+            <i class="icon-remove"></i>
+            Cancelar
+        </a>
+    </div>
+</div>
+<!-- Fim da Div aonde as modais serão abertas-->

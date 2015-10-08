@@ -1,0 +1,63 @@
+<?php
+$view = $this;
+
+$inDashboard =  TRUE;
+
+$dtFormatter = function ($row) {
+    return $row ? $row['dtComentario']->toString( 'dd/MM/yyyy HH:mm:ss') : NULL;
+};
+
+$txComentarioFormatter = function ($row) use ($view) {
+    return mb_substr($row['txComentario'], 0, $view->limitComment, 'UTF-8') .
+           (mb_strlen($row['txComentario'], 'UTF-8') > $view->limitComment ? '<b>&hellip;</b>' : NULL);
+};
+
+$setoFormatter = function ($contect) {
+    return $contect['noUnidadeOrg'];
+};
+
+$acao = function($row) use ($view, $inDashboard) {
+    # @todo aplicar verificacao de tramite do artefato após alteração da estrutura da tabela
+    
+    $hasDemandaComentario = FALSE;
+    foreach ($view->demandaAberta as $demanda) {
+        if ($demanda['sqTipoAssuntoSolicitacao'] === Core_Configuration::getSgdoceTipoAssuntoSolicitacaoComentario()) {
+            $hasDemandaComentario = TRUE;
+        }
+    }
+
+    $newer  = $row['dtComentario']->getTimestamp() > $row['dtTramite']->getTimestamp();
+    $update = $view->actionButton('Alterar', 'ComentarioGrid.update',        array('sqComentarioArtefato' => $row['sqComentarioArtefato']),'pencil'  );
+    $delete = $view->actionButton('Excluir', 'ComentarioGrid.confirmDelete', array('sqComentarioArtefato' => $row['sqComentarioArtefato'],'sqArtefato' => $row['sqArtefato']), 'trash');
+
+    # visualizar é sempre permitido
+    $arrBtn['view'] = $view->actionButton('Visualizar', 'ComentarioGrid.detail', array('sqComentarioArtefato' => $row['sqComentarioArtefato']), 'eye-open');
+
+    if (true === $view->hasPermission && $newer && $inDashboard) {
+        $arrBtn['up' ] = $update;
+        $arrBtn['del'] = $delete;
+    }
+
+    if (!isset($arrBtn['up']) && \Zend_Registry::get('isUserSgi') && $hasDemandaComentario ){
+        $arrBtn['up' ] = $update;
+        $arrBtn['del'] = $delete;
+    }
+
+    return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+
+$configArray = array('columns'  => array(
+      array('column' => $dtFormatter),
+      array('column' => $txComentarioFormatter),
+      array('column' => 'noPessoa'),
+      array('column' => $setoFormatter),
+      array('column' => $acao)
+    )
+);
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data  = $parse->parse($this->result);
+
+echo json_encode($data);
+

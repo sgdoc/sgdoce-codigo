@@ -1,0 +1,82 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3 class="title-main">Adicionar Conta</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form-dado-bancario-modal">
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="sqTipoDadoBancario" ><span title="Campo Obrigatório"
+ class="required">*</span> Tipo</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                        echo $this->comboCustom('sqTipoDadoBancario', $this->data->getSqTipoDadoBancario()->getSqTipoDadoBancario(), array('class' => 'required'), $this->cmb['sqTipoDadoBancario']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="sqBanco"><span title="Campo Obrigatório"
+ class="required">*</span> Número do Banco</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('coBanco', NULL, array('class' => 'span3 required', 'maxlength' => 3));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="sqBanco"><span title="Campo Obrigatório"
+ class="required">*</span> Banco</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->comboCustom('sqBanco', $this->data->getSqAgencia()->getSqBanco()->getSqBanco(), array('class' => 'required span11'), $this->cmb['sqBanco']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="" ><span title="Campo Obrigatório"
+ class="required">*</span> Agência</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('sqAgencia', $this->data->getSqAgencia()->getCoAgencia(), array('class' => 'span3 required', 'maxlength' => 50));
+                        ?>
+                        &nbsp; DV &nbsp;
+                        <?php
+                        echo $this->formText('coDigitoAgencia', $this->data->getSqAgencia()->getCoDigitoAgencia(), array('class' => 'span2 required', 'maxlength' => 10, 'disabled' => 'disabled'));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nuConta"><span title="Campo Obrigatório"
+ class="required">*</span> Conta</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuConta', $this->data->getNuConta(), array('class' => 'span3 required', 'maxlength' => 10));
+                        ?>
+                        <span title="Campo Obrigatório"
+ class="required">*</span> DV &nbsp;
+                        <?php
+                        echo $this->formText('nuContaDv', $this->data->getNuContaDv(), array('class' => 'span2 required', 'maxlength' => 3));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="coOperacao" class="control-label"><span id="operacao-required" style="display: none;"><span title="Campo Obrigatório"
+ class="required">*</span> </span>Número da Operação</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('coOperacao', $this->data->getCoOperacao(), array('class' => 'input-mini30', 'maxlength' => 3));
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarDadoBancario" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn" data-dismiss="modal" title="Fechar">Fechar</a>
+</div>
+<script src="<?php echo $this->assetUrl('sica/dado-bancario/modal.js') ?>" type="text/javascript"></script>

@@ -1,0 +1,85 @@
+/**
+ * ThreeLittleDots
+ * Simple "..." animated
+ *
+ * Example:
+ * Carregando<span class="threeLittleDots">.</span><span class="threeLittleDots">.</span><span class="threeLittleDots">.</span>
+ */
+span.threeLittleDots {
+  -webkit-animation: pulsate_threeLittleDots-2 0.45s ease-in-out infinite;
+  -o-animation: pulsate_threeLittleDots-2 0.45s ease-in-out infinite;
+  animation: pulsate_threeLittleDots-2 0.45s ease-in-out infinite;
+
+  position: relative;
+}
+span.threeLittleDots:first-of-type {
+  -webkit-animation-name: pulsate_threeLittleDots-1;
+  -o-animation-name: pulsate_threeLittleDots-1;
+  animation-name: pulsate_threeLittleDots-1;
+}
+span.threeLittleDots:last-of-type {
+  -webkit-animation-name: pulsate_threeLittleDots-3;
+  -o-animation-name: pulsate_threeLittleDots-3;
+  animation-name: pulsate_threeLittleDots-3;
+}
+
+
+@-webkit-keyframes pulsate_threeLittleDots-1 {
+  0% {   opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@-o-keyframes pulsate_threeLittleDots-1 {
+  0% {   opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@keyframes pulsate_threeLittleDots-1 {
+  0% {   opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+
+@-webkit-keyframes pulsate_threeLittleDots-2 {
+  0% {   opacity:   1; bottom: 0px; }
+  10% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  60% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@-o-keyframes pulsate_threeLittleDots-2 {
+  0% {   opacity:   1; bottom: 0px; }
+  10% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  60% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@keyframes pulsate_threeLittleDots-2 {
+  0% {   opacity:   1; bottom: 0px; }
+  10% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  60% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+
+@-webkit-keyframes pulsate_threeLittleDots-3 {
+  0% {   opacity:   1; bottom: 0px; }
+  20% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  70% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@-o-keyframes pulsate_threeLittleDots-3 {
+  0% {   opacity:   1; bottom: 0px; }
+  20% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  70% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}
+@keyframes pulsate_threeLittleDots-3 {
+  0% {   opacity:   1; bottom: 0px; }
+  20% {  opacity:   1; bottom: 0px; }
+  50% {  opacity: 0.8; bottom: 3px; }
+  70% {  opacity: 0.8; bottom: 3px; }
+  100% { opacity:   1; bottom: 0px; }
+}

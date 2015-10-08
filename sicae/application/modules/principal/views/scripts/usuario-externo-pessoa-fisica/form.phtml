@@ -1,0 +1,142 @@
+<fieldset>
+    <div class="control-group">
+        <label for="cp1" class="control-label">
+            <span  class="required">*</span> Nome Completo
+        </label>
+        <div class="controls">
+            <?php echo $this->formHidden('dtCadastro', $this->dtCadastro); ?>
+            <?php echo $this->formHidden('sqTipoPessoa', 1); ?>
+            <?php echo $this->formHidden('sqUsuarioExterno', $this->data->getSqUsuarioExterno()); ?>
+            <?php echo $this->formText('noUsuarioExterno', $this->data->getNoUsuarioExterno(), array('class' => 'span8 required passaporte', 'maxlength' => 200)); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="nacionalidade" class="control-label">
+            <span class="required">*</span> Nacionalidade</label>
+        <div class="controls">
+            <label class="radio inline">
+                <input type="radio" name="inNacionalidadeBrasileira" value="1"
+                <?php
+                echo $this->data->getSqUsuarioPessoaFisica()->getInNacionalidadeBrasileira() ? 'checked="checked"' : '';
+                ?>>
+                Brasileiro
+            </label>
+            <label class="radio inline">
+                <input type="radio" name="inNacionalidadeBrasileira" value="0"
+                <?php
+                echo $this->data->getSqUsuarioPessoaFisica()->getInNacionalidadeBrasileira() ? '' : 'checked="checked"';
+                ?>>
+                Estrangeiro
+            </label>
+        </div>
+    </div>
+    <div class="control-group campoPassaporte">
+        <label for="paisOrigem" class="control-label"> País de Origem</label>
+        <div class="controls">
+            <?php echo $this->comboCustom('sqPaisOrigem', $this->data->getSqUsuarioPessoaFisica()->getSqPaisOrigem(), array('class' => 'span2'), $this->cmb['sqPais']); ?>
+        </div>
+    </div>
+    <div class="control-group campoPassaporte">
+        <label for="passaporte" class="control-label">
+            <span class="required">*</span> Passaporte
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('nuPassaporte', $this->data->getSqUsuarioPessoaFisica()->getNuPassaporte(), array('class' => 'span4 required passaporte', 'maxlength' => 50)); ?>
+            <span class="help-block aviso avisoPassaporte">Esta informação será utilizada para recuperação de senha.</span>
+        </div>
+    </div>
+    <div class="control-group campoCPF" style="display: block;">
+        <label for="cp2" class="control-label">
+            <span  class="required cpf">*</span> CPF
+        </label>
+        <div class="controls">
+            <?php $attr = $this->data->getSqUsuarioExterno() ? array('class' => 'input-medium required cpf', 'disabled' => 'disabled') : array('class' => 'input-medium required cpf'); ?>
+            <?php echo $this->formText('nuCpf', $this->data->getSqUsuarioPessoaFisica()->getNuCpf(), $attr); ?>
+            <span class="help-block aviso avisoCpf">Esta informação será utilizada para recuperação de senha.</span>
+        </div>
+    </div>
+    <div class="control-group campoRG">
+        <label for="cp3" class="control-label">RG</label>
+        <div class="controls">
+            <?php echo $this->formText('nuRegistroGeral', $this->data->getSqUsuarioPessoaFisica()->getNuRegistroGeral(), array('class' => 'span2', 'maxlength' => 50)); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="cp4" class="control-label">Sexo</label>
+        <div class="controls">
+            <?php echo $this->comboCustom('sgSexo', $this->data->getSqUsuarioPessoaFisica()->getSgSexo(), array(), array('M' => 'Masculino', 'F' => 'Feminino')); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="cp5" class="control-label">Escolaridade</label>
+        <div class="controls">
+            <?php echo $this->comboCustom('sqTipoEscolaridade', $this->data->getSqUsuarioPessoaFisica()->getSqTipoEscolaridade(), array(), $this->cmb['sqTipoEscolaridade']); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="cp6" class="control-label">Profissão</label>
+        <div class="controls">
+            <?php echo $this->formText('deProfissao', $this->data->getSqUsuarioPessoaFisica()->getDeProfissao(), array('class' => 'span6', 'maxlength' => 100)); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="cp7" class="control-label">
+            <span  class="required">*</span> E-mail
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('txEmail', $this->data->getTxEmail(), array('class' => 'span6 required email', 'maxlength' => 100)); ?>
+
+            <?php if ($this->data->getSqUsuarioExterno()) { ?>
+                <span class="help-block aviso">Ao alterar o e-mail, seu login de acesso será alterado.</span>
+            <?php } else { ?>
+                <span class="help-block aviso">Seu e-mail será seu login de acesso ao sistema.</span>
+            <?php } ?>
+
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="confirmEmail" class="control-label">
+            <span  class="required">*</span> Confirmar E-mail
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('txEmailConfirmado', $this->data->getTxEmail(), array('class' => 'span6 required email', 'maxlength' => 100)); ?>
+        </div>
+    </div>
+    <?php if (!$this->data->getSqUsuarioExterno()): ?>
+        <div class="control-group">
+            <label for="cp7" class="control-label">
+                <span  class="required">*</span> Senha
+            </label>
+            <div class="controls">
+                <?php echo $this->formPassword('txSenha', NULL, array('class' => 'span3 required validatePassword', 'maxlength' => 32)); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="cp7" class="control-label">
+                <span  class="required">*</span> Confirmar Senha
+            </label>
+            <div class="controls">
+                <?php echo $this->formPassword('txSenhaConfirmado', NULL, array('class' => 'span3 required validatePassword', 'maxlength' => 32)); ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</fieldset>
+
+<br />
+<div class="form-actions">
+    <a href="#" class="btn disabled"><i class="icon-chevron-left"></i> Anterior</a>
+    <a href="#2" class="btn btn-primary btn_next_wizard" data-toggle="tab">Próximo <i class="icon-chevron-right icon-white"></i></a>
+
+    <?php if ($this->data->getSqUsuarioExterno()) : ?>
+        <a data-toggle="modal" class="btn concluir">Concluir</a>
+    <?php endif; ?>
+
+    <?php if ($this->data->getSqUsuarioExterno()) : ?>
+        <button id="btnConcluir" class="btn cancelar" type="button">
+            <i class="icon-remove"></i>  Cancelar
+        </button>
+    <?php else : ?>
+        <a href="<?php echo $this->url(array('controller' => 'usuario-externo', 'action' => 'login'), NULL, TRUE); ?>"
+           class="btn"><i class="icon-remove"></i> Cancelar</a>
+    <?php endif; ?>
+</div>

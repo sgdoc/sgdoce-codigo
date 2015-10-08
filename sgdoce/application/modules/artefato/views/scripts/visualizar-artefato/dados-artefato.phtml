@@ -1,0 +1,8 @@
+<?php
+    $sqTipoArtefato = $this->entityArtefato->getSqTipoArtefatoAssunto()->getSqTipoArtefato()->getSqTipoArtefato();
+
+    if ($sqTipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoDocumento()) {
+        echo $this->render('visualizar-artefato/view-documento.phtml');
+    }else if ($sqTipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoProcesso()) {
+        echo $this->render('visualizar-artefato/view-processo.phtml');
+    }

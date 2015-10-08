@@ -1,0 +1,27 @@
+<?php
+    $view = $this;
+
+    $nome = function($row){
+        $fileinfo = pathinfo($row['deCaminhoArquivo']);
+        $nome = $fileinfo['filename'];        
+        return $nome;
+    };
+
+    $acao = function($row) use ($view) {
+        $rtn =
+        //$view->actionButton('Visualizar Imagem', 'artefato/imagem/show?sqAnexoArtefato='.$row['sqAnexoArtefato'].'&resize=1&crop=0&width=800&height=600"', array(),'eye-open',null,array(),'href');
+        '<a class="btn btn-mini view-image cboxElement" href="artefato/imagem/show?sqAnexoArtefato='.$row['sqAnexoArtefato'].'&resize=1&crop=0&width=500&height=300">
+        <span class="icon-eye-open"></span>    
+        </a>';
+        return $rtn;
+    };
+
+    $configArray = array('columns' => array(
+                                      0 => array('column' => $nome),
+                                      1 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

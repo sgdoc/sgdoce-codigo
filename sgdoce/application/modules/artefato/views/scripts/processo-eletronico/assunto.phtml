@@ -1,0 +1,121 @@
+<div class="tab-pane" id="assunto">
+    <fieldset>
+        <div class="control-group">
+        <label class="control-label" for="sqAssunto">
+            <span class="required">* </span>Assunto
+        </label>
+        <div class="controls">
+            <?php
+                $sqAssunto = ($this->objEntArtefato->getSqTipoArtefatoAssunto()->getSqAssunto() != null)
+                             ? $this->objEntArtefato->getSqTipoArtefatoAssunto()->getSqAssunto()->getSqAssunto() : null ;
+                $txAssunto = ($this->objEntArtefato->getSqTipoArtefatoAssunto()->getSqAssunto() != null)
+                             ? $this->objEntArtefato->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto() : null ;
+                echo $this->formHidden('sqAssunto_hidden', $sqAssunto);
+                echo $this->formText('sqAssunto', $txAssunto, array('class'=> 'required span8'))
+             ?>
+        </div>
+    </div>
+        <div class="control-group">
+            <label class="control-label" for="txAssuntoComplementar">Assunto Complementar</label>
+            <div class="controls">
+                <?php echo $this->formTextarea('txAssuntoComplementar',$this->objEntArtefato->getTxAssuntoComplementar(),array('maxlength' => 250,'class'=> 'span8','rows' => 3));?>
+            </div>
+        </div>
+            <?php
+
+                if (!$this->objEntArtefato->getDtPrazo() && !$this->objEntArtefato->getNuDiasPrazo()) {
+                    $sqPrazo = null;
+                }else{
+                    $sqPrazo = ($this->objEntArtefato->getDtPrazo()) ? 1 : 2;
+                }
+//                if ($this->objEntArtefato->getInDiasCorridos() == '0' || $this->objEntArtefato->getInDiasCorridos() == '1'){
+//                    $sqPrazo = ($this->objEntArtefato->getInDiasCorridos()) ? '2' : '1';
+//                }
+            ?>
+        <div class="control-group">
+            <label class="control-label" for="sqPrazo">Prazo de Entrega</label>
+            <div class="controls">
+                <?php
+                echo $this->ComboCustom('sqPrazo', $sqPrazo,
+                        array('class'=>'input-small span4'),
+                        array('1' => 'Data', '2' => 'Dias')); ?>
+            </div>
+        </div>
+        <?php
+         $dtPrazo = $this->objEntArtefato->getDtPrazo();
+        if ($this->dataPost['dtPrazo']){
+            $dtPrazo = $this->dataPost['dtPrazo'];
+        }
+        $nuDiasPrazo = $this->objEntArtefato->getNuDiasPrazo();
+        if ($this->dataPost['nuDiasPrazo']){
+            $nuDiasPrazo = $this->dataPost['nuDiasPrazo'];
+        }
+
+        ?>
+        <input class="" type="hidden" name="inDiasCorridos" id="inDiasCorridos" value="" />
+
+        <div class="control-group dvDataPrazo" hidden="true">
+            <label class="control-label" for="appendedInputButton">
+                <span class="required">* </span>Data do Prazo</label>
+            <div class="controls">
+                <div class="input-append date"
+                     data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>"
+                     data-date-startdate="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>"
+                     data-date-enddate="<?php echo \Zend_Date::now()->addYear(20)->get('dd/MM/yyyy')?>"
+                     data-date-format="dd/mm/yyyy">
+                    <input id="dtPrazo"
+                           value="<?php echo $dtPrazo;?>"
+                           class="input-small dateBR startDate endDate required"
+                           maxlength="60"
+                           name="dtPrazo" mask="date" type="text"/>
+                    <a href="#" class="btn add-on right" title="Calendário"><i class="icon-calendar"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="control-group dvDiasPrazo" hidden="true">
+            <label class="control-label" for="inDias">
+                <span class="required">* </span>Dias</label>
+            <div class="controls">
+                <?php
+                $value = NULL;
+                if ($this->objEntArtefato->getInDiasCorridos() == '0' || $this->objEntArtefato->getInDiasCorridos() == '1'){
+                    $value = ($this->objEntArtefato->getInDiasCorridos()) ? '2' : '1';
+                }
+                if ($this->dataPost['inDias']){
+                    $value = $this->dataPost['inDias'];
+                }
+                echo $this->ComboCustom('inDias',$value,
+                        array('class'=>'required span4'),
+                        array('1' => 'Úteis', '2' => 'Corridos')); ?>
+                <input type="text" class="input-small inline required" mask="numeric"
+                       id="nuDiasPrazo" name="nuDiasPrazo" maxlength="3"
+                       value="<?php echo $nuDiasPrazo; ?>" />
+            </div>
+        </div>
+       <div class="control-group">
+            <label class="control-label" for="sqPrioridade">
+                <span class="required">* </span>Prioridade
+            </label>
+            <div class="controls">
+                <?php
+                $sqPrioridade = $this->objEntArtefato->getSqTipoPrioridade() != NULL ? $this->objEntArtefato->getSqTipoPrioridade()->getSqPrioridade()->getSqPrioridade() : \Core_Configuration::getSgdoceTipoPrioridadeBaixa();
+                $txPrioridade = $this->objEntArtefato->getSqTipoPrioridade() != NULL ? $this->objEntArtefato->getSqTipoPrioridade()->getTxTipoPrioridade() : NULL;
+                echo $this->ComboCustom('sqPrioridade', $sqPrioridade, array('class' => 'required span4'), $this->arrOptPrioridade);
+                ?>
+            </div>
+        </div>
+        <div class="control-group TipoPrioridade hide">
+            <label class="control-label" for="sqTipoPrioridade">
+                <span class="required">* </span>Descrição da Prioridade
+            </label>
+            <div class="controls" id="divTipoPrioridade">
+                <?php
+                $sqTipoPrioridade = $this->objEntArtefato->getSqTipoPrioridade() != NULL ? $this->objEntArtefato->getSqTipoPrioridade()->getSqTipoPrioridade() : NULL;
+                echo $this->ComboCustom('sqTipoPrioridade',$sqTipoPrioridade,array('class'=>'span8 required'),$this->arrOptTipoPrioridade);
+                ?>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div id="modal-capa-processo" class="modal modal-large hide fade"></div>
+<div id="modal-termo-renumerado" class="modal modal-large hide fade"></div>

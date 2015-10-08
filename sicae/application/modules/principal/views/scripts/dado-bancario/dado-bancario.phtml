@@ -1,0 +1,47 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'dado-bancario', 'action' => 'list')) ?>" id="form-dado-bancario">
+    <fieldset>
+        <div class="control-group">
+            <div class="span6">
+                <button type="button" class="btn btn-mini" id="btn-add-dado-bancario" href="#adicionarEmail" data-toggle="modal" title="Adicionar">
+                    <i class="icon-plus"></i>
+                </button>
+            </div>
+            <?php
+            echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+            ?>
+            <table id="table-dado-bancario">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Banco</th>
+                        <th>Agência</th>
+                        <th>DV</th>
+                        <th>Conta</th>
+                        <th>DV</th>
+                        <th width="60px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </fieldset>
+    <br/>
+    <div class="form-actions">
+        <a class="btn buttons" href="#contato" title="Anterior">
+            <span class="icon-chevron-left"></span> Anterior
+        </a>
+        <a class="btn disabled" title="Salva e segue para a próxima aba.">
+            Próxima <span class="icon-chevron-right"></span>
+        </a>
+        <button  id="btnConcluir" class="btn btn-primary btn-concluir" type="button" title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <a class="btn btnCancelar" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+<!--MODAL ADICIONAR DADO BANCARIO-->
+<div class="modal hide fade" id="modal-dado-bancario"></div>
+<script src="<?php echo $this->assetUrl('sica/dado-bancario/index.js') ?>" type="text/javascript"></script>
+

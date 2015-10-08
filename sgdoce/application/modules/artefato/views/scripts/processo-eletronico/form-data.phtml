@@ -1,0 +1,88 @@
+<script type="text/javascript" src="/js/app/artefato/pessoa/pessoa.js"></script>
+<script type="text/javascript" src="/js/app/artefato/imagem/list-upload.js"></script>
+
+<?php
+$this->headScript()->appendFile($this->baseUrl() . '/js/library/jquery.form.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/imagem.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/upload-simple.js');
+echo $this->headScript();
+echo $this->formHidden('divEdit','0');
+$nuArtefatoFormatado = null;
+
+if( $this->objEntArtefato->getSqArtefato() ):
+   $nuArtefatoFormatado = ' - ' . $this->nuArtefato($this->objEntArtefato);
+endif;
+
+?>
+
+<h1><?php echo $this->pageTitle . $nuArtefatoFormatado; ?></h1>
+<!------ INICIO DAS ABAS --------->
+<br />
+<ul class="nav nav-tabs tabsForm" id="nav-tabs">
+    <li class="active"><a href="#basicos" data-toggle="tab" class="tab">Dados Gerais</a></li>
+    <?php if (!$this->objEntArtefato->getSqArtefato()): ?>
+        <li><a href="#volume" data-toggle="tab" class="tab">Volumes</a></li>
+    <?php endif; ?>
+    <li><a href="#interessados" data-toggle="tab" class="tab">Interessados</a></li>
+    <li><a href="#assunto" data-toggle="tab" class="tab">Assunto</a></li>
+    <li><a href="#dadosVinculacao" data-toggle="tab" class="tab">Referências</a></li>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <form class="form-horizontal form-processo-eletronico-principal"
+        id="form-cadastro-documento"
+        action="<?php echo $this->url(array('action'=>'save')) ?>"
+        method="post">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+        <br />
+        <?php echo $this->formHidden('stBloqueioArtefato', $this->bloqueioArtefato); ?>
+        <?php echo $this->formHidden('sqArtefato', $this->objEntArtefato->getSqArtefato()); ?>
+        <?php echo $this->formHidden('nuArtefato', $this->objEntArtefato->getNuArtefato()); ?>
+        <?php echo $this->formHidden('dtArtefato', $this->objEntArtefato->getDtArtefato()); ?>
+        <?php echo $this->formHidden('dtCadastro', $this->objEntArtefato->getDtCadastro()); ?>
+        <?php echo $this->formHidden('inEletronico', (integer)$this->objEntArtefato->getInEletronico()); ?>
+        <?php echo $this->formHidden('inNumeracaoVerso', 0); ?>
+        <?php echo $this->formHidden('coAmbitoProcesso', $this->objEntArtefatoProcesso->getCoAmbitoProcesso()); ?>
+        <?php echo $this->formHidden('nuVolume', $this->objEntArtefatoProcesso->getNuVolume()); ?>
+        <?php echo $this->formHidden('nuPaginaProcesso', $this->objEntArtefatoProcesso->getNuPaginaProcesso()); ?>
+        <?php echo $this->formHidden('isAutuacao', $this->isAutuacao); ?>
+        <?php echo $this->formHidden('stMigracao', (integer)$this->objEntArtefato->getStMigracao()); ?>
+        <?php echo $this->formHidden('arInconsistencia', $this->objEntArtefato->getArInconsistencia()); ?>
+        <?php if($this->objEntArtefatoProcesso->getSqEstado() instanceof VwEstado): ?>
+            <?php echo $this->formHidden('sqEstado', $this->objEntArtefatoProcesso->getSqEstado()->getSqEstado()); ?>
+        <?php endif; ?>
+        <?php if($this->objEntArtefatoProcesso->getSqMunicipio()): ?>
+            <?php echo $this->formHidden('sqMunicipio', $this->objEntArtefatoProcesso->getSqMunicipio()->getSqMunicipio()); ?>
+        <?php endif; ?>
+        <?php echo $this->formHidden('sqTipoArtefato', \Core_Configuration::getSgdoceTipoArtefatoProcesso()); ?>
+        <?php
+            if( isset($this->dadosOrigem[1]) ) {
+                echo $this->formHidden('procedencia', $this->dadosOrigem[1]);
+            }
+        ?>
+
+        <?php echo $this->formHidden('redirect', $this->redirect); ?>
+        <div class="tab-content" id="tab-content">
+			<div class="tab-pane active" id="basicos">
+				<?php echo $this->render('processo-eletronico/basico.phtml', array(
+                                        'isValidProcess' => $this->isValidProcess
+				));?>
+			</div>
+            <?php if (!$this->objEntArtefato->getSqArtefato()): ?>
+            <div class="tab-pane" id="volume"><?php echo $this->render('processo-eletronico/volume.phtml');?></div>
+            <?php endif; ?>
+	        <div class="tab-pane" id="interessados"><?php echo $this->render('processo-eletronico/interessados.phtml');?></div>
+	        <div class="tab-pane" id="assunto"><?php echo $this->render('processo-eletronico/assunto.phtml');?></div>
+	        <div class="tab-pane" id="dadosVinculacao"><?php echo $this->render('documento/dados-vinculacao.phtml'); ?></div>
+            <?php echo $this->render('processo-eletronico/form-action.phtml'); ?>
+
+            <?php // echo $this->render('processo-eletronico/form-action.phtml'); ?>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/menuprocesso.js"></script>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/processo-eletronico.js"></script>

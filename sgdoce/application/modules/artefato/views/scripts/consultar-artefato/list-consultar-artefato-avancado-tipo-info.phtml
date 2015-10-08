@@ -1,0 +1,90 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+    	$autuar = '';
+    	if(($row['inAbreProcesso']) && ($nuNup)  &&
+            ($row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoDocumento())){
+    		//  		    	$inAutucao = FALSE;
+    		if(!$row['inAutuacao']){
+    			//  		    		$inAutucao = TRUE;
+    			$autuar = $view->actionButton('Autuar', 'consultaArtefato.autuarProcesso', array('sqArtefato' => $row['sqArtefato'] ,'view'=> '2','update'=> '0' ), NULL, 'Autuar');
+    		}
+    	}
+ $controller = '';
+             $action = '';
+            switch ($row['sqTipoArtefato']) {
+                case \Core_Configuration::getSgdoceTipoArtefatoDocumento():
+                    $controller = 'documento';
+                     $action = 'delete-artefato';
+                    break;
+                case \Core_Configuration::getSgdoceTipoArtefatoProcesso():
+                	$controller = 'processo-eletronico';
+                	if($row['inAutuacaoFilho'] == '1'){
+                		$controller = 'autuar-processo';
+                	}
+                    break;
+                case \Core_Configuration::getSgdoceTipoArtefatoDossie():
+                    $controller = 'dossie';
+                    $action = 'delete';
+                    break;
+            }
+
+            $rtn =
+             $view->actionButton('Alterar', $view->urlCurrent(array('module' => 'artefato', 'controller' => $controller, 'action' => 'edit')), array('id'=>$row['sqArtefato'],'view'=> '2'),'pencil',NULL,array(),'href').
+             $view->actionButton('Visualizar', 'artefato/visualizar-artefato/index', array('sqArtefato'=>$row['sqArtefato']),'eye-open',NULL,array(),'href');
+             if($row['sqTipoArtefato'] != \Core_Configuration::getSgdoceTipoArtefatoProcesso()){
+              $rtn .=  $view->actionButton('Excluir', 'consultaArtefato.deletar', array($row['sqArtefato'],$controller,$action,$row['nuDigital']),'trash');
+             }
+            $rtn .=  $view->actionButtonDropdown(array(
+                     $view->actionButton('Anexar', 'consultaArtefato.encaminharMinutaAnalise', array('sqArtefato' => $row['sqArtefato']), NULL, 'Anexar').
+                     $view->actionButton('Apensar', 'consultaArtefato.encaminharMinutaAssinatura', array('sqArtefato' => $row['sqArtefato']), NULL, 'Apensar').
+            		 $autuar .
+                     $view->actionButton('Carimbar', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Carimbar').
+                     $view->actionButton('Comentários', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Comentários').
+                     $view->actionButton('Despachos', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Despachos').
+//                     $view->actionButton('Inserir', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Inserir').
+                     $view->actionButton('Imagens Tramitar', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Tramitar')
+
+             ));
+
+
+        $rtn = $view->buttonGroup($rtn);
+        return $rtn;
+    };
+
+     //Alterar para mostrar o tipo do documento Ex: Atestado,minuta,etc.
+     $tipoDocumento = function($row){
+        if(!empty($row['sqTipoArtefato']) && ($row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoDocumento())){
+            return $row['noTipoDocumento'];
+        }
+        return '';
+    };
+
+    $nuArtefato = function ($row) use ($view) {
+    	if($row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoProcesso()){
+    		if(strlen($row['nuArtefato']) == 17){
+    			return $view->maskNumber($row['nuArtefato'], '99999.999999/9999-99');
+    		}else{
+    			return $row['nuArtefato'];
+    		}
+    	}
+    	return $row['nuArtefato'];
+    };
+
+    $configArray = array('columns' => array(
+                                  0 => array('column' => 'noTipoDocumento'),
+                                  1 => array('column' => 'nuDigital'),
+                                  2 => array('column' => $tipoDocumento),
+                                  3 => array('column' => $nuArtefato),
+                                  4 => array('column' => 'noPessoaOrigem'),
+                                  5 => array('column' => 'txAssunto'),
+                                  6 => array('column' => 'txComentario'),
+                                  7 => array('column' => $acao)
+
+
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

@@ -1,0 +1,68 @@
+<?php
+$rows = isset($this->layout()->data) ? $this->layout()->data : array();
+$entityArtefato = $this->layout()->entityArtefato;
+
+$nr = $this->layout()->getView()->nuArtefato($entityArtefato);
+?>
+<page backtop="50mm" backbottom="10mm" backleft="5mm" backright="5mm">
+    <page_header>
+        <div id="header">
+            <img src="<?php echo $this->layout()->logo ?>" />
+            <p class="title"><b>HISTÓRICO</b><br>Referente a Digital/Processo: <?php echo $nr ?></p>
+        </div>
+    </page_header>
+    <div id="content">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 220px;">Pessoa</th>
+                    <th style="width: 290px;">Unidade</th>
+                    <th style="width: 400px;">Ação</th>
+                    <th style="width: 120px;">Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($rows as $row): ?>
+                <tr>
+                    <td style="width: 220px;"><?php echo $row['noPessoa']?></td>
+                    <td style="width: 290px;"><?php echo $row['noUnidadeOrg']?></td>
+                    <td style="width: 400px;"><?php echo $row['txOperacao']?></td>
+                    <td style="width: 120px;"><?php echo $row['dtOperacao']->get(\Zend_Date::DATETIME_SHORT)?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <!--
+        -->
+    </div>
+    <page_footer>
+        <p class="date">Data de impress&atilde;o <?php echo date('d/m/Y H:i:s'); ?></p>
+    </page_footer>
+</page>
+<style type="text/css">
+<!--
+#content {
+    font-size: 12pt;
+}
+#header {
+    width: 100%;
+    text-align: center;
+    font-family: "Times New Roman";
+    border-bottom: solid black 1px;
+}
+.date {
+    float: right;
+    text-align: right;
+    font-family: "Arial";
+    font-size: 8pt;
+    margin-right: 0.8in
+}
+
+table thead tr th{
+    background-color: #398751;
+}
+table thead tr th, table tbody tr td {
+    border-bottom: 1px solid black;
+}
+-->
+</style>

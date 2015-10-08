@@ -1,0 +1,98 @@
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Interessado</h3>
+</div>
+<div class="modal-body">
+    <div id="error-pass"></div>
+    <form class="form-horizontal" name="form-interessado-modal">
+        <?php echo $this->formHidden('sqArtefato', $this->sqArtefato) ?>
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required" title="Required field">*</span> Interessado
+                </label>
+                <div class="controls">
+                    <input type="radio" name="tpInternoExterno" value="interno" class="required" /> Interno
+                    <input type="radio" name="tpInternoExterno" value="externo" class="required"> Externo
+                </div>
+            </div>
+            <div class="hidden interno">
+                <div class="control-group">
+                    <input type="radio" name="unidFuncionario" class="required" value="unidade"> Unidade do ICMBio
+                    <input type="radio" name="unidFuncionario" class="required" value="funcionario"> Funcionário do ICMBio
+                </div>
+                <div class="control-group hidden unidade">
+                    <label class="control-label" for="unidIcmbio">* Unidade do ICMBio</label>
+                    <div class="controls">
+                        <?php echo $this->formText('unidIcmbio', NULL, array('class' => 'required', 'maxlength' => '30')); ?>
+                    </div>
+                </div>
+                <div class="control-group hidden funcionario">
+                    <label class="control-label" for="funcIcmbio">* Funcionario ICMBio</label>
+                    <div class="controls">
+                        <?php echo $this->formText('funcIcmbio', NULL, array('class' => 'required', 'maxlength' => '30')); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden externo">
+                <div class="control-group">
+                    <label class="control-label" for="sqTipoPessoaInteressado">
+                        <span class="required" title="Required field">*</span> Tipo de Pessoa
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqTipoPessoaInteressado', NULL, array('class' => 'required'), $this->tipoPessoa); ?>
+                    </div>
+                </div>
+                <div class="hidden noPessoa div-externo">
+                    <div class="control-group">
+                        <label class="control-label" for="noPessoa">
+                            <span class="required" title="Required field">* </span> Nome
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('noPessoa', NULL, array('class' => 'required')); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden nuCpf div-externo">
+                    <div class="control-group">
+                        <label class="control-label" for="nuCpf">
+                            <span class="required" title="Required field">* </span> Cpf
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('nuCpf', NULL, array('class' => 'cpf', 'mask' => 'cpf')); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden nuCnpj div-externo">
+                    <div class="control-group">
+                        <label class="control-label" for="nuCnpj">
+                            <span class="required" title="Required field">* </span> Cnpj
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('nuCnpj', NULL, array('class' => 'required cnpj', 'mask' => 'cnpj')); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden nuPassaporte div-externo">
+                    <div class="control-group">
+                        <label class="control-label" for="nuPassaporte">
+                            <span class="required" title="Required field">* </span>Nº do Passaporte
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('nuPassaporte', NULL, array('class' => 'required', 'maxlength' => '20')); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluirInteressado">Concluir</button>
+    <a href="#" class="btn btnCancelarInteressado" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    Interessado.interessadoAutoComplete();
+    Interessado.interessadoFuncoes();
+</script>
+<script type="text/javascript" src="/js/components/validation.js"></script>

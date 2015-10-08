@@ -1,0 +1,53 @@
+<?php
+    $view = $this;
+    $params = $this->params;
+
+    $acao = function($row) use ($view, $params) {
+        $statusAcao = ($row['stMensagemAtiva']) ? "Desativar" : "Ativar" ;
+        $stMensagemAtiva = ($row['stMensagemAtiva'] == 1) ? 0 : 1;
+
+        $rtn = '';
+        if (!isset($params['noDelete']))
+        {
+            $rtn .= $view->actionButton('Excluir', 'cMensagem.deletar',      array($row['sqMensagem']),'trash').
+                    $view->actionButton('Alterar',  'cMensagem.editar',       array($row['sqMensagem']),'pencil');
+        }
+
+        $rtn .= $view->actionButton('Status', 'cMensagem.switchStatus',
+                 array(
+                    $row['sqMensagem'],
+                    $row['sqAssunto']['sqAssunto'],
+                    $row['sqTipoDocumento']['sqTipoDocumento'],
+                    $stMensagemAtiva
+                    ),
+                NULL, $statusAcao);
+
+        return $rtn;
+    };
+
+    $tipodocumento = function($row) {
+        return $row['sqTipoDocumento']['noTipoDocumento'];
+    };
+
+    $assunto = function($row)
+    {
+        return $row['sqAssunto']['txAssunto'];
+    };
+
+    $mensagemativa= function ($row)
+    {
+        return $row['stMensagemAtiva'] == TRUE ? "Ativo" : "Inativo";
+    };
+
+    $configArray = array('columns' => array(0 =>array( 'column'=>$tipodocumento),
+                                            1 =>array( 'column'=>$assunto),
+                                            2 => array('column' => 'txMensagem'),
+                                            3 => array('column' => $mensagemativa),
+                                            4 => array('column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

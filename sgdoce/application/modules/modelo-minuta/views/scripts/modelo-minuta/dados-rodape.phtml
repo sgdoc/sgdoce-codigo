@@ -1,0 +1,12 @@
+<div class="tab-pane" id="dadosRodape">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <br>
+    <div class="control-group">
+    <?php
+        $template = new \Core_View_Helper_TemplateType();
+        $template->templateType($this->campos,6,NULL);
+    ?>
+    </div>
+</div>

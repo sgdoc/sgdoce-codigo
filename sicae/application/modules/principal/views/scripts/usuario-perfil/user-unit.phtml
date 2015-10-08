@@ -1,0 +1,22 @@
+<?php
+
+$js = <<<JAVASCRIPT
+
+(function (Sistemas) {
+	var response = {$this->response},
+		id = {$this->id};
+	if ($(response).size() > 1) {
+		Sistemas.populateUsersList(response,id);
+	} else {
+		Sistemas.redirectSystem(id);
+	}
+	
+}(Sistemas));
+
+JAVASCRIPT;
+
+echo $js;
+
+if ($this->callback !== '') {
+	echo "{$this->callback}();";
+}

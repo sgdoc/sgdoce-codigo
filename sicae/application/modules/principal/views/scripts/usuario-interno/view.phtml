@@ -1,0 +1,61 @@
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <div class="clearfix">
+            <dt>CPF</dt>
+            <dd><?php echo $this->escape($this->maskNumber($this->data['nuCpf'], 'cpf')); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Nome do Usuário</dt>
+            <dd><?php echo $this->escape($this->data['noPessoa']); ?></dd>
+        </div>
+        <div class="clearfix">
+            <?php $ddd      = '(' . $this->data['nuDdd'] . ') '; ?>
+            <?php $telefone = $this->data['nuTelefone']; ?> 
+                
+            <?php if (!$this->data['nuTelefone']) :?>
+                    <?php $ddd = $telefone = ''; ?>
+            <?php endif; ?>
+            
+            <?php if (strlen($this->data['nuTelefone']) >= 8) :?>
+                    <?php $telefone = substr($this->data['nuTelefone'], 0, 4) . '-' 
+                                    . substr($this->data['nuTelefone'], 4, 8); ?>
+            <?php endif; ?>
+            <dt>Telefone institucional</dt>
+            <dd><?php echo $this->escape($ddd . $telefone); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>E-mail institucional</dt>
+            <dd><?php echo $this->escape($this->data['txEmail']); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Status</dt>
+            <dd><?php echo $this->data['stAtivo'] ? 'Ativo' : 'Inativo'; ?></dd>
+        </div>
+
+        <?php if (count($this->binds)): ?>
+            <h5>Perfis Vinculados</h5>
+            <?php $binds = $this->binds; ?>
+            <?php while ($current = current($binds)): ?>
+                <table class="table table-bordered table-condensed table-striped">
+                    <tbody>
+                        <tr>
+                            <td colspan="3"><strong><?php echo $current['sgSistema'], ' - ', $current['noSistema']?></strong></td>
+                        </tr>
+                        <tr>
+                             <th>Perfil</th>
+                             <th>Unidade Organizacional</th>
+                        </tr>
+                         <?php foreach ($binds as $key => $bind): ?>
+                            <?php if ($current['sgSistema'] !==  $bind['sgSistema']) { break; }?>
+                            <tr>
+                                <td><?php echo $this->escape($bind['noPerfil']) ?></td>
+                                <td><?php echo $this->escape($bind['noPessoa']) ?></td>
+                            </tr>
+                            <?php unset($binds[$key]);?>
+                         <?php endforeach;?>
+                    </tbody>
+                </table>
+            <?php endwhile; ?>
+        <?php endif;?>
+    </dl>
+</div>

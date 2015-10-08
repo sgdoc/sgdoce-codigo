@@ -1,0 +1,52 @@
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <div class="clearfix">
+            <dt>Sistema</dt>
+            <dd><?php echo $this->data[0]['noSistema']; ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Perfil</dt>
+            <dd><?php echo $this->data[0]['noPerfil']; ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Perfil Interno?</dt>
+            <dd><?php echo ($this->data[0]['inPerfilExterno'] === FALSE) ? 'Sim' : 'Não'; ?></dd>
+        </div>
+        <?php if ($this->data[0]['inPerfilExterno'] === TRUE) :?>
+            <div class="clearfix">
+                <dt>Perfil Externo Padrão?</dt>
+                <dd><?php echo ($this->data[0]['padrao'] === TRUE) ? 'Sim' : 'Não' ?></dd>
+            </div>
+        <?php else :?>
+            <div class="clearfix">
+                <dt>Tipo de Perfil</dt>
+                <dd><?php echo ($this->data[0]['noTipoPerfil']); ?></dd>
+            </div>
+        <?php endif; ?>
+        <div class="clearfix">
+            <dt>Status</dt>
+            <dd><?php echo ($this->data[0]['stRegistroAtivo']) ? 'Ativo' : 'Inativo'; ?></dd>
+        </div>
+        <h5>Menu / Funcionalidade</h5>
+        <table cellspacing="0" cellpadding="0" border="0" class="table table-striped table-bordered table-condensed">
+            <tbody>
+                <?php $menu = array(); ?>
+                <?php foreach ($this->data as $data): ?>
+                    <?php if (!in_array($data['noMenu'], $menu)) { ?>
+                        <?php array_push($menu, $data['noMenu']); ?>
+                        <tr>
+                            <th><?php echo $data['noMenu'] ?></th>
+                        </tr>
+                        <?php foreach ($this->data as $funcionalidade): ?>
+                            <?php if ($data['noMenu'] == $funcionalidade['noMenu']) { ?>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $funcionalidade['noFuncionalidade'] ?></td>
+                                </tr>
+                            <?php } ?>
+                        <?php endforeach; ?>
+                    <?php } ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </dl>
+</div>

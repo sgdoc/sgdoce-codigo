@@ -1,0 +1,133 @@
+<div class="alert alert-error campos-obrigatorios hide">
+
+</div>
+<form class="form-horizontal" id="form-pesquisar-pessoa" action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        <div class="btn-group pull-right">
+            <?php echo $this->buttonCadastrar(
+                    $this->urlCurrent(array('action' => 'rota')),
+                    array('action' => 'rota'),
+                    array('class'=>'btn-primary')); ?>
+        </div>
+    </div>
+    <input type="text" id="pesquisa-pdf" class="hide" name="pesquisa-pdf">
+    <fieldset id="static-assets">
+        <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label" for="sqTipoPessoa" ><span title="Campo Obrigatório"
+ class="required">*</span> Tipo de Pessoa</label>
+            <div class="controls">
+                <?php
+                echo $this->ComboCustom('sqTipoPessoa', NULL, array('class' => 'required span4'), $this->cmb['sqTipoPessoa']);
+                ?>
+            </div>
+        </div>
+
+        <!---GRUPO PESSOA FISICA---->
+        <div class="control-group fisica hide">
+            <label class="control-label" for="noPessoaFisica">Nome</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('noPessoaFisica', NULL, array('class' => 'span8', 'maxlength' => 120));
+                ?>
+            </div>
+        </div>
+        <div class="control-group fisica hide">
+            <label class="control-label" for="nuCpf">CPF</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('nuCpf', NULL, array('class' => 'span4 cpf', 'mask' => 'cpf'));
+                ?>
+            </div>
+        </div>
+
+        <!---GRUPO PESSOA JURIDICA---->
+        <div class="control-group juridica hide">
+            <label for="sqTipoSociedade" class="control-label">Natureza Jurídica</label>
+            <div class="controls">
+                <?php echo $this->comboCustom('sqNaturezaJuridicaPai', NULL, array('class' => 'span8'), $this->cmb['sqNaturezaJuridica']); ?>
+            </div>
+        </div>
+        <div class="control-group juridica hide">
+            <label for="classNatJuridica" class="control-label"> Classificação da Natureza Jurídica
+            </label>
+            <div class="controls">
+                <?php echo $this->comboCustom('sqNaturezaJuridica', NULL, array('class' => 'span8'), array()); ?>
+            </div>
+        </div>
+        <div class="control-group juridica hide">
+            <label for="cnpjPessoaJur" class="control-label">Razão Social / Nome Fantasia</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('noPessoaJuridica', NULL, array('class' => 'span8', 'maxlength' => 120));
+                ?>
+            </div>
+        </div>
+        <div class="control-group juridica hide">
+            <label class="control-label" for="nuCnpjF">CNPJ</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('nuCnpj', NULL, array('class' => 'span4 cnpj', 'mask' => 'cnpj'));
+                ?>
+            </div>
+        </div>
+
+        <!---GRUPO SEM CLASSIFICACAO---->
+        <div class="control-group semClass hide">
+            <label for="noPessoa" class="control-label"><span title="Campo Obrigatório"
+ class="required">*</span> Nome</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('noPessoaSemClass', NULL, array('class' => 'span8 required', 'maxlength' => 120));
+                ?>
+            </div>
+        </div>
+        <div class="control-group fisica juridica semClass hide">
+            <label for="natJuridica" class="control-label"> Status</label>
+            <div class="controls">
+                <?php $arrStatus = array(1 => 'Ativo', 0 => 'Inativo'); ?>
+                <?php echo $this->comboCustom('stRegistroAtivo', NULL, array('class' => 'span4'), $arrStatus); ?>
+            </div>
+        </div>
+        <br/>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-pesquisar" id="pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+            <button type="reset" class="btn limpar">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+
+<!--DIV RESULTADO DA PESQUISA-->
+<div class="row-fluid hidden" id="grid">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Resultado da Pesquisa</legend>
+            <table id="table-pesquisar-pessoa">
+                <thead>
+                    <tr>
+                        <th class="nome">Nome</th>
+                        <th class="cpfGrid">CPF</th>
+                        <th class="data">Data de Nascimento</th>
+                        <th class="sexo">Sexo</th>
+                        <th>Código Identificador</th>
+                        <th width="50px">Status</th>
+                        <th width="65px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <br/>
+            <div class="form-actions">
+                <a class="btn btn-primary filtro">Filtros</a>
+                <?php echo $this->buttonCadastrar($this->urlCurrent(array('action' => 'rota')),array('action' => 'rota')); ?>
+                <a class="btn gerar-pdf" href="<?php echo $this->urlCurrent(array('action' => 'gerar-pdf')) ?>"><i class="icon-pdf"></i> Gerar PDF</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="modal hide fade" id="modal-pessoa-fisica"></div>
+<script src="<?php echo $this->assetUrl('sica/pessoa/index.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/pessoa/form.js') ?>" type="text/javascript"></script>

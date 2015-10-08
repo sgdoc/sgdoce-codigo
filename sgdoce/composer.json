@@ -1,0 +1,52 @@
+{
+    "homepage": "http://www.phpunit.de/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Sebastian Bergmann",
+            "email": "sb@sebastian-bergmann.de",
+            "role": "lead"
+        },
+        {
+            "name": "Giorgio Sironi",
+            "email": "info@giorgiosironi.com",
+            "role": "developer"
+        },
+        {
+            "name": "Ivan Kurnosov",
+            "email": "zerkms@zerkms.com",
+            "role": "developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/sebastianbergmann/phpunit-selenium/issues",
+        "irc": "irc://irc.freenode.net/phpunit"
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "phpunit/phpunit": "~3.7|~4.0",
+        "phpunit/dbunit": ">=1.2",
+        "phpunit/php-code-coverage": "~2.0",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "mayflower/php-codebrowser": "~1.1",
+        "phpmd/phpmd": "@stable",
+        "pdepend/pdepend" : "2.1.0",
+        "phploc/phploc": "*",
+        "squizlabs/php_codesniffer": "2.*",
+        "sebastian/phpcpd": "*",
+        "zendframework/zendframework1": "~1.11",
+        "phpunit/phpunit-selenium": ">=1.2"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "classmap": [
+            "application/modules",
+            "library"
+        ]
+    },
+    "include-path": [
+        ""
+    ]
+}

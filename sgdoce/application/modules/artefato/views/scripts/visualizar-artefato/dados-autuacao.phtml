@@ -1,0 +1,115 @@
+<fieldset>
+    <legend>Autuação do Processo</legend>
+    <?php
+            $digitalAutuacao    = '&nbsp;';
+        if ($this->autuacao) {
+            $digitalAutuacao    = $this->autuacao[0]->getSqArtefatoFilho()->getNuDigital()->getNuEtiqueta();
+            $nupSiorg           = $this->maskNumber($this->autuacao[0]->getSqArtefatoFilho()->getNuDigital()->getNuNupSiorg(), '9999999.99999999/9999-99');
+            $nrArtefatoAutuacao = $this->autuacao[0]->getSqArtefatoFilho()->getNuArtefato();
+            $noTipoDocAutuacao  = ($this->autuacao[0]->getSqArtefatoFilho()->getSqTipoDocumento()) ?
+                                        $this->autuacao[0]->getSqArtefatoFilho()->getSqTipoDocumento()->getNoTipoDocumento() :
+                                            $digitalAutuacao;
+
+        }else{
+            $nupSiorg           = $digitalAutuacao;
+            $nrArtefatoAutuacao = $digitalAutuacao;
+            $noTipoDocAutuacao  = $digitalAutuacao;
+        }
+    ?>
+    <div class="control-group">
+        <label class="control-label">Documento de Autuação</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $digitalAutuacao; ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">NUP </label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $nupSiorg; ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" >Nr Documento</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $nrArtefatoAutuacao; ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Tipo do Documento</label>
+        <div class="controls">
+            <span class="checkbox inline">
+                <?php echo $noTipoDocAutuacao; ?>
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Data de autuação</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getDtArtefato()->toString('dd/MM/YYYY') ?> </span>
+        </div>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>Origem do Processo</legend>
+    <div class="control-group">
+        <label class="control-label" for="Procedencia" >Procedência</label>
+        <div class="controls">
+            <span class="checkbox inline">
+                <?php echo ($this->dadosOrigem[1] == 1) ? 'Interno' : 'Externo'; ?>
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="Tipo_pessoa" >Tipo de Pessoa</label>
+        <div class="controls">
+            <?php
+            $sqTipoPessoaOrigem = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqTipoPessoa();
+            if ($this->dadosOrigem[1] == 1) {
+                if ($sqTipoPessoaOrigem == 4) {
+                    $tipoPessoaOrigem = "Unidade Organizacional Interna";
+                } elseif ($sqTipoPessoaOrigem == 5) {
+                    $tipoPessoaOrigem = "Unidade Organizacional Externa";
+                } else {
+                    $tipoPessoaOrigem = "Funcionario";
+                }
+            } else {
+                if ($this->nacionalidadeOrigem == 2) {
+                    $tipoPessoaOrigem = "Pessoa Estrangeira";
+                } else {
+                    $tipoPessoaOrigem = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqTipoPessoa()->getNoTipoPessoa();
+                }
+            }
+            ?>
+            <span class="checkbox inline"><?php echo $tipoPessoaOrigem; ?></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="origemCpfCnpj" id="origemCpfCnpj"></label>
+        <div class="controls">
+            <?php
+            $nuCpfCnpjPassaporteOrigem = NULL;
+            if ($sqTipoPessoaOrigem == 1) {
+                $nuCpfCnpjPassaporteOrigem = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getNuCpfCnpjPassaporte();
+                if( strlen($nuCpfCnpjPassaporteOrigem) == 11 ) {
+                    $nuCpfCnpjPassaporteOrigem = $this->maskNumber($nuCpfCnpjPassaporteOrigem, '999.999.999-99');
+                }
+                if ($this->nacionalidadeOrigem == 2) {
+                    $nuCpfCnpjPassaporteOrigem = $this->dadosOrigem[0]->getSqPessoaSgdoce()->getNuCpfCnpjPassaporte();
+                }
+            }
+            if ($sqTipoPessoaOrigem == 2) {
+                $nuCpfCnpjPassaporteOrigem = $this->maskNumber($this->dadosOrigem[0]->getSqPessoaSgdoce()->getNuCpfCnpjPassaporte(), '99.999.999/9999-99');
+            }
+            ?>
+            <span class="checkbox inline"><?php echo $nuCpfCnpjPassaporteOrigem; ?></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="Nome" >Nome</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->dadosOrigem[0]->getSqPessoaSgdoce()->getNoPessoa(); ?></span>
+        </div>
+    </div>
+</fieldset>

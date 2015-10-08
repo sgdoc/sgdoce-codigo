@@ -1,0 +1,70 @@
+<fieldset>
+    <legend>Informações do Processo</legend>
+    <dl class="dl-horizontal">
+        <dt>Âmbito do Processo:</dt>
+            <dd>
+                <?php
+                $arrAmbito = array('F' => 'Federal','E' => 'Estadual','M' => 'Municipal','J' => 'Judicial' );
+                echo $arrAmbito[$this->entityArtefato->getSqArtefatoProcesso()->getCoAmbitoProcesso()];
+                ?>
+            </dd>
+
+<!--        <dt>Número do Processo:</dt>
+            <dd><?php // echo $this->NuArtefato($this->entityArtefato); ?></dd>-->
+        <dt>Interessados:</dt>
+        <dd>
+            <?php
+            if (count($this->dadosInteressado) != 0) {
+                $aux = array();
+                foreach ($this->dadosInteressado as $key => $value) {
+                    $aux[] = trim($value['noPessoa']);
+                }
+                echo implode(', ', $aux) . '&nbsp;';
+            } else {
+                echo "&nbsp;";
+            }
+            ?>
+        </dd>
+
+        <dt>Assunto:</dt>
+        <dd><?php echo $this->entityArtefato->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto(); ?></dd>
+
+        <dt>Assunto Complementar:</dt>
+        <dd><?php echo ($this->entityArtefato->getTxAssuntoComplementar()) ? :'&nbsp;'; ?></dd>
+
+        <dt>Grau de Acesso:</dt>
+        <dd>
+            <?php
+                $grauAcesso = 'Indefinido';
+                if ($this->entityArtefato->getSqGrauAcessoArtefato()) {
+                    $grauAcesso = $this->entityArtefato->getSqGrauAcessoArtefato()->getSqGrauAcesso()->getNoGrauAcesso();
+                }
+                echo $grauAcesso;
+            ?>
+        </dd>
+
+        <?php if ($this->entityArtefato->getDtPrazo()): ?>
+            <dt>Data do Prazo:</dt>
+            <dd><?php echo $this->entityArtefato->getDtPrazo()->toString('dd/MM/YYYY'); ?></dd>
+        <?php elseif ($this->entityArtefato->getInDiasCorridos() && $this->entityArtefato->getNuDiasPrazo()): ?>
+            <dt>Dias de Prazo:</dt>
+            <dd><?php
+                    $inDiasCorridos = $this->entityArtefato->getInDiasCorridos();
+                    $labelInDiasCorridos = '';
+                    if (TRUE === $inDiasCorridos) {
+                        $labelInDiasCorridos = 'Dias Corridos';
+                    }else if(FALSE === $inDiasCorridos) {
+                        $labelInDiasCorridos = 'Dias Úteis';
+                    }
+            echo ($this->entityArtefato->getNuDiasPrazo()); ?></span><span class="checkbox inline"><?php echo ($labelInDiasCorridos); ?></span></dd>
+        <?php endif; ?>
+
+        <?php if ($this->entityArtefato->getSqTipoPrioridade()): ?>
+            <dt>Prioridade:</dt>
+            <dd><?php echo $this->entityArtefato->getSqTipoPrioridade()->getSqPrioridade()->getNoPrioridade(); ?></dd>
+
+            <dt>Descrição da Prioridade:</dt>
+            <dd><?php echo $this->entityArtefato->getSqTipoPrioridade()->getTxTipoPrioridade(); ?></dd>
+        <?php endif; ?>
+    </dl>
+</fieldset>

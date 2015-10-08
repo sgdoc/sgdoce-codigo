@@ -1,0 +1,90 @@
+<div class="alert alert-error campos-obrigatorios hide">
+
+</div>
+<form class="form-horizontal" id="form-pesquisar-pessoa" action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        <div class="btn-group pull-right">
+            <a class="btn btn-primary" href="#">Cadastrar</a>
+        </div>
+    </div>
+    <fieldset id="static-assets">
+        <legend>Filtros</legend>
+
+        <!-- begin: cunsultar por -->
+        <div class="control-group">
+            <label class="control-label" for="sqTipoPessoa" >
+                <span title="Campo Obrigatório"
+ class="required">*</span>
+                Constultar por
+                </label>
+            <div class="controls">
+                <?php
+                    echo
+                    $this->ComboCustom(
+                        'tipoPesquisa',
+                        NULL,
+                        array('class' => 'required span4'),
+                        array(
+                            'du' => 'Dados da Unidade',
+                            'cc' => 'Correlação de Códigos',
+                            'bl' => 'Base Legal',
+                            'en' => 'Endereço'
+                        )
+                    );
+                ?>
+            </div>
+        </div>
+        <!-- end: cunsultar por -->
+
+        <!-- begin: container de pesquisa -->
+        <div id="containerSearch" class="hide"></div>
+        <!-- end: container de pesquisa -->
+
+        <br/>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-pesquisar" id="pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+            <button type="reset" class="btn limpar">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+
+<!--DIV RESULTADO DA PESQUISA-->
+<div class="row-fluid hidden" id="grid">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Resultado da Pesquisa</legend>
+            <table id="table-pesquisar-pessoa">
+                <thead>
+                    <tr>
+                        <th class="nome">Nome</th>
+                        <th class="cpfGrid">CPF</th>
+                        <th class="data">Data de Nascimento</th>
+                        <th class="sexo">Sexo</th>
+                        <th>Código Identificador</th>
+                        <th width="50px">Status</th>
+                        <th width="65px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <br/>
+            <div class="form-actions">
+                <a class="btn btn-primary filtro">Filtros</a>
+                <a class="btn" href="<?php
+                    // echo $this->urlCurrent(array('action' => 'rota'))
+                    ?>">Cadastrar</a>
+                <a class="btn gerar-pdf" href="<?php
+                // echo $this->urlCurrent(array('action' => 'gerar-pdf'))
+                ?>"><i class="icon-pdf"></i> Gerar PDF</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div class="modal hide fade" id="modal-pessoa-fisica"></div>
+
+<!-- <script src="<?php echo $this->assetUrl('sica/unidade-organizacional-interna/index.js'); ?>" type="text/javascript"></script> -->
+<script src="<?php echo $this->assetUrl('sica/unidade-organizacional-interna/form.js'); ?>" type="text/javascript"></script>

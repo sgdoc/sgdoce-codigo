@@ -1,0 +1,56 @@
+<?php
+    $view = $this;
+    $params = $this->params;
+
+
+    $sqSolicitacao = function($row) use ($view, $params) {
+        return $row['sqSolicitacao'];
+    };
+        
+    $dsSolicitacao = function($row) use ($view, $params) {
+        $dsSolicitacao = $row['dsSolicitacao'];
+        $dsSolicitacao = "<div width='150px' class='wrapword'>{$dsSolicitacao}</div>";
+        return $dsSolicitacao;
+    };
+
+    $dtSolicitacao = function($row) use ($view, $params) {
+        $dtSolicitacao = new \Zend_Date($row['dtSolicitacao']);
+        return $dtSolicitacao->get(\Zend_Date::DATETIME_MEDIUM);
+    };
+    
+    $dtOperacao = function($row) use ($view, $params) {
+        if( $row['sqTipoStatusSolicitacao'] == \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada() ){
+            $dtOperacao = new \Zend_Date($row['dtOperacao']);
+            return $dtOperacao->get(\Zend_Date::DATETIME_MEDIUM);
+        }
+        return " - ";
+    };
+
+    $acao = function($row) use ($view, $params) {
+        $rtn = " - ";
+        if( $row['sqTipoStatusSolicitacao'] == \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada() ){
+            $rtn = $view->actionButton('Visualizar',  'Pesquisa.acoes.visualizar', array($row['sqSolicitacao']),'eye-open');
+        }
+        return $rtn;
+    };
+    
+    $nuArtefato = function($row) use ($view, $params) {
+        return (is_null($row['nuDigital'])) ? $row['nuArtefato'] : $row['nuDigital'];
+    };
+
+    $configArray = array('columns' => array(0 => array( 'column' => $sqSolicitacao),
+                                            1 => array( 'column' => $nuArtefato),
+                                            2 => array( 'column' => $dtSolicitacao),
+                                            3 => array( 'column' => 'noTipoAssuntoSolicitacao'),
+                                            4 => array( 'column' => $dsSolicitacao),
+                                            5 => array( 'column' => 'noPessoaAtendimento'),
+                                            6 => array( 'column' => $dtOperacao),
+                                            7 => array( 'column' => 'noTipoStatusSolicitacao'),
+                                            8 => array( 'column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

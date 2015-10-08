@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SSPCore::SIAL - Abstract Layer" default="build" basedir=".">
+
+    <property name="QSConfig" location="${basedir}/QS-Config" />
+    <property name="QSConfigOutput" location="${basedir}/QS-Config/output" />
+    <include  file="${QSConfig}/config/phptools.xml" as="phptools"/>
+
+    <target name="roolback" description="cleanup previoues build dirs">
+        <echo message="delete ${QSConfigOutput}" level="verbose" />
+        <delete dir="${QSConfigOutput}" />
+    </target>
+
+    <target name="prepare" depends="roolback">
+        <echo message="prepare ${QSConfigOutput}" level="verbose"/>
+        <mkdir dir="${QSConfigOutput}" />
+        <mkdir dir="${QSConfigOutput}/logs" />
+        <mkdir dir="${QSConfigOutput}/code-browser" />
+    </target>
+
+    <target name="build" depends="prepare, phptools.phptests" />
+</project>

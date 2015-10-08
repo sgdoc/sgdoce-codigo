@@ -1,0 +1,137 @@
+<?php
+echo $this->headScript()
+        ->appendFile($this->baseUrl() . '/js/app/artefato/tramite/index.js')
+
+?>
+<script type="text/javascript" src="/js/app/artefato/origem/origem.js"></script>
+<script type="text/javascript" src="/js/app/artefato/documento/origem.js"></script>
+
+<h1>Trâmite de Artefato</h1>
+
+<form class="form-horizontal"
+      action="<?php echo $this->urlCurrent(array('action' => 'save')) ?>"
+      method="post" id="form_tramite_artefato">
+
+    <?php
+    echo $this->formHidden('tipoArtefato',$this->tipoArtefatoBack);
+    $aux = array();
+    $sigiloso = false;
+    foreach ($this->arrArtefato as $sqArtefato=>$values) {
+        $entityArtefato = $values['entity'];
+        $sigiloso = $values['hasVinculoSigiloso'];
+        echo $this->formHidden('sqArtefato[]',$entityArtefato->getSqArtefato());
+        $aux[] = $this->nuArtefato($entityArtefato);
+    }
+    ?>
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+
+    <fieldset>
+        <legend>Artefatos a serem tramitados</legend>
+        <div class="control-group">
+            <label class="control-label">Artefato(s)</label>
+            <div class="controls">
+                <?php echo $this->formTextarea('artefatos',  implode(', ', $aux), array('disabled'=>'disabled', 'class'=>'span12','rows'=>2))?>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Informações do trâmite</legend>
+        <div class="control-group">
+            <label class="control-label">
+                <span class="required">*</span> Tipo Trâmite
+            </label>
+            <div class="controls radios-inline">
+                <div>
+                    <input type="radio" id="tipo_tramite-1" name="tipo_tramite" value="1" class="required" checked="checked"/>
+                    <label for="tipo_tramite-1" >Interno</label>
+                    <input type="radio" id="tipo_tramite-2" name="tipo_tramite" value="2" class="required" />
+                    <label for="tipo_tramite-2" >Externo</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="tramite-1" class="tramiteControle">
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required">* </span>Destino
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('sqUnidadeOrg_hidden',0)?>
+                    <?php echo $this->formText('sqUnidadeOrg',null,array('class'=>'span6', 'required'=>'required'))?>
+                </div>
+            </div>
+
+            <div class="control-group destinoInterno <?php echo (!$sigiloso)? 'hide': ''; ?>">
+                <label class="control-label"><?php echo ($sigiloso) ? '<span class="required">* </span>': ''; ?>Usuário</label>
+                <div class="controls">
+                    <?php
+                        $class = 'span6';
+                        if ($sigiloso){
+                            $class .= ' required';
+                        }
+
+                        echo $this->formHidden('sqPessoaDestinoInterno_hidden',0);
+                        echo $this->formText('sqPessoaDestinoInterno',null,array('readonly'=>'readonly', 'class'=>$class));
+
+                    ?>
+                </div>
+            </div>
+        </div>
+
+        <div id="tramite-2" class="tramiteControle hide">
+
+            <?php echo $this->render('origem/dados-origem.phtml');?>
+
+            <div class="control-group">
+                <label class="control-label" for="sqTipoRastreamento">Serviço</label>
+                <div class="controls">
+                    <?php echo $this->ComboCustom('sqTipoRastreamento', null, array('class' => 'span4'), $this->tipoRastreamento); ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="txCodigoRastreamento">Correio</label>
+                <div class="controls">
+                    <?php echo $this->formText('txCodigoRastreamento', null, array('class' => 'span3','maxlength'=>15,'style'=>'text-transform:uppercase;')); ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="stImprimeGuia">Imprimir Guia para recibo</label>
+                <div class="controls">
+                    <?php echo $this->formCheckbox('stImprimeGuia',null,null,array('checkedValue'=>1,'uncheckedValue'=>0)); ?>
+                </div>
+            </div>
+            <div class="control-group endereco">
+                <label class="control-label" for="sqEndereco">
+                    Endereço
+                </label>
+                <div class="controls">
+                    <?php // echo $this->ComboCustom('sqEndereco', null, array('class' => 'span4'), array()); ?>
+                    <?php echo $this->formText('txEndereco', null, array('class' => 'span7','style'=>'text-transform:uppercase;')); ?>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btn_save">Salvar</button>
+        <a href="<?php echo $this->backUrl; ?>" class="btn" id="cancelar">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+
+<script>
+    Tramitar._sqUnidadeLogada    = <?php echo \Core_Integration_Sica_User::getUserUnit(); ?>;
+    Tramitar._artefatoSigiloso   = <?php echo (integer) $sigiloso; ?>;
+
+    $('#chekProcedenciaExterno').parents('.control-group').hide();
+    $('#chekProcedenciaExterno').trigger('click');
+
+</script>

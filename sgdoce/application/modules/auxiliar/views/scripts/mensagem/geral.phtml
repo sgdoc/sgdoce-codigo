@@ -1,0 +1,31 @@
+<h1>Mensagem Geral</h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br />
+<!-- FORMULÁRIO INÍCIO-->
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-mensagem">
+
+    <input type="hidden" name="sqMensagem" value="<?php echo $this->data->getSqMensagem();?>" />
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+
+        <div class="control-group">
+            <div class="control-group">
+            <label class="control-label" for="txMensagem">* Mensagem Geral</label>
+            <div class="controls">
+                <textarea class="required input-xlarge" maxlength="300" rows="6" name="txMensagem" id="mensagemEspecifica" value=""><?php echo $this->data->getTxMensagem();?></textarea>
+                <input type="hidden" name="msgGeral" value="1" />
+            </div>
+        </div>
+
+        <!-- BARRA DE AÇÔES INICIO -->
+        <div class="form-actions">
+            <button class="btn btn-primary">Salvar</button>
+            <a href="/auxiliar/mensagem" class="btn" id="voltar">
+                <i class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+        <!-- ROW FLUID FIM -->
+    </fieldset>
+</form>

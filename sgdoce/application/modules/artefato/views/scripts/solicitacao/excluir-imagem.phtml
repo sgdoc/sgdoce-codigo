@@ -1,0 +1,39 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl() . '/js/components/validation.js')
+                       ->appendFile($this->baseUrl() . '/js/app/artefato/solicitacao/form.js');
+    echo $this->headScript();
+?>
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h1>Excluir Imagem</h1>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div id="error-material"></div>
+        <form enctype="multipart/form-data"
+              class="form-horizontal"
+              id="formModalSolicitacao"
+              method="post"
+              action="<?php echo $this->url(array('action' => 'excluir-imagem')); ?>" >
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"> <span class="required">*</span> Observação: </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("txObservacao", $this->txDefaultTxObservacao, array( 'rows' => 3, 'class' => 'span9 required', 'maxlength' => 500)); ?>
+                    </div>                    
+                    <?php echo $this->formHidden('sqArtefato', $this->entArtefato->getSqArtefato()); ?>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-primary" id="btnSubmit">Excluir Imagem</a>
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

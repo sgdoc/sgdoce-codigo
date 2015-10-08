@@ -1,0 +1,48 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl('/js/components/validation.js'));
+$this->headScript()->appendFile($this->baseUrl('js/app/artefato/dossie/modalDocumentos.js'));
+echo $this->headScript();
+?>
+<div class="modal-header">
+	<a class="close" data-dismiss="modal">×</a>
+	<h3>Adicionar Documentos</h3>
+</div>
+<div class="modal-body">
+	<div class="row-fluid">
+		<form class="form-horizontal-modal" action="<?php echo $this->urlCurrent(array('controller'=>'dossie','action' => 'documentos'))?>" method="post" id="formModalVinculacao">
+			<input type="hidden" id="sqArtefato" name="sqArtefato" value="<?php echo $this->sqArtefato;?>">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="tipoDoc">
+                        <span class="required" title="Required field">*</span> Tipo
+					</label>
+					<div class="controls">
+					    <input type="hidden" id="sqTipoVinculoArtefato" name="sqTipoVinculoArtefato" value="3">
+					    <input type="hidden" id="sqTipoArtefato" name="sqTipoArtefato" value="1">
+					    <?php
+                        $tipo = array('' =>'Selecione'
+                                       ,'TRUE' => 'Original'
+                                       ,'FALSE' => 'Cópia');
+                        echo $this->formSelect('inOriginal',
+                                NULL,
+                                array('class'=>'required span10'),
+                                $tipo);
+                        ?>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="digital">
+                        <span class="required" title="Required field">*</span> Digital
+                    </label>
+					<div class="controls">
+						<input type="text" class="span10 required" id="nuDigitalDocumento" name="nuDigitalDocumento">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" type="submit" data-dismiss="modal" id="btn-documento">Concluir</button>
+	<a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>

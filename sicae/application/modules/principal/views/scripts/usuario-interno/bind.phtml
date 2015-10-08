@@ -1,0 +1,137 @@
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+
+<form class="form-horizontal">
+    <div class="row-fluid">
+        <div class="control-group">
+            <label class="control-label">Nome do Usuário</label>
+            <?php echo $this->formHidden('sqUsuario', $this->data->getSqUsuario(), array()) ?>
+            <div class="controls">
+                <input type="text"
+                       class="span8 disabled"
+                       disabled="disabled"
+                       value="<?php echo $this->data->getSqPessoa()->getNoPessoa() ?>" />
+            </div>
+        </div>
+
+        <?php $arrSistema = array();
+            $hasPermissionEdit       = $this->checkAcl(array('action'=>'edit-bind'));
+            $hasPermissionDelete     = $this->checkAcl(array('action'=>'delete-profile'));
+            $hasPermissionNewProfile = $this->checkAcl(array('action'=>'create-bind'));
+        ?>
+        <fieldset>
+            <?php if ($hasPermissionNewProfile): ?>
+            <legend>Adicionar Atribuição de Perfil</legend>
+            <div class="control-group">
+                <div class="span6">
+                    <a title="Adicionar"
+                       data-toggle="modal"
+                       data-backdrop="static"
+                       data-keyboard="false"
+                       data-target="#modal-view"
+                       href="<?php echo $this->urlCurrent(array('action' => 'create-bind')) ?>"
+                       class="btn btn-mini btnModal"
+                       titleModal="<?php echo $this->translate('usuario-interno_create-bind') ?>"
+                       type="button">
+                        <i class="icon-plus"></i>
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php foreach ($this->binds as $current) { ?>
+                <?php if (!in_array($current['sqSistema'], $arrSistema)) { ?>
+                    <?php
+                    if ($this->sqPerfil == 3) {
+                        if (!in_array($current['sqSistema'], $this->sistemas)) {
+                            continue;
+                        }
+                    }
+                    ?>
+                    <table class="table table-bordered table-condensed table-striped">
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><strong><?php echo $current['sgSistema'], ' - ', $current['noSistema'] ?></strong></td>
+                            </tr>
+                            <tr>
+                                <th>Perfil</th>
+                                <th>Unidade Organizacional</th>
+                                <?php if($hasPermissionEdit || $hasPermissionDelete): ?>
+                                    <th>Ações</th>
+                                <?php endif;?>
+                            </tr>
+                            <?php foreach ($this->binds as $key => $bind) { ?>
+                                <?php if ($current['sgSistema'] == $bind['sgSistema']) { ?>
+                                    <tr>
+                                        <td><?php echo $this->escape($bind['noPerfil']) ?></td>
+                                        <td><?php echo $this->escape($bind['noPessoa']) ?></td>
+                                        <?php if($hasPermissionEdit || $hasPermissionDelete): ?>
+                                            <td width="50">
+                                                <div class="btn-group pull-right">
+                                                    <?php
+                                                    if ($hasPermissionEdit): ?>
+                                                        <a title="Alterar"
+                                                           data-target="#modal-view"
+                                                           data-backdrop="static"
+                                                           data-keyboard="false"
+                                                           data-toggle="modal"
+                                                           href="<?php
+                                                                echo $this->urlCurrent(array(
+                                                                    'action' => 'edit-bind',
+                                                                    'usuario' => $bind['sqUsuario'],
+                                                                    'unidade' => $bind['sqPessoa'],
+                                                                    'sqSistema' => $bind['sqSistema']
+                                                                ))
+                                                                ?>"
+                                                           titleModal="<?php echo $this->translate('usuario-interno_edit-bind') ?>"
+                                                           class="btn btn-mini btnModal">
+                                                            <i class="icon-pencil"></i></a>
+                                                    <?php endif;?>
+                                                    <?php if ($hasPermissionDelete): ?>
+                                                        <a title="Excluir"
+                                                           message="<?php echo Core_Registry::getMessage()->translate('MN137') ?>"
+                                                           href="<?php
+                                                                    echo $this->urlCurrent(array(
+                                                                        'action' => 'delete-profile',
+                                                                        'unidade' => $bind['sqPessoa'],
+                                                                        'perfil' => $bind['sqPerfil'],
+                                                                        'usuario' => $bind['sqUsuario']
+                                                                    ))
+                                                                    ?>"
+                                                           class="btn btn-mini delete"
+                                                           >
+                                                            <i class="icon-trash"></i>
+                                                        </a>
+                                                    <?php endif;?>
+                                                </div>
+                                            </td>
+                                        <?php endif;?>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } ?>
+                <?php $arrSistema[] = $current['sqSistema']; ?>
+            <?php } ?>
+        </fieldset>
+
+        <div class="form-actions">
+            <a class="btn" href="<?php echo $this->urlCurrent(array('controller' => 'usuario-interno', 'action' => 'index')) ?>">Voltar</a>
+        </div>
+    </div>
+</form>
+<div class="modal hide fade" id="modal-view">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="title-main"><?php echo $this->translate('usuario-interno_create-bind') ?></h3>
+    </div>
+    <div class="modal-body" id="body-view">
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary btn-concluir" href="#">Concluir</a>
+        <a href="#" data-dismiss="modal" class="btn">
+            <i class="icon-remove"></i> Cancelar</a>
+    </div>
+</div>

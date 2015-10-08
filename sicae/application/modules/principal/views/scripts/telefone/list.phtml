@@ -1,0 +1,27 @@
+<?php
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+            $codigo = array($row['sqTelefone'], $row['sqPessoa']);
+
+            $button = $view->actionButton('Alterar', 'Telefone.alterar', $codigo, 'pencil')
+                    . $view->actionButton('Excluir', 'Telefone.deletar', $codigo, 'trash');
+
+            return $button;
+        };
+
+$mask = function($row) {
+            return strlen($row['nuTelefone']) >= 8 ? substr($row['nuTelefone'], 0, 4) . '-' . substr($row['nuTelefone'], 4, 9) : $row['nuTelefone'];
+        };
+
+$configArray = array();
+$configArray['columns'][0]['column'] = 'noTipoTelefone';
+$configArray['columns'][1]['column'] = 'nuDdd';
+$configArray['columns'][2]['column'] = $mask;
+$configArray['columns'][3]['column'] = $acao;
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

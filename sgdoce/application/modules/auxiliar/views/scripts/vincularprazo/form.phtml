@@ -1,0 +1,102 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl().'/js/library/jquery.simpleautocomplete.js');
+    $this->headScript()->appendFile($this->baseUrl().'/js/app/auxiliar/vincularprazo/form.js');
+    echo $this->headScript();
+?>
+
+<?php $label = ($this->data->getSqIndicacaoPrazo() ? 'Alterar' : 'Cadastrar'); ?>
+<h1><?php echo $label?> Vinculo de Prazo</h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+
+<br />
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-manter-vincular-prazo">
+    <input type="hidden" name="sqIndicacaoPrazo" value="<?php echo $this->data->getSqIndicacaoPrazo();?>" />
+    <fieldset>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="control-group">
+                    <label class="control-label">Tipo de Documento</label>
+                    <div class="controls">
+                        <input type="hidden" id="sqTipoDocumento_hidden" value="<?php
+                        echo ($this->data->getSqTipoDocumento() ?
+                                        $this->data->getSqTipoDocumento()->getSqTipoDocumento():
+                                        '');
+                                    ?>" />
+                        <input type="text" name="sqTipoDocumento" id="sqTipoDocumento" value="<?php
+                                echo ($this->data->getSqTipoDocumento() ?
+                                        $this->data->getSqTipoDocumento()->getNoTipoDocumento():
+                                        '');
+                                    ?>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="control-group">
+                    <label class="control-label">* Assunto</label>
+                    <div class="controls">
+                        <input type="hidden" id="sqAssunto_hidden" value="<?php
+                        echo ($this->data->getSqAssunto() ?
+                                        $this->data->getSqAssunto()->getSqAssunto():
+                                        '');
+                                    ?>" />
+                        <input class="required" type="text" name="sqAssunto" id="sqAssunto" value="<?php
+                                echo ($this->data->getSqAssunto() ?
+                                        $this->data->getSqAssunto()->getTxAssunto():
+                                        '');
+                                    ?>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="control-group">
+                    <label class="control-label">* Prazo </label>
+                    <div class="controls">
+                        <select class="required" name="inPrazoObrigatorio" id="inPrazoObrigatorio" />
+                            <option value="">Selecione...</option>
+                            <option value="TRUE" <?php echo (($this->data->getInPrazoObrigatorio() == TRUE) && ($this->data->getSqIndicacaoPrazo())) ? 'selected=\'selected\'' : ''; ?>>Obrigatório</option>
+                            <option value="FALSE" <?php echo (($this->data->getInPrazoObrigatorio() == FALSE) && ($this->data->getSqIndicacaoPrazo())) ? 'selected=\'selected\'' : ''; ?>>Determinado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divPrazo">
+            <div class="row-fluid">
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="control-label">* Dias</label>
+                        <div class="controls">
+                            <input class="required" type="text" name="nuDiasPrazo" id="nuDiasPrazo" maxLength="3" value="<?php echo $this->data->getNuDiasPrazo();?>"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="control-group" id="divPrazo">
+                        <div class="controls">
+                            <select class="required" name="inDiasCorridos" id="inDiasCorridos" />
+                                <option value="">Selecione...</option>
+                                <option value="FALSE" <?php echo (($this->data->getInDiasCorridos() == FALSE) && ($this->data->getSqIndicacaoPrazo()))? 'selected=\'selected\'' : ''; ?>>Úteis</option>
+                                <option value="TRUE" <?php echo (($this->data->getInDiasCorridos() == TRUE) && ($this->data->getSqIndicacaoPrazo())) ? 'selected=\'selected\'' : ''; ?>>Corridos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">
+                <span class="icon-chevron-right icon-search icon-white"></span> Salvar
+            </button>
+            <button id="cancelar" class="btn voltar" type="button">
+                <span class="icon-remove"></span> Cancelar
+            </button>
+        </div>
+    </fieldset>
+</form>

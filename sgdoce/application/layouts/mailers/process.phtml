@@ -1,0 +1,19 @@
+<?php
+echo $this->render('header.phtml');
+
+$strWithoutProcess = ($this->withoutProcess) ? '(sem registro para processar)': '';
+
+?>
+
+<p>Prezado Gestor.</p>
+<br />
+<p>O processo <b><?php echo $this->processType; ?></b>
+   teve seu <b><?php echo $this->type; ?></b>
+   em <b><?php echo $this->objZDProcess->get(\Zend_Date::DATETIME_MEDIUM); ?></b>. <?php echo $strWithoutProcess?></p>
+
+<?php if ($this->arrSucesso): ?>
+    <br />
+    <p>Digitais processadas com sucesso: (<?php echo count($this->arrSucesso).'/'.$this->totalRegistroProcessar; ?>) </p>
+    <br />
+    <?php echo implode('<br />', $this->arrSucesso); ?>
+<?php endif; ?>

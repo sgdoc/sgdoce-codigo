@@ -1,0 +1,45 @@
+<?php
+$view = $this;
+$fnAcao = function($row) use ($view) {
+
+    $arrBtn = array(
+        $view->actionButton('Visualizar', 'PesquisarCaixaArquivo.handleModalListaArtefatoArquivado', array($row['sqCaixa']), 'eye-open'),
+    );
+
+    if ($row['qtdeArtefatoCaixa'] == 0 ) {
+        $arrBtn[] = $view->actionButton('Alterar', 'PesquisarCaixaArquivo.edit', array($row['sqCaixa']), 'pencil');
+        $arrBtn[] = $view->actionButton('Excluir', 'PesquisarCaixaArquivo.delete', array($row['sqCaixa']), 'trash');
+    }
+
+    if ($row['stFechamento']) {
+        $arrBtn[] = $view->actionButton('Reabrir Caixa', 'PesquisarCaixaArquivo.openBox', array($row['sqCaixa']), 'ativado');
+    }else{
+        $arrBtn[] = $view->actionButton('Fechar Caixa', 'PesquisarCaixaArquivo.closeBox', array($row['sqCaixa']), 'inativado');
+    }
+
+    return $view->buttonGroup(join(' ', $arrBtn), count($arrBtn));
+};
+
+$fnClassificacao = function($row){
+    return $row['nuClassificacao'] . ' - ' . $row['txClassificacao'];
+};
+
+$fnSituacao = function($row) {
+    return ($row['stFechamento']) ? 'Fechada':'Aberta';
+};
+
+$configArray = array('columns'  => array(
+                              array('column' => 'nuCaixa'),
+                              array('column' => $fnClassificacao),
+                              array('column' => 'noUnidadeOrg'),
+                              array('column' => 'nuAno'),
+                              array('column' => $fnSituacao),
+                              array('column' => $fnAcao)
+    )
+);
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data  = $parse->parse($this->result);
+
+echo json_encode($data);

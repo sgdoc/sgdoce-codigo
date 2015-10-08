@@ -1,0 +1,60 @@
+<br/>
+<!------ INICIO DAS ABAS --------->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#dado-basico" data-toggle="tab">Dados Básicos</a></li>
+    <li><a href="#documento" data-toggle="tab">Documentos</a></li>
+    <li><a href="#endereco" data-toggle="tab">Endereços</a></li>
+    <li><a href="#contato" data-toggle="tab">Contatos</a></li>
+    <li><a href="#dado-bancario" data-toggle="tab" class="tab">Dados Bancários</a></li>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <div class="tab-pane active" id="dado-basico">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php $params = array('data' => $this->data, 'perfil' => $this->perfil, 'aba' => $this->aba, 'cmb' => $this->cmb, 'noPessoa' => $this->noPessoa); ?>
+        <?php echo $this->partial('pessoa-fisica/form.phtml', $params); ?>
+    </div>
+
+    <!-----DOCUMENTOS------>
+    <div class="tab-pane" id="documento">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->partial('documento/documento.phtml', $params); ?>
+    </div>
+
+    <!-----ENDEREÇOS------>
+    <div class="tab-pane" id="endereco">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->partial('endereco/endereco.phtml', $params); ?>
+    </div>
+
+    <!-----CONTATO------>
+    <div class="tab-pane" id="contato">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->partial('telefone/telefone.phtml', $params); ?>
+        <?php echo $this->partial('email/email.phtml', $params); ?>
+    </div>
+
+    <!-----CONTA------>
+    <div class="tab-pane" id="dado-bancario">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->partial('dado-bancario/dado-bancario.phtml', $params); ?>
+    </div>
+</div>
+<script src="<?php echo $this->assetUrl('sica/pessoa/form.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/pessoa-fisica/index.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/endereco/endereco.js') ?>" type="text/javascript"></script>

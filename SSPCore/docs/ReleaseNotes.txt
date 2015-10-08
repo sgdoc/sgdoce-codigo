@@ -1,0 +1,18 @@
+*system:    SSPCore
+*version:   1.3.0
+*iteration: -
+*deliver:   08/06/2015 17:00
+*tickets:   -
+
+*objective:
+- Separação do config
+
+*products:
+- Plano de Implantação
+- Código-fonte
+
+*new_functionality:
+-
+
+*changed_funcionality:
+-

@@ -1,0 +1,44 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl().'/js/library/jquery.simpleautocomplete.js');
+    $this->headScript()->appendFile($this->baseUrl().'/js/app/auxiliar/tipounidadeorg/form.js');
+    echo $this->headScript();
+?>
+
+<?php $sqTratamento = NULL; ?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Destinatário</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-destinatario-interno-modal" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">
+                        <span class="required" title="Required field">*</span> Tipo de Unidade
+                    </label>
+                    <div class="controls">
+                        <input type="text" class="span9 required" name="sqTipoUnidadeOrg" id="sqTipoUnidadeOrg">
+                    </div>
+                </div>
+                <div class="control-group dv5-noUnidade" hidden="true">
+                    <label class="control-label"><span class="required"    title="Required field"></span> Nome da Unidade</label>
+                    <div class="controls">
+                        <input type="text" class="span9" name="sqUnidadeOrg" id="sqUnidadeOrg">
+                    </div>
+                </div>
+                <div class="control-group dv5-noPessoa" hidden="true">
+                    <label class="control-label"><span class="required"    title="Required field"></span> Nome do Destinatário</label>
+                    <div class="controls">
+                        <input type="text" class="span9" name="sqPessoaDestInterno" id="sqPessoaDestInterno">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirDestinatarioInterno" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarDestinatarioInterno" data-dismiss="modal" title="Cancelar">Cancelar</a>
+</div>
+<script type="text/javascript" src="/js/app/artefato/minuta-eletronica/destinatario.js"></script>

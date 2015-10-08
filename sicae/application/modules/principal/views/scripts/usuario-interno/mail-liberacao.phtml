@@ -1,0 +1,79 @@
+<?php
+$sistema = current($this->perfis);
+$noPerfil = array();
+
+foreach ($this->perfis as $key => $perfil) {
+    $noPerfil[] = $this->escape($perfil['noPerfil']);
+}
+
+$urlSica = rtrim(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOption('urlSica'), '/');
+?>
+<body>
+    <table border="0">
+        <tr>
+            <th colspan="2">INSTITUTO CHICO MENDES DE CONSERVAÇÃO DA BIODIVERSIDADE</th>
+        </tr>
+        <tr>
+            <td colspan="2">Prezado(a): <b><?php echo trim($this->escape($this->usuario['noPessoa'])) ?></b>,</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td width="30">&nbsp;</td>
+            <td>
+                Seu cadastro para utilização do sistema <b><?php echo $this->escape($sistema['noSistema']) ?></b>
+                foi realizado com sucesso.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                Você foi cadastrado com o(s) seguinte(s) perfil(is):
+                <ul>
+                    <?php foreach ($this->perfis as $key => $perfil): ?>
+                        <li>
+                            <?php echo $this->escape($perfil['noPerfil']); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                Acesse o sistema a partir do browser instalado na sua máquina, no endereço <?php echo $urlSica; ?>.
+                informe seu CPF e senha, que são os mesmos utilizados na rede interna do ICMBio.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                Caso você tenha problemas no acesso, contacte o Gestor do Sistema <?php echo $this->escape($sistema['noSistema']); ?>,
+                o qual lhe concedeu o acesso ou ligue para a Central de Atendimento pelos telefones:
+                2028-9700 (Brasília) e 0800-600-2808 (demais localidades).
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">Atenciosamente,</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">COTEC/ICMBio.</td>
+        </tr>
+    </table>
+</body>

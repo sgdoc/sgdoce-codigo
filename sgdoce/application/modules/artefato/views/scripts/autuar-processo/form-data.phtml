@@ -1,0 +1,76 @@
+<script type="text/javascript" src="/js/app/artefato/pessoa/pessoa.js"></script>
+<script type="text/javascript" src="/js/app/artefato/imagem/list-upload.js"></script>
+
+<?php
+$this->headScript()->appendFile($this->baseUrl() . '/js/library/jquery.form.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/imagem.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/upload-simple.js');
+echo $this->headScript();
+if($this->data->getSqTipoArtefatoAssunto()->getSqTipoArtefatoAssunto()){
+$titulo = 'Alterar Processo';
+echo $this->formHidden('divEdit','1');
+}else{
+$titulo = 'Autuar Processo';
+echo $this->formHidden('divEdit','0');
+}
+?>
+
+<h1><?php echo $titulo;?></h1>
+<!------ INICIO DAS ABAS --------->
+<br />
+<ul class="nav nav-tabs tabsForm" id="nav-tabs">
+    <li class="active"><a href="#basicos" data-toggle="tab" class="tab">Dados Gerais</a></li>
+    <li><a href="#interessados" data-toggle="tab" class="tab">Interessados</a></li>
+    <li><a href="#assunto" data-toggle="tab" class="tab">Assunto</a></li>
+    <li><a href="#temaTratado" data-toggle="tab" class="tab">Tema Tratado</a></li>
+    <li><a href="#dadosVinculacao" data-toggle="tab" class="tab">Referências</a></li>
+    <li><a href="#pecas-processo" data-toggle="tab" class="tab">Peças do Processo</a></li>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <form class="form-horizontal form-processo-eletronico-principal"
+          id="form-cadastro-documento"
+        action="<?php echo $this->url(array('action'=>'save')) ?>"
+        method="post">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+        <br />
+        <?php echo $this->formHidden('artefatoPai',$this->sqArtefatoPai);?>
+        <?php echo $this->formHidden('sqArtefato', $this->data->getSqArtefato()); ?>
+        <?php echo $this->formHidden('dtArtefato', $this->data->getDtArtefato()); ?>
+        <?php echo $this->formHidden('redirect', $this->redirect); ?>
+        <?php echo $this->formHidden('sqTipoArtefato','2'); ?>
+
+        <div class="tab-content" id="tab-content">
+          <div class="tab-pane active" id="basicos">
+          <?php echo $this->partial('autuar-processo/basico.phtml',
+                                array(
+									'data' => $this->data,
+									'tipoPessoa' => $this->tipoPessoa,
+									'dadosOrigem' => $this->dadosOrigem,
+                                    'disabled'=>TRUE,
+                                    'readOnly'=>TRUE,
+                                    'data'    => $this->data,
+                                    'ambito'  => $this->ambito,
+                                    'estado'  => $this->estado,
+                                    'sqEstado' => $this->sqEstado,
+                                    'municipio' => $this->municipio,
+								    'coAmbitoProcesso' => $this->coAmbitoProcesso,
+								    'nuPaginaProcesso' => $this->nuPaginaProcesso));?>
+            </div>
+            <?php echo $this->render('autuar-processo/interessados.phtml');?>
+            <?php echo $this->render('autuar-processo/assunto.phtml');?>
+            <?php echo $this->render('autuar-processo/tema-tratado.phtml');?>
+            <?php echo $this->render('autuar-processo/pecas-processo.phtml');?>
+            <?php echo $this->render('documento/dados-vinculacao.phtml'); ?>
+            <?php echo $this->render('autuar-processo/form-action.phtml');?>
+        </div>
+    </form>
+</div>
+<script
+    type="text/javascript" src="/js/app/artefato/autuar-processo/menuprocesso.js"></script>
+<script
+    type="text/javascript" src="/js/app/artefato/autuar-processo/processo-eletronico.js"></script>

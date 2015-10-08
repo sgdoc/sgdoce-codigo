@@ -1,0 +1,124 @@
+<div id="container-du">
+    <div class="control-group">
+        <label class="control-label" for="noPessoa">Nome da Unidade</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'noPessoa',
+                    NULL,
+                    array('class' => 'span4', 'maxlength' => 200)
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sgUnidadeOrg">Sigla</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'sgUnidadeOrg',
+                    NULL,
+                    array('class' => 'span4', 'maxlength' => 30)
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="inUoExterna" class="control-label">Localização</label>
+        <div class="controls form-inline">
+            <label for="inUoExterna_ec">
+                <input type="radio" name="inUoExterna" value="ec" id="inUoExterna_ec" /> Estrutura Central
+            </label>
+            <label for="inUoExterna_ed">
+                <input type="radio" name="inUoExterna" value="ed" id="inUoExterna_ed" /> Estrutura Descentral
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="noTipoUnidadeorg" class="control-label">Categoria da Unidade Organizacional</label>
+        <div class="controls">
+            <?php
+                echo $this->comboUnidadeOrg(
+                    'noTipoUnidadeorg',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()// $this->data->activeUorg
+                );
+            ?>
+        </div>
+    </div>
+
+    <!-- begin: categoria de manejo -->
+    <div class="control-group hidden cg-noTipoUnidadeOrg">
+        <label class="control-label" for="noTipoUnidadeOrg">Categoria de Manejo</label>
+        <div class="controls">
+            <?php
+                echo $this->comboUnidadeOrg(
+                    'noTipoUnidadeOrg',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()// $this->data->activeUorg
+                );
+            ?>
+        </div>
+    </div>
+    <!-- end: categoria de manejo -->
+
+    <div class="control-group">
+        <label class="control-label" for="sqUnidadeAdmPai"> Vínculo Técnico Superior</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'sqUnidadeAdmPai',
+                    NULL,
+                    array('class' => 'span7', 'maxlength' => 200));
+                ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="sqUnidadeFinPai" class="control-label">Vínculo Administrativo Financeiro</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'sqUnidadeFinPai',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="sqTipoEstagioImplementacao" class="control-label">Estágio de Implementação</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'sqTipoEstagioImplementacao',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="sqAtivo" class="control-label">Status</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'sqAtivo',
+                    NULL,
+                    array('class'=>'span4'),
+                    array("s" => "Sim", "n" => "Não")
+                );
+            ?>
+        </div>
+    </div>
+
+</div>

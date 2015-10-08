@@ -1,0 +1,34 @@
+<div class="top-bar">
+    <p class="requiredLegend pull-left">
+        Campos obrigatórios <span class="required">*</span>
+    </p>
+</div>
+<div class="form-horizontal">
+    <div class="control-group dv5-txPosTratamento" hidden="true">
+        <label class="control-label">Cargo</label>
+        <div class="controls">
+            <input type="text" class="" name="noCargoInternoDestinatario" id="noCargoInternoDestinatario"
+            value="<?php echo $this->data->getSqArtefato()->getNoCargoInterno(); ?>">
+        </div>
+    </div>
+</div>
+<div class="control-group">
+    <fieldset>
+    <legend>Lista de Destinatários</legend>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="btn-group">
+                    <a href="#" id="btnAdicionarDestinatarioInterno" data-toggle="modal" class="btn btn-mini"><i title="Adicionar" class="icon-plus"></i> </a>
+                </div>
+            </div>
+        </div>
+        <table id="table-destinatario-interno">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+        </table>
+    </fieldset>
+</div>

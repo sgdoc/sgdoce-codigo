@@ -1,0 +1,83 @@
+<br/>
+<!------ INICIO DAS ABAS --------->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#dado-basico" data-toggle="tab">Dados Básicos</a></li>
+    <li><a href="#pessoa-vinculo" data-toggle="tab">Vínculo</a></li>
+    <li><a href="#endereco" data-toggle="tab">Endereços</a></li>
+    <li><a href="#contato" data-toggle="tab">Contatos</a></li>
+    <li><a href="#dado-bancario" data-toggle="tab" class="tab">Dados Bancários</a></li>
+    <?php if ($this->visualizar) { ?>
+        <li><a href="#vinculo-sistemico" data-toggle="tab" class="tab">Vínculo Sistêmico</a></li>
+    <?php } ?>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <div class="tab-pane active" id="dado-basico">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->render('pessoa-juridica/form.phtml'); ?>
+    </div>
+
+    <!-----VINCULO------>
+    <div class="tab-pane" id="pessoa-vinculo">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->render('pessoa-vinculo/pessoa-vinculo.phtml'); ?>
+    </div>
+
+    <!-----ENDEREÇOS------>
+    <div class="tab-pane" id="endereco">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php
+        if ($this->visualizar) {
+            echo $this->render('pessoa-juridica/view-endereco.phtml');
+        } else {
+            echo $this->render('endereco/endereco.phtml');
+        }
+        ?>
+    </div>
+
+    <!-----CONTATO------>
+    <div class="tab-pane" id="contato">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->render('telefone/telefone.phtml'); ?>
+        <?php echo $this->render('email/email.phtml'); ?>
+    </div>
+
+    <!-----CONTA------>
+    <div class="tab-pane" id="dado-bancario">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br/>
+        <?php echo $this->render('dado-bancario/dado-bancario.phtml'); ?>
+    </div>
+    <?php if ($this->visualizar) { ?>
+        <!-----VINCULO SISTEMICO------>
+        <div class="tab-pane" id="vinculo-sistemico">
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+            </div>
+            <br/>
+            <?php echo $this->render('pessoa-juridica/vinculo-sistemico.phtml'); ?>
+        </div>
+    <?php } ?>
+</div>
+<script src="<?php echo $this->assetUrl('sica/pessoa/form.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/endereco/endereco.js') ?>" type="text/javascript"></script>
+
+<?php if ($this->visualizar) { ?>
+    <script src="<?php echo $this->assetUrl('sica/pessoa-juridica/view.js') ?>" type="text/javascript"></script>
+<?php } else { ?>
+    <script src="<?php echo $this->assetUrl('sica/pessoa-juridica/index.js') ?>" type="text/javascript"></script>
+<?php } ?>

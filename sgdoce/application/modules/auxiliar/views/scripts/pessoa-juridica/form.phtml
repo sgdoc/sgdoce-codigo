@@ -1,0 +1,139 @@
+<?php
+    $params = array(
+        'new'   => $this->new,
+        'data'  => $this->data,
+        'combo' => $this->combo,
+        'sqPessoaSgdoce' => $this->sqPessoaSgdoce,
+        'campoPessoa'=>$this->campoPessoa,
+        'campoCnpj'=>$this->campoCnpj,
+        'form'=>$this->form
+    );
+?>
+
+<ul class="nav nav-tabs" id="tabPessoaJuridica">
+    <li class="active"><a href="#tab-dados-basicos" data-toggle="tab">Dados Básicos</a></li>
+    <li><a href="#tab-enderecos" data-toggle="tab">Endereços</a></li>
+	<li><a href="#tab-contatos" data-toggle="tab">Contatos</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="top-bar">
+    	<p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+
+    <br/>
+
+    <!-----Dados Básicos------>
+    <div class="tab-pane active" id="tab-dados-basicos">
+	    <?php echo $this->partial('/pessoa-juridica/partial/dados-basicos.phtml', $params); ?>
+    </div>
+
+    <!-----ENDEREÇOS------>
+    <div class="tab-pane" id="tab-enderecos">
+	    <?php echo $this->partial('/pessoa-juridica/partial/enderecos.phtml', $params); ?>
+    </div>
+
+    <!-----CONTATO------>
+    <div class="tab-pane" id="tab-contatos">
+	    <?php echo $this->partial('/pessoa-juridica/partial/contato-telefone.phtml', $params); ?>
+	    <?php echo $this->partial('/pessoa-juridica/partial/contato-email.phtml', $params); ?>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-actions">
+			<a class="btn disabled btn-nav btn-prev" href="#" data-toggle="tab"><i class="icon-chevron-left"></i> Anterior</a>
+			<a class="btn btn-primary btn-nav btn-next" href="#" data-toggle="tab">Próxima <i class="icon-chevron-right icon-white"></i></a>
+            <a href="#" class="btn btn-nav btn-concluir">Concluir</a>
+<?php /*if($this->data->getSqPessoaJuridica()) { ?>
+            <a href="#modalConcluir" role="button" class="btn" data-toggle="modal">Concluir</a>
+<?php }*/ ?>
+			<a class="btn" id="btnIntegrationInfoconv"><i class="icon-receita"></i> Sincronizar RF</a>
+            <a href="#" class="btn btn-fechar-janela"><i class="icon-remove"></i> Cancelar</a>
+
+            <!-- Gatilho para modal -->
+			<a class="btn btn-modal hide" data-toggle="modal"></a>
+        </div>
+    </div>
+</div>
+
+<!--MODAL CONCLUIR-->
+<div class="modal fade" id="modalConcluir">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Operação realizada com sucesso.</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#modalConcluir" data-dismiss="modal" role="button" class="btn btn-primary btn-fechar-concluir">Fechar</a>
+    </div>
+</div>
+
+<!--MODAL UPLOAD-->
+<div class="modal fade" id="modalUpload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Upload</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Upload em andamento. Por favor aguarde!</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#modalConcluir" data-dismiss="modal" role="button" class="btn btn-primary btn-fechar-concluir">Fechar</a>
+    </div>
+</div>
+
+<!--MODAL CNPJ-->
+<div class="modal fade" id="modalCnpj">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+		<h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+					<p>O CNPJ informado já existe. Deseja alterar as informações?</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+		<a href="#" class="btn btn-primary" data-toggle="modal">Sim</a>
+		<a href="#" class="btn" data-dismiss="modal"><i class="icon-remove"></i> Não</a>
+    </div>
+</div>
+
+<!--MODAL CNPJ-->
+<div class="modal fade" id="modalRazaoSocial">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+		<h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+					<p>A Razão Social informada já existe. Deseja alterar as informações?</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+		<a href="#" class="btn btn-primary" data-toggle="modal">Sim</a>
+		<a href="#" class="btn" data-dismiss="modal"><i class="icon-remove"></i> Não</a>
+    </div>
+</div>

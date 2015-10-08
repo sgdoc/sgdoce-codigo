@@ -1,0 +1,181 @@
+<?php
+    $view = $this;
+    $params = $this->params;
+
+    $sqSolicitacao = function($row) use ($view, $params) {
+        return $row['sqSolicitacao'];
+    };
+    
+    $dsSolicitacao = function($row) use ($view, $params) {
+        $dsSolicitacao = $row['dsSolicitacao'];
+        $dsSolicitacao = "<div width='150px' class='wrapword'>{$dsSolicitacao}</div>";
+        return $dsSolicitacao;
+    };
+
+    $dtSolicitacao = function($row) use ($view, $params) {
+        $dtSolicitacao = new \Zend_Date($row['dtSolicitacao']);
+        return $dtSolicitacao->get(\Zend_Date::DATETIME_MEDIUM);
+    };
+
+    $acao = function($row) use ($view, $params) {
+        $arrSqArtefato    = array('sqArtefato' => $row['sqArtefato']);
+
+        $arrBtn = array();
+        
+        if( $row['hasImage'] ) {
+            $arrBtn = array(
+                $view->actionButton('Ver Imagem', "Solicitacao.acoes.imageView", $arrSqArtefato, 'eye-open')
+            );
+        }
+        
+        $arrButtonsDropdown = array();
+
+
+        if( $row['sqArtefato'] != "" ){
+            $arrButtonsDropdown = array(
+                'detalhar' => $view->actionButton(NULL, 'Artefato.visualizarArtefato' , $arrSqArtefato, NULL, 'Detalhar')
+            );
+        }
+        
+        switch ($row['sqTipoAssuntoSolicitacao']) {
+            case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoExcluirImagem():
+                if ($row['hasImage']) {
+                    $arrButtonsDropdown['excluirImagem'] = $view->actionButton(NULL, 'Solicitacao.acoes.excluirImagem', array($row['sqSolicitacao']), NULL, 'Excluir Imagem');
+                }
+            break;
+            case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoVolumeDeProcesso():
+                $arrButtonsDropdown['volume'] = $view->actionButton(NULL, 'Artefato.editVolume' , $arrSqArtefato, NULL, 'Volume de Processo');
+            break;
+            case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoComentario():
+                $arrButtonsDropdown['comentario'] = $view->actionButton(NULL, 'Comentario.go', $arrSqArtefato, NULL, 'Comentário');
+            break;
+            case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoDespacho():
+                $arrButtonsDropdown['despacho'] = $view->actionButton(NULL, 'Despacho.go', $arrSqArtefato, NULL, 'Despacho');
+            break;
+            case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoAlterarCadastro():
+                if( $row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoProcesso() ) {
+                    $arrButtonsDropdown['editarProcesso'] = $view->actionButton('Alterar Processo', 'Artefato.editProcess', array('sqArtefato' => $row['sqArtefato']), NULL, 'Alterar');
+                } else if( $row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoDocumento() ) {
+                    $arrButtonsDropdown['editarDocumento'] = $view->actionButton('Alterar Documento', 'Solicitacao.acoes.editarDocumento', array('sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Alterar');
+                }
+            break;
+            /*case \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoAlterarNumero():
+                $arrButtonsDropdown['alterarNumero'] = $view->actionButton(NULL, 'Artefato.editNumber', $arrSqArtefato, NULL, 'Alterar Número');
+            break;*/
+        }
+        $arrVinculo = array(
+            \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoDesanexaProcesso(),
+            \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoDesanexaDigital(),
+            \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoDesmembraPecas(),
+            \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoRemoverPeca()
+        );
+        
+        # Anexação Incorreta de Processo/Digital ou Desmembramento de Peças ou Remover Peça
+        if( in_array($row['sqTipoAssuntoSolicitacao'], $arrVinculo) ) {
+            $arrButtonsDropdown['vincular'] = $view->actionButton(NULL, 'Vinculo.go', $arrSqArtefato, NULL, 'Vinculações');
+        }
+
+        switch($row['sqTipoStatusSolicitacao']){
+            case \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada():
+                $arrBtn[] = $view->actionButton('Detalhar Demanda', 'Solicitacao.acoes.visualizar', array($row['sqSolicitacao']),'list-alt');
+                break;
+            case \Core_Configuration::getSgdoceTipoStatusSolicitacaoEmAndamento():
+                $arrBtn[] = $view->actionButton('Finalizar', 'Solicitacao.acoes.finalizar', array($row['sqSolicitacao']),'comentario');
+                # Se operação de exclusão da imagem ja foi realizada, não é possivel devolver a demanda.
+                if( $row['sqTipoAssuntoSolicitacao'] != \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoExcluirImagem() ){
+                    $arrBtn[] = $view->actionButton('Devolver', 'Solicitacao.acoes.devolver', array($row['sqSolicitacao']),'retornar');
+                } else {
+                    if($row['hasImage']){
+                        $arrBtn[] = $view->actionButton('Devolver', 'Solicitacao.acoes.devolver', array($row['sqSolicitacao']),'retornar');
+                    }
+                }
+                if( $row['sqArtefato'] != "" ) {
+                    $arrBtn[] = $view->actionButtonDropdown($arrButtonsDropdown);
+                }
+                break;
+            case \Core_Configuration::getSgdoceTipoStatusSolicitacaoDevolvidaTriagem():
+            case \Core_Configuration::getSgdoceTipoStatusSolicitacaoAberta():
+                $arrBtn[] = $view->actionButton('Triar', 'Solicitacao.acoes.triar', array($row['sqSolicitacao']),'tramitar');
+                break;
+            default:
+        }
+        
+        # Somente para a aba Histórico.
+        if( $params["noAction"] ) {
+            $arrBtn = array();
+            $arrBtn[] = $view->actionButton('Detalhar Demanda', 'Solicitacao.acoes.visualizar', array($row['sqSolicitacao']),'list-alt');
+        }
+        
+        return $view->buttonGroup(join(' ', $arrBtn), count($arrBtn));
+    };
+
+    $checkbox = function($row) use ($view, $params) {
+        return "<input type=\"checkbox\" name=\"sqSolicitacao[]\" value=\"" . $row['sqSolicitacao'] . "\" />";
+    };
+
+    $txEmail = function($row) use ($view, $params) {
+        $txEmail = $row['txEmail'];
+        if( strlen($txEmail) > 35 ) {
+            $txEmail = substr($txEmail, 0, 35);
+        }
+        return $txEmail . "...";
+    };
+
+    $configArray = array();
+    if( $this->withCbox ) {
+        if( $this->withSituacao ) {            
+            $configArray = array('columns' => array(0 => array( 'column' => $checkbox),
+                                                 1 => array( 'column' => $sqSolicitacao),
+                                                 2 => array( 'column' => $dtSolicitacao),
+                                                 3 => array( 'column' => 'noTipoStatusSolicitacao'),
+                                                 4 => array( 'column' => 'noPessoaAbertura'),
+                                                 5 => array( 'column' => 'noUnidadeAbertura'),
+                                                 6 => array( 'column' => 'nuArtefato'),
+                                                 7 => array( 'column' => 'noTipoAssuntoSolicitacao'),
+                                                 8 => array( 'column' => $dsSolicitacao),
+                                                 9 => array( 'column' => $acao),
+             ));
+        } else {
+            $configArray = array('columns' => array(0 => array( 'column' => $checkbox),
+                                                 1 => array( 'column' => $sqSolicitacao),
+                                                 2 => array( 'column' => $dtSolicitacao),
+                                                 3 => array( 'column' => 'noPessoaAbertura'),
+                                                 4 => array( 'column' => 'noUnidadeAbertura'),
+                                                 5 => array( 'column' => 'nuArtefato'),
+                                                 6 => array( 'column' => 'noTipoAssuntoSolicitacao'),
+                                                 7 => array( 'column' => $dsSolicitacao),
+                                                 8 => array( 'column' => $acao),
+             ));           
+        }
+    } else {
+        if( $this->withSituacao ) {
+            $configArray = array('columns' => array( 0 => array( 'column' => $sqSolicitacao),
+                                                     1 => array( 'column' => $dtSolicitacao),
+                                                     2 => array( 'column' => 'noTipoStatusSolicitacao'),
+                                                     3 => array( 'column' => 'noPessoaAbertura'),
+                                                     4 => array( 'column' => 'noUnidadeAbertura'),
+                                                     5 => array( 'column' => 'nuArtefato'),
+                                                     6 => array( 'column' => 'noTipoAssuntoSolicitacao'),
+                                                     7 => array( 'column' => $dsSolicitacao),
+                                                     8 => array( 'column' => $acao)
+            ));
+        } else {
+            $configArray = array('columns' => array( 0 => array( 'column' => $sqSolicitacao),
+                                                     1 => array( 'column' => $dtSolicitacao),
+                                                     2 => array( 'column' => 'noPessoaAbertura'),
+                                                     3 => array( 'column' => 'noUnidadeAbertura'),
+                                                     4 => array( 'column' => 'nuArtefato'),
+                                                     5 => array( 'column' => 'noTipoAssuntoSolicitacao'),
+                                                     6 => array( 'column' => $dsSolicitacao),
+                                                     7 => array( 'column' => $acao)
+            ));            
+        }
+    }
+
+
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

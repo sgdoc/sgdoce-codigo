@@ -1,0 +1,102 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3 class="title-main">Adicionar Documento</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-documento-modal" method="post">
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="tpDocumento" ><span title="Campo Obrigatório"
+ class="required">*</span> Tipo de Documento </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                        echo $this->ComboCustom('', $this->data->getSqAtributoTipoDocumento()->getSqTipoDocumento()->getSqTipoDocumento(), array('id' => 'sqTipoDocumento', 'class' => 'required'), $this->cmb['sqTipoDocumento']);
+                        ?>
+                    </div>
+                </div>
+                <?php foreach ($this->cmb['tpDocumento'] as $tpDocumento) { ?>
+                    <?php foreach ($tpDocumento->getSqATributoTipoDocumento() as $atributoTpDocumento) { ?>
+                        <div class="control-group <?php echo $tpDocumento->getSqTipoDocumento(); ?>">
+                            <label class="control-label">
+                                <span title="Campo Obrigatório"
+ class="required">*</span> <?php echo $atributoTpDocumento->getSqAtributoDocumento()->getNoAtributoDocumento(); ?>
+                            </label>
+                            <div class="controls">
+                                <?php
+                                $class = array('class' => $tpDocumento->getSqTipoDocumento());
+                                $nameRand = 'input_' . rand(0, 99999);
+                                $sqAtributoTipoDocumento = $atributoTpDocumento->getSqAtributoTipoDocumento();
+
+                                switch ($atributoTpDocumento->getSqAtributoDocumento()->getSqAtributoDocumento()) {
+                                    case \Core_Configuration::getCorpAtributoDocumentoNumero():
+                                        $attrs['class'] = 'span7 numeric required ' . $tpDocumento->getSqTipoDocumento();
+                                        $attrs['maxlength'] = 30;
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->formText($nameRand . '[txValor]', NULL, $attrs);
+                                        break;
+
+                                    case \Core_Configuration::getCorpAtributoDocumentoUf() :
+                                        $attrs['class'] = 'required ' . $tpDocumento->getSqTipoDocumento();
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->comboCustom($nameRand . '[txValor]', NULL, $attrs, $this->cmb['sqEstado']);
+                                        break;
+
+                                    case \Core_Configuration::getCorpAtributoDocumentoDataExpedicao():
+                                    case \Core_Configuration::getCorpAtributoDocumentoPrimeiraHabilitacao():
+                                    case \Core_Configuration::getCorpAtributoDocumentoValidade():
+                                        $attrs['class'] = 'input-small dateBR datepicker required ' . $tpDocumento->getSqTipoDocumento();
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->formText($nameRand . '[txValor]', NULL, $attrs);
+					echo '<a class="btn right datepicker-icon" title="Calendário"><i class="icon-calendar"></i></a>';
+                                        break;
+
+                                    case \Core_Configuration::getCorpAtributoDocumentoRegistro():
+                                        $attrs['class'] = 'span4 required ' . $tpDocumento->getSqTipoDocumento();
+                                        $attrs['maxlength'] = 30;
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->formText($nameRand . '[txValor]', NULL, $attrs);
+                                        break;
+
+                                    case \Core_Configuration::getCorpAtributoDocumentoCategoria():
+                                        $attrs['class'] = 'span2 required ' . $tpDocumento->getSqTipoDocumento();
+                                        $attrs['maxlength'] = 5;
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->formText($nameRand . '[txValor]', NULL, $attrs);
+                                        break;
+
+                                    default:
+                                        $attrs['class'] = 'span4 required ' . $tpDocumento->getSqTipoDocumento();
+                                        $attrs['maxlength'] = 50;
+
+                                        echo $this->formHidden($nameRand . '[sqPessoa]', $this->sqPessoa, $class);
+                                        echo $this->formHidden($nameRand . '[sqAtributoTipoDocumento]', $sqAtributoTipoDocumento, $class);
+                                        echo $this->formText($nameRand . '[txValor]', NULL, $attrs);
+                                        break;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarDocumento" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn" data-dismiss="modal" title="Fechar">Fechar</a>
+</div>
+<script src="<?php echo $this->assetUrl('sica/documento/modal.js') ?>" type="text/javascript"></script>

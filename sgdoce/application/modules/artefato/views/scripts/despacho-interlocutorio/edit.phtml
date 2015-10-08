@@ -1,0 +1,54 @@
+<script type="text/javascript" src="/js/app/artefato/despacho-interlocutorio/edit.js"></script>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Alterar Despacho</h1>
+            <div class="alert alert-error campos-obrigatorios hidden"></div>
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            
+            <form class="form-horizontal" id="form_novo_despacho">
+                <?php
+                    echo $this->formHidden('sqDespachoInterlocutorio', $this->data->getSqDespachoInterlocutorio());
+                    echo $this->formHidden('sqArtefato'              , $this->data->getSqArtefato()->getSqArtefato());
+                    echo $this->formHidden('sqUnidadeDestino'        , $this->data->getSqUnidadeDestino()->getSqUnidadeOrg());
+                    echo $this->formHidden('sqUnidadeAssinatura'     , $this->data->getSqUnidadeAssinatura()->getSqUnidadeOrg());
+                    echo $this->formHidden('sqPessoaAssinatura'      , $this->data->getSqPessoaAssinatura()->getSqPessoa());
+                    echo $this->formHidden('sqPessoaOperacao'        , $this->data->getSqPessoaOperacao()->getSqPessoa());
+                    if( $this->data->getSqCargoAssinatura() ) {
+                        echo $this->formHidden('sqCargoAssinatura'       , $this->data->getSqCargoAssinatura()->getSqCargo());
+                    } else {
+                        echo $this->formHidden('sqCargoAssinatura'       , NULL);
+                    }
+                    if( $this->data->getSqFuncaoAssinatura() ) {
+                        echo $this->formHidden('sqFuncaoAssinatura'      , $this->data->getSqFuncaoAssinatura()->getSqFuncao());
+                    } else {
+                        echo $this->formHidden('sqFuncaoAssinatura'      , NULL);
+                    }        
+                    echo $this->formHidden('dtDespacho'              , $this->data->getDtDespacho()->get('dd/MM/yyyy H:m:s'));
+                    echo $this->formHidden('backUrl'                 , $this->backUrl);
+                ?>
+                <br />
+                <div class="control-group">
+                    <label class="control-label"><span class="required">*</span>Despacho</label>
+                    <div class="controls">
+                        <textarea name="txDespacho" id="txDespacho" class="span11 required" rows="5" cols="80" maxlength="1000">
+                            <?php echo htmlspecialchars($this->data->getTxDespacho()); ?>
+                        </textarea>
+                    </div>
+                </div>
+            
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="btnSubmit">Salvar</button>
+                    <button class="btn"             id="btnCancel"><i class="icon-remove"></i> Cancelar</button>
+            
+            <!--        <a href="#" class="btn btn-primary" data-dismiss="modal" id="btn_modal_update_despacho">Salvar</a>
+                    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

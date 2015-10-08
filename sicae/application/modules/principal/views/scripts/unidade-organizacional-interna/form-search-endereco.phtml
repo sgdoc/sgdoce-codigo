@@ -1,0 +1,47 @@
+<div id="container-en">
+
+    <div class="control-group">
+        <label for="sqCep" class="control-label">CEP</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'sqCep',
+                    NULL,
+                    array(
+                        'mask'     => 'cep',
+                        'class'    => 'span3',
+                        'maxlength' => 9,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="sgEstado" class="control-label">UF</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'sgEstado',
+                    NULL,
+                    array('class'=>'span4'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="noMunicpio" class="control-label">Município</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'noMunicpio',
+                    NULL,
+                    array('class'=>'span4'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+</div>

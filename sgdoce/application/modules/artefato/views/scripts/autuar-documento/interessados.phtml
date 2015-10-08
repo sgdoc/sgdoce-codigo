@@ -1,0 +1,70 @@
+<script type="text/javascript" src="/js/app/artefato/interessado/interessado.js"></script>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/interessado.js"></script>
+<div class="tab-pane" id="interessados">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Interessados</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <a id="btnAdicionarInteressado" data-toggle="modal" class="btn btn-mini">
+                            <i title="Adicionar" class="icon-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php
+                $class = 'class="table table-bordered table-striped tableInteressado"';
+                $body = '<tbody>
+                             <tr class="mensagemInteressado">
+                                 <td colspan="3">Nenhum registro encontrado.</td>
+                             </tr>
+                         </tbody>';
+
+                $trInteressados = "";
+
+                if( count($this->listInteressados) > 0 ) {
+                    foreach( $this->listInteressados as $key => $interessado ){
+                        $key++;
+                        $trInteressados .= "<tr>";
+                        $trInteressados .= "<td>{$interessado['noPessoa']}
+                                            <input type=\"hidden\" name=\"dataInteressado[{$key}][noPessoa]\" value=\"{$interessado['noPessoa']}\">
+                                            <input type=\"hidden\" name=\"dataInteressado[{$key}][sqPessoaFuncao]\">
+                                            <input type=\"hidden\" name=\"dataInteressado[{$key}][unidFuncionario]\" value=\"funcionario\">
+                                            </td>";
+                        $trInteressados .= "<td>{$interessado['nuCpfCnpjPassaporte']}
+                                            <input type=\"hidden\" name=\"dataInteressado[{$key}][sqPessoaCorporativo]\" value=\"{$interessado['sqPessoaCorporativo']}\" class=\"hdn_sqPessoaCorporativo\">
+                                            <input type=\"hidden\" name=\"dataInteressado[{$key}][sqTipoPessoa]\" value=\"{$interessado['sqTipoPessoa']}\">
+                                            </td>";
+                        $trInteressados .= '<td><button type="button" class="btn btn-mini btnExcluirInteressado" title="Excluir"><i class="icon-trash"></i></button></td>';
+                        $trInteressados .= "</tr>";
+                    }
+                    $body = "<tbody>
+                             <tr class=\"mensagemInteressado hide\">
+                                 <td colspan=\"3\">Nenhum registro encontrado.</td>
+                             </tr>{$trInteressados}</tbody>";
+                }
+            ?>
+
+            <table  id="table-interessado" <?php echo $class; ?> >
+                <thead>
+                    <tr>
+                        <th width="75%">Nome</th>
+                        <th width="20%">CPF/CNPJ/Passaporte</th>
+                        <th width="5%">Ações</th>
+                    </tr>
+                </thead>
+                <?php echo $body; ?>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<!-- INICIO MODAL INTERESSADOS -->
+<div id="modal-interessado" class="modal hide fade modal-large">
+</div>
+<!-- FIM MODAL INTERESSADOS -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        Interessado.keyInteressado = $("#table-interessado tbody tr").length - 1;
+    })
+</script>

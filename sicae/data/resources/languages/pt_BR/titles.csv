@@ -1,0 +1,47 @@
+index;
+create;Incluir
+edit;Alterar
+view;Visualizar
+;
+sistema_index;Pesquisar Sistema
+sistema_create;Cadastrar Sistema
+sistema_edit;Alterar Sistema
+sistema_view;Visualizar Sistema
+;
+funcionalidade_index;Pesquisar Funcionalidade
+funcionalidade_create;Cadastrar Funcionalidade
+funcionalidade_edit;Alterar Funcionalidade
+funcionalidade_view;Visualizar Funcionalidade
+;
+usuario-interno_index;Pesquisar Usuário Interno
+usuario-interno_create;Cadastrar Usuário Interno
+usuario-interno_edit;Alterar Usuário Interno
+usuario-interno_view;Visualizar Usuário Interno
+usuario-interno_bind;Atribuir Perfil ao Usuário Interno
+usuario-interno_create-bind;Adicionar Atribuição de Perfil
+usuario-interno_edit-bind;Alterar Atribuição de Perfil
+;
+perfil_index;Pesquisar Perfil
+perfil_create;Cadastrar Perfil
+perfil_edit;Alterar Perfil
+perfil_view;Visualizar Perfil
+;
+pessoa_index;Pesquisar Pessoa
+pessoa_rota;Cadastrar Pessoa
+;
+pessoa-fisica_create;Cadastrar Pessoa Física
+pessoa-fisica_edit;Alterar Pessoa Física
+pessoa-juridica_create;Cadastrar Pessoa Jurídica
+pessoa-juridica_edit;Alterar Pessoa Jurídica
+pessoa-juridica_view;Visualizar Pessoa Jurídica
+;
+usuario-externo_rota;Cadastrar Usuário Externo
+
+usuario-externo-pessoa-fisica_create;Cadastrar Usuário Externo
+usuario-externo-pessoa-juridica_create;Cadastrar Usuário Externo
+usuario-externo-pessoa-fisica_edit;Alterar Cadastro de Usuário Externo
+usuario-externo-pessoa-juridica_edit;Alterar Cadastro de Usuário Externo
+usuario-externo_view;Visualizar Usuário Externo
+;
+usuario-externo_index;Pesquisar Usuário Externo
+usuario-externo_bind;Atribuir Perfil ao Usuário Externo

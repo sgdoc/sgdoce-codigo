@@ -1,0 +1,12 @@
+<?php echo $this->render('header.phtml'); ?>
+
+<p>Prezado Gestor.</p>
+<br />
+<p>Ocorreram os seguintes erros durante o último ciclo de migração de imagem: </p>
+<?php
+    $arrError  = $this->erros;
+    foreach ($arrError as $value) {
+        echo "<p>{$value}</p>";
+    }
+?>
+

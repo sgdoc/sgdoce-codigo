@@ -1,0 +1,54 @@
+<?php
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/tipodoc/index.js');
+echo $this->headScript();
+ ?>
+<h1>Pesquisar Tipo de Documento</h1>
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>" method="post" id="form-tipo-documento">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">
+                        Cadastrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Tipo de Documento</label>
+            <div class="controls">
+                <input class="span6" type="text" name="noTipoDocumento" id="noTipoDocumento" value=""/>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" id="pesquisar">
+                <span class="icon-search icon-white"></span> Pesquisar
+            </button>
+             <button class="btn " type="reset">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+<div class="control-group hidden">
+<fieldset>
+    <legend>
+        Resultado da Pesquisa
+    </legend>
+</fieldset>
+    <table id="table-grid-tipodoc">
+        <thead>
+            <tr>
+                <th width="45%">Tipo de Documento</th>
+                <th width="15%">Abre Processo?</th>
+                <th width="15%">Situação</th>
+                <th width="25%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="form-actions">
+        <a class="btn btn-primary" title="Filtros" href="auxiliar/tipodoc/index">Filtros</a>
+        <a class="btn" title="Cadastrar" href="auxiliar/tipodoc/create">Cadastrar</a>
+    </div>
+</div>

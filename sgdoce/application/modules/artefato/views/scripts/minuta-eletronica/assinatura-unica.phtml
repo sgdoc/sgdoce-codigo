@@ -1,0 +1,70 @@
+<div class="top-bar">
+    <p class="requiredLegend pull-left">
+        Campos obrigatórios <span class="required">*</span>
+    </p>
+</div>
+<fieldset>
+<div class="control-group">
+    <label class="control-label campo-responsavel">
+        <span class="required" title="Required field">*</span> Responsável</label>
+    <?php
+        $assinante   = '';
+        $sqResponsavel = '';
+        $responsavel = '';
+        $cargo       = '';
+        $setor       = '';
+        if(isset($this->assinaturaUnica[0])){
+            $assinante   = $this->assinaturaUnica[0]['sqTipoAssinante'];
+            $sqResponsavel = $this->assinaturaUnica[0]['sqPessoa'];
+            $responsavel = $this->assinaturaUnica[0]['noPessoa'];
+            $cargo       = $this->assinaturaUnica[0]['noCargo'];
+            $setor       = isset($this->assinaturaSetor[0]) ? $this->assinaturaSetor[0]['noUnidadeOrg'] : '';
+        }
+     ?>
+    <div class="controls">
+        <label class="radio inline">
+            <input type="radio" class="required" name="sqTipoAssinante"
+                   id="pessoaLogada" value="1"  <?php echo ($assinante == 1) ? 'checked' : '';?>
+                   <?php echo (isset($this->assinantesUnicos[1]))? '': 'disabled="disabled"'; ?>
+            >
+            Pessoa Logada
+        </label>
+        <label class="radio inline">
+            <input type="radio" class="required" name="sqTipoAssinante"
+                   id="chefeSetor" value="2" <?php echo ($assinante == 2) ? 'checked' : '';?>
+                    <?php echo (isset($this->assinantesUnicos[2]))? '': 'disabled="disabled"'; ?>
+            >
+            Chefe do Setor
+        </label>
+        <label class="radio inline">
+            <input type="radio" class="required" name="sqTipoAssinante"
+                   id="chefeSubstituto" value="3" <?php echo ($assinante == 3) ? 'checked' : '';?>
+                   <?php echo (isset($this->assinantesUnicos[3]))? '': 'disabled="disabled"'; ?>
+            >
+            Substituto
+        </label>
+        <p for="group19" generated="true" id="p-resp-obr" class="help-block">Campo de preenchimento obrigatório.</p>
+    </div>
+</div>
+<div class="control-group">
+    <label for="input01" class="control-label">Nome</label>
+    <div class="controls">
+        <input type="hidden" id="sqPessoaAssinante"    name="sqPessoaAssinante" value="<?php echo $sqResponsavel;?>" >
+        <input type="hidden" id="sqResponsavel_hidden" name="sqResponsavel_hidden" value="<?php echo $sqResponsavel;?>" >
+        <input type="text" value="<?php echo $responsavel;?>"
+        id="sqResponsavel" name="sqResponsavel" readonly="readonly">
+    </div>
+</div>
+<div class="control-group dv3-sqCargo" hidden="true">
+    <label for="input01" class="control-label">Cargo</label>
+    <div class="controls">
+        <input type="text" value="<?php echo $cargo;?>" id="noProfissao" name="noProfissao" readonly="readonly">
+    </div>
+</div>
+<div class="control-group dv3-sqSetor" hidden="true">
+    <label for="input01" class="control-label">Setor</label>
+    <div class="controls">
+        <input type="text" value="<?php echo $setor;?>" id="sqSetorResponsavel" name="sqSetorResponsavel" readonly="readonly">
+    </div>
+</div>
+</fieldset>

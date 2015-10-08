@@ -1,0 +1,52 @@
+<?php
+$objEntity = $this->layout()->objDesmemDesentra;
+$nuArtefatoDestino = $this->layout()->nuArtefatoDestino;
+?>
+<page backtop="5mm" backbottom="20mm" backleft="10mm" backright="10mm">
+
+<div style="text-align: center;">
+    <img src="<?php echo $this->layout()->logo; ?>" width="150" name="ICMBio Logo" title="ICMBio Logo" border="0">
+</div>
+
+<p style="text-align: center; margin-top:50px;"><?php echo $this->layout()->noUnidadeOrg; ?></p>
+
+<p style="text-align: center; margin-top:80px; margin-bottom:80px;">TERMO DE DESMEMBRAMENTO</p>
+                 
+<p>PROCESSO N&deg; <b>
+<?php if($objEntity->getSqArtefato()->getCoAmbitoProcesso() == 'F'): ?>
+	<?php echo $this->layout()->getView()->maskNumber(
+                $objEntity->getSqArtefato()->getSqArtefato()->getNuArtefato(),
+                $this->layout()->nuArtefatoMask); ?></b>
+<?php else: ?>
+	<?php echo $objEntity->getSqArtefato()->getSqArtefato()->getNuArtefato(); ?>
+<?php endif; ?>
+
+
+</p>
+
+<p style="text-indent:75px; text-align:justify;">Em	<?php echo $objEntity->getDtOperacao()->get($this->layout()->dtFormatPrint); ?>, faço a retirada do presente processo da(s) peça(s) n(s)
+<?php echo $objEntity->getTxNumeroPecas(); ?> por solicitação do(a) <b><?php echo $objEntity->getSqUnidadeSolicitacao()->getNoUnidadeOrg(); ?> - <?php echo $objEntity->getSqUnidadeSolicitacao()->getSgUnidadeOrg(); ?></b> para compor o processo N&deg;
+<b><?php echo $nuArtefatoDestino; ?></b></p>
+
+<?php $strAssinatura = $objEntity->getSqPessoaAssinatura()->getNoPessoa() . " - " . $objEntity->getSqCargo()->getNoCargo();  ?>
+
+		<p style="text-align: center; margin-top:100px;">
+		<?php echo str_repeat("_", strlen($strAssinatura) + 2); ?><br />
+		<?php echo $strAssinatura ?><br />
+		(Assinatura/Carimbo)</p>
+
+    <page_footer>
+        <p class="date">Data de impress&atilde;o <?php echo date('d/m/Y H:i:s'); ?></p>
+    </page_footer>
+</page>
+<style type="text/css">
+<!--
+.date {
+    float: right;
+    text-align: right;
+    font-family: "Arial";
+    font-size: 8pt;
+    margin-right: 0.8in
+}
+-->
+</style>

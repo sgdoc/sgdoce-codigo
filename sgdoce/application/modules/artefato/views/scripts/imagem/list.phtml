@@ -1,0 +1,261 @@
+<script type="text/javascript" src="/js/library/jquery.form.js"></script>
+<script type="text/javascript" src="/js/library/jquery.colorbox.js"></script>
+<script type="text/javascript" src="/js/app/artefato/imagem/imagem.js"></script>
+<script type="text/javascript" src="/js/app/artefato/imagem/upload.js"></script>
+<script type="text/javascript" src="/js/components/validation.js"></script>
+<?php
+$total = count($this->result);
+function imagemFake($numero)
+{
+    return "<li class='span2 box-img'>
+                        <div class='thumbnail'>
+                            <div style='float: right;' class='0'>
+                                <div class='btn btn-mini'>
+                                    <i class='icon-trash' onclick='javascript:Imagem.alertaImagem();'></i>
+                                </div>
+                            </div>
+                            <a>
+                                <img width='300' height='300' src='img/carimbo_branco.png'>
+                            </a>
+                            <div class='caption'>
+                                <label class='inline'>
+                                    CARIMBO
+                                </label>
+                                <div class='dropup'>
+                                    <select class='span12' disabled='disabled'>
+                                        <option selected='selected' value='V'>Verso</option>
+                                    </select>
+                                </div>
+                                <label class='checkbox inline'>
+                                    <input type='checkbox' disabled='disabled'>Em branco
+                                </label>
+
+                                <div style='text-align:center;'>
+                                    <label class='inline'>{$numero}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>";
+}
+?>
+<input type="hidden" id="qtdAll" name="qtdAll" value="<?php echo $total ?>" />
+<div id="messageImage"></div>
+<?php if (!$this->obrigatoriedade) : ?>
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios
+            <span class="required">*</span>
+        </p>
+    </div>
+<?php endif; ?>
+<div class="resposta"> </div>
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Lista de Imagens</legend>
+
+        <div class="btn-group" <?php echo $this->visualizarArtefato ? 'hidden' : '';?>>
+            <a class="btn btn-mini" data-toggle="modal" href="#adicionarImagem">
+                <i class="icon-plus" title="Adicionar"></i>
+            </a>
+            <?php if($this->botaoExcluir):?>
+            <a class="btn btn-mini" data-toggle="modal" id="removeImage">
+                <i class="icon-trash" title="Excluir Todos"></i>
+            </a>
+            <a class="btn btn-mini" data-toggle="modal" id="btnOrdenar">
+                <i class="icon-refresh" title="Ordenar"></i>
+            </a>
+            <?php endif; ?>
+        </div>
+
+        <br />
+        <div class="thumb-box" id="lista">
+            <?php if ($total < 1) : ?>
+                <div class="row-fluid">
+                    <div class="control-group well span12">
+                        <ul class="thumbnails">
+                            <li>Nenhum resultado encontrado.</li>
+                        </ul>
+                    </div>
+                </div>
+            <?php else : ?>
+                <div class="row-fluid">
+                    <div class="control-group well span12">
+                        <ul class="thumbnails">
+                            <?php $count = 1; ?>
+                            <?php $mudaPosicao = FALSE; ?>
+                            <?php foreach ($this->result as $anexo) : ?>
+                                <?php $setDisabled = NULL; ?>
+                                <?php $fileinfo = pathinfo($anexo['deCaminhoArquivo']); ?>
+                                <?php $nome = $fileinfo['filename']; ?>
+                                <?php $extensao = strtolower($fileinfo['extension']); ?>
+                                <?php
+                                $nomeExt = $nome;
+                                if (strlen($nomeExt) >= 12) {
+                                    $nomeExt = substr($nomeExt, 0, 11);
+                                    $nomeExt = $nomeExt . '...';
+                                } else {
+                                    $nomeExt = $nome . '.' . $extensao;
+                                }
+                                ?>
+                                <li class="span2 box-img" id="anexoArtefato-<?php echo $anexo['sqAnexoArtefato'] ?>" artefatoValue="<?php echo $anexo['sqArtefato']['sqArtefato'];?>" >
+                                    <div class="thumbnail">
+                                        <?php if($this->botaoExcluir):?>
+                                        <div class="btn-group pull-right" style="float: right;" <?php echo $this->visualizarArtefato ? 'hidden' : ''?>>
+                                            <?php if($this->sqArtefato == $anexo['sqArtefato']['sqArtefato']):?>
+                                            <a class="btn btn-mini remove-image" modalValue="<?php echo $anexo['sqAnexoArtefato']; ?>">
+                                                <i class="icon-trash"></i>
+                                            </a>
+                                            <?php endif; ?>
+                                            <a class="btn btn-mini mover" title="Mover" href="#" id="btn-move">
+                                                <i class="icon-move"></i>
+                                            </a>
+                                        </div>
+                                        <?php endif; ?>
+                                        <a class="view-image cboxElement" href="artefato/imagem/show?sqAnexoArtefato=<?php echo $anexo['sqAnexoArtefato']; ?>&resize=1&crop=0&width=800&height=600">
+                                            <img src="data:image/<?php echo $extensao;?>;base64,
+                                            <?php
+                                            $path = current(explode ('application', __DiR__))
+                                                . 'data'           . DIRECTORY_SEPARATOR
+                                                . 'upload'         . DIRECTORY_SEPARATOR
+                                                . 'thumbs' . DIRECTORY_SEPARATOR;
+
+                                            echo base64_encode(file_get_contents($path . $nome . '_300_X_300.' . $extensao));
+                                            ?>
+                                            " alt="" width="300" height="300" />
+                                        </a>
+                                        <div class="caption">
+                                            <span><b><?php echo $nomeExt; ?></b></span><br />
+                                            <div class="dropup" <?php echo $this->visualizarArtefato ? 'hidden' : ''?>>
+                                                <?php if ($anexo['inFrente']) : ?>
+                                                    <select class="span12 comboFrenteVerso" id="<?php echo $anexo['sqAnexoArtefato']; ?>" onchange="javascript:Imagem.inBranco(this, <?php echo $anexo['sqAnexoArtefato']; ?>)">
+                                                        <option value="F" <?php echo ($anexo['inFrente']) ? 'selected="selected"' : NULL; ?>>Frente</option>
+                                                    </select>
+                                                    <?php $setDisabled = ' disabled="disabled" '; ?>
+                                                <?php else : ?>
+                                                    <?php if ($anexo['inVersoBranco'] || (!$anexo['inFrente'] && !$mudaPosicao)) : ?>
+                                                        <?php $mudaPosicao = TRUE; ?>
+                                                        <?php //$setDisabled = ' disabled="disabled" '; ?>
+                                                    <?php else : ?>
+                                                        <?php $mudaPosicao = FALSE; ?>
+                                                    <?php endif; ?>
+<!--                                                <select class="span12 comboFrenteVerso" onchange="javascript:Imagem.inBranco(this, <?php echo $anexo['sqAnexoArtefato']; ?>)">
+                                                        <option value="F" <?php // echo ($mudaPosicao) ? 'selected="selected"' : NULL; ?>>Frente</option>
+                                                        <option value="V" <?php // echo (!$mudaPosicao) ? 'selected="selected"' : NULL; ?>>Verso</option>
+                                                    </select>-->
+                                                    <select class="span12 comboFrenteVerso" onchange="javascript:Imagem.inBranco(this, <?php echo $anexo['sqAnexoArtefato']; ?>)">
+                                                        <option value="F" <?php echo ($anexo['inFrente']) ? 'selected="selected"' : NULL; ?>>Frente</option>
+                                                        <option value="V" <?php echo (!$anexo['inFrente']) ? 'selected="selected"' : NULL; ?>>Verso</option>
+                                                    </select>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div <?php echo $this->visualizarArtefato ? 'hidden' : ''?>>
+                                                <label class="checkbox inline">
+                                                    <?php $printFake = ($anexo['inVersoBranco']) ? ' checked="checked" ' : NULL; ?>
+                                                    <input <?php echo $printFake; ?> type="checkbox" id="inBranco-<?php echo $anexo['sqAnexoArtefato']; ?>" <?php echo $setDisabled ?> onclick="javascript:Imagem.versoBranco(this, <?php echo $anexo['sqAnexoArtefato']; ?>);">Em branco
+                                                </label>
+                                            </div>
+
+                                            <div style="text-align:center;">
+                                                <label class="inline"><?php echo $anexo['nuPagina']; ?></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php
+                                if ($printFake) {
+                                    $count++;
+                                    echo imagemFake($count);
+                                } $count++;
+                                ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </fieldset>
+</div>
+
+<div class="modal hide fade" id="adicionarImagem">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Adicionar Imagem</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div id="error-image"></div>
+            <form class="form-horizontal" id="formUpload" method="post" action="artefato/imagem/upload">
+                <input type="hidden" name="sqArtefato" id="sq-artefato" value="<?php echo $this->dto->getSqArtefato(); ?>" />
+                <input type="hidden" class="hidden" name="inInserir" id="inInserir" value="imagem">
+                <input type="checkbox" id="anexo" name="anexo" class="hidden" value="1" />
+                <fieldset>
+
+                    <div class="control-group">
+                        <label class="control-label obrigatorio" for="imageFile">
+                            <span class="required obrigatorio" title="Campo obrigatório">*</span> Selecionar Imagem(ns)
+                        </label>
+                        <div class="controls">
+                            <input type="file" name="imageFile[]" id="imageFile" multiple="multiple" />
+                            <br /><span class="help-block hide obrigatorio">Campo de preenchimento obrigatório.</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+
+                        <label class="control-label" for="imageFile">
+                            <span class="required" title="Campo obrigatório">*</span> Posição
+                        </label>
+                        <div class="controls">
+                            <select name="inFrente" id="inFrente">
+                                <option value="F">Frente</option>
+                                <option value="V" selected="selected">Frente e Verso</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary" id="concluirUpload">Concluir</a>
+        <a class="btn" data-dismiss="modal" id="cancelarModalUpload" href="#"><i class="icon-remove"></i> Cancelar</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modalImagem">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Atenção</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid"></div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
+
+<div class="modal hide fade" id="modalUploadion">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Atenção</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            Upload em andamento. Por favor aguarde!
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
+
+<div class="modal hide fade" id="modalUploadOk">
+    <div class="modal-header">
+        <h3>Atenção</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            Upload concluído!
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>

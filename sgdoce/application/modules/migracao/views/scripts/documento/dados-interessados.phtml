@@ -1,0 +1,68 @@
+<script type="text/javascript" src="/js/app/artefato/interessado/interessado.js"></script>
+<script type="text/javascript" src="/js/app/artefato/documento/interessado.js"></script>
+
+<div class="tab-pane" id="dadosInteressados">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Interessados</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <a href="#" id="btnAdicionarInteressado" data-toggle="modal"
+                           class="btn btn-mini"> <i title="Adicionar" class="icon-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <?php if (!$this->data->getSqArtefato()): ?>
+                    <div class="span6"></div>
+                    <div class="span6"></div>
+                <?php endif; ?>
+            </div>
+            <?php
+                $class = '';
+                $body = '';
+                if (!$this->data->getSqArtefato()){
+                    $class = 'class="table table-bordered table-striped tableInteressado"';
+                    $body = '<tbody>
+                                 <tr class="mensagemInteressado">
+                                     <td colspan="3">Nenhum registro encontrado.</td>
+                                 </tr>
+                             </tbody>';
+                }
+            ?>
+
+            <table  id="table-interessado" <?php echo $class; ?> >
+                <thead>
+                    <tr>
+                        <th width="75%">Nome</th>
+                        <th width="20%">CPF/CNPJ/Passaporte</th>
+                        <th width="5%">Ações</th>
+                    </tr>
+                </thead>
+                <?php echo $body; ?>
+            </table>
+        </fieldset>
+        <br />
+        <fieldset>      
+            <table  id="table-interessado" class="table table-bordered table-striped alert-info">
+                <thead>
+                    <tr>
+                        <th width="75%">Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(!empty($this->dataSgdocFisico['interessado'])): ?>
+                    <tr>
+                        <td><?php echo $this->dataSgdocFisico['interessado']; ?></td>
+                    </tr>
+                    <?php else: ?>
+                    <tr>
+                        <td>Não informado anteriormente.</td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<div id="modal-interessado" class="modal hide fade modal-large modal-without-scroll"></div>

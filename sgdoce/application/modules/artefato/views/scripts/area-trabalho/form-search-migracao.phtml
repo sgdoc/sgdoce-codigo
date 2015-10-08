@@ -1,0 +1,54 @@
+<form class="form-inline text-center"
+      id="formSearchMigracaoBox"
+      method="post">
+  <!---->
+  <?php echo $this->formHidden('urlMigracao', $this->urlCurrent(array('module' => 'migracao', 'controller' => 'area-trabalho', 'action' => 'list'))); ?>
+  <?php echo $this->formHidden('tipoArtefato', $this->tipoArtefato,array('id'=>'type_migracao_box')); ?>
+  <?php echo $this->formHidden('typeView', 'list', array('id'=>'type_view')); ?>
+  <?php echo $this->formHidden('migration_box', 5); ?>
+
+  <div class="control-group">
+      <label for="nuVolume" class="control-label">
+          <span class="required">*</span> Número <?php echo ($this->tipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoDocumento()) ? "da Digital" : "do Processo" ?>:
+      </label>
+      <div class="controls">
+          <?php
+          
+            $inputParams = array(
+                'id' => 'nuArtefato',
+                'class' => 'span6 required',
+                'mask' => 'numeric',
+                'placeholder' => 'Preencha o número completo'
+            );
+          
+            if( $this->tipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoDocumento() ):
+                
+                $inputParams['minlength'] = 1;
+                $inputParams['maxlength'] = 7;
+
+            else:
+                 
+                $inputParams['minlength'] = 15;
+                $inputParams['maxlength'] = 18;
+            
+            endif;
+            
+            echo $this->formText( 'nuArtefatoSearch', null,  $inputParams);
+          ?>
+          <button class="btn btn-primary" id="btnSearchMigracao" type="button">
+              Pesquisar
+          </button>
+      </div>
+  </div>
+  <?php if($this->tipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoProcesso()): ?>
+      <div id="nuProcessoLength">
+          <input type="radio" name="tpNuArtefato" value="17" checked="checked" class="required tpNuArtefato" id="tpNuArtefato2" />
+          <label for="tpNuArtefato2" style="display: inline; font-size: 1em;">ANO com quatro dígitos</label>
+          <a href="javascript:void(0);" class="infolink" title="Ex: 00000.000000/2009-00"><i class="icon-question-sign"></i></a>
+          <input type="radio" name="tpNuArtefato" value="15" class="required tpNuArtefato" id="tpNuArtefato1"/>
+          <label for="tpNuArtefato1" style="display: inline; font-size: 1em;">ANO com dois dígitos</label>
+          <a href="javascript:void(0);" class="infolink" title="Ex: 00000.000000/09-00"><i class="icon-question-sign"></i></a>
+      </div>
+  <?php endif; ?>
+
+</form>

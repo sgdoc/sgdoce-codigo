@@ -1,0 +1,15 @@
+<?php echo $this->render('header.phtml'); ?>
+
+<b>Status do suporte:</b> <?php echo $this->status[$this->ultimoStatus['sqTipoStatusSolicitacao']]; ?><br />
+<b>Nº do suporte:</b> <?php echo $this->entSolicitacao->getSqSolicitacao(); ?>/<?php echo $this->entSolicitacao->getDtSolicitacao()->get(\Zend_Date::YEAR); ?><br />
+<b>Data do pedido:</b> <?php echo $this->entSolicitacao->getDtSolicitacao()->get(\Zend_Date::DATETIME_MEDIUM); ?> (data e hora do pedido)<br />
+<b>Situação do pedido:</b> <?php echo $this->ultimoStatus['noTipoStatusSolicitacao']; ?><br />
+<b>Técnico Responsável:</b> <?php echo $this->ultimoStatus['noPessoaResponsavel'] ?: '- nenhum -'; ?><br />
+<?php if( $this->entSolicitacao->getSqArtefato() instanceof Sgdoce\Model\Entity\Artefato): ?>
+<b>Nº da digital/processo:</b> <?php echo $this->layout()->getView()->nuArtefato($this->entSolicitacao->getSqArtefato()); ?><br />
+<?php endif; ?>
+<b>Assunto:</b> <?php echo $this->entSolicitacao->getSqTipoAssuntoSolicitacao()->getNoTipoAssuntoSolicitacao(); ?><br />
+<b>Descrição:</b> <?php echo $this->entSolicitacao->getDsSolicitacao(); ?><br />
+<?php if( $this->txComentario ): ?>
+<b>Comentário Atendente:</b> <?php echo $this->txComentario; ?><br />
+<?php endif; ?>

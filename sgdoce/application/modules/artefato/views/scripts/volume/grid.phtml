@@ -1,0 +1,36 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl('/js/app/artefato/volume/grid.js')); ?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <?php echo $this->userMessageStack() ?>
+
+            <h1>Detalhar Volumes  - <?php echo $this->nuArtefato($this->entityArtefato); ?></h1>
+            <br />
+            <div class="control-group form-horizontal" id="divGrid">
+                <fieldset>
+                    <legend>Lista de Volumes</legend>
+                </fieldset>
+                <?php echo $this->formHidden('urlBack',(isset($this->backUrl)) ? str_replace('/','.',$this->backUrl) : ''); ?>
+            
+                <table id="grid_volume">
+                    <thead >
+                        <tr>
+                            <th width="35%" class="sorting_disabled">Volume</th>
+                            <th width="30%" class="sorting_disabled">Folha Inicial</th>
+                            <th width="30%" class="sorting_disabled">Folha Final</th>
+                            <th width="5%"  class="sorting_disabled">Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="form-actions">
+<!--                     <button class="btn btn-primary" id="btn_imprimir">Imprimir</button> -->
+                    <button class="btn btn-primary" id="cancelar"><i class="icon-remove"></i> Cancelar</button>
+                </div>
+            </div>
+            
+            <form id="volume-artefato-grid-form" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>">
+                <input type="hidden" name="sqArtefato" id="sqArtefato" value="<?php echo $this->entityArtefato->getSqArtefato(); ?>" />
+            </form>
+        </div>
+    </div>
+</div>'

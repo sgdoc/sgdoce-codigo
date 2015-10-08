@@ -1,0 +1,80 @@
+<?php
+$view = $this;
+
+$mask = function ($row) {
+            return \Zend_Filter::filterStatic($row['nuCpf'], 'MaskNumber', array('cpf'), array('Core_Filter'));
+        };
+
+$date = function ($row) use ($view) {
+            if ($row['dtNascimento']) {
+                return $row['dtNascimento']->get('dd/MM/YYYY');
+            } else {
+                return '';
+            }
+        };
+
+/** Início do ajuste solicitado no ticket #11092 */
+$sexo = function ($row) use ($view) {
+            if (strtoupper($row['sgSexo']) == 'F') {
+                return 'Feminino';
+            } elseif (strtoupper($row['sgSexo']) == 'M') {
+                return 'Masculino';
+            } else {
+                return '';
+            }
+        };
+/** Fim do ajuste solicitado no ticket #11092 */
+
+$status = function ($row) use ($view) {
+            if ($row['stRegistroAtivo']) {
+                return 'Ativo';
+            } else {
+                return 'Inativo';
+            }
+        };
+?>
+<table class="table table-condensed" id="table-pdf">
+    <thead>
+        <tr class="title">
+            <th class="nome">Nome</th>
+            <th class="cpf">CPF</th>
+            <th class="data">Data de Nascimento</th>
+            <th class="sexo">Sexo</th>
+            <th>Cod. Identificador</th>
+            <th>Nacionalidade Brasileira?</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->layout()->data['data'] as $key => $value) { ?>
+            <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                <td>
+                    <?php echo $value['noPessoa']; ?>
+                </td>
+                <td align="center">
+                    <?php echo $mask($value); ?>
+                </td>
+                <td align="center">
+                    <?php echo $date($value); ?>
+                </td>
+                <td>
+                    <?php echo $sexo($value); ?>
+                </td>
+                <td align="center">
+                    <?php echo $value['sqPessoa']; ?>
+                </td>
+                <td>
+                    <?php echo $value['sqMunicipio'] ? 'Sim' : 'Não'; ?>
+                </td>
+                <td>
+                    <?php echo $status($value); ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+    <tr>
+        <td colspan="7" class="total-registro">
+            Total de Registros: <?php echo count($this->layout()->data['data']); ?>
+        </td>
+    </tr>
+</table>

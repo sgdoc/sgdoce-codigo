@@ -1,0 +1,89 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/arquivo/caixa/index.js'); ?>
+
+<h1>Pesquisar Caixa de Arquivo</h1>
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+<br />
+<form class="form-horizontal"  method="post" id="form_caixa_arquivo"
+      action="<?php echo $this->urlCurrent(array('action' => 'list'))?>">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">Pelo menos um dos filtros deve ser preenchido.</p>
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">
+                        Cadastrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset>
+        <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Número</label>
+            <div class="controls">
+                <?php echo $this->formText('nuCaixa', null, array('class'=>'span2', 'mask'=>'numeric', 'maxlength'=>7))?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Ano da Caixa</label>
+            <div class="controls">
+                <?php echo $this->formText('nuAno', null, array('class'=>'span1', 'mask'=>'numeric', 'maxlength'=>4))?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Classificação</label>
+            <div class="controls">
+                <?php echo $this->formHidden('sqClassificacao_hidden',null,array('name'=>'sqClassificacao'))?>
+                <?php echo $this->formText('sqClassificacao', null, array('class'=>'span8'))?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Unidade</label>
+            <div class="controls">
+                <?php echo $this->formHidden('sqUnidadeOrg_hidden',null,array('name'=>'sqUnidadeOrg'))?>
+                <?php echo $this->formText('sqUnidadeOrg', null, array('class'=>'span8'))?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="stFechamento">Situação</label>
+            <div class="controls">
+                 <?php echo $this->ComboCustom('stFechamento', null, array('class'=>'span3'), $this->arrSituacao); ?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="btn_pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+            <button id="btn_clear" class="btn">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+<div class="control-group" id="divGrid">
+    <fieldset>
+        <legend>Resultado da pesquisa</legend>
+    </fieldset>
+    <table id="grid_caixa_arquivo">
+        <thead >
+            <tr>
+                <th width="8%">Número</th>
+                <th width="10%">Classificação</th>
+                <th width="29%">Unidade</th>
+                <th width="10%">Ano da Caixa</th>
+                <th width="10%">Situação</th>
+                <th width="7%" class="sorting_disabled">Ação</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="form-actions">
+        <a class="btn btn-primary" id="btn_filtros" title="Filtros" href="javascript:void(0);">Filtros</a>
+        <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn">Cadastrar</a>
+    </div>
+</div>
+
+<div id="modal_lista_artefato_arquivado" class="modal hide fade modal-large"></div>
+
+<div id="modal_imagem_artefato" class="modal hide fade modal-large"></div>

@@ -1,0 +1,36 @@
+<?php
+
+ use Principal\Service\TipoEndereco; ?>
+<form class="form-horizontal">
+    <fieldset>
+        <br>
+        <?php foreach ($this->data->getSqEndereco() as $entity) : ?>
+            <?php if ($entity->getSqTipoEndereco()->getSqTipoEndereco() == TipoEndereco::INSTITUCIONAL) : ?>
+                <p class="span11"><b class="span3">Tipo de Endereço</b> <?php echo $entity->getSqTipoEndereco()->getNoTipoEndereco(); ?></p>
+                <p class="span11"><b class="span3">País</b> <?php echo $entity->getSqMunicipio()->getSqEstado()->getSqPais()->getNoPais(); ?></p>
+                <p class="span11"><b class="span3">CEP</b> <?php echo $this->maskNumber($entity->getSqCep(), 'cep'); ?></p>
+                <p class="span11"><b class="span3">UF</b> <?php echo $entity->getSqMunicipio()->getSqEstado()->getSgEstado(); ?></p>
+                <p class="span11"><b class="span3">Município</b> <?php echo $entity->getSqMunicipio()->getNoMunicipio(); ?></p>
+                <p class="span11"><b class="span3">Logradouro</b> <?php echo $entity->getTxEndereco(); ?></p>
+                <p class="span11"><b class="span3">Número</b> <?php echo $entity->getNuEndereco(); ?></p>
+                <p class="span11"><b class="span3">Complemento</b> <?php echo $entity->getTxComplemento(); ?></p>
+                <p class="span11"><b class="span3">Bairro</b> <?php echo $entity->getNoBairro(); ?></p>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </fieldset>
+    <br/>
+    <div class="form-actions">
+        <a class="btn buttons" href="#documento" title="Anterior">
+            <span class="icon-chevron-left"></span> Anterior
+        </a>
+        <a class="btn btn-primary buttons" href="#contato" title="Salva e segue para a próxima aba.">
+            Próxima <span class="icon-chevron-right icon-white"></span>
+        </a>
+        <button  id="btnConcluir" class="btn" type="button" title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <a class="btn btnCancelar" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>" >
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>

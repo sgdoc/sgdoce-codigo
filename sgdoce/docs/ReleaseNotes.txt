@@ -1,0 +1,19 @@
+*system: SGDoce
+*version: 1.2.23
+*iteration: -
+
+*deliver: 06-10-2015 [13:13:09]
+
+*objective:
+- Modificando o protocolo da requisição do WERBSERVICE de HTTPS para HTTP.
+- Alterando Acordion de Historico de Demanda adicionando formulario de pesquisa para não carregar todos os registros
+
+*products:
+CODIGO-FONTE
+
+*new_functionality:
+- N/A
+
+*changed_funcionality:
+- WEBSERVICE
+- Demandas de Suporte

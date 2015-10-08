@@ -1,0 +1,33 @@
+<form class="form-horizontal" name="form-login"
+    action="<?php echo $this->url(array('controller'=>'usuario-externo', 'action'=>'change-pass-with-mail'), NULL, TRUE); ?>"
+    method="post">
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+        <legend>Alterar Minha Senha</legend>
+        <input type="hidden" name="sqUsuarioExterno" value="<?php echo $this->sqUsuarioExterno; ?>" />
+        <input type="hidden" name="txSenha" value="TfOCi4" />
+        <div class="control-group">
+            <label class="control-label" for="input01"><span class="required">* </span> Nova senha</label>
+            <div class="controls">
+                <input type="password" name="txSenhaNova"
+                    class="input-xlarge required validatePassword" maxlength="32"  id="txSenhaNova">
+                <span class="help-block aviso">Digite sua nova senha</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="input01"><span class="required">* </span> Confirmação nova senha</label>
+            <div class="controls">
+                <input type="password" name="txSenhaNovaConfirm"
+                    class="input-xlarge required validatePassword" maxlength="32"
+                    id="txSenhaNovaConfirm">
+                <span class="help-block aviso">Digite sua nova senha outra vez</span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Alterar Senha</button>
+            <a class="btn" href="<?php echo $this->url(array('controller'=>'usuario-externo', 'action'=>'login'), null, TRUE); ?>">Cancelar</a>
+        </div>
+    </fieldset>
+</form>
+
+<script src="<?php echo $this->assetUrl('sica/usuario-externo/change-pass-token.js', array('address' => 'js')); ?>" type="text/javascript"></script>

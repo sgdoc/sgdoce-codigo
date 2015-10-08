@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Services" targetNamespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP">
+    <types>
+        <xsd:schema targetNamespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+    </types>
+    <portType name="ServicesPort">
+        <operation name="verificaAutenticacaoUsuarioInterno">
+            <documentation>Verifica autentica&#xE7;&#xE3;o do usu&#xE1;rio interno retorna 'true' caso este possua acesso</documentation>
+            <input message="tns:verificaAutenticacaoUsuarioInternoIn"/>
+            <output message="tns:verificaAutenticacaoUsuarioInternoOut"/>
+        </operation>
+        <operation name="verificaAutenticacaoUsuarioExterno">
+            <documentation>Verifica autentica&#xE7;&#xE3;o do usu&#xE1;rio externo retorna 'true' caso este possua acesso</documentation>
+            <input message="tns:verificaAutenticacaoUsuarioExternoIn"/>
+            <output message="tns:verificaAutenticacaoUsuarioExternoOut"/>
+        </operation>
+    </portType>
+    <binding name="ServicesBinding" type="tns:ServicesPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="verificaAutenticacaoUsuarioInterno">
+            <soap:operation soapAction="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP#verificaAutenticacaoUsuarioInterno"/>
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+            </output>
+        </operation>
+        <operation name="verificaAutenticacaoUsuarioExterno">
+            <soap:operation soapAction="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP#verificaAutenticacaoUsuarioExterno"/>
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="ServicesService">
+        <port name="ServicesPort" binding="tns:ServicesBinding">
+            <soap:address location="{context_url}/index.php?XDEBUG_SESSION_START=ECLIPSE_DBGP"/>
+        </port>
+    </service>
+    <message name="verificaAutenticacaoUsuarioInternoIn">
+        <part name="credential" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+    </message>
+    <message name="verificaAutenticacaoUsuarioInternoOut">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+    <message name="verificaAutenticacaoUsuarioExternoIn">
+        <part name="credential" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+    </message>
+    <message name="verificaAutenticacaoUsuarioExternoOut">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+</definitions>

@@ -1,0 +1,748 @@
+<?php if(!empty($this->layout()->viewFor)): ?>
+<h1>Assinar Minuta</h1>
+<div class="top-bar">&nbsp;</div>
+<?php endif; ?>
+<?php
+
+$inRodape = NULL;
+$inInteressado = FALSE;
+
+//cabecalho
+$inLocal    = FALSE;
+$inNumDoc   = FALSE;
+$inAnoDoc   = FALSE;
+$inSetorDoc = FALSE;
+$inDataDoc  = FALSE;
+$inAssunto  = FALSE;
+
+// destinatario
+$inDestInt = FALSE;
+$inVarDest = FALSE;
+$inUniDest = FALSE;
+$inNomUnid = FALSE;
+$inTipUnid = FALSE;
+$inNomDest = FALSE;
+
+// assinatura
+$inSetorAss = NULL;
+$inCargoAss = NULL;
+$inSetorCab = NULL;
+$inEndCab   = NULL;
+$inTelCab   = NULL;
+$inEmailCab = NULL;
+
+$path = APPLICATION_PATH . '/../public/';
+
+foreach ($this->layout()->arrDestino as $kDest => $dDest) {
+    if ($kDest === 'qtdDestinatario') {
+        if ($dDest > 1) {
+            $inVarDest = TRUE;
+        }
+        elseif ($dDest == 1) {
+            $inUniDest = TRUE;
+        }
+    }
+}
+
+foreach($this->layout()->arrCampo as $key => $data) {
+
+    foreach($data as $key2 => $data2){
+        // rodape
+        if ($data2 === 'Rodapé') {
+            $inRodape = TRUE;
+        }
+
+        // interessado
+        if ($data2 === 'Interessado') {
+            $inInteressado = $data['inVisivelDocumento'];
+        }
+
+        // cabecalho
+        if(substr(strtolower($data2),0,10) == 'nº do doc'){
+            $inNumDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'ano'){
+            $inAnoDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'sigla do s'){
+            $inSetorDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'local'){
+            $inLocal = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'data'){
+            $inDataDoc = TRUE;
+        }
+
+        // destinatario
+        if(substr(strtolower($data2),0,10) == 'destino in'){
+            $inDestInt = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'Vários des'){
+            $inVarDest = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'Único dest'){
+            $inUniDest = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'nome da un'){
+            $inNomUnid = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'tipo da un'){
+            $inTipUnid = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'nome do de'){
+            $inNomDest = TRUE;
+        }
+
+        // cargo assinatura
+        if ($data2 === 17) {
+            $inCargoAss = TRUE;
+        }
+
+        // assunto
+        if(strtolower($data['noCampo']) == 'assunto'){
+            $inAssunto = TRUE;
+        }
+
+        //setor assinatura
+        if ($data2 === 18) {
+            $inSetorAss = TRUE;
+        }
+
+        #setor cabecalho
+        if($data2 === 23){
+            $inSetorCab = TRUE;
+        }
+
+        #endereco cabecalho
+        if($data2 === 24){
+            $inEndCab = TRUE;
+        }
+
+        #telefone cabecalho
+        if($data2 === 25){
+            $inTelCab = TRUE;
+        }
+
+        #email cabecalho
+        if($data2 === 26){
+            $inEmailCab = TRUE;
+        }
+    }
+}
+
+?>
+<page backtop="0mm" backbottom="44mm" backleft="0mm" backright="0mm"> <?php if(empty($this->layout()->viewFor)): ?>
+<page_footer> <?php if($inRodape): ?>
+<div class="rodape-separator"></div>
+<table class="rodape">
+	<tr>
+		<td class="rodape-left"><?php if(!empty($this->layout()->arrRodape['deImagemRodape'])): ?>
+			<img
+			src="../data/upload/rodape/<?php echo $this->layout()->arrRodape['deImagemRodape']; ?>"
+			name="logo" title="logo" width="120" height="120" border="0"> <?php endif; ?>
+		</td>
+		<td class="rodape-right"><?php if(!empty($this->layout()->arrRodape['noPessoa'])): ?>
+			<?php echo $this->layout()->arrRodape['noPessoa'] ?> <br /> <?php endif; ?>
+			<?php if(!empty($this->layout()->arrRodape['txEndereco'])): ?>
+			Endereço: <?php echo $this->layout()->arrRodape['txEndereco'] ?> <br />
+			<?php endif; ?> <?php if(!empty($this->layout()->arrRodape['coCep'])): ?>
+			CEP: <?php
+			$cepRodape = $this->layout()->arrRodape['coCep'];
+			$cepRodape = substr($cepRodape, 0, 5) . '-' . substr($cepRodape, 5, 3);
+			echo $cepRodape;
+			?> <br /> <?php endif; ?> <?php if(!empty($this->layout()->arrRodape['nuTelefone'])): ?>
+			Telefone: <?php
+			$telRodape = (string)$this->layout()->arrRodape['nuTelefone'];
+			$telDDDRodape = (string)$this->layout()->arrRodape['nuDdd'];
+			$telRodapeNum = substr($telRodape, -8);
+			$telRodapeNum1 = substr($telRodapeNum, -8, 4);
+			$telRodapeNum2 = substr($telRodapeNum, -4, 4);
+			echo '(' . $telDDDRodape . ')' . ' ' . $telRodapeNum1 . '-' . $telRodapeNum2;
+			?> <?php endif; ?> <?php if(!empty($this->layout()->arrRodape['txEnderecoEletronico'])): ?>
+			Email: <?php echo $this->layout()->arrRodape['txEnderecoEletronico'] ?>
+			<br /> <?php endif; ?>
+		</td>
+	</tr>
+</table>
+<?php endif; ?>
+<div style="text-align: right;"> [[page_cu]]/[[page_nb]] </div>
+</page_footer> <?php endif; ?> <?php if(!empty($this->layout()->viewFor)): ?>
+<div class="content-geral">
+	<?php endif; ?>
+	<div class="content">
+		<div id="header">
+			<p class="smallMargin">
+				<!-- cabeçalho -->
+				<?php if($this->layout()->arrOrigem['sqCabecalho']) :?>
+
+
+			<table class="tabImagem">
+				<tr>
+					<td><?php if(!empty($this->layout()->arrOrigem['deArquivoImagem'])): ?>
+						<img
+						src="img/<?php echo $this->layout()->arrOrigem['deArquivoImagem'] ?>"
+						name="logo" alt="logo" title="logo" width=120 height=120 border=0>
+						<?php endif; ?>
+					</td>
+					<?php if(!empty($this->layout()->arrOrigem['nuDigital'])) : ?>
+						<div class="ImagemBar">
+							ICMBio/CDoc&nbsp;&nbsp;&nbsp; <br> <img class="imgPath"
+								src="<?php  echo $path . 'barcode.jpg' ?>"> <br> <span
+								class="alignCenter"> <?php echo substr($this->layout()->arrOrigem['nuDigital'], 1,7) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</span>
+						</div>
+					<?php endif; ?>
+				</tr>
+				<tr>
+					<td>
+						<p class="smallMargin">
+							<b> <?php if(!empty($this->layout()->arrOrigem['txCabecalho'])
+                                                         && $this->layout()->arrOrigem['txCabecalho'] !== 'Nenhum'): ?>
+								<?php echo $this->layout()->arrOrigem['txCabecalho'] ?> <?php endif; ?>
+							</b>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td><?php $virgula = null;
+					$cabeçalho = "";
+					?> <span class="smallMargin" class="alignCenter"> <?php if(!empty($this->layout()->arrOrigem['noPessoa']) && $inSetorCab): ?>
+							<?php $virgula = ', ';
+                                $cabeçalho = $this->layout()->arrOrigem['noPessoa'];?>
+							<?php endif; ?> <?php if(!empty($this->layout()->arrOrigem['txEndereco']) && $inEndCab): ?>
+
+							<?php $cabeçalho .= rtrim(ltrim($virgula .'Endereço: ' .$this->layout()->arrOrigem['txEndereco']));
+							$virgula = ', ';
+							?> <?php endif; ?> <?php if(!empty($this->layout()->arrOrigem['nuEndereco']) && $inEndCab): ?>
+							<?php $cabeçalho .= rtrim(ltrim($virgula .'Número: ' . $this->layout()->arrOrigem['nuEndereco']));?>
+							<?php endif; ?> <?php if(!empty($this->layout()->arrOrigem['nuTelefone']) && $inTelCab): ?>
+							<?php
+							$telCabecalho = (string)$this->layout()->arrOrigem['nuTelefone'];
+							$telDDDRodape = (string)$this->layout()->arrOrigem['nuDdd'];
+							$telCabecalhoNum = substr($telCabecalho, -8);
+							$telCabecalhoNum1 = substr($telCabecalhoNum, -8, 4);
+							$telCabecalhoNum2 = substr($telCabecalhoNum, -4, 4);
+                            $cabeçalho .= rtrim(ltrim($virgula .'Telefone: ' . '(' . $telDDDRodape . ')' . ' ' . $telCabecalhoNum1 . '-' . $telCabecalhoNum2));?>
+                            <?php endif; ?>
+                            <?php if(!empty($this->layout()->arrOrigem['txEmail']) && $inEmailCab): ?>
+							<?php
+							if($virgula == ', ' ){
+							    //$cabeçalho .= rtrim(ltrim($virgula));
+							}
+                            $cabeçalho .= '<br /> Email: ' . $this->layout()->arrOrigem['txEmail'];?>
+							<?php endif; ?> <?php echo $cabeçalho; ?>
+					</span>
+					</td>
+				</tr>
+			</table>
+			<!-- cabeçalho -->
+			<?php endif;?>
+			</p>
+			<p class="smallMargin">
+				<!-- 	-->
+			</p>
+		</div>
+
+		<p id="titulo-left">
+			<?php if(!empty($this->layout()->arrOrigem['noTipoDocumento'])): ?>
+			<?php echo $this->layout()->arrOrigem['noTipoDocumento'] ?>
+			<?php endif; ?>
+			<?php if($inNumDoc): ?>
+			N&#186;
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrOrigem['nuArtefato'])): ?>
+			<?php echo $this->layout()->arrOrigem['nuArtefato'] ?>
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrOrigem['dtArtefato']) && $inAnoDoc): ?>
+			/
+			<?php echo $this->layout()->arrOrigem['dtArtefato']->get('Y') ?>
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrOrigem['noPessoa']) && $inSetorDoc): ?>
+			-
+			<?php echo $this->layout()->arrOrigem['noPessoa'] ?>
+			<?php endif; ?>
+		</p>
+		<p id="date">
+			<?php if(!empty($this->layout()->arrOrigem['noMunicipio']) && $inLocal): ?>
+			<?php echo $this->layout()->arrOrigem['noMunicipio'] ?>
+			,
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrOrigem['dtArtefato']) && $inDataDoc): ?>
+			<?php $data = $this->layout()->arrOrigem['dtArtefato'];?>
+			<?php echo $data->get('d') ?>
+			de
+			<?php echo Zend_Locale_Data::getContent(Zend_Locale::findLocale(), 'month', (int) $data->get('M')); ?>
+			de
+			<?php echo $data->get('Y') ?>
+			.
+			<?php endif; ?>
+		</p>
+		<p id="to">
+			<?php if(!empty($this->layout()->arrOrigem)): // modelo ?>
+			<?php echo $this->layout()->arrOrigem['noCargoInterno'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if ($inDestInt): ?>
+			<?php
+
+			/*  1 - Se selecionado
+FECHO
+			-um destinatário
+			-destinatário interno
+			-tipo da unidade
+			-nome da unidade
+			-nome do destinatário:
+
+			Mostrar:
+
+			<cargo-interno> / Nome da Unidade
+			A/C: Nome do destinatário
+			*/
+			if ($inUniDest && $inDestInt && $inTipUnid && $inNomUnid && $inNomDest
+                    && !empty($this->layout()->arrDestino[0]['noPessoa'])
+                    && $this->layout()->arrDestino[0]['sqTipoPessoa'] == 1) {
+
+                if (!empty($this->layout()->arrDestino[0]['noCargoInterno'])) {
+                    echo $this->layout()->arrDestino[0]['noCargoInterno'] . ' ' .
+                                    $this->layout()->arrDestino[0]['noUnidadeOrg'] . '<br />';
+                }
+                elseif (!empty($this->layout()->arrDestino[0]['noUnidadeOrg'])) {
+                    echo $this->layout()->arrDestino[0]['noUnidadeOrg'] . '<br />';
+                }
+
+                if (!empty($this->layout()->arrDestino[0]['noPessoa'])) {
+                    echo 'A/C: ' . $this->layout()->arrDestino[0]['noPessoa'];
+                }
+            } elseif (!$inUniDest && $inDestInt && $inTipUnid && $inNomUnid && $inNomDest
+                && !empty($this->layout()->arrDestino[0]['noPessoa'])
+                && $this->layout()->arrDestino[0]['sqTipoPessoa'] == 1) {
+
+                if (!empty($this->layout()->arrDestino[0]['noCargoInterno'])) {
+                    echo $this->layout()->arrDestino[0]['noCargoInterno'] . ' ' . $this->layout()->arrDestino[0]['noUnidadeOrg'] . '<br />';
+                } elseif (!empty($this->layout()->arrDestino[0]['noUnidadeOrg'])) {
+                    echo $this->layout()->arrDestino[0]['noUnidadeOrg'] . '<br />';
+                }
+
+                if (!empty($this->layout()->arrDestino[0]['noPessoa'])) {
+                    $arrDestinos = array();
+                    foreach ($this->layout()->arrDestino as $destino) {
+                        if (isset($destino['noPessoa'])){
+                            $arrDestinos[$destino['noPessoa']] = $destino['noPessoa'];
+                        }
+                    }
+                    $stringDestinos = implode(", ", $arrDestinos);
+                    echo 'A/C: ' . $stringDestinos;
+                }
+            }
+
+            /*  2 - Se selecionado
+
+            -um destinatário
+            -destinatário interno
+            -tipo da unidade
+            -nome da unidade
+
+            Mostrar:
+
+            <cargo-interno> / Nome da Unidade
+            */
+            elseif ($inUniDest && $inDestInt && $inTipUnid && $inNomUnid
+                    && !empty($this->layout()->arrDestino[0]['noPessoa'])
+                    && $this->layout()->arrDestino[0]['sqTipoPessoa'] == 4) {
+
+                if (!empty($this->layout()->arrDestino[0]['noCargoInterno'])) {
+                    echo $this->layout()->arrDestino[0]['noCargoInterno'] . ' ' .
+                                    $this->layout()->arrDestino[0]['noPessoa'] . '<br />';
+                }
+                elseif (!empty($this->layout()->arrDestino[0]['noPessoa'])) {
+                    echo $this->layout()->arrDestino[0]['noPessoa'];
+                }
+            }
+
+            /*  3 - Se selecionado
+
+            -um destinatário
+            -destinatário interno
+            -tipo da Unidade:
+
+            Mostrar
+
+            <cargo-interno> / Tipo da Unidade
+            */
+            elseif ($inTipUnid && !empty($this->layout()->arrDestino[0]['noTipoUnidadeOrg2'])
+                    && empty($this->layout()->arrDestino[0]['noUnidadeOrg'])) {
+                $arrDestinos = array();
+                foreach ($this->layout()->arrDestino as $destino) {
+                    if (isset($destino['noTipoUnidadeOrg2'])){
+                        $arrDestinos[$destino['noTipoUnidadeOrg2']] = $destino['noTipoUnidadeOrg2'];
+                    }
+                }
+                $stringDestinos = implode(", ", $arrDestinos);
+
+                if (!empty($this->layout()->arrDestino[0]['noCargoInterno'])) {
+                    echo $this->data['arrDestino'][0]['noCargoInterno'] . ' ' .
+                        $stringDestinos . '<br />';
+                } elseif (!empty($this->layout()->arrDestino[0]['noPessoa'])) {
+                    echo $stringDestinos;
+                }
+            }
+
+            ?>
+			<?php else: ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noTratamento'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['noTratamento'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['txPosTratamento'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['txPosTratamento'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noPessoa'])): ?>
+			<b><?php echo $this->layout()->arrDestino[0]['noPessoa'] ?> </b> <br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noCargo'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['noCargo'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noUnidadeOrg'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['noUnidadeOrg'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noMunicipio'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['noMunicipio'] ?>
+			-
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['noEstado'])): ?>
+			<?php echo $this->layout()->arrDestino[0]['noEstado'] ?>
+			<br />
+			<?php endif; ?>
+			<?php if(!empty($this->layout()->arrDestino[0]['coCep'])): ?>
+			<?php
+			$cep = $this->layout()->arrDestino[0]['coCep'];
+			$cep = substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+			echo $cep;
+			?>
+			<br />
+			<?php endif; ?>
+			<?php endif; ?>
+		</p>
+		<!-- Assunto -->
+		<?php if(!empty($this->layout()->arrOrigem['txAssunto']) && $inAssunto): ?>
+		<div style="text-align: justify;">
+		ASSUNTO :
+		<?php
+		echo !empty($this->layout()->arrOrigem['txAssuntoComplementar'])
+		? $this->layout()->arrOrigem['txAssuntoComplementar']
+		: $this->layout()->arrOrigem['txAssunto']
+		?>
+		</div>
+		<?php endif; ?>
+		<!-- Interessado(s) -->
+		<br />
+		<?php if(($inInteressado) && !empty($this->layout()->arrInteressado) && count($this->layout()->arrInteressado) > 0): ?>
+		<?php $countInteressados = count($this->layout()->arrInteressado); ?>
+		<?php $cont = 1; ?>
+		<div class="" style="text-align: left;">
+			Interessado(s):
+			<?php foreach($this->layout()->arrInteressado as $dadosInteressado): ?>
+			<?php if(!empty($dadosInteressado['noPessoa'])): ?>
+			<?php echo $dadosInteressado['noPessoa'] ?>
+			<?php if($cont < $countInteressados): ?>
+			,
+			<?php endif; ?>
+			<?php $cont++ ?>
+			<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+		<?php if(!empty($this->layout()->arrOrigem['txReferencia'])): ?>
+		<div style="text-align: justify;">
+		Ref:
+		<?php
+		//$txReferencia = str_replace(array('\n','\r' ,'\r\n','\<br>', '\<br><br>'),'<br/>' ,$this->layout()->arrOrigem['txReferencia']);
+		echo nl2br($this->layout()->arrOrigem['txReferencia']);
+
+		?>
+		</div>
+		<br /> <br />
+		<?php endif; ?>
+
+		<?php
+
+        if(!empty($this->layout()->arrDestino[0]['noVocativo'])): ?>
+		<!-- senhor (a) -->
+		<span class="marginLeft">&nbsp;</span>
+		<?php
+
+		$textoVocativo = $this->layout()->arrDestino[0]['noVocativo'];
+		if($this->layout()->arrDestino[0]['txPosVocativo']){
+            $textoVocativo .= ' ' .$this->layout()->arrDestino[0]['txPosVocativo'];
+        }
+        ?>
+		<p class="posVocativo">
+			<span class="marginLeft">&nbsp;</span> <br />
+			<?php echo $textoVocativo .','; ?>
+		</p>
+		<?php endif; ?>
+		<p class="alignJustify ajustaBox">
+			<span class="marginLeft">&nbsp;</span>
+			<?php if(!empty($this->layout()->arrOrigem['txTextoArtefato'])): ?>
+			<?php
+			    $textoAtual = str_replace(array('\n','\r' ,'\r\n','\<br>', '\<br><br>'),'<br/>' ,$this->layout()->arrOrigem['txTextoArtefato']);
+			    echo nl2br($textoAtual) ?>
+			<?php endif; ?>
+			<br />
+			<!-- Descrição do prazo -->
+			<?php if(!empty($this->layout()->arrOrigem['txDescricaoPrazo'])): ?>
+			<?php echo nl2br($this->layout()->arrOrigem['txDescricaoPrazo']); ?>
+			,
+			<?php endif; ?>
+			<!-- Imprime dias corridos -->
+			<?php if(empty($this->layout()->arrOrigem['inDiasCorridos']) && !empty($this->layout()->arrOrigem['nuDiasPrazo']) ): ?>
+			<?php
+			$qtdDiasCorridos = $this->layout()->arrOrigem['nuDiasPrazo'];
+			$dtArtefato = $this->layout()->arrOrigem['dtArtefato']->add($qtdDiasCorridos, Zend_Date::DAY );
+			echo $dtArtefato->get('dd/MM/YYYY');
+			?>
+			<?php endif; ?>
+			<!-- Imprime dias uteis -->
+			<?php if(!empty($this->layout()->arrOrigem['inDiasCorridos']) && !empty($this->layout()->arrOrigem['nuDiasPrazo']) ): ?>
+			<?php $arrFeriados = $this->layout()->feriados; ?>
+			<?php $helperDiasUteis = new Sgdoce_View_Helper_DiasUteis(); ?>
+			<?php echo $helperDiasUteis->diasUteis(
+			                $this->layout()->arrOrigem['dtArtefato']->get('dd/MM/YYYY'),
+			                $this->layout()->arrOrigem['nuDiasPrazo'],
+                           $arrFeriados); ?>
+			<?php endif; ?>
+			<!-- Imprime data marcada -->
+			<?php if(!empty($this->layout()->arrOrigem['dtPrazo'])): ?>
+			<?php echo $this->layout()->arrOrigem['dtPrazo']->get('dd/MM/YYYY') ?>
+			<?php endif; ?>
+		</p>
+			<br />
+	<!-- FECHO -->
+	<div id="fecho" style="font-size: 12pt;">
+		<?php if(!empty($this->layout()->arrOrigem['noFecho'])): ?>
+		<span class="marginLeft">&nbsp;</span>
+		<?php echo $this->layout()->arrOrigem['noFecho'] . ',' ?>
+		<br /> <br /> <br />
+		<?php endif; ?>
+	</div>
+	<span id="signature">
+		<p class="mediumMargin" style="font-size: 12pt;">
+			<?php if(!empty($this->layout()->arrAssinatura)): ?>
+			<?php
+			$contS = 0;
+			?>
+			<?php foreach($this->layout()->arrAssinatura as $dado): ?>
+			<?php
+			if($contS !== 0):
+			?>
+			<?php if(!empty($dado['noTipoMotivacao']) && $dado['sqTipoMotivacao'] > 1): ?>
+			<br />
+			<?php echo $dado['noTipoMotivacao'] ?>
+			<?php elseif(!empty($dado['deMotivacao'])): ?>
+			<br />
+			<?php echo $dado['deMotivacao'] ?>
+			<?php endif; ?>
+			<br /> <br />
+			<?php
+			endif;
+			$contS++;
+			?>
+			<?php if(!empty($dado['noPessoa'])): ?>
+			<b> <?php echo $dado['noPessoa'] ?>
+			</b> <br />
+			<?php endif; ?>
+			<?php if(!empty($dado['noCargo']) && $inCargoAss): ?>
+			<?php echo $dado['noCargo'] ?>
+			<?php endif; ?>
+			<?php if(!empty($dado['noUnidadeOrg']) && $inSetorAss): ?>
+			/
+			<?php echo $dado['noUnidadeOrg'] ?>
+			<?php endif; ?>
+			<br />
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</p>
+	</span>
+	</div>
+
+	<?php if(!empty($this->layout()->viewFor)): ?>
+</div>
+<div class="form-actions">
+	<label class="pull-left span6"> <input type="checkbox" name=""
+		id="deAcordo"
+		onClick="
+                    if(this.checked == true){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary';
+                    }else if (this.checked == false){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary disabled';
+                    }
+                " /> De acordo com o conteúdo do documento.
+	</label> <a class="btn btn-assinar btn-primary disabled"
+		id="btn-assinar"
+		href="/artefato/visualizar-caixa-minuta/assinar-minuta/sqArtefato/<?php echo $this->layout()->arrOrigem['sqArtefato']?>">
+		Assinar </a> <a class="btn"
+		href="/artefato/visualizar-caixa-minuta/visualizar-minuta/sqArtefato/<?php echo $this->layout()->arrOrigem['sqArtefato']?>">
+		<i class="icon-pdf"></i> Gerar PDF
+	</a> <a class="btn" href="javascript:history.back()"><i
+		class="icon-remove"></i> Cancelar</a>
+</div>
+<?php endif; ?> </page>
+<style type="text/css">
+<!--
+.content-geral {
+	border: 1px solid #ddd;
+	overflow-y: scroll;
+	height: 500px;
+}
+
+.content,.rodape { /*size: 8.27in 11.69in;*/
+	margin-right: 0.79in;
+	margin-left: 0.79in;
+	font-size: 12pt;
+	/*border: 1px solid grey;*/
+}
+
+.rodape {
+	font-size: 10pt;
+	font-family: "Times New Roman";
+}
+
+#header {
+	width: 100%;
+	margin-bottom: 30px;
+	text-align: center;
+	font-family: "Times New Roman";
+	font-size: 9pt;
+}
+
+#titulo-left {
+	text-align: left;
+	margin-bottom: 0px;
+}
+
+#titulo-right {
+	text-align: right;
+	margin-right: 30px;
+	margin-bottom: 80px;
+}
+
+#titulo-center {
+	text-align: center;
+	margin-center: 30px;
+	margin-bottom: 80px;
+}
+
+#date {
+	text-align: right;
+	margin-right: 30px;
+	margin-bottom: 0px;
+}
+
+#to { /*	margin-bottom: 50px;*/
+
+}
+
+#att {
+	margin-left: 50px;
+	margin-bottom: 70px;
+}
+
+#signature {
+	text-align: center;
+	margin-right: 0.79in;
+	margin-left: 0.79in;
+	margin-top: 15px;
+}
+
+#fecho {
+	text-align: left;
+	margin-right: 0.79in;
+	margin-left: 0.79in;
+	margin-top: 15px;
+}
+
+.smallMargin {
+	margin: 0 0 4px 0;
+	padding: 0;
+	font-size: 12px
+}
+
+.mediumMargin {
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+.marginLeft {
+	margin-left: 50px;
+}
+
+.justify {
+	text-align: justify;
+}
+
+.alignCenter {
+	text-align: center;
+}
+
+.rodape-separator {
+	width: 600px;
+	border: 1px solid #ccc;
+	margin: 40px 0 0 70px;
+}
+
+table.rodape {
+	border: 0px;
+}
+
+td.rodape-left {
+	float: left;
+	width: 100px;
+	border: 0px;
+}
+
+td.rodape-right {
+	border: 0px;
+	padding: 10px 5px 5px 10px;
+	width: 450;
+}
+
+.ajustaBox {
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 99%;
+	text-align: justify;
+}
+
+.barcode {
+	text-align: right;
+}
+
+.ImagemLogo {
+	width: 50%;
+	float: left;
+	position: relative;
+}
+
+.ImagemBar {
+	width: 25%;
+	margin-left: 400px;
+	margin-top: 40px;
+	float: right;
+	position: absolute;
+}
+
+.tabImagem {
+	text-align: center;
+	width: 10%;
+	margin-left: 100px;
+}
+
+.posVocativo {
+	margin-left: 60px;
+}
+
+</style>

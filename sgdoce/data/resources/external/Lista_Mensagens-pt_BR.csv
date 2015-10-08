@@ -1,0 +1,188 @@
+MN001;Tem certeza que deseja liberar as digitais ao setor selecionado?;Confirmação
+MN002;Existem <quantidade de digitais> disponíveis para o setor;Alerta
+MN003;O campo <campo> é de preenchimento obrigatório.;Alerta
+MN004;Atenção: As digitais <nº inicial> à <nº final> serão impressas sob responsabilidade do usuário <Nome do usuário>.;Alerta
+MN005;Tem certeza que deseja efetuar o pré-cadastro?;Confirmação
+MN006;Tem certeza que deseja cancelar a ação de realizar pré-cadastro?;Confirmação
+MN007;Número da digital já cadastrado.;Alerta
+MN008;Número da digital inválida.;Alerta
+MN009;Número Digital pertencente ao setor <nome do setor>.;Alerta
+MN010;Já existe documento cadastrado com essas informações.;Alerta
+MN011;Tem certeza que deseja cancelar o cadastro?;Confirmação
+MN012;Após inclusão do despacho não será permitido alteração. Confirma operação? ;Confirmação
+MN013;Operação realizada com sucesso.;Sucesso
+MN014;Upload em andamento. Por favor aguarde.;Alerta
+MN015;Upload concluído.;Sucesso
+MN016;Arquivo não selecionado.;Alerta
+MN017;Extensão do arquivo inválida. Selecione arquivos no formato .PNG.;Alerta
+MN018;Tem certeza que deseja realizar a exclusão?;Confirmação
+MN019;Número do processo inválido.;Alerta
+MN020;Número do processo já cadastrado.;Alerta
+MN021;CPF Inválido.;Alerta
+MN022;CNPJ Inválido.;Alerta
+MN023;Data inválida.;Alerta
+MN024;Tem certeza que deseja anexar esse artefato ao principal <digital do principal>.? Essa operação não poderá ser desfeita.;Confirmação
+MN025;Nenhum resultado encontrado.;Alerta
+MN026;A digital / O Número do Processo <número da digital> / <número do processo > já está está listada(o) para anexação da digital  / do número do processo <número da digital> / <número do processo>;Alerta
+MN027;Tem certeza que deseja apensar artefatos selecionados ao artefato principal <digital do principal>?;Confirmação
+MN028;Tem certeza que deseja desapensar os <artefatos> selecionados do artefato principal <digital do principal>?;Confirmação
+MN029;Nenhum comentário registrado.;Alerta
+MN030;Deseja imprimir o histórico de comentários?;Confirmação
+MN031;Nenhum despacho registrado.;Alerta
+MN032;Deseja imprimir o histórico de despacho?;Confirmação
+MN033;Deseja imprimir o histórico de trâmite?;Confirmação
+MN034;Nenhum trâmite registrado.;Alerta
+MN035;O volume não pode exceder 200 folhas.;Alerta
+MN036;Deseja emitir o termo de abertura de volume?;Confirmação
+MN037;Tem certeza que deseja desapensar os seguintes artefatos? <nºs digitais> ou <nº processos>;Confirmação
+MN038;Tem certeza que deseja excluir o destinatário <destinatário> para conhecimento?;Confirmação
+MN039;Não há <processos / documentos /  Minutas> na sua caixa <nome da caixa>;Alerta
+MN040;Não é possível alterar o grau de sigilo da imagem para <grau de sigilo selecionado>;Alerta
+MN041;O Grupo de Trâmite <Grupo de Trâmite> já existe no sistema e não pode ser cadastrado.;Alerta
+MN042;Lote já impresso por <b>%s</b> em %s. Poderá haver duplicidade de digitais. Deseja Continuar?;Alerta
+MN043;Alteração realizada com sucesso.;Sucesso
+MN044;Inclusão realizada com sucesso.;Sucesso
+MN045;Exclusão realizada com sucesso.;Sucesso
+MN046;Tipo de Documento já cadastrado.;Alerta
+MN047;Exclusão não permitida.;Alerta
+MN048;Solicitação enviada com sucesso;Sucesso
+MN049;Este tipo de documento não pode autuar processo.;Alerta
+MN050;Solicitação atendida com sucesso;Sucesso
+MN051;Tem certeza que deseja excluir a Digital <b>%s</b>?;Confirmação
+MN052;Não existem informações para a pesquisa informada.;Alerta
+MN053;Pelo menos um item deve ser selecionado.;Alerta
+MN054;Tem certeza que deseja desativar o Tipo de Documento?;Alerta
+MN055;Tipo de Documento desativado.;Sucesso
+MN056;Tipo de Documento ativado com sucesso;Sucesso
+MN057;Exclusão não permitida. Tipo de documento já utilizado.;Alerta
+MN058;Tem certeza que deseja desentranhar esse(s) documento(s) <Número das digitais dos documentos> deste processo <número do processo>.? Essa operação não poderá ser desfeita.;Confirmação
+MN059;A digital <número da digital> já está está listada para desentranhamento ao  processo <número do processo>;Alerta
+MN060;Tem certeza que deseja desmembrar esse(s) documento(s) <Número das digitais dos documentos> deste processo <número do processo>.? Essa operação não poderá ser desfeita.;Confirmação
+MN061;Tem certeza que deseja apensar esse artefato ao principal <digital do principal>.? Essa operação não poderá ser desfeita.;Confirmação
+MN062;A digital /  O Número do Processo <número da digital> / <número do processo > já está está listada(o) para apensação da digital  / do número do processo <número da digital> / <número do processo>;Alerta
+MN063;Tem certeza que deseja desapensar esse artefato ao principal <digital do principal>.? Essa operação não poderá ser desfeita.;Confirmação
+MN064;A digital /  O Número do Processo <número da digital> / <número do processo > já está está listada(o) para desapensação da digital  / do número do processo <número da digital> / <número do processo>;Alerta
+MN065;Tem certeza que deseja excluir o tipo de prioridade?;Confirmação
+MN066;Tipo de prioridade já cadastrado.;Alerta
+MN067;Exclusão não permitida. Tipo de prioridade já utilizado.;Alerta
+MN068;Tem certeza que deseja desativar a mensagem?;Confirmação
+MN069;Mensagem desativada com sucesso;Sucesso
+MN070;Mensagem ativada com sucesso;Sucesso
+MN071;Já existe mensagem cadastrada para o tipo de documento e assunto. Deseja alterar a mensagem?;Confirmação
+MN072;Já existe mensagem ativa para o tipo de documento e assunto. Deseja desativar a mensagem <descrição da mensagem>?;Confirmação
+MN073;Documento resgatado pelo SGI para tratamento devido a problemas.;Sucesso
+MN074;Número já cadastrado. Próximo disponível: <proximo>, informe: <anterior>, para geração do próximo disponível;Alerta
+MN075;Já existe vinculação de prazo para os dados selecionados. Deseja desvincular o prazo <prazo>?;Confirmação
+MN076;Extensão do arquivo inválida. A extensão permitida é <extensão>;Alerta
+MN077;O tamanho do arquivo é superior ao permitido. O tamanho permitido é <tamanho>.;Alerta
+MN078;A dimensão da imagem é maior que o limite permitido de 300x300 px .;Alerta
+MN079;Foi detectado virus <nome do virus>. O(s) arquivo(s) <nome do arquivo> não pode ser inserido no sistema.;Alerta
+MN080;O usuário <nome do usuário> não possui permissão para receber o(s) seguinte(s) artefato(s): <Lista do número do processo ou digital> dos artefatos que não podem ser recebidos pelo usuário;Alerta
+MN081;A assinatura não pode ser validada pelo motivo <motivo da invalidade da assinatura>. ;Alerta
+MN082;Tipo de documento/Assunto não cadastrado.;Alerta
+MN083;Modelo de Minuta já cadastrado para esse tipo/assunto.;Alerta
+MN084;Não existem modelos de minutas cadastrados. É necessário cadastrar um modelo antes de produzir um documento. Favor entrar em contato com o Gerenciador do Sistema.;Alerta
+MN085;Operação realizada com sucesso. O documento encontra-se disponível na sua área de trabalho.;Sucesso
+MN086;Não há minutas selecionadas. Selecione ao menos uma para realizar a ação.;Alerta
+MN087;Informe pelo menos um campo para realizar a pesquisa.;Alerta
+MN088;A assinatura do documento foi corrompida. Documento invalido.;Alerta
+MN089;Tem certeza que deseja excluir o comentário?;Confirmação
+MN090;Digital localizada no SGDoc Físico. Visualize a imagem e confirme com o documento original.;Alerta
+MN091;Imagem do documento confere com o documento original?;Confirmação
+MN092;Tem certeza que deseja cancelar a operação?;Confirmação
+MN093;Importação das imagens realizada com sucesso. Para concluir a ação, finalize o cadastro do documento.;Sucesso
+MN094;Tem certeza que deseja devolver a solicitação?;Confirmação
+MN095;Falha no recebimento de imagens. Não será possível completar a operação.;Confirmação
+MN096;O Despacho, “<exibe o despacho anterior a anexação. Despacho que solicitou a anexação>“, será excluído. Confirma exclusão?;Confirmação
+MN097;O termo que anexou o processo <número do processo que será desanexado> foi excluído.;Alerta
+MN098;A numeração do processo principal foi refeita.;Alerta
+MN099;Tem certeza que deseja retirar as digitais <digitais que serão retiradas>?;Confirmação
+MN100;Apenas um Servidor Público pode assinar o termo.;Alerta
+MN101;Deseja incluir as digitais <nº das digitais> ao processo?;Confirmação
+MN102;As digitais: <digitais que são cópias.> são cópias e serão excluídas. Deseja excluir as cópias?;Confirmação
+MN103;As imagens não conferem com o documento original. Não será possível cadastrar o documento.;Alerta
+MN104;Solicitação devolvida.;Sucesso
+MN105;A digital informada não permite abertura de processo.;Alerta
+MN106;Não é permitido a retirada da primeira folha do Dossiê.;Alerta
+MN107;Não foi possível encaminhar a solicitação.;Erro
+MN108;Minuta Devolvida.;Sucesso
+MN109;Arquivo inexistente.;Erro
+MN110;Caminho no servidor para armazenamento sem permissão de escrita.;Erro
+MN111;Pasta para upload de arquivos inexistente no servidor.;Erro
+MN112;Imagem precisa ser um png de fundo transparente. ;Erro
+MN117;O Nome informado já existe. Deseja alterar as informações?;Confirmação
+MN120;A Razão Social informada já existe. Deseja alterar as informações?;Erro
+MN124;Para incluir um cadastro sem informar o CPF, deverá ser informado o login e senha de um usuário com perfil de chefe do setor ou substituto.;Erro
+MN126;Usuário não encontrado.;Erro
+MN127;Senha incorreta.;Erro
+MN128;Nenhuma mensagem definida;Erro
+MN129;Extensão do arquivo inválida. Permitido somente extensão PDF.;Erro
+MN130;Dimensão do arquivo diferente do permitido. A dimensão permitido é 120X120 pixels;Alerta
+MN132;Nenhum registro encontrado.;Alerta
+MN132F;Nenhum registro encontrado. <a href="/auxiliar/pessoa-fisica/create" target="_blank">Deseja cadastrar ? </a>;Confirmação
+MN132J;Nenhum registro encontrado. <a href="/auxiliar/pessoa-juridica/create" target="_blank">Deseja cadastrar ? </a>;Confirmação
+MN137;Não é permitido excluir todos os documentos da pessoa. Ao menos um documento deve estar cadastrado.;Erro
+MN141;Não é possível o cadastro ou alteração das informações. Favor procurar a coordenação para o cadastro da sua unidade de exercício.;Erro
+MN145;Ainda existe etiqueta <b>%s</b> disponível para <b>%s</b>. Não é possível gerar novo lote.;Erro
+MN146;Artefato não está em sua Área de Trabalho.;Alerta
+MN147;Alteração não permitida.;Alerta
+MN148;Esta Digital possui o NUP <b>'%s'</b> associado e só pode ser usada para documento de procedência interna. Deseja continuar?;Confirmação
+MN149;Esta Digital não possui NUP associado e só pode ser usada para documento de procedência externa. Deseja continuar?;Confirmação
+MN150;Número da Digital não foi liberada no sistema ou não pertence a sua unidade.;Erro
+MN151;Cadastro de Documento Eletrônico não esta disponível.;Erro
+MN152;Unidade não possui lote de etiqueta eletrônica liberado no sistema.;Erro
+MN153;Não foi possível determinar o lote da etiqueta;Erro
+MN154;Você não pode editar o Artefato <b>%s</b>, ele não esta em sua Área de Trabalho, foi tramitado, possui vínculo ou possui solicitação em aberto;Erro
+MN155;Trâmite realizado com sucesso;Alerta
+MN156;Falta-lhe permissão para executar esta operação;Erro
+MN157;Caixa já possui artefatos arquivado. Não pode ser %s.;Erro
+MN158;Artefato tramitado com sucesso.;Sucesso
+MN159;Trâmite cancelado com sucesso.;Sucesso
+MN160;Trâmite retornado com sucesso.;Sucesso
+MN161;O %s <b>'%s'</b> já foi recebido. Trâmite não pode ser cancelado.;Erro
+MN162;O trâmite do %s <b>'%s'</b> não foi feito por você. Trâmite não pode ser cancelado.;Erro
+MN163;Artefato não encontrado.;Erro
+MN164;Artefato(s) recebido(s) com sucesso.;Sucesso
+MN165;O %s <b>'%s'</b> já foi recebido.;Erro
+MN166;O %s <b>'%s'</b> não esta tramitado para você. Não pode ser recebido.;Erro
+MN167;Esta Digital possui o NUP <b>'%s'</b> associado e só pode ser usada para documento de procedência interna.;Erro
+MN168;Esta Digital não possui NUP associado e só pode ser usada para documento de procedência externa.;Erro
+MN169;O SGDoc-e está consolidando o bloco documental em um único pdf para download. Ao final do processo o link será enviado para o email <b>%s</b>.;Sucesso
+MN170;Apesar da validação no inicio do cadastro, a digital <b>%d</b> já esta em uso por outro usuário que completou o cadastro. Agora você precisará utilizar outra digital.;Alerta
+MN171;O usuário de destino do tramite é obrigatório para artefatos sigilosos.;Erro
+MN172;O endereço é obrigatório para trâmite externo com Guia.;Erro
+MN173;O %s <b>'%s'</b> não possui imagem e não pode ser tramitado para unidade diferente de <b>%s</b>;Erro
+MN174;Exclusão não permitida, artefato não encontrado.;Erro
+MN175;O %s <b>'%s'</b> não pode ser recebido. O trâmite foi cancelado.;Erro
+MN176;É necessário pelo menos um interessado no cadastro do processo.;Erro
+MN177;Seu e-mail institucional foi cadastrado errado. Entre em contato com o Suporte para mais informações.;Erro
+MN178;Ocorreu um erro na migração dos dados.;Erro
+MN179;É obrigatório informar Cargo ou Função.;Erro
+MN180;Esta digital possui mais de um vínculo, favor entrar em contato com a cotec-projetos@icmbio.gov.br;Erro
+MN181;Ocorreu um erro, favor entrar em contato com a cotec-projetos@icmbio.gov.br;Erro
+MN182;Alteração só poderá ser executada mediante demanda para o SGI.;Alerta
+MN183;A demanda de suporte deve ser do tipo "Alterar Dados" e estar triada para seu usuário;Erro
+MN184;Já existe Documento cadastrado com essas informações, verifique o sequencial do tipo do Documento.;Erro
+MN185;Documento %s com numeração '%s', já esta cadastrado com essas informações.;Erro
+MN186;É obrigatório a numeração para Documentos oficiais.;Erro
+MN187;O artefato %s é sigiloso ou possui vínculo com outro artefato sigiloso e deve ser %s separadamente.;Alerta
+MN188;Os artefatos %s são sigilosos ou possuem vínculo com outro artefato sigiloso e devem ser %ss separadamente.;Alerta
+MN189;O artefato %s é sigiloso ou possui vínculo com outro artefato sigiloso e deve ser tramitado para um usuário específico.;Alerta
+MN190;Para tramitar para Sede, o trâmite deve ter como destino o SEDOC.;Erro
+MN191;Operação inválida, artefatos são de tipos diferentes;Erro
+MN192;Todos os trâmites foram cancelado com sucesso.;Sucesso
+MN193;%s trâmite(s) foi(ram) cancelado(s) com sucesso.;Sucesso
+MN194;Artefato '%s' não foi possível ser trâmitado.;Erro
+MN195;Todos os Artefatos foram recebidos com sucesso.;Sucesso
+MN196;%s Artefato(s) recebido(s) com sucesso.;Sucesso
+MN197;Todos os Artefatos foram retronados com sucesso.;Sucesso
+MN198;%s Artefato(s) retornado(s) com sucesso.;Sucesso
+MN199;Artefato(s) arquivado(s) na unidade com sucesso.;Sucesso
+MN200;Artefato(s) desarquivados(s) do arquivo setorial da unidade com sucesso.;Sucesso
+MN201;A unidade de destino do tramite é obrigatório.;Erro
+MN202;Tem certeza que deseja excluir o volume?;Confirmação
+MN203;A exclusão só poderá ser executada mediante demanda para o SGI.;Alerta
+MN204;Conforme portaria será permitido cadastro de processos com 21 dígitos apartir de Janeiro.;Erro
+MN205;Não é permitido abertura de demanda de suporte com este tipo de assunto para artefatos não corrigidos.;Erro
+MN206;Já existe uma solicitação aberta com esse assunto.;Erro
+MN207;Este processo contém apenas um volume, portanto ele não pode ser excluído.;Erro

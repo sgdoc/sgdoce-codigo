@@ -1,0 +1,3 @@
+[1.2.26]
+* core::Request
+ * UPDATE: Permite configurar se será ou não usado o comportamento do magic_quotes_gpc (requer a ditriz: php.environment.magic_quotes_gpc)

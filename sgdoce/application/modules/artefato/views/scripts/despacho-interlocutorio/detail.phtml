@@ -1,0 +1,59 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl('/js/app/artefato/despacho-interlocutorio/detail.js')); ?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Visualizar Despacho</h1>
+            <br />
+            <br />
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">Destinatário</label>
+                    <div class="controls">
+                        <?php echo $this->formText('1',$this->data->getSqUnidadeDestino()->getSgUnidadeOrg(),
+                                array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+                </div>
+            
+                <div class="control-group">
+                    <label class="control-label">Despacho</label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea('2',$this->data->getTxDespacho(),
+                                array('readonly'=>'readonly', 'class' =>'span8', 'rows'=>'10')) ;?>
+                    </div>
+                </div>
+            
+                <div class="control-group">
+                    <label class="control-label">Assinatura</label>
+                    <div class="controls">
+                        <?php echo $this->formText('3',$this->data->getSqPessoaAssinatura()->getNoPessoa(),
+                                array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                        </div>
+                </div>
+                <?php if( $this->data->getSqCargoAssinatura() ): ?>
+                <div class="control-group">
+                    <label class="control-label">Cargo</label>
+                    <div class="controls">
+                        <?php echo $this->formText('4',$this->data->getSqCargoAssinatura()->getNoCargo(),
+                                array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+                </div>
+                <?php elseif( $this->data->getSqFuncaoAssinatura() ): ?>
+                <div class="control-group">
+                    <label class="control-label">Função</label>
+                    <div class="controls">
+                        <?php echo $this->formText('4',$this->data->getSqFuncaoAssinatura()->getNoFuncao(),
+                                array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+                </div>    
+                <?php 
+                endif; 
+                echo $this->formHidden('sqArtefato' ,  $this->data->getSqArtefato()->getSqArtefato()); 
+                //echo $this->formHidden('backToModal' , $this->backToModal);
+                ?>
+                <div class="form-actions">
+                    <a class="btn btn-primary btn-voltar" href="javascript:void(0);">Fechar</a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

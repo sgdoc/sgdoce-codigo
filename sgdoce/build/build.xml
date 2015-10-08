@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Sandbox" 
+         default="config" 
+         basedir="./../"
+         phingVersion="2.4.7"
+>
+   <php function="dirname" returnProperty="currentdir">
+       <param value="${phing.file}" />
+   </php>
+
+    <target name="config">
+        <phing dir="${currentdir}/scripts" phingfile="config.xml" />
+    </target>
+
+    <target name="ci">
+        <phing dir="${currentdir}/scripts" phingfile="ci.xml" />
+    </target>
+
+</project>

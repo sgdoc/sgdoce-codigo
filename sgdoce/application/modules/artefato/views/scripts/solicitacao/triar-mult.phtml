@@ -1,0 +1,73 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/solicitacao/form.js');
+    echo $this->headScript();
+?>
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h1>Encaminhar Demanda(s)</h1>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div id="error-material"></div>
+        <form enctype="multipart/form-data"
+              class="form-horizontal"
+              id="formModalSolicitacao"
+              method="post"
+              action="<?php echo $this->url(array('action' => 'save-status')); ?>" >
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"> Demanda(s): </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formTextarea(
+                            "dsIdSolicitacao",
+                            implode(", ", $this->arrSqSolicitacao),
+                            array(
+                                    'rows'     => 1,
+                                    'class'    => 'span9 required',
+                                    'disabled' => 'disabled'
+                            )
+                        );
+                        foreach( $this->arrSqSolicitacao as $sqSolicitacao )
+                        {
+                            echo $this->formHidden('sqSolicitacao[]', $sqSolicitacao);
+                        }
+                        echo $this->formHidden("sqPessoaTriagem", \Core_Integration_Sica_User::getPersonId());
+                        echo $this->formHidden("sqTipoStatusSolicitacao", \Core_Configuration::getSgdoceTipoStatusSolicitacaoEmAndamento());
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span class="required">*</span> Atendente:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom("sqPessoaResponsavel", null, array( 'class' => 'span9 required'), $this->listAtendentes); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Comentário:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("txComentario", null, array( 'rows' => 3, 'class' => 'span9')); ?>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-primary" id="btnSubmit">Encaminhar</a>
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

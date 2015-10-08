@@ -1,0 +1,38 @@
+<?php echo $this->headScript()
+        ->appendFile($this->baseUrl() . '/js/app/artefato/vinculo/modal-first-piece.js')
+        ->appendFile($this->baseUrl() . '/js/components/mask.js');
+?>
+
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>1ª Peça para <?php echo $this->nuArtefato($this->entityArtefato); ?></h1> <!--deve ser h1 para o validador saber onde coloca a mensagem-->
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form_artefato_primeira_peca"
+              action="<?php echo $this->urlCurrent(array(
+                  'module'=>'artefato',
+                  'controller'=>'vinculo',
+                  'action' => 'save-first-piece')); ?>">
+            <?php
+                echo $this->formHidden('parent',$this->entityArtefato->getSqArtefato());
+            ?>
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required">*</span> Documento
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('child_hidden',null,array('name'=>'child'));
+                          echo $this->formText('child', null, array('class'=>'span8 required', 'mask'=>'numeric'));
+                    ?>
+                    <a href="javascript:void(0);" class="infolink" title="O Documento deve estar em sua Área de Trabalho e possuir imagem"><i class="icon-question-sign"></i></a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" id="btnSave" class="btn btn-primary" title="Salvar">Salvar</button>
+    <a href="#" class="btn" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

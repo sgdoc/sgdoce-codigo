@@ -1,0 +1,12 @@
+<?php
+    $link           = $this->urlLink;
+    $entArtefato    = $this->entSolicitacao->getSqArtefato();
+    $nuDigital      = str_pad($entArtefato->getNuDigital()->getNuEtiqueta(), 7,'0',STR_PAD_LEFT);
+?>
+<?php echo $this->render('header.phtml'); ?>
+
+<p>Caro usuário.</p>
+<br />
+<p>O SGDoc-e finalizou, em <?php echo $this->dtProcessamento->get(\Zend_Date::DATETIME_MEDIUM) ?>, a migração das imagens do documento <b><?php echo $nuDigital; ?></b>.</p>
+
+

@@ -1,0 +1,78 @@
+<?php
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/mensagem/index.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/mensagem/view.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/components/string-utils.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/library/jquery.simpleautocomplete.js');
+echo $this->headScript();
+ ?>
+<h1>Pesquisar Mensagem</h1>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list')); ?>" method="post" id="form-search-mensagem">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'geral'))?>" class="btn btn-primary" id="novo">
+                        Mensagem Geral
+                    </a>
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn" id="novo">
+                        Nova Mensagem Específica
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+    <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Tipo de Documento</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoDocumento', 'sqTipoDocumento', array('class'=>'span4'), $this->items); ?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Assunto</label>
+            <div class="controls">
+                <input class="span4" type="text" name="sqAssunto" id="sqAssunto" value="" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Status</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('stMensagemAtiva','',array('class'=>'span4'),array('true'=>' Ativa','false'=>' Inativa')); ?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary">
+                <i class="icon-search icon-white"></i>
+                Pesquisar</button>
+                 <button class="btn " type="reset">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+
+<div class="control-group hidden">
+<fieldset>
+    <legend>
+        Resultado da Pesquisa
+    </legend>
+</fieldset>
+    <table id="table-grid-mensagem">
+        <thead>
+            <tr>
+                <th width="20%">Tipo Documento</th>
+                <th width="20%">Assunto</th>
+                <th width="20%">Mensagem Específica</th>
+                <th width="20%">Status</th>
+                <th width="20%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="form-actions">
+        <a class="btn btn-primary" title="Filtros" href="auxiliar/mensagem/index">Filtros</a>
+        <a class="btn" title="Cadastrar" href="auxiliar/mensagem/create">Cadastrar</a>
+    </div>
+</div>

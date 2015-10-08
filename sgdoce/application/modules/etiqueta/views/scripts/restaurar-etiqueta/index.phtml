@@ -1,0 +1,44 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/etiqueta/restaurar-etiqueta/index.js'); ?>
+<h1>Restaurar Digitais</h1>
+<br/>
+<div class="tab-pane" id="digitais">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Digitais</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <a id="btn-add" data-toggle="modal" class="btn btn-mini">
+                            <i title="Adicionar" class="icon-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="span6"></div>
+                <div class="span6"></div>
+            </div>
+            <table id="table-digitais" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th width="95%">Digital</th>
+                        <th width="5%">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="digitalNone">
+                        <td colspan="3">Nenhuma Digital adicionada.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<form class="form-horizontal" target="_blank" method="post" id="form_restaurar_etiqueta"
+      action="<?php echo $this->urlCurrent(array('action' => 'print'))?>">
+    <div class="control-group" id="etiquetasRestaurar">
+        <div class="form-actions">
+            <button type="button" id="btn_gerar"    class="btn btn-primary">Restaurar</button>
+            <button type="button" id="btn_cancelar" class="btn"><i class="icon-remove"></i> Cancelar</button>
+        </div>
+    </div>
+</form>
+<div id="modal_container" class="modal hide fade modal-large modal-without-scroll"></div>

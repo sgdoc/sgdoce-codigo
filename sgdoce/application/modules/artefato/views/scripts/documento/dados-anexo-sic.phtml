@@ -1,0 +1,37 @@
+<?php
+
+$this->echoComponentResources('uploader');
+
+$hideFieldset = 'hide';
+
+if($this->data->getSqTipoArtefatoAssunto()->getSqTipoArtefatoAssunto()){
+    $hideFieldset = '';
+}
+
+?>
+
+<div class="tab-pane" id="anexoSic">
+    <div class="control-group">
+        <fieldset class="<?php echo $hideFieldset; ?>">
+            <legend>Anexos</legend>
+            <div class="tab-pane" id="dadosMaterial">
+                <table id="tableAnexoSic">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Data de Cadastro</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </fieldset>
+        <br />
+        <fieldset>
+            <legend>Upload</legend>
+            <div id="uploader"></div>
+        </fieldset>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/app/artefato/documento/anexo-sic.js"></script>

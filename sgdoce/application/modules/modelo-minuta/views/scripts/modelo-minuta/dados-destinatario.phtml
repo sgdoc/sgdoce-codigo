@@ -1,0 +1,125 @@
+<div class="tab-pane" id="dadosDestinatario">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <br>
+    <?php
+    $valueInterno = '';
+    $checkDestSim    = '';
+    $checkDestNao    = '';
+    $checkInterno = '';
+    $valueVia = '';
+    $checkVia = '';
+    $valueDestino = '';
+    $checkDestino = '';
+    foreach ($this->campos[5] as $value) :?>
+        <?php   if ($value['noCampo'] == 'Destinatário') {
+           $checkDestSim  =  ($value['checked']) ? 'checked="checked"' : '';
+           if (!$checkDestSim){
+               $checkDestNao = 'checked="checked"';
+            }
+        }?>
+        <?php   if ($value['noCampo'] == 'Destino Interno') {
+           $valueInterno  =  $value['sqPadraoModeloDocumentoCam'];
+           $checkInterno  =  ($value['checked']) ? 'checked="checked"' : '';
+        }?>
+        <?php   if ($value['noCampo'] == 'Única via?') {
+           $valueVia  =  $value['sqPadraoModeloDocumentoCam'];
+           $checkVia  =  ($value['checked']) ? 'checked="checked"' : '';
+        }?>
+        <?php   if ($value['noCampo'] == 'Único Destino?') {
+           $valueDestino  =  $value['sqPadraoModeloDocumentoCam'];
+           $checkDestino  =  ($value['checked']) ? 'checked="checked"' : '';
+        }?>
+
+    <?php endforeach;?>
+    <?php foreach ($this->campos[5] as $value) :?>
+    <?php   if ($value['noCampo'] == 'Destinatário') : ?>
+    <div class="control-group">
+        <label class="control-label">* Possui Destinatário?</label>
+        <div class="controls">
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam1" id="destSim"
+                class="required" value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                <?php echo $checkDestSim;?>>
+                Sim
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam1" id="destNao"
+                class="required" value="0" <?php echo $checkDestNao;?>/> Não
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php   if ($value['noCampo'] == 'Destino Externo') : ?>
+    <div class="control-group destino">
+        <label class="control-label"> <span title="Required field"
+            class="required">*</span> Destino
+        </label>
+        <div class="controls">
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam2" id="destInterno"
+                class="required" value="<?php echo $valueInterno;?>"  <?php echo $checkInterno;?>/> Interno
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam2" id="destExterno"
+                class="required"
+                value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                <?php echo ($value['checked']) ? 'checked="checked"' : ''?>>
+                Externo
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php   if ($value['noCampo'] == 'Várias vias?') : ?>
+    <div class="control-group interno">
+        <label class="control-label"> <span title="Required field"
+            class="required">*</span> Várias Vias ?
+        </label>
+        <div class="controls">
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam3" id="variasViasSim"
+                class="required"
+                value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                <?php echo ($value['checked']) ? 'checked="checked"' : ''?>> Sim
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam3" id="variasViasNao"
+                class="required" value="<?php echo $valueVia;?>"  <?php echo $checkVia;?>/> Não
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php   if ($value['noCampo'] == 'Vários Destinos?') : ?>
+    <div class="control-group externo">
+        <label class="control-label"> <span title="Required field"
+            class="required">*</span> Vários Destinos ?
+        </label>
+        <div class="controls">
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam4" id="variosDestinosSim"
+                class="required"
+                value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                <?php echo ($value['checked']) ? 'checked="checked"' : ''?>>Sim
+            <input type="radio"
+                name="sqPadraoModeloDocumentoCam4" id="variosDestinosNao"
+                class="required" value="<?php echo $valueDestino;?>"  <?php echo $checkDestino;?>/> Não
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php endforeach;?>
+
+    <div class="control-group allCampo">
+    <?php foreach ($this->campos[5] as $value) : ?>
+        <?php
+            if($value['noCampo'] == 'Várias vias?' || $value['noCampo'] == 'Única via?') {
+                continue;
+            }
+        ?>
+        <div class="controls">
+         <label class="checkbox inline">
+            <input type="checkbox" id="sqPadraoModeloDocumentoCam"
+                   name="sqPadraoModeloDocumentoCam[]"
+                   class="tipoDocumento"
+                   value="<?php echo $value['sqPadraoModeloDocumentoCam']?>"
+                   <?php echo ($value['checked']) ? 'checked="checked"' : ''?>>
+            <?php echo $value['noCampo']?>
+        </label><br>
+        </div>
+    <?php endforeach;?>
+    </div>
+</div>

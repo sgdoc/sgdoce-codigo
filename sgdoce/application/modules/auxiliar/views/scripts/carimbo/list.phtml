@@ -1,0 +1,39 @@
+<?php
+
+    $view = $this;
+    $params = $this->params;
+
+    $acao = function($row) use ($view) {
+        $rtn = $view->actionButton('Excluir', 'Carimbo.deletar', array($row['sqCarimbo']),'trash').
+        $view->actionButton('Visualizar',
+                '/auxiliar/carimbo/visualizar/',
+                array('id'=>$row['sqCarimbo']),
+                'eye-open',
+                NULL,
+                array('data-toggle'=>'modal', 'data-target' => '#modalCarimbo'),
+                'href'
+        );
+
+        return $rtn;
+
+    };
+
+    $noCarimbo = function ($row){
+        return  mb_strtoupper($row['noCarimbo'],'UTF-8');
+    };
+
+    $noTipoArtefato = function($row) {
+        return $row['sqTipoArtefato']['noTipoArtefato'];
+    };
+
+    $configArray = array('columns' => array(0 => array('column' => $noCarimbo),
+                                            1 => array('column' => $noTipoArtefato),
+                                            2 => array('column' => $acao)
+    ));
+
+    // configurar a grid
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

@@ -1,0 +1,37 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'endereco', 'action' => 'list')) ?>" id="form-endereco">
+    <fieldset>
+		<div class="control-group">
+			<div class="span6">
+				<button type="button" id="btn-add-endereco" class="btn btn-mini" href="#modalEndereco" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+			</div>
+            <?php
+                echo $this->formHidden('sqPessoa', $this->data->getSqPessoaFisica()->getSqPessoa());
+                echo $this->formHidden('sqPessoaSgdoce', $this->sqPessoaSgdoce);
+
+                if($this->new) {
+                    echo $this->formHidden('new', true);
+                }
+            ?>
+			<table id="table-endereco" class="table table-bordered table-striped table-condensed table-hover">
+				<thead>
+					<tr>
+						<th>CEP</th>
+						<th>Tipo</th>
+						<th>Logradouro</th>
+						<th>Número</th>
+						<th>Bairro</th>
+						<th>UF</th>
+						<th>Município</th>
+						<th>Imagem</th>
+						<th width="100">Ações</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</fieldset>
+</form>
+
+<!--MODAL ADICIONAR DOCUMENTO-->
+<div class="modal hide fade" id="modalEndereco"></div>
+<script type="text/javascript" src="/js/app/auxiliar/endereco/endereco.js"></script>
+<script type="text/javascript" src="/js/app/auxiliar/endereco/index.js"></script>

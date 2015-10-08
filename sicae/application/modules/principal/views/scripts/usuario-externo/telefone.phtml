@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>Telefone</legend>
+    <div class="control-group">
+        <label class="control-label" for="complementar-nuDddTelefone">Telefone Fixo</label>
+        <div class="controls">
+            <input type="text"
+                   class="span2 foneBR"
+                   name="complementar[nuTelefoneFixo]"
+                   id="nuTelefone-nuTelefone"
+                   value="<?php echo $this->data->getDadoComplementar()->getNuDddTelefoneFixo() . $this->data->getDadoComplementar()->getNuTelefoneFixo(); ?>"
+                   />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="complementar-nuDddCelular">Telefone Celular</label>
+        <div class="controls">
+            <input type="text"
+                   class="span2 foneBR"
+                   name="complementar[nuTelefoneCelular]"
+                   value="<?php echo $this->data->getDadoComplementar()->getNuDddTelefoneCelular() . $this->data->getDadoComplementar()->getNuTelefoneCelular(); ?>"
+                   id="complementar-nuTelefoneCelular"
+                   />
+        </div>
+    </div>
+</fieldset>

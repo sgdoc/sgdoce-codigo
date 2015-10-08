@@ -1,0 +1,118 @@
+<?php
+$view = $this;
+
+$mask = function ($row) {
+            return \Zend_Filter::filterStatic($row['nuCnpj'], 'MaskNumber', array('cnpj'), array('Core_Filter'));
+        };
+
+$status = function ($row) use ($view) {
+            if ($row['stRegistroAtivo']) {
+                return 'Ativo';
+            } else {
+                return 'Inativo';
+            }
+        };
+
+$arrPJ = $this->layout()->data['arrPJ'];
+$arrVinculo = $this->layout()->data['arrVinculo'];
+?>
+<?php foreach ($this->layout()->data['data'] as $key => $value) { ?>
+    <table class="table table-condensed" id="table-pdf">
+        <thead>
+            <tr class="title">
+                <th class="nome">CNPJ</th>
+                <th class="cpf">Razão Social</th>
+                <th class="data">Nome Fantasia</th>
+                <th class="sexo">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                <td align="center">
+                    <?php echo \Zend_Filter::filterStatic($value['nuCnpj'], 'MaskNumber', array('cnpj'), array('Core_Filter')); ?>
+                </td>
+                <td>
+                    <?php echo $value['noPessoa']; ?>
+                </td>
+                <td>
+                    <?php echo $value['noFantasia']; ?>
+                </td>
+                <td>
+                    <?php echo $status($value); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="largura-total"></td>
+            </tr>
+            <?php $sqEmail = $arrPJ[$value['sqPessoa']]->getSqPessoaJuridica()->getSqEmail()->first(); ?>
+            <?php $sqTelefone = $arrPJ[$value['sqPessoa']]->getSqPessoaJuridica()->getSqTelefone()->first(); ?>
+            <?php $sqEndereco = $arrPJ[$value['sqPessoa']]->getSqPessoaJuridica()->getSqEndereco()->first(); ?>
+            <tr class="title">
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th colspan="2">E-mail</th>
+            </tr>
+            <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                <td>
+                    <?php
+                    if ($sqEndereco) {
+                        echo $sqEndereco->getTxEndereco();
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    if ($sqTelefone) {
+                        echo \Zend_Filter::filterStatic(
+                                $sqTelefone->getNuDDD() . $sqTelefone->getNuTelefone()
+                                , 'MaskNumber'
+                                , array('fone' => '(999) 9999-9999')
+                                , array('Core_Filter'));
+                    }
+                    ?>
+                </td>
+                <td colspan="2">
+                    <?php
+                    if ($sqEmail) {
+                        echo $sqEmail->getTxEmail();
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr class="title">
+                <th>Nome</th>
+                <th>CPF</th>
+                <th colspan="2">Vínculo</th>
+            </tr>
+            <?php foreach ($arrVinculo[$value['sqPessoa']] as $entity) : ?>
+                <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                    <td>
+                        <?php echo $entity->getSqPessoaRelacionamento()->getNoPessoa(); ?>
+                    </td>
+                    <td align="center">
+                        <?php
+                        echo \Zend_Filter::filterStatic(
+                                $entity->getSqPessoaRelacionamento()->getSqPessoaFisica()->getNuCpf()
+                                , 'MaskNumber'
+                                , array('cpf')
+                                , array('Core_Filter'));
+                        ?>
+                    </td>
+                    <td colspan="2">
+                        <?php echo $entity->getSqTipoVinculo()->getNoTipoVinculo(); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <br />
+<?php } ?>
+<br />
+<br />
+<table class="table" align="center">
+    <tr>
+        <td class="total-registro sem-bordas largura-total">
+            Total de Registros: <?php echo sprintf("%02d", count($this->layout()->data['data'])); ?>
+        </td>
+    </tr>
+</table>

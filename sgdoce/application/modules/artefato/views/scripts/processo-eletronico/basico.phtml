@@ -1,0 +1,136 @@
+<script type="text/javascript" src="/js/app/artefato/origem/origem.js"></script>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/origem.js"></script>
+<fieldset>
+    <?php $disabled = ($this->objEntArtefato->getNuArtefato() != null) ? array('disabled' => 'disabled') : array(); ?>
+    <?php $disabled_text = ($this->objEntArtefato->getNuArtefato() != null) ? "disabled='disabled'" : ""; ?>
+    <div class="control-group">
+        <label for="co_ambito_processo" class="control-label"> <span
+                class="required" title="Required field">* </span>Âmbito
+        </label>
+        <div class="controls">
+            <?php
+                $coAmbitoProcessoInput = "coAmbitoProcesso";
+                if( $this->objDtoParams->getCoAmbitoProcesso() != '' ) {
+                    echo $this->formHidden('coAmbitoProcesso', $this->objEntArtefatoProcesso->getCoAmbitoProcesso());
+                    $coAmbitoProcessoInput .= "_disabled";
+                }
+                echo $this->formSelect($coAmbitoProcessoInput,
+                        $this->objEntArtefatoProcesso->getCoAmbitoProcesso(),
+                        $disabled+array('class'=>'span4'),
+                        $this->arrOptAmbito );
+            ?>
+        </div>
+    </div>
+
+    <?php
+        $sqEstadoDiv = "hide"; $sqEstado = null;
+        if( $this->objDtoParams->getSqEstado() != '' ):
+            $sqEstado = $this->objEntArtefatoProcesso->getSqEstado()->getSqEstado();
+            $sqEstadoDiv = "";
+        endif;
+    ?>
+
+    <div class="control-group divEstado <?php echo $sqEstadoDiv; ?>">
+        <label for="sqEstado" class="control-label"> <span class="required">* </span>UF</label>
+        <div class="controls">
+        <?php
+            $sqEstadoInput = "sqEstado";
+            if( $sqEstado ) {
+                echo $this->formHidden('sqEstado', $sqEstado);
+                $sqEstadoInput .= "_disabled";
+            }
+            echo $this->ComboCustom($sqEstadoInput,$sqEstado,$disabled+array('class'=>'span4 required'),$this->arrOptEstado );
+        ?>
+        </div>
+    </div>
+
+    <?php
+        $sqMunicipioDiv = "hide"; $sqMunicipio = null;
+        if( $this->objDtoParams->getSqMunicipio() != '' ):
+            $sqMunicipio = $this->objEntArtefatoProcesso->getSqMunicipio()->getSqMunicipio();
+            $sqMunicipioDiv = "";
+        endif;
+    ?>
+    <div class="control-group Municipio <?php echo $sqMunicipioDiv; ?>">
+        <label class="control-label" for="sqMunicipio"><span class="required">* </span>Município</label>
+        <div class="controls" id="divMunicipio">
+        <?php
+            $sqMunicipioInput = "sqMunicipio";
+            if( $sqMunicipio ) {
+                echo $this->formHidden('sqMunicipio', $sqMunicipio);
+                $sqMunicipioInput .= "_disabled";
+            }
+            echo $this->ComboCustom($sqMunicipioInput, $sqMunicipio, $disabled+array('class'=>'span4'), $this->arrOptMunicipio); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="nuArtefato" class="control-label"><span class="required">* </span>Número do Processo</label>
+        <div class="controls">
+            <?php
+                $nuArtefato = null;
+                if( $this->objEntArtefato->getNuArtefato()
+                    && ($this->objDtoParams->getCoAmbitoProcesso() == 'F'
+                        || $this->objEntArtefatoProcesso->getCoAmbitoProcesso() == 'F') ) {
+                    $nuArtefato = $this->nuArtefato($this->objEntArtefato, \Core_Configuration::getSgdoceTipoArtefatoProcesso());
+                } else {
+                    $nuArtefato = $this->objEntArtefato->getNuArtefato();
+                }
+                echo $this->formText( 'nuArtefato', $nuArtefato, array_merge(array('class'=>'numeric required span4'), $disabled));
+            ?>
+        </div>
+    </div>
+    <?php if( !$this->bloqueioDigito ): ?>
+    <div class="control-group" id="nuProcessoLength">
+        <label for="nuArtefato" class="control-label"><span class="required">* </span>Dígitos</label>       
+        <div class="controls">
+            <div>
+                <?php echo $this->formHidden('tpNuArtefato', $this->tpNuArtefato); ?>
+                <input type="radio" name="tpNuArtefato_disabled" value="15" class="required tpNuArtefato" id="tpNuArtefato3"/>
+                <label for="tpNuArtefato3" style="display: inline; font-size: 1em;">15</label>
+                <a href="javascript:void(0);" class="infolink" title="Processo anteriores a 2001"><i class="icon-question-sign"></i></a>
+                <input type="radio" name="tpNuArtefato_disabled" value="17" checked="checked" class="required tpNuArtefato" id="tpNuArtefato1"/>
+                <label for="tpNuArtefato1" style="display: inline; font-size: 1em;">17</label>
+                <a href="javascript:void(0);" class="infolink" title="Conforme Portaria SLTI/MP n° 3 de 16 de maio de 2003"><i class="icon-question-sign"></i></a>
+                <input type="radio" name="tpNuArtefato_disabled" value="21" class="required tpNuArtefato" id="tpNuArtefato2" disabled="disabled" />
+                <label for="tpNuArtefato2" style="display: inline; font-size: 1em;">21</label>
+                <a href="javascript:void(0);" class="infolink" title="Conforme Portaria Interministerial MJ/MP que aprova os procedimentos relativos à utilização do Número Único de Protocolo (NUP) n° 2321 de 30 de dezembro de 2014."><i class="icon-question-sign"></i></a>
+            </div>
+        </div>
+    </div>    
+    <?php endif; ?>
+
+    <?php
+    if( $this->isValidProcess == true ) :
+        $sqGrauAcesso = null;
+        if( $this->objEntArtefato->getSqGrauAcessoArtefato() != '' ) {
+            $sqGrauAcesso = $this->objEntArtefato
+                                 ->getSqGrauAcessoArtefato()
+                                 ->getSqGrauAcesso()
+                                 ->getSqGrauAcesso();
+        }
+    ?>
+        <div class="control-group">
+            <label class="control-label" for="sqGrauAcesso"><span class="required">* </span>Grau de Acesso</label>
+            <div class="controls" id="divMunicipio">
+                <?php echo $this->ComboCustom('sqGrauAcesso', $sqGrauAcesso, array('class' => 'required span4'), $this->arrOptGrauAcesso); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="dtArtefato" class="control-label"><span class="required" title="">* </span>Data de Autuação</label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>"
+                     data-date-format="dd/mm/yyyy" data-date-enddate="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" class="input-append date">
+                    <input value="<?php echo $this->objEntArtefato->getDtArtefato()->get('dd/MM/yyyy');?>"
+                           class="input-small dateBR endDate required" id="dtArtefato"
+                           name="dtArtefato" mask="date" type="text" />
+                    <a href="#" class="btn add-on right" title="Calendário"><i class="icon-calendar"></i> </a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <fieldset>
+            <legend>Origem</legend>
+            <?php echo $this->render('origem/dados-origem.phtml'); ?>
+        </fieldset>
+    <?php endif;?>
+</fieldset>

@@ -1,0 +1,104 @@
+<?php
+	$nuNup = $this->nuNup;
+    $view = $this;
+    $acao = function($row) use ($view,$nuNup) {
+	    	$autuar = '';
+ 		    if(($row['inAbreProcesso']) && ($nuNup) && ($row['sqTipoArtefato'] == 1)){
+//  		    	$inAutucao = FALSE;
+ 		    	if(!$row['inAutuacao']){
+//  		    		$inAutucao = TRUE;
+ 		    		$autuar = $view->actionButton('Autuar', 'consultaArtefato.autuarProcesso', array('sqArtefato' => $row['sqArtefato'],'view'=> '2','update'=> '0' ), NULL, 'Autuar');
+ 		    	}
+	    	}
+            $controller = '';
+            $action = '';
+            switch ($row['sqTipoArtefato']) {
+                case 1:
+                    $controller = 'documento';
+                     $action = 'delete-artefato';
+                    break;
+                case 2:
+                	$controller = 'processo-eletronico';
+                	if($row['inAutuacaoFilho'] == '1'){
+                		$controller = 'autuar-processo';
+                	}
+                    break;
+                case 3:
+                    $controller = 'dossie';
+                    $action = 'delete';
+                    break;
+            }
+
+            if ($row['inOriundoMinuta']){
+                $btnAlterar = "";
+            } else {
+                $btnAlterar = $view->actionButton('Alterar', $view->urlCurrent(array('module' => 'artefato', 'controller' => $controller, 'action' => 'edit')), array('id'=>$row['sqArtefato'],'inAutuacaoFilho'=>$row['inAutuacaoFilho'],'view'=> '2'),'pencil',NULL,array(),'href');
+            }
+            $rtn =
+             $btnAlterar.
+             $view->actionButton('Visualizar', 'artefato/visualizar-artefato/index', array('sqArtefato'=>$row['sqArtefato']),'eye-open',NULL,array(),'href');
+             if($row['sqTipoArtefato'] != 2){
+              $rtn .=  $view->actionButton('Excluir', 'ArtefatoDelete.Deletar', array($row['sqArtefato'],$row['nuDigital'],2),'trash');
+             }
+            $rtn .=  $view->actionButtonDropdown(array(
+                     $view->actionButton('Anexar', 'consultaArtefato.encaminharMinutaAnalise', array('sqArtefato' => $row['sqArtefato']), NULL, 'Anexar').
+                     $view->actionButton('Apensar', 'consultaArtefato.encaminharMinutaAssinatura', array('sqArtefato' => $row['sqArtefato']), NULL, 'Apensar').
+            		 $autuar .
+                     $view->actionButton('Carimbar', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Carimbar').
+                     $view->actionButton('Comentários', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Comentários').
+                     $view->actionButton('Despachos', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Despachos').
+//                     $view->actionButton('Inserir', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Inserir').
+                     $view->actionButton('Imagens Tramitar', 'consultaArtefato.acompanharMinuta', array('sqArtefato' => $row['sqArtefato']), NULL, 'Tramitar')
+
+             ));
+
+        $rtn = $view->buttonGroup($rtn);
+        return $rtn;
+    };
+
+    $dtPrazo = function($row){
+        if($row['dtPrazo']){
+            return $row['dtPrazo']->get('dd/MM/YYYY');
+        }
+        return NULL;
+    };
+
+   $interessado = function ($row){
+        if($row['noPessoaInteressada']){
+            $interessado = explode(',', $row['noPessoaInteressada']);
+            return $interessado[0];
+        }
+    };
+
+    $nuArtefato = function ($row) use ($view) {
+    	if($row['sqTipoArtefato'] == 2){
+    		if(strlen($row['nuArtefato']) == 17){
+    			return $view->maskNumber($row['nuArtefato'], '99999.999999/9999-99');
+    		}else{
+    			return $row['nuArtefato'];
+    		}
+    	}
+    	return $row['nuArtefato'];
+    };
+
+    $configArray = array('columns' => array(
+                                  0 => array('column' => 'noTipoArtefato'),
+                                  1 => array('column' => 'nuDigital'),
+                                  2 => array('column' => 'noTipoDocumento'),
+                                  3 => array('column' => $nuArtefato),
+                                  4 => array('column' => 'noPessoaOrigem'),
+                                  5 => array('column' => 'txAssunto'),
+                                  6 => array('column' => $interessado),
+                                  7 => array('column' => 'nuCpfCnpjPassaporteOrigem'),
+                                  8 => array('column' =>  $dtPrazo),
+                                  9 => array('column' => 'noPrioridade'),
+                                 10 => array('column' => $acao)
+
+    ));
+
+
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

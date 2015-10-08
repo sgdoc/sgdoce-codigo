@@ -1,0 +1,423 @@
+ /**
+ * \mainpage SIAL - Documentação
+ *
+ * \image html sial_mascote.jpg
+ *
+ * \section intro SIAL - Abstract Layer
+ *
+ * O SIAL - Abstract Layer, é um Framework criado e mantido pelo ICMBio e que tem por objetivo o\n
+ * desenvolvimento de suas aplicações. Suas principais características são:\n
+ *
+ *     1. estrutura bem definida;
+ *
+ *     2. forte delegação de responsabilidade entre as camadas;
+ *
+ *     3. flexibilidade para adoção e substituição de componentes externos;
+ *
+ *     4. 100% coberto por testes unitário;
+ *
+ *     5. facilidade para detecção de erros;
+ *
+ *     6. concentração na abstração de soluções para problemas em comum;
+ *
+ *     7. otimização de recursos com foco em soluções necessárias;
+ *
+ *     8. proporcionar ganho de produtividade na construção das aplicações;
+ *
+ *     9. possibilita uma padronização na codificação;
+ *
+ *     10. permitir a convivência de versões diferentes de um mesmo componente externo;
+ *
+ * O SIAL é ainda um framework de abstração, orientado à objeto, desenvolvido em PHP 5. Utiliza de recursos do Zend Framework,\n
+ * com a vantagem de ser independente do mesmo ou de frameworks comerciais. Por manter sua regra de negocio em uma camada\n
+ * especifica, permite que esta seja independente de persistencia.\n
+ *
+ * 
+ * \subpage Revisões "Histórico"
+ *
+ * \section links Links
+ * 
+ * \par
+ * - ICMBio Portal : http://www.icmbio.gov.br
+ * - Manuais       : \subpage Manuais "Manuais"
+ * - Licença       : \subpage Licença "Licença"
+ * 
+ * \page Revisões Revisões
+ *
+ * \par 
+ *   -  Histórico das revisões realizadas no SIAL, juntamente com todos os históricos de alterações.
+ *
+ * 
+ * \subpage r1_5 
+ * 
+ * \par
+ * 
+ * \subpage r1_4 
+ * 
+ * \par 
+ * 
+ * \subpage r1_3
+ */
+
+ /**
+ * \page Manuais Manuais
+ *
+ * \par
+ *    - Manuais do SIAL
+ *        - Manual do SIAL : http://www.icmbio.gov.br/sial/docs/sial.pdf
+ *        - Manual dos Validadores : http://www.icmbio.gov.br/sial/docs/ICMBio_SIAL_Manual_Validadores.pdf
+ *        - Manual de Anotações : http://www.icmbio.gov.br/sial/docs/ICMBIO_SIAL_Manual_Anotacoes.pdf
+ *        - Manual de Componentes : https://www.icmbio.gov.br/sial/docs/ICMBIO_SIAL_Manual_Componentes.pdf
+ */
+
+ /**
+ * \page Licença Licença GNU/GPL
+ * 
+ * Copyright 2011 ICMBio \n\n
+ * Este arquivo é parte do programa SISICMBio \n
+ * O SISICMBio é um software livre; você pode redistribuí-lo e/ou modificá-lo dentro dos termos \n
+ * da Licença Pública Geral GNU como publicada pela Fundação do Software Livre (FSF); na versão \n
+ * 2 da Licença.
+ *
+ * Este programa é distribuído na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem \n
+ * uma garantia implícita de ADEQUAÇÃO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a \n
+ * Licença Pública Geral GNU/GPL em português para maiores detalhes.
+
+ * Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o título "LICENCA.txt", \n
+ * junto com este programa, se não, acesse o Portal do Software Público Brasileiro no endereço \n
+ * www.softwarepublico.gov.br ou escreva para a Fundação do Software Livre(FSF) \n
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
+ * 
+ */
+ 
+ /** 
+ * \page r1_5 SIAL - Revisão 1.5
+ *  
+ *    - Novos Recursos :
+ *        - inclusão de exemplo de uso na documentacao do código
+ *        - implementação do metodo errorAction
+ *        - removida a obrigacao de criacao de ValueObject/Model/Persist ao instanciar o controller, a 
+ *        - partir desta revisao apenas sera necessario criar tais classes quando da Business for 
+ *        - invocada o metodo Business::getModel
+ *        - inclusao de suporte ao DataViewObject
+ *        - acrescentado o método _forward que redireciona um fluxo de requisição
+ *        - acrescentado o método setParams que é utilizado pelo ControllerAbstract::_forward
+ *        - atualização para persistência MySQL
+ *        - Versao 0.2.0 do Gerador do SIAL
+ *        - Skeleton gerador de arquivos baseado no arquivo .s
+ *        - Gerador de Formulario baseado no .s
+ *        - Gerador dinamico de arquivos HTML baseado no .s independente do Gerador do SIAL
+ *        - Classes de Formatacao CSS baseado nos validadores setados
+ *        - Gerador do SIAL versao 0.2.0
+ *        - Metodos desenvolvidos automaticamente findByElement (elementos do banco) para o Gerador do SIAL
+ *        - Testes unitarios para para os metodos desenvolvidos
+ *        - Gerador de Codigo com heranca da Classe BusinessCrudAbstract
+ *        - Liberacao de funcionalidades padrao: save, update, delete, findByParam na classe BusinessCrudAbstract
+ *        - Persistência de arquivo
+ *        - Tratamento de Upload de Arquivos
+ *        - Tratamento  de arquivos gerados
+ *        - Utilização da notação de log no ValueObject para também efetuar ou não log de arquivos
+ *        - Helper para efetuar downloads de arquivos
+ *        - Acrescida validacoes para envios via $_FILES (isFile)
+ *        - Acrescida funcionalidade para obter arquivos enviados via Upload utilizando getParams('files') ja e retorado um VO do tipo TFile
+ *        - Criado tipo TFile utilizado para arquivos efetuados via upload
+ *        - Criado tipo TFileContent utilizado para arquivos efetuados via upload
+ *        - Problemas com get
+ *        - Na passagem de parâmetro poderá ser utilizado ? ou /
+ *        - Validadores ao executar o método load do ValueObject
+ *        - Correcao de CheckStyle
+ *        - Documentacao do codigo
+ *        - Suporte a funções SQL ANSI/92
+ *        - Joins em VO's
+ *        - Suporte a operadores SQL ANSI/92
+ *        - Suporte a quotes
+ *    - Correcoes
+ *        - correção para ticket #309
+ *        - na persist foi alterado o limit de Null para ALL como parametro básico
+ *        - tratamento de XML não UTF-8
+ *        - inclusao de metodos para configuracao de propriedades definciao no config.ini
+ *    @deprecated
+ *        - Revisão da documentação para o método GetBusinessParam
+ */
+ 
+ /** 
+ * \page r1_4 SIAL - Revisão 1.4
+ *
+ *    - Adicionado:
+ *        - Gerenciador de Sessao;
+ *        - Suporte a ViewHelper;
+ *        - Anotacao para definir se a entidade representada pelo ValueObject tera suas transacoes logadas;
+ *        - Foi removido a necessidade de refazer o link para a ClassLoader;
+ *        - O uso da utilitário dump foi é executado em ambiente de desenvolvimento.
+ *  
+ *    - Melhoria:
+ *       - DUMP: Exibe a saída do objeto informado apenas em ambeiente no ambiente de desenvolvimento
+ *       - ClassLoader: Não é mais necessário refazer o link do ClassLoader
+ *       - Remoção do construtor da superclasse, SIALAbstract.
+ *        
+ *    - Novos Recurso:
+ *       - ViewHelper: Funcionalidade auxiliar usadas na camada de View
+ *       - Session: Gerenciador de sessao
+ *    
+ *  -- HOWTO --
+ *    Esta seção exemplifica o uso dos novos recursos do SIAL.
+ *    
+ *    - Helper:
+ *      - A criação de um helper consiste basicamente em duas partes:
+ *        - 1: Registrar o namespace do(s) Helper(s)
+ *        - 2: Definir o Helper.
+ *        
+ *        - Registro de namespace do Helpers:
+ *         O registro de Helper é feito como mostrado abaixo:
+ *         
+ *             \code
+ *             # registro de namespace de helper
+ *             Helper::registerNamespace('fullnamespace');
+ *             \endcode
+ *         
+ *        
+ *            - Por padrão, são registrados automaticamentes dois locais de namespaces:
+ *                
+ *               - br\gov\icmbio\sial\mvcb\view\helper: São Helpers gerais e inalteráveis, criados e distribuídos pelas
+ *                 releases do SIAL;
+ *               
+ *               - br\gov\icmbio\sisicmbio\library\mvcb\view\helper: São Helpers gerais da aplicação SISICMBIO e podem ser 
+ *                 acrescidos conforme necessidade do projeto ICMBIO.
+ *             
+ *        - Definição de um helper
+ *          - Um helper deve ser visto com uma funcionalidade auxiliar sem contexto, ou seja, deve ser criada para resolver
+ *          uma categoria de problema, comum a mais de um UC. Exemplo: maskCpf, maskCnpj, formatNumber, etc. Todo Helper
+ *          deverá herdar diretamente da classe SIALAbstract ou doutro Helper.
+ *           Regra para definição:
+ *             - Por se tratar de uma classe, deve seguir todas as regras de definição de classes definidas no DAS, GA;
+ *             - Todo Helper deve está sob um namespace;
+ *             - Herdar diretamente de SIALAbstract ou de outro Helper;
+ *             - Possuir um método de mesmo nome da classe, seguindo regra de definição de nomes DAS;
+ *             - O método executor, de mesmo nome da classe, deve ser público
+ *             
+ *             # bloco de documentacao de licença
+ *             \code
+ *             namespace full\namespace\of\helper;
+ *             use br\gov\icmbio\sial\SIALAbstract;
+ *             \endcode
+ *             
+ *             # bloco de docuemtacao do helper
+ *             \code
+ *             class HelperName extends SIALAbstract
+ *             {
+ *                 /**
+ *                  *
+ *                  */
+ *             }
+ *             \endcode
+ *             
+ */
+
+ /**
+ * \page r1_3 SIAL - Revisão 1.3
+ * 
+ *     - Atualizar o arquivo config.ini acrescendo a entrada
+ *     \code
+ *      config.ini: app.mainsystem = [sisicmbio]*
+ *     \endcode
+ *      Onde [sisicmbio]* e o nome do sistema principal
+ *
+ *     - Melhoria:
+ *       - Config
+ *         - Suporte a chamada recursiva de propriedades do objeto Config
+ *         
+ *     - Novos Recruso:
+ *        1: Validadores
+ *           - Foram acrescidos dois validadores um para validar CPF e outro para CNPJ
+ *           - Gerenciador de constantes integrado ao SIAL
+ *           - FIFO: Classe de tratamento de estrutura de dados em fila
+ *           - JQuery: Utilitário com o objetivo primário de preparar uma string para ser usada pela jQuery no lado do cliente
+ *           
+ *     
+ *     HOWTO
+ *      Esta seção descreve como utilizar os novos recursos e as melhorias implementadas no SIAL.
+ *      
+ *      - Config:
+ *        - A melhoria do metodo get permite recupera uma determinada propriedade que esteja organizada em varios
+ *        niveis apenas com um 'get' como exemplicado abaixo, o exemplo abaixo considera que o arquivo config.ini 
+ *        esteja carregado e que o objeto Config esteja instanciado:
+ *        
+ *            \code
+ *            # dado a necessidade de recupera a propriedade 'php.mail.smtp.supported' o que resultaria em 4 chamadas ao metodo
+ *            # get como exemplicado logo baixo:
+ *            
+ *            # maneira antiga de recuperar (desencorajada)
+ *            $objConfig->get('php')->get('mail')->get('smtp')->get('supported');
+ *            
+ *            # pode e deve sempre que necessaio ser recuperada conforme exemplicado abaixo
+ *            $objConfig->get('php.mail.smtp.supported');
+ *            \endcode
+ *      
+ *      - Validadores:
+ *        - Para validar um dado CPF basta invocar o 'validate' e informar o suposto CPF em questão:
+ *        
+ *            \code
+ *            # modo de validacao #1
+ *            
+ *            # importa a funcionalidade de validacao
+ *            use br\gov\icmbio\sial\util\validate\Validate;
+ *            
+ *            $validCpf = '78827555676';
+ *            echo Validate::isCpf($validCpf) ? 'TRUE' : 'FALSE'; // TRUE
+ *            
+ *            # modo de validacao #2
+ *            echo br\gov\icmbio\sial\util\validate\Validate\Validate::isCpf($validCpf) ? 'TRUE' : 'FALSE'; // TRUE
+ *            
+ *            # modo de validacao #3
+ *            $vltordCpf = new br\gov\icmbio\sial\util\validate\Validate\Cpf();
+ *            echo $vltordCpf->isValid($validCpf) ? 'TRUE' : 'FALSE'; // TRUE
+ *            \endcode
+ *            
+ *        - Para validar um dado CNPJ basta invocar o 'validate' e informar o suposto CNPJ em questão:
+ *            
+ *            \code
+ *            # modo de validacao #1
+ *            
+ *            # importa a funcionalidade de validacao
+ *            use br\gov\icmbio\sial\util\validate\Validate;
+ *            
+ *            $validCnpj = '24692680000110';
+ *            echo Validate::isCnpj($validCnpj) ? 'TRUE' : 'FALSE'; // TRUE
+ *            
+ *            # modo de validacao #2
+ *            echo br\gov\icmbio\sial\util\validate\Validate\Validate::isCnpj($validCnpj) ? 'TRUE' : 'FALSE'; // TRUE
+ *            
+ *            # modo de validacao #3
+ *            $vltordCnpj = new br\gov\icmbio\sial\util\validate\Validate\Cnpj();
+ *            echo $vltordCnpj->isValid($validCnpj) ? 'TRUE' : 'FALSE'; // TRUE
+ *            \endcode
+ *            
+ *      - Constantes:
+ *        - Se necessário, o SIAL disponibiliza um recurso de constantes, complementar aos arquivos .ini, que pode ser usado
+ *        para armazenar texto literais usados na aplicacao, para tanto e' necessario entender como este recurso esta' 
+ *        organizado no SIAL:
+ *        
+ *          - 1º:  Cada sistema, incluido o principal tem sua pasta de constantes, claro se o mesmo for utilizar este recuro,
+ *                 para ficar mais claro, vamos assumir que o nome do sistema principal e' 'sisicmbio' e que o mesmo fica no 
+ *                 seguinte diretorio 'br/gov/icmbio/sisicmbio', assim, todos seus subsistemas ficarao organizados em 
+ *                 'application', como segue 'br/gov/icmbio/sisicmbio/application'. A pasta do sistema principal devera ser: 
+ *                 'br/gov/icmbio/sisicmbio/application/constant' e dentro deste diretorio devera existir um arquivo de nome
+ *                 'sisicmbio.php', dentro deste arquivo as constantes propriamente dito.
+ *                 
+ *          - 2º: Para definir uma constante deve ser seguido as seguintes regras:
+ *              1: 'SIAL'
+ *              2: SISTEMA
+ *              3: SUBSISTEMA
+ *              4: FUNCIONALIDADE (se houver)
+ *              5: CONSTANTE_NAME
+ *    
+ *             Onde: 1 é uma constante que devine que a constante é o SIAL; 
+ *                   2 o nome do sistema que deu origem a constante;
+ *                   3 nome do subsistema;
+ *                   4 nome da funcionalide;
+ *                   5 o nome da constante.
+ *                   
+ *             Assim, para definir uma constante de nome TITLE que faz referencia a um titulo do SIAL tera como nome final:
+ *             SIAL_SISICMBIO_TITLE
+ *             
+ *             Já para o definir uma constate para o gerador de codigo do SIAL que fica sob o diretorio:
+ *             'br/gov/icmbio/sisicmbio/application/tools/wizard' a mesma constante ficara': SIAL_SISICMBIO_TOOLS_WIZARD_TITLE
+ *             e armazenado no arquivo 'br/gov/icmbio/sisicmbio/application/tools/constant/wizard.php', 
+ *             Vide modulo 'br\gov\icmbio\sisicmbio\application\tools'.
+ *             
+ *        \code
+ *        # controller
+ *        # invocando a constante 'SIAL_SISICMBIO_TOOLS_WIZARD_TITLE' note que a penas o nome da constante 'e informado
+ *        echo $this->constant('TITLE');
+ *        
+ *        # informar o nome completo da constante
+ *        echo $this->constant('SIAL_SISICMBIO_TOOLS_WIZARD_TITLE', FALSE);
+ *        
+ *        
+ *        # view
+ *        # mais exemplos de uso em:
+ *        # '/sial/br/gov/icmbio/sisicmbio/application/tools/wizard/mvcb/view/scripts/html/WizardDesktop.phtml'
+ *        echo $this->constant->get('TITLE');
+ *        \endcode
+ *             
+ *             
+ *        Serialização
+ *        \code
+ *        #
+ *        # serializando e desserializando
+ *        #
+ *        
+ *        # serializando um array no PHP para uso no jQUery
+ *        $data = array(
+ *           'key_1' => 'value #1',
+ *           'key_2' => 'value #2',
+ *           'key_3' => 'value #3',
+ *        );
+ *        
+ *        echo br\gov\icmbio\sial\util\client\JQuery::serialize($data);
+ *        // output: key_1=value+%231&key_2=value+%232&key_3=value+%233
+ *        
+ *        # deserializando um formulário (POST) serializado com a jQuery.js
+ *        $serData = 'key_1=value+%231&key_2=value+%232&key_3=value+%233';
+ *        var_dump( br\gov\icmbio\sial\util\client\JQuery::unserialize($serData) );
+ *        
+ *        // output: array(3) {
+ *        // ["key_1"]=> string(8) "value #1"
+ *        // ["key_2"]=> string(8) "value #2"
+ *        // ["key_3"]=> string(8) "value #3"
+ *        // }
+ *        ... [ end - fragmento de código #4 ] ...
+ *        
+ *        
+ *        Fila
+ *        ... [ begin - fragmento de código #5 ] ...
+ *        #
+ *        # utilizando FIFO para gerenciar fila
+ *        #
+ *        
+ *        # pessoas da lista
+ *        $data = array('Maria', 'Jose', 'Joao');
+ *        
+ *        $fifo = new br\gov\icmbio\sial\util\stack\FIFO();
+ *        $fifo->init($data);
+ *        
+ *        echo "Fila completa:\n";
+ *        echo '----------------';
+ *        dump($fifo);
+ *        
+ *        echo "remove elemento: ";
+ *        echo $fifo->pop();
+ *        
+ *        
+ *        echo "Fila";
+ *        dump($fifo);
+ *        
+ *        echo "remove elemento: ";
+ *        echo $fifo->pop();
+ *        
+ *        echo "Fila";
+ *        dump($fifo);
+ *        
+ *        echo "inclui elemento a fila: ";
+ *        echo $fifo->push('Ikaro');
+ *        
+ *        echo "Fila";
+ *        dump($fifo);
+ *        
+ *        # dispenca todos os elementos restantes da fila
+ *        $fifo->flush();
+ *        
+ *        echo "Fila";
+ *        dump($fifo);
+ *        
+ *        # coloca varios elementos na fila de uma so' vez
+ *        $fifo->init(array('Maria', 'Jose', 'Joao', 'Ikaro'));
+ *        dump($fifo);
+ *        
+ *        # atende todos os elementos da fila
+ *        while(!$fifo->isEmpty()) {
+ *        echo "Em que posso ajudar Sr(a): ", $fifo->pop(), "\n";
+ *        
+ *        }
+ *        \endcode
+ */

@@ -1,0 +1,60 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/etiqueta/gerar-etiqueta/create.js'); ?>
+
+<h1>Gerar Digitais</h1>
+
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br/>
+
+<form class="form-horizontal"  method="post" id="form_gerar_etiqueta"
+      action="<?php echo $this->urlCurrent(array('action' => 'save'))?>">
+
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Quantidade de Página</label>
+        <div class="controls">
+            <?php echo $this->ComboCustom('sqQuantidadeEtiqueta',
+                    $this->params['sqQuantidadeEtiqueta'],
+                    array('class'=>'span6 required'),
+                    $this->arrQtdeEtiqueta); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Tipo de Digital</label>
+        <div class="controls">
+            <?php echo $this->ComboCustom('sqTipoEtiqueta',
+                    $this->params['sqTipoEtiqueta'],
+                    array('class'=>'span6 required'),
+                    $this->arrTipoEtiqueta); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Unidade</label>
+        <div class="controls">
+            <input type="hidden" name="sqUnidadeOrg" id="sqUnidadeOrg_hidden" value="<?php echo $this->params['sqUnidadeOrg'] ?>" />
+            <input type="text" class="span6 required" name="sqUnidadeOrg" id="sqUnidadeOrg" value="<?php echo $this->params['sqUnidadeOrg_autocomplete'] ?>" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label"><span class="required lote">* </span>Lote</label>
+        <div class="controls">
+            <?php echo $this->ComboCustom('inLoteComNupSiorg',
+                                              false,
+                                              array('class'=>'span6 required'),
+                                              array(1 => 'Com NUP', 0 => 'Sem NUP')); ?>
+
+            <?php // echo $this->formCheckbox('inLoteComNupSiorg',null,null,array('checkedValue'=>1,'uncheckedValue'=>0));?>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btn_gerar">Gerar</button>
+        <a href="<?php echo $this->urlCurrent(array('action' => 'index'))?>" class="btn" id="cancelar">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>
+<script>
+    GerarEtiqueta.SQ_TIPO_ETIQUETA_ELETRONICA = <?php echo $this->sqTipoEtiquetaEletronica; ?>;
+</script>

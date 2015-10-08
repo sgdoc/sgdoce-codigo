@@ -1,0 +1,171 @@
+<?php
+$view = $this;
+$acao = function($row) use ($view){
+
+    if (isset($row['noOcorrencia'])){
+        // Em acompanhamento
+
+             $rtn = $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => FALSE, 'view' => 4), 'eye-open', NULL, array(), 'href') .
+                    $view->actionButtonDropdown(array(
+                        $view->actionButton ( 'Desacompanhar Minuta', 'AcoesMinuta.desacompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 4), null, 'Desacompanhar Minuta' )
+                    ));
+    }elseif ($row['sqStatusArtefato'] == 0){
+        // Enviadas
+        $rtn = $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => FALSE, 'view' => 2), 'eye-open', NULL, array(), 'href');
+    }elseif ($row['sqStatusArtefato'] == 1){
+        // Produzidas
+        if((empty($row['inAssinaturaArtefato']) && $row['qtdAssinantesArtefato'] > 0) || ($row['qtdAssinantesArtefato'] > 0 && (empty($row['inCampoAssinatura'])) || $row['assinada'] != 0)){
+            // Produzidas que não podem ser assinadas pela pessoa que está logada porque não está nos relacionados para assinar a minuta em questão
+            if(($row['sqOcorrencia'] != 13 && $row['sqOcorrencia'] != 7 && $row['sqOcorrencia'] != 8) && ($row['sqStatusArtefato'] == 1 || $row['sqStatusArtefato'] == 4)){
+                // Produzidas que nao estao em acompanhamento e nao sao produzidas ou devolvidas {pode excluir}
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 3),'pencil').
+                       $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'view' => 3), 'eye-open', NULL, array(), 'href') .
+                       $view->actionButton('Excluir', 'AcoesMinuta.excluirMinuta', array('id'=>$row['sqArtefato'], 'view' => 3),'trash').
+                       $view->actionButtonDropdown(array(
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Acompanhar Minuta')
+                    ));
+            }
+            else{
+                // Produzidas que estao em acompanhamento e sao produzidas ou devolvidas {nao pode excluir}
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 3),'pencil').
+                       $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'view' => 3), 'eye-open', NULL, array(), 'href') .
+                       $view->actionButtonDropdown(array(
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Acompanhar Minuta')
+                        ));
+            }
+        }
+        else{
+            // Produzidas que podem ser assinadas pela pessoa que está logada porque não está nos relacionados para assinar a minuta em questão
+            if(($row['sqOcorrencia'] != 13 && $row['sqOcorrencia'] != 7 && $row['sqOcorrencia'] != 8) && ($row['sqStatusArtefato'] == 1 || $row['sqStatusArtefato'] == 4)){
+                // Produzidas que nao estao em acompanhamento e nao sao produzidas ou devolvidas {pode excluir}
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 3),'pencil').
+                       $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'view' => 3), 'eye-open', NULL, array(), 'href') .
+                       $view->actionButton('Excluir', 'AcoesMinuta.excluirMinuta', array('id'=>$row['sqArtefato'], 'view' => 3),'trash').
+                       $view->actionButtonDropdown(array(
+                            $view->actionButton('Assinar Minuta', 'AcoesMinuta.assinarMinuta', array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => TRUE, 'view' => 3), NULL, 'Assinar Minuta').
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Acompanhar Minuta')
+                    ));
+            }
+            else{
+                // Produzidas que estao em acompanhamento e sao produzidas ou devolvidas {nao pode excluir}
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 3),'pencil').
+                       $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato'], 'view' => 3), 'eye-open', NULL, array(), 'href') .
+                       $view->actionButtonDropdown(array(
+                            $view->actionButton('Assinar Minuta', 'AcoesMinuta.assinarMinuta', array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => TRUE, 'view' => 3), NULL, 'Assinar Minuta').
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 3), NULL, 'Acompanhar Minuta')
+                        ));
+            }
+        }
+    }elseif ($row['sqStatusArtefato'] == 2 || 3 || 4){
+        // Recebidas, Em analise e Devolvida
+        if((empty($row['inAssinaturaArtefato']) && $row['qtdAssinantesArtefato'] > 0) || ($row['qtdAssinantesArtefato'] > 0 && (empty($row['inCampoAssinatura'])) || $row['assinada'] != 0)){
+            // Recebidas, Em analise e Devolvida que não podem ser assinadas pela pessoa que está logada porque não está nos relacionados para assinar a minuta em questão
+            if(($row['sqOcorrencia'] != 13 && $row['sqOcorrencia'] != 7 && $row['sqOcorrencia'] != 8) && ($row['sqStatusArtefato'] == 1 || $row['sqStatusArtefato'] == 4)){
+
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 1),'pencil').
+                    $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato']), 'eye-open', NULL, array(), 'href') .
+                    $view->actionButton('Excluir', 'AcoesMinuta.excluirMinuta', array('id'=>$row['sqArtefato'], 'view' => 1),'trash').
+                    $view->actionButtonDropdown(array(
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Acompanhar Minuta').
+                            $view->actionButton('Devolver Minuta', 'Modal.devolverMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqPessoa' => $row['sqPessoa']), NULL, 'Devolver Minuta')
+                        ));
+            }
+            else{
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 1),'pencil').
+                    $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato']), 'eye-open', NULL, array(), 'href') .
+                    $view->actionButtonDropdown(array(
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Acompanhar Minuta').
+                            $view->actionButton('Devolver Minuta', 'Modal.devolverMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqPessoa' => $row['sqPessoa']), NULL, 'Devolver Minuta')
+                        ));
+            }
+        }
+        else{
+            // Recebidas, Em analise e Devolvida que podem ser assinadas pela pessoa que está logada porque não está nos relacionados para assinar a minuta em questão
+            if(($row['sqOcorrencia'] != 13 && $row['sqOcorrencia'] != 7 && $row['sqOcorrencia'] != 8) && ($row['sqStatusArtefato'] == 1 || $row['sqStatusArtefato'] == 4)){
+
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 1),'pencil').
+                    $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato']), 'eye-open', NULL, array(), 'href') .
+                    $view->actionButton('Excluir', 'AcoesMinuta.excluirMinuta', array('id'=>$row['sqArtefato'], 'view' => 1),'trash').
+                    $view->actionButtonDropdown(array(
+                            $view->actionButton('Assinar Minuta', 'AcoesMinuta.assinarMinuta', array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => TRUE, 'view' => 1), NULL, 'Assinar Minuta').
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Acompanhar Minuta').
+                            $view->actionButton('Devolver Minuta', 'Modal.devolverMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqPessoa' => $row['sqPessoa']), NULL, 'Devolver Minuta')
+                        ));
+            }
+            else{
+                $rtn = $view->actionButton('Alterar', 'AcoesMinuta.alterarMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqTipoDocumento' => $row['sqTipoDocumento'], 'sqAssunto' => $row['sqAssunto'], 'view' => 1),'pencil').
+                    $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'visualizar-minuta')), array('sqArtefato'=>$row['sqArtefato']), 'eye-open', NULL, array(), 'href') .
+                    $view->actionButtonDropdown(array(
+                            $view->actionButton('Assinar Minuta', 'AcoesMinuta.assinarMinuta', array('sqArtefato'=>$row['sqArtefato'], 'viewFor' => TRUE, 'view' => 1), NULL, 'Assinar Minuta').
+                            $view->actionButton('Encaminhar Para Análise', 'Modal.encaminharMinutaAnalise', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Análise').
+                            $view->actionButton('Encaminhar Para Assinatura', 'Modal.encaminharMinutaAssinatura', array('sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Encaminhar Para Assinatura').
+                            $view->actionButton('Acompanhar Minuta', 'AcoesMinuta.acompanharMinuta', array('sqArtefato' => $row['sqArtefato'], 'view' => 1), NULL, 'Acompanhar Minuta').
+                            $view->actionButton('Devolver Minuta', 'Modal.devolverMinuta', array('sqArtefato' => $row['sqArtefato'], 'sqHistoricoArtefato' => $row['sqHistoricoArtefato'], 'sqPessoa' => $row['sqPessoa']), NULL, 'Devolver Minuta')
+                        ));
+            }
+        }
+
+    }
+    $rtn = $view->buttonGroup($rtn);
+    return $rtn;
+};
+
+$acoesMultiplas = function($row){
+
+    if($row['sqStatusArtefato'] == 0){
+        $disabled = 'disabled="disabled"';
+    }
+    else{
+        $disabled = '';
+    }
+
+        return '<input type="checkbox" name="sqArtefato[]" id="sqArtefato" value="'.$row['sqArtefato'].'" '.$disabled.' />';
+};
+
+$dataCriacao = function($row){
+   return $row['dataCriacao']->get('dd/MM/YYYY');
+};
+
+$prazo = function($row) use ($view) {
+    if(!empty($row['prazo'])){
+        return $row['prazo']->get('dd/MM/YYYY');
+    }
+    else{
+        if( empty($row['inDiasCorridos']) && !empty($row['nuDiasPrazo']) ){
+            $arrFeriados = $view->feriados;
+            return $view->diasUteis($row['dataCriacao']->get('dd/MM/YYYY'), $row['nuDiasPrazo'], $arrFeriados);
+        }
+    }
+};
+
+$configArray = array('columns' =>  array(
+                              0 => array('column' => $acoesMultiplas),
+                              1 => array('column' => $dataCriacao),
+                              2 => array('column' => 'tipo'),
+                              3 => array('column' => 'origem'),
+                              4 => array('column' => 'assunto'),
+                              5 => array('column' => 'autor'),
+                              6 => array('column' => $prazo),
+                              7 => array('column' => 'status'),
+                              8 => array('column' => $acao)
+));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);
+?>

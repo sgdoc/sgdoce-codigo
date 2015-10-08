@@ -1,0 +1,85 @@
+<?php
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/mensagem/view.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/mensagem/form.js');
+$this->headScript()->prependFile($this->baseUrl() . '/js/library/jquery.simpleautocomplete.js');
+echo $this->headScript();
+
+$label = ($this->data->getSqMensagem() ? 'Alterar' : 'Cadastrar');
+?>
+<h1>
+    <?php echo $label;?>
+    Mensagem Específica
+</h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br />
+<!-- FORMULÁRIO INÍCIO-->
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-mensagem">
+    <input type="hidden" name="sqMensagem" id="sqMensagem" value="<?php echo $this->data->getSqMensagem();?>" />
+    <input type="hidden" name="desativarAnteriores" value="" />
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">* Tipo de Documento</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoDocumento',
+                        ($this->data->getSqTipoDocumento() ?$this->data->getSqTipoDocumento()->getSqTipoDocumento():'') ,
+                        array('class'=>'span4 required'),
+                        $this->items); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">* Assunto</label>
+            <div class="controls">
+                <input type="hidden" id="sqAssunto_hidden"
+                    value="<?php echo ($this->data->getSqAssunto() ? $this->data->getSqAssunto()->getSqAssunto(): ''); ?>" />
+                <input class="span4 required" type="text" name="sqAssunto" id="sqAssunto"
+                    value="<?php echo ($this->data->getSqAssunto() ? $this->data->getSqAssunto()->getTxAssunto(): ''); ?>" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">* Mensagem Específica</label>
+            <div class="controls">
+                <textarea class="span4 required" cols="100" rows="3" maxlength="300" name="txMensagem" id="mensagemEspecifica" value=""
+                    <?php if ($this->actionName == 'create'){ echo 'readonly="readonly"';}?>><?php echo $this->data->getTxMensagem();?></textarea>
+            </div>
+        </div>
+        <!-- BARRA DE AÇÔES INICIO -->
+        <div class="form-actions">
+            <button id="btn-submit" class="btn btn-primary">Salvar</button>
+            <a href="/auxiliar/mensagem" class="btn" id="voltar"> <i
+                class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+        <!-- ROW FLUID FIM -->
+    </fieldset>
+</form>
+<form id="grid-search" action="<?php echo $this->urlCurrent(array('action' => 'list')); ?>" method="post">
+    <input type="hidden" name="sqTipoDocumento" value="" id="sqTipoDocumentoModal" />
+    <input type="hidden" name="sqAssunto" value="" id="sqAssuntoModal" />
+    <input type="hidden" name="noDelete" value="1" />
+</form>
+<div class="modal hide" id="modalMensagem">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3 id="modal-title">Modal header</h3>
+    </div>
+    <div class="modal-body">
+        <table id="table-grid">
+            <thead>
+                <tr>
+                    <th width="20%">Tipo de Documento</th>
+                    <th width="20%">Assunto</th>
+                    <th width="20%">Mensagem Específica</th>
+                    <th width="20%">Status</th>
+                    <th width="20%">Ações</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal"><i
+            class="icon-remove"></i> Cancelar</a>
+    </div>
+</div>

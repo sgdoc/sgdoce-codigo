@@ -1,0 +1,297 @@
+@CHARSET "UTF-8";
+
+.mapaModal {
+    width: 512px;
+    height: 384px;
+}
+
+.olControlPanel {
+    height: 40px;
+    padding-left: 10px;
+    position: relative !important;
+    float: right;
+    background: #666;
+    opacity: 0.85;
+    filter: alpha(opacity=85);
+    margin: 4px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+.olControlPanel div {
+    display:block;
+    width:  34px;
+    height: 27px;
+    margin: 7px 7px 0 0;
+    float: right;
+}
+.olControlPanel .olControlMouseDefaultsItemActive { background-image: url("/img/openlayers/pan_on.jpg"); }
+.olControlPanel .olControlMouseDefaultsItemInactive { background-image: url("/img/openlayers/pan_off.jpg"); }
+.olControlPanel .olControlPolygonItemActive { background-image: url("/img/openlayers/draw_polygon_on.jpg"); }
+.olControlPanel .olControlPolygonItemInactive { background-image: url("/img/openlayers/draw_polygon_off.jpg"); }
+.olControlPanel .olControlLineItemInactive { background-image: url("/img/openlayers/draw_line_off.jpg"); }
+.olControlPanel .olControlLineItemActive { background-image: url("/img/openlayers/draw_line_on.jpg"); }
+.olControlPanel .olControlPointItemInactive { background-image: url("/img/openlayers/draw_point_off.jpg"); }
+.olControlPanel .olControlPointItemActive { background-image: url("/img/openlayers/draw_point_on.jpg"); }
+.olControlPanel .olControlModifyFeatureItemActive {  background-image: url("/img/openlayers/edit_polygon_on.jpg"); }
+.olControlPanel .olControlModifyFeatureItemInactive { background-image: url("/img/openlayers/edit_polygon_off.jpg"); }
+.olControlPanel .olControlModifyFeatureRotateItemActive { background-image: url("/img/openlayers/rotate_polygon_on.jpg"); }
+.olControlPanel .olControlModifyFeatureRotateItemInactive { background-image: url("/img/openlayers/rotate_polygon_off.jpg"); }
+.olControlPanel .olControlModifyFeatureDragItemActive { background-image: url("/img/openlayers/move_polygon_on.jpg"); }
+.olControlPanel .olControlModifyFeatureDragItemInactive { background-image: url("/img/openlayers/move_polygon_off.jpg"); }
+.olControlPanel .olControlModifyFeatureResizeItemActive { background-image: url("/img/openlayers/resize_polygon_on.jpg"); }
+.olControlPanel .olControlModifyFeatureResizeItemInactive { background-image: url("/img/openlayers/resize_polygon_off.jpg"); }
+.olControlPanel .olControlZoomBoxItemActive { background-image: url("/img/openlayers/zoomfit_on.jpg"); }
+.olControlPanel .olControlZoomBoxItemInactive { background-image: url("/img/openlayers/zoomfit_off.jpg"); }
+.olControlPanel .olControlZoomInItemInactive { background-image: url("/img/openlayers/zoomin.jpg"); }
+.olControlPanel .olControlZoomOutItemInactive { background-image: url("/img/openlayers/zoomout.jpg"); }
+.olControlPanel .olControlSelectFeatureDestroyItemActive { background-image: url("/img/openlayers/destroy_polygon_on.jpg"); }
+.olControlPanel .olControlSelectFeatureDestroyItemInactive { background-image: url("/img/openlayers/destroy_polygon_off.jpg"); }
+.olControlPanel .olControlSelectFeatureItemInactive { background-image: url("/img/openlayers/identify_off.jpg"); }
+.olControlPanel .olControlSelectFeatureItemActive { background-image: url("/img/openlayers/identify_on.jpg"); }
+.olControlPanel .olControlMeasureItemInactive { background-image: url("/img/openlayers/measure_off.jpg"); }
+.olControlPanel .olControlMeasureItemActive { background-image: url("/img/openlayers/measure_on.jpg"); }
+
+.olControlPanel .olControlTraceItemInactive { background-image: url("/img/openlayers/icone_trace_off.png"); }
+.olControlPanel .olControlTraceItemActive { background-image: url("/img/openlayers/icone_trace_on.png"); }
+.olControlPanel .olControlSnapItemInactive { background-image: url("/img/openlayers/icone_snap_off.png"); }
+.olControlPanel .olControlSnapItemActive { background-image: url("/img/openlayers/icone_snap_on.png"); }
+
+
+.olControlEditingToolbar  {
+    float:right;
+    right: 30px;
+    height: 30px; 
+    width: 200px;
+}
+.olControlEditingToolbar div { 
+  background-image: url("/img/openlayers/editing_tool_bar.png");
+  background-repeat: no-repeat;
+  float:right;
+  width:  24px;
+  height: 24px;
+  margin: 5px;
+}
+.olControlEditingToolbar .olControlNavigationItemActive { 
+  background-position: -103px -23px; 
+}
+.olControlEditingToolbar .olControlNavigationItemInactive { 
+  background-position: -103px -0px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePointItemActive { 
+  background-position: -77px -23px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePointItemInactive { 
+  background-position: -77px -0px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePathItemInactive { 
+  background-position: -51px 0px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePathItemActive { 
+  background-position: -51px -23px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive { 
+  background-position: -26px 0px; 
+}
+.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive { 
+  background-position: -26px -23px ;
+}
+
+div.olMap {
+    z-index: 0;
+    padding: 0px!important;
+    margin: 0px!important;
+    cursor: default;
+}
+div.olMapViewport {
+    text-align: left;
+}
+div.olLayerDiv {
+   -moz-user-select: none;
+}
+.olLayerGoogleCopyright {
+    left: 1px;
+    bottom: 1px;  
+}
+.olLayerGooglePoweredBy {
+    left: 2px;
+    bottom: 15px;
+    display: none;
+}
+
+
+.olLayerGoogleCopyright {
+    right: 3px;
+    bottom: 2px;
+    left: auto;  
+}
+.olLayerGoogleV3.olLayerGoogleCopyright {
+    bottom: 0px;
+    right: 0px !important;
+}
+.olLayerGooglePoweredBy {
+    left: 2px;
+    bottom: 2px;   
+}
+.olLayerGoogleV3.olLayerGooglePoweredBy {
+    bottom: 0px !important;
+}
+
+/**
+ * Cursor styles
+ */
+
+.olCursorWait {
+    cursor: wait;
+}
+.olDragDown {
+    cursor: move;
+}
+.olDrawBox {
+    cursor: crosshair;
+}
+.olControlDragFeatureOver {
+    cursor: move;
+}
+.olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {
+    cursor: -moz-grabbing;
+}
+
+
+/**
+ * Layer switcher
+ */
+.mapaModal .olControlLayerSwitcher {
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    width: 20em;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-bottom: 3px;
+    font-size: smaller;
+    color: white;
+    background-color: transparent;
+}
+.mapaModal .olControlLayerSwitcher .layersDiv {
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-right: 75px;
+    background-color: darkblue;
+    width: 100%;
+    height: 100%;
+}
+.mapaModal .olControlLayerSwitcher .layersDiv .baseLbl,
+.mapaModal .olControlLayerSwitcher .layersDiv .dataLbl {
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-bottom: 3px;
+}
+.mapaModal .olControlLayerSwitcher .layersDiv .baseLayersDiv,
+.mapaModal .olControlLayerSwitcher .layersDiv .dataLayersDiv {
+    padding-left: 10px;
+}
+.mapaModal .olControlLayerSwitcher .maximizeDiv,
+.mapaModal .olControlLayerSwitcher .minimizeDiv {
+    top: 5px;
+    right: 0px;
+}
+
+
+
+
+#pesquisaUC {
+    display: none;
+}
+
+#pesquisarActions {
+    text-align: center;
+}
+
+#pesquisarActions img {
+    cursor:pointer;
+    cursor:hand;
+}
+
+
+
+
+
+#map { position:relative; }
+        .smallmap {
+            width: auto;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+
+#layerswitcher { top:25%; }
+
+#OpenLayers_Control_MaximizeDiv_innerImage { display:none; }
+
+.dimuirDiv { 
+    height:15px; 
+    padding-top:0px !important;
+    overflow:hidden;
+}
+.dimuirDiv:before{
+    content: 'Camadas';
+}
+
+.btn-esconder { 
+    position:absolute; 
+    top:41px; 
+    right:-1px; 
+    z-index:9999;
+    background-color:#f5f5f5;
+    padding:0px 2px 2px 5px;
+    border:1px solid #a3a3a3;
+    border-right:1px solid #ccc;
+    /*border-right:0px;*/
+    cursor:pointer;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.box-message { 
+    position:absolute; 
+    width:auto; 
+    max-width: 80%;
+    height:auto; 
+    max-height:80px;
+    padding:5px 5px 0px; 
+    background-color:#fff; 
+    z-index:9999; 
+    bottom:0; 
+    left:0;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+    border:1px solid #ccc;
+    border-bottom:0px;
+    border-left:0px;
+    overflow:auto;
+}
+.box-message .message {
+    width:auto;
+    background-color:#D9EDF7;
+    padding: 5px 15px 5px 10px;
+    color:#3A87AD;
+    margin-bottom:5px;
+    border:1px solid #BCE8F1;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    border-radius:3px;
+}
+.box-message .message p { display:inline; margin-bottom:0px; }
+.box-message button { 
+    line-height: 20px;
+    position: relative;
+    right: -8px;
+    top: -2px;
+}

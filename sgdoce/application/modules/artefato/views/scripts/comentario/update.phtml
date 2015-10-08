@@ -1,0 +1,39 @@
+<script type="text/javascript" src="/js/app/artefato/comentario/update.js"></script>
+<?php $this->headScript()->appendFile($this->baseUrl("/js/app/artefato/comentario/form.js")); ?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Alterar Comentário</h1>
+
+            <div class="alert alert-error campos-obrigatorios hidden"></div>
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            
+            <form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'register'))?>"
+                  method="post" id="formComentario" name="formComentario">
+            
+                <?php echo $this->formHidden('sqArtefato',$this->sqArtefato); ?>
+                <?php echo $this->formHidden('sqComentarioArtefato',$this->sqComentarioArtefato); ?>
+                <?php echo $this->formHidden('dtComentario',$this->dtComentario); ?>
+                <?php echo $this->formHidden('backUrl',$this->backUrl); ?>
+            
+                <div class="control-group">
+                    <label class="control-label" for="txComentario">
+                        <span class="required">* </span>Comentário
+                    </label>
+                    <div class="controls">
+                        <textarea name="txComentario" id="txComentario" class="txComentario span6 required" maxlength="2000" data-validate="notEmpty" rows="5" cols="40"><?php echo $this->txComentario; ?></textarea>
+                    </div>
+                </div>
+            
+                <div class="form-actions" id="form-comentario-artefato">
+                    <button class="btn btn-primary" id="btnSubmit"><i class=""></i> Salvar </button>
+                    <button class="btn"             id="btnCancel"><i class="icon-remove"></i> Cancelar </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

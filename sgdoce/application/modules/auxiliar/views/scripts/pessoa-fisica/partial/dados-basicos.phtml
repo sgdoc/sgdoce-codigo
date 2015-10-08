@@ -1,0 +1,121 @@
+<form class="form-horizontal" action="/auxiliar/pessoa-fisica/save" method="post" id="form-dados-basicos">
+<?php
+    $dateFilter = new \Core_Filter_Date();
+    $dateFilter->setFormatInput('yyyy-MM-dd')
+    ->setFormatOutput('dd/MM/yyyy');
+
+    echo $this->formHidden('sqPessoa', $this->data->getSqPessoaFisica()->getSqPessoa() ? : '');
+    echo $this->formHidden('sqTipoPessoa', \Core_Configuration::getCorpTipoPessoaFisica());
+    echo $this->formHidden('sqPessoaSgdoce', $this->sqPessoaSgdoce ? : '');
+
+    $hasCpf = true;
+    if(
+    $this->data->getSqPessoaFisica()
+    && $this->data->getSqPessoaFisica()->getSqPessoa()
+    && !$this->data->getNuCpf()
+    ) {
+    $hasCpf = false;
+}
+?>
+<input type="hidden" id="campoPessoa" name="campoPessoa" value="<?php echo $this->campoPessoa?>">
+<input type="hidden" id="campoCpf" name="campoCpf" value="<?php echo $this->campoCpf?>">
+<input type="hidden" id="form" name="form" value="<?php echo $this->form?>">
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="nuCpf">CPF</label>
+            <div class="controls">
+                <div class="input-append">
+                <?php if($hasCpf) { ?>
+                    <input type="hidden" id="sqPessoaResponsavel" name="sqPessoaResponsavel" value="" />
+                    <input type="text" class="input-medium cpf" id="nuCpf" name="nuCpf" mask="cpf" <?php if($this->data->getNuCpf()) { ?>readonly="readonly"<?php } ?> ignore value="<?php
+                        echo $this->data ? $this->data->getNuCpf() : null;
+                    ?>" />
+                <?php } else { ?>
+                    <input type="text" class="input-medium cpf" id="nuCpf" name="nuCpf" mask="cpf" ignore value="" />
+                    <button type="button" class="btn right btn-visualizar-justificativa" data-toggle="modal" href="#modalJustificativa" title="Visualizar Justificativa"><i class="icon-eye-open"></i></button>
+                <?php } ?>
+                    <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="noPessoa">
+                <span class="required" title="">*</span> Nome
+            </label>
+            <div class="controls">
+                <input type="text" class="span9 obrigatorio required" id="noPessoaFisica" name="noPessoaFisica" maxlength="120" title="Informe o nome completo" value="<?php
+                    echo $this->data ? $this->data->getNoPessoaFisica() : null;
+                ?>" />
+                <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dtNascimento">Data de Nascimento</label>
+            <div class="controls">
+                <div class="input-append date">
+                    <input name="dtNascimento" id="dtNascimento" type="text" class="input-medium dateBR" mask="date" data-format="dd/mm/yyyy" value="<?php
+                        echo $this->data ? $dateFilter->filter($this->data->getDtNascimento()) : null;
+                    ?>" /><span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nmMae">Nome da Mãe</label>
+            <div class="controls">
+                <input type="text" class="span9" id="noMae" name="noMae" maxlength="120" value="<?php
+                    echo $this->data ? $this->data->getNoMae() : null;
+                ?>" />
+                <!--span class="help-block hide">Campo de preenchimento obrigatório.</span-->
+            </div>
+        </div>
+        <!--div class="control-group">
+            <label class="control-label" for="estCivil" >Estado Civil</label>
+            <div class="controls">
+                <select id="estCivil">
+                    <option value="">Selecione uma opção</option>
+                    <option value="">Casado</option>
+                    <option value="">Divorciado</option>
+                    <option value="">Solteiro</option>
+                    <option value="">Viúvo</option>
+                </select>
+            </div>
+        </div-->
+        <div class="control-group">
+            <label class="control-label" for="nacionalidade" >Nacionalidade Brasileira?</label>
+            <div class="controls">
+                <label class="radio inline">
+                    <input type="radio" id="sqNacionalidade-sim" name="sqNacionalidadeBrasileira" value="1" <?php
+                        echo (!$this->data->getSqPais()->getSqPais()) ? 'checked' : ($this->data->getSqPais()->getSqPais() == 1) ? 'checked' : ''
+                    ?> />
+                    Sim
+                </label>
+                <label class="radio inline">
+                    <input type="radio" id="sqNacionalidade-nao" name="sqNacionalidadeBrasileira" value=""<?php
+                        echo ($this->data->getSqPais()->getSqPais() && $this->data->getSqPais()->getSqPais() != 1) ? 'checked' : ''
+                    ?> />
+                    Não
+                </label>
+            </div>
+        </div>
+        <div class="control-group campoEstrangeiro hide">
+            <label class="control-label" for="sqPais">
+                <span class="required">*</span> País de Origem
+            </label>
+            <div class="controls">
+                <?php echo $this->comboCustom('sqPais',
+                        !$this->data ? : $this->data->getSqPais()->getSqPais(),
+                        array('class'=>'span4 obrigatorio'),
+                        $this->listaPais); ?>
+                <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+            </div>
+        </div>
+        <div class="control-group campoEstrangeiro">
+            <label class="control-label" for="infComplementares">
+                <!--span class="required">*</span--> Informações Complementares
+            </label>
+            <div class="controls">
+                <input name="txInformacaoComplementar" id="txInformacaoComplementar" value="<?php echo $this->txInformacaoComplementar; ?>" type="text" class="span11" maxlength="180" />
+            </div>
+        </div>
+    </fieldset>
+</form>

@@ -1,0 +1,46 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl('/js/app/artefato/comentario/grid.js')); ?>
+
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <?php echo $this->userMessageStack() ?>
+
+            <h1>Comentar  - <?php echo $this->nuArtefato($this->entArtefato); ?></h1>
+            <br />
+            <div class="control-group form-horizontal" id="divGrid">
+                <fieldset>
+                    <legend>Lista de Comentários</legend>
+                </fieldset>
+                <?php if($this->hasPermission):?>
+                    <div class="btn-group">
+                        <button title="Adicionar" class="btn btn-mini btnAddComentario"><i class="icon-plus"></i></button>
+                    </div>
+                <?php endif;?>
+            
+                <?php echo $this->formHidden('urlBack',(isset($this->backUrl)) ? str_replace('/','.',$this->backUrl) : ''); ?>
+            
+                <table id="grid_comentario">
+                    <thead >
+                        <tr>
+                            <th width="7%"  class="sorting_disabled">Data/Hora</th>
+                            <th width="38%" class="sorting_disabled">Comentário</th>
+                            <th width="10%" class="sorting_disabled">Usuário</th>
+                            <th width="10%" class="sorting_disabled">Setor</th>
+                            <th width="7%"  class="sorting_disabled">Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="btn_imprimir">Imprimir</button>
+                    <button class="btn" id="cancelar"><i class="icon-remove"></i> Cancelar</button>
+                </div>
+            </div>
+            
+            <div id="modal-comentario-artefato" class="modal hide fade"></div>
+            
+            <form id="comentario-artefato-grid-form" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>">
+                <input type="hidden" name="sqArtefato" id="sqArtefato" value="<?php echo $this->entArtefato->getSqArtefato(); ?>" />
+            </form>
+        </div>
+    </div>
+</div>

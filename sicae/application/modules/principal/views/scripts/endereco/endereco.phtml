@@ -1,0 +1,45 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'endereco', 'action' => 'list')) ?>" id="form-endereco">
+    <fieldset>
+        <div class="control-group">
+            <div class="span6">
+                <button type="button" class="btn btn-mini" id="btn-add-endereco" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+            </div>
+            <?php
+            echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+            ?>
+            <table id="table-endereco">
+                <thead>
+                    <tr>
+                        <th>CEP</th>
+                        <th>Tipo</th>
+                        <th>Logradouro</th>
+                        <th>Número</th>
+                        <th>Bairro</th>
+                        <th>UF</th>
+                        <th>Município</th>
+                        <th width="60px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </fieldset>
+    <br/>
+    <div class="form-actions">
+        <a class="btn buttons" href="#documento" title="Anterior">
+            <span class="icon-chevron-left"></span> Anterior
+        </a>
+        <a class="btn btn-primary buttons" href="#contato" title="Salva e segue para a próxima aba.">
+            Próxima <span class="icon-chevron-right icon-white"></span>
+        </a>
+        <button  id="btnConcluir" class="btn" type="button" title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <a class="btn btnCancelar" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>" >
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+<!--MODAL ADICIONAR ENDERECO-->
+<div class="modal hide fade" id="modal-endereco"></div>
+<script src="<?php echo $this->assetUrl('sica/endereco/index.js') ?>" type="text/javascript"></script>

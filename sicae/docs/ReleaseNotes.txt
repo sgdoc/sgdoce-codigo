@@ -1,0 +1,17 @@
+*system:    SICA-e
+*version:   0.7.19
+*iteration: -
+*deliver:   06-10-2015 13:18
+*tickets:   - 
+
+*objective:
+- Modificando o protocolo da requisição do WERBSERVICE de HTTPS para HTTP.
+
+*products:
+- 
+
+*new_functionality:
+- 
+
+*changed_funcionality:
+- WEBSERVICE

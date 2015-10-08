@@ -1,0 +1,105 @@
+<?php if ($this->forbiddenAccess) : ?>
+    <style type="text/css">
+        #forbiddenAccessContainer {
+            position: relative;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+        #forbiddenAccessContainer #forbiddenAccessSign {
+            display: block;
+            box-shadow: 0 0 10px #b94a48;
+            border-radius: 100%;
+            height: 200px;
+            border: 5px solid #b94a48;
+            position: absolute;
+            width: 200px;
+            background: none repeat scroll 0 0 #b94a48;
+            opacity: 0.4;
+            right: 1%;
+            bottom: -50px;
+            -webkit-animation: forbiddenAnimation 2s 1;
+            -o-animation: forbiddenAnimation 2s 1;
+            animation: forbiddenAnimation 2s 1;
+        }
+        #forbiddenAccessContainer #forbiddenAccessSignBar {
+            height: 20px;
+            width: 100%;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 90px;
+            background: none repeat scroll 0 0 #EEE;
+            box-shadow: 0 0 10px #b94a48 inset;
+            border-radius: 5px;
+        }
+        
+        @-webkit-keyframes forbiddenAnimation {
+            0% {
+                transform: scale3d(0.1,0.1,1);
+                box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+            }
+            70% {
+                opacity: 0.6;
+                transform: scale3d(1.08,1.08,1);
+                box-shadow: 0 10px 20px rgba(0,0,0,0);
+            }
+            100% {
+                transform: scale3d(1,1,1);
+            }
+        }
+        @-moz-keyframes forbiddenAnimation {
+            0% {
+                transform: scale3d(0.1,0.1,1);
+                box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+            }
+            70% {
+                opacity: 0.6;
+                transform: scale3d(1.08,1.08,1);
+                box-shadow: 0 10px 20px rgba(0,0,0,0);
+            }
+            100% {
+                transform: scale3d(1,1,1);
+            }
+        }
+        @-o-keyframes forbiddenAnimation {
+            0% {
+                transform: scale3d(0.1,0.1,1);
+                box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+            }
+            70% {
+                opacity: 0.6;
+                transform: scale3d(1.08,1.08,1);
+                box-shadow: 0 10px 20px rgba(0,0,0,0);
+            }
+            100% {
+                transform: scale3d(1,1,1);
+            }
+        }
+
+        @keyframes forbiddenAnimation {
+            0% {
+                transform: scale3d(0.1,0.1,1);
+                box-shadow: 0 3px 20px rgba(0,0,0,0.9);
+            }
+            70% {
+                opacity: 0.6;
+                transform: scale3d(1.08,1.08,1);
+                box-shadow: 0 10px 20px rgba(0,0,0,0);
+            }
+            100% {
+                transform: scale3d(1,1,1);
+            }
+        }
+    </style>
+    <div id="forbiddenAccessContainer" class="hero-unit alert alert-error">
+        <div id="forbiddenAccessSign">
+            <div id="forbiddenAccessSignBar"></div>
+        </div>
+        <h1>Sigiloso</h1>
+        <p>
+            Seu acesso não permite a visualização deste documento
+        </p>
+    </div>
+<?php else: ?>
+    <div class="pdfViewerContainer"></div>
+<?php endif; ?>

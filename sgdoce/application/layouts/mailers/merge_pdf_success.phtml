@@ -1,0 +1,16 @@
+<?php
+    $link           = $this->urlLink;
+    $entArtefato    = $this->entSolicitacao->getSqArtefato();
+    $noTipoArtefato = $entArtefato->getSqTipoArtefatoAssunto()->getSqTipoArtefato()->getNoTipoArtefato();
+
+    $helper         = new Sgdoce_View_Helper_NuArtefato();
+    $nuArtefato     = $helper->nuArtefato($entArtefato);
+
+    echo $this->render('header.phtml');
+?>
+
+<p>Caro usuário.</p>
+<br />
+<p>O SGDoc-e finalizou a geração do bloco documental em um único documento em PDF do <?php echo $noTipoArtefato; ?> <b><?php echo $nuArtefato; ?></b>.</p>
+<p>O PDF está disponível no link <a href="<?php echo $link; ?>"><?php echo $link; ?></a> até a meia-noite do dia de hoje.</p>
+<p><i>Obs.: Você precisa estar logado no SGDoc-e antes de clicar no link.</i></p>

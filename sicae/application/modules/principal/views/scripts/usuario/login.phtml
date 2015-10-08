@@ -1,0 +1,40 @@
+<form class="form-horizontal"
+      name="form-login"
+      action="<?php echo $this->url(array('controller' => 'usuario', 'action' => 'autenticate')); ?>"
+      method="post">
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+        <legend>Login</legend>
+        <!-- INPUT INÍCIO -->
+        <div class="control-group">
+            <label class="control-label" for="nuCpf"><span title="Campo Obrigatório"
+ class="required">*</span> Usuário</label>
+            <div class="controls">
+                <?php
+                echo $this->formText('nuCpf', $this->data['nuCpf'], array('class' => 'input-xlarge required cpf', 'mask' => 'cpf', 'autocomplete' => 'off'));
+                ?>
+            </div>
+        </div>
+        <!-- INPUT FIM -->
+        <!-- INPUT INÍCIO -->
+        <div class="control-group">
+            <label class="control-label" for="senha"><span title="Campo Obrigatório"
+ class="required">*</span> Senha</label>
+            <div class="controls">
+                <input type="password" maxlength="32" class="input-xlarge required" id="senha" name="txSenha">
+            </div>
+        </div>
+        <!-- INPUT FIM -->
+        <!-- CAPTCHA -->
+        <?php echo $this->captcha() ?>
+        <!-- FIM CAPTCHA -->
+        <!-- BARRA DE AÇÔES INICIO -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" >Login</button>
+            <a class="btn" data-toggle="modal" data-backdrop="static" data-keyboard="false" href="#esqueci">Esqueci minha senha</a>
+        </div>
+        <!-- BARRA DE AÇÔES FIM -->
+    </fieldset>
+</form>
+
+

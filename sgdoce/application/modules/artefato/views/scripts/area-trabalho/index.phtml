@@ -1,0 +1,268 @@
+<?php
+echo $this->headScript()
+        ->appendFile($this->baseUrl() . '/js/app/artefato/area-trabalho/index.js')
+        ->appendFile($this->baseUrl() . '/js/app/artefato/artefato/index.js');
+
+$artefatoDocumento = \Core_Configuration::getSgdoceTipoArtefatoDocumento();
+$artefatoProcesso  = \Core_Configuration::getSgdoceTipoArtefatoProcesso();
+$artefatoDossie    = \Core_Configuration::getSgdoceTipoArtefatoDossie();
+?>
+
+<h1>Área de Trabalho</h1>
+<br />
+
+<!-- <ul class="nav nav-pills"> -->
+<ul class="nav nav-tabs">
+    <li id="liDocumento" data-tipo-artefato="<?php echo $artefatoDocumento; ?>">
+        <a href="javascript:AreaTrabalho.updateView(<?php echo $artefatoDocumento; ?>)">Documentos</a></li>
+    <li id="liProcesso" data-tipo-artefato="<?php echo $artefatoProcesso; ?>">
+        <a href="javascript:AreaTrabalho.updateView(<?php echo $artefatoProcesso; ?>)">Processos</a></li>
+
+    <!-- DESCOMENTAR QUANDO EXISTIR O DOSSIE
+    <li id="liDossie" data-tipo-artefato="<?php // echo $artefatoDossie; ?>">
+        <a href="javascript:AreaTrabalho.updateView(<?php // echo $artefatoDossie; ?>)">Dossie</a></li>
+    -->
+</ul>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#caixaUnidade">
+                Unidade
+            </a>
+        </div>
+        <div id="caixaUnidade" data-grid="unidade" class="accordion-body collapse <?php echo ($this->caixa === 'caixaUnidade')? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <form class="form-horizontal"
+                      action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>"
+                      method="post"
+                      id="form-visualizar-area-trabalho-unidade">
+                    <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_unit_box'))?>
+                    <?php echo $this->formHidden('unit_box',1)?>
+                    <div class="input-append pull-right">
+                        <?php echo $this->formText('search',null,array('id'=>'unit_search','placeholder'=>'Pesquisar...','class'=>'search caixaUnidade'))?>
+                        <button type="submit" class="btn right" title="Filtrar">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <form id="unit_box-form_multiple_actions" name="unit_box-form_multiple_actions" method="post">
+                    <div class="span12">
+                        <div class="btn-group">
+                            <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                <i class="icon-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id="unit_box-acaoMultRecTram" class="acaoMultRecTram">Receber Trâmite</a></li>
+                                <li><a id="unit_box-acaoMultCanTram" class="acaoMultCanTram">Cancelar Trâmite</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table id="table-grid-area-trabalho-unidade" class="defaultBox">
+                        <?php echo $this->render('area-trabalho/table-header.phtml'); ?>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#minhaCaixa">
+                Minha
+            </a>
+        </div>
+        <div id="minhaCaixa" data-grid="minha" class="accordion-body collapse <?php echo ($this->caixa === 'minhaCaixa')? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <form class="form-horizontal"
+                      action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>"
+                      method="post"
+                      id="form-visualizar-area-trabalho-minha">
+                    <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_my_box'))?>
+                    <?php echo $this->formHidden('my_box',2)?>
+                    <div class="input-append pull-right">
+                        <?php echo $this->formText('search',null,array('id'=>'my_search','placeholder'=>'Pesquisar...','class'=>'search minhaCaixa'))?>
+                        <button type="submit" class="btn right btnSearch" title="Filtrar">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <form id="my_box-form_multiple_actions" name="my_box-form_multiple_actions" method="post">
+                    <div class="span12">
+                        <div class="btn-group">
+                            <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                <i class="icon-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id="my_box-acaoMultTram"    class="acaoMultTram">Tramitar</a></li>
+                                <li><a id="my_box-acaoMultRecTram" class="acaoMultRecTram">Receber Trâmite</a></li>
+                                <li><a id="my_box-acaoMultCanTram" class="acaoMultCanTram">Cancelar Trâmite</a></li>
+                                <li><a id="my_box-acaoMultArquivo" class="acaoMultArqSetorial">Arquivar no Setor</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table id="table-grid-area-trabalho-minha" class="defaultBox">
+                        <?php echo $this->render('area-trabalho/table-header.phtml'); ?>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#caixaArquivoSetorial">
+                Arquivo Setorial
+            </a>
+        </div>
+        <div id="caixaArquivoSetorial" data-grid="arquivo-setorial" class="accordion-body collapse <?php echo ($this->caixa === 'caixaArquivoSetorial')? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <form class="form-horizontal"
+                      action="<?php echo $this->urlCurrent(array('action' => 'list-arquivo-setorial')) ?>"
+                      method="post"
+                      id="form-visualizar-area-trabalho-arquivo-setorial">
+                    <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_archive_sector_box'))?>
+                    <?php echo $this->formHidden('archive_sector_box',5)?>
+                    <div class="input-append pull-right">
+                        <?php echo $this->formText('search',null,array('id'=>'my_search','placeholder'=>'Pesquisar...','class'=>'search caixaArquivoSetorial'))?>
+                        <button type="submit" class="btn right btnSearch" title="Filtrar">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <form id="archive_sector_box-form_multiple_actions" name="archive_sector_box-form_multiple_actions" method="post">
+                    <div class="span12">
+                        <div class="btn-group">
+                            <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                <i class="icon-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id="archive_sector_box-acaoMultDesarq" class="acaoMultDesarqSetorial">Desarquivar</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table id="table-grid-area-trabalho-arquivo-setorial">
+                        <?php echo $this->render('area-trabalho/table-header-archive-sector.phtml'); ?>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#caixaExterna">
+                Externos
+            </a>
+        </div>
+        <div id="caixaExterna" data-grid="externa" class="accordion-body collapse <?php echo ($this->caixa === 'caixaExterna')? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <form class="form-horizontal"
+                      action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>"
+                      method="post"
+                      id="form-visualizar-area-trabalho-externa">
+                    <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_external_box')); ?>
+                    <?php echo $this->formHidden('external_box',3); ?>
+                    <div class="input-append pull-right">
+                        <?php echo $this->formText('search',null,array('id'=>'external_search','placeholder'=>'Pesquisar...','class'=>'search caixaExterna'))?>
+                        <button type="submit" class="btn right" title="Filtrar">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <form id="external_box-form_multiple_actions" name="external_box-form_multiple_actions" method="post">
+                    <div class="span12">
+                        <div class="btn-group">
+                            <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                <i class="icon-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id="external_box-acaoMultRecTram" class="acaoMultRetTram">Retornar Trâmite</a></li>
+                                <li><a id="external_box-acaoMultCanTram" class="acaoMultCanTram">Cancelar Trâmite</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table id="table-grid-area-trabalho-externa" class="defaultBox">
+                        <?php echo $this->render('area-trabalho/table-header.phtml'); ?>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    $arrCheck = array(
+        \Core_Configuration::getSgdocePerfilArquivo(),
+        \Core_Configuration::getSgdocePerfilSgi()
+    );
+    if(in_array($this->currentProfile, $arrCheck) ): ?>
+        <br />
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#caixaArquivo">
+                    Arquivo
+                </a>
+            </div>
+            <div id="caixaArquivo" data-grid="arquivo" class="accordion-body collapse <?php echo ($this->caixa === 'caixaArquivo')? 'in' : ''; ?>">
+                <div class="accordion-inner">
+                    <form class="form-horizontal"
+                          action="<?php echo $this->urlCurrent(array('action' => 'list-artefato-arquivo')) ?>"
+                          method="post"
+                          id="form-visualizar-area-trabalho-arquivo">
+                        <?php echo $this->formHidden('tipoArtefato',$this->tipoArtefato,array('id'=>'type_archive_box'))?>
+                        <?php echo $this->formHidden('archive_box',4)?>
+                        <div class="input-append pull-right">
+                            <?php echo $this->formText('search',null,array('id'=>'archive_search','placeholder'=>'Pesquisar...','class'=>'search caixaArquivo'))?>
+                            <button type="submit" class="btn right" title="Filtrar">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <form id="archive_box-form_multiple_actions" name="archive_box-form_multiple_actions" method="post">
+
+                        <div class="span12">
+                            <div class="btn-group">
+                                <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                                    <i class="icon-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a id="archive_box-acaoMultDesarq" class="acaoMultDesarq">Desarquivar</a></li>
+                                    <li><a id="archive_box-acaoMultEmpres" class="acaoMultEmpres">Emprestar</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <table id="table-grid-area-trabalho-arquivo" class="defaultBox">
+                            <?php echo $this->render('area-trabalho/table-header-archive.phtml'); ?>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <br />
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#caixaMigracao">
+                Migração
+            </a>
+        </div>
+        <div id="caixaMigracao" data-grid="migracao" class="accordion-body collapse <?php echo ($this->caixa === 'caixaMigracao')? 'in' : ''; ?>">
+            <div class="accordion-inner">
+                <?php echo $this->render("area-trabalho/form-search-migracao.phtml"); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal_container_xl_size" class="modal hide fade modal-large force-xl-size" data-backdrop="static"></div>
+<div id="modal_container_medium" class="modal hide fade modal-medium modal-without-scroll" data-backdrop="static"></div>
+
+<script>
+    Tramite.printGuia('<?php echo $this->printGuia; ?>','<?php echo $this->enderecoGuia; ?>');
+    AreaTrabalho._TIPO_ARTEFATO_DOCUMENTO = <?php echo $artefatoDocumento; ?>;
+    AreaTrabalho._TIPO_ARTEFATO_PROCESSO = <?php echo $artefatoProcesso; ?>;
+//    AreaTrabalho._TIPO_ARTEFATO_DOSSIE = <?php // echo $artefatoDossie; ?>;
+
+    AreaTrabalho._currentBox = '<?php echo $this->caixa; ?>';
+
+</script>

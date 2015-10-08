@@ -1,0 +1,38 @@
+<?php
+
+    $view = $this;
+    $acao = function($row) use ($view) {
+        $rtn = $view->actionButton('Alterar',  'IndicacaoPrazo.alterar', array($row['sqIndicacaoPrazo']),'pencil').
+               $view->actionButton('Excluir', 'IndicacaoPrazo.deletar', array($row['sqIndicacaoPrazo']),'trash');
+        return $rtn;
+    };
+
+    $txAssunto = function($row) {
+        return $row['sqAssunto']['txAssunto'];
+    };
+
+    $noTipoDocumento = function($row) {
+        return $row['sqTipoDocumento']['noTipoDocumento'];
+    };
+
+    $noPrazo = function($row) {
+        if ($row['inPrazoObrigatorio'] == TRUE) {
+            $noPrazo = 'Obrigatório';
+        } else {
+            $noPrazo = 'Determinado';
+        }
+        return $noPrazo;
+    };
+
+    $configArray = array('columns' => array(0 => array('column' => $noTipoDocumento),
+                                            1 => array('column' => $txAssunto),
+                                            2 => array('column' => $noPrazo),
+                                            3 => array('column' => 'nuDiasPrazo'),
+                                            4 => array('column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

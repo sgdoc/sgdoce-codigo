@@ -1,0 +1,23 @@
+<br/>
+<!------ INICIO DAS ABAS --------->
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active tab"><a href="#1" data-toggle="tab">Dados Básicos</a></li>
+    <li class="tab"><a href="#2" data-toggle="tab">Documentos</a></li>
+    <li class="tab"><a href="#3" data-toggle="tab">Endereços</a></li>
+    <li class="tab"><a href="#4" data-toggle="tab">Contatos</a></li>
+    <li class="tab"><a href="#5" data-toggle="tab">Dados Bancários</a></li>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <div class="tab-pane active" id="1">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br />
+        <?php $params = array('data' => $this->data, 'perfil' => $this->perfil, 'aba' => $this->aba, 'cmb' => $this->cmb, 'noPessoa' => $this->noPessoa); ?>
+        <?php echo $this->partial('pessoa-fisica/form.phtml', $params); ?>
+    </div>
+</div>
+<script src="<?php echo $this->assetUrl('sica/pessoa/form.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/pessoa-fisica/index.js') ?>" type="text/javascript"></script>
+<script src="<?php echo $this->assetUrl('sica/endereco/endereco.js') ?>" type="text/javascript"></script>

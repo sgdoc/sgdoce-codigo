@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+      bootstrap="../../PHPUnitBootstrap.php"
+      colors="true"
+      verbose="true"
+      cacheTokens="true"
+      syntaxCheck="true"
+      backupGlobals="false"
+      stopOnFailure="false"
+      stopOnSkipped="false"
+      stopOnIncomplete="false"
+      forceCoversAnnotation="false"
+      backupStaticAttributes="false"
+      convertErrorsToExceptions="true"
+      convertNoticesToExceptions="true"
+      convertWarningsToExceptions="true"
+      mapTestClassNameToCoveredClassName="false">
+
+    <testsuites>
+        <testsuite name="core">
+            <directory>../../core/br/gov/sial/core</directory>
+        </testsuite>
+
+        <testsuite name="core-util">
+            <directory>../../core/br/gov/sial/core/util</directory>
+        </testsuite>
+
+    <!--
+        <testsuite name="core-acl">
+            <directory>../../test/br/gov/sial/core/acl</directory>
+        </testsuite>
+
+        <testsuite name="core-exception">
+            <directory>../../test/br/gov/sial/core/exception</directory>
+        </testsuite>
+
+        <testsuite name="core-lang">
+            <directory>../../test/br/gov/sial/core/lang</directory>
+        </testsuite>
+
+        <testsuite name="hevent">
+            <directory>../../test/br/gov/sial/core/hevent</directory>
+        </testsuite>
+
+        <testsuite name="core-mvcb">
+            <directory>../../test/br/gov/sial/core/mvcb</directory>
+        </testsuite>
+
+        <testsuite name="core-mvcb-model">
+            <directory>../../test/br/gov/sial/core/mvcb/model</directory>
+        </testsuite>
+
+        <testsuite name="core-mvcb-view">
+            <directory>../../test/br/gov/sial/core/mvcb/view</directory>
+        </testsuite>
+
+        <testsuite name="core-mvcb-controller">
+            <directory>../../test/br/gov/sial/core/mvcb/controller</directory>
+        </testsuite>
+
+        <testsuite name="core-mvcb-business">
+            <directory>../../test/br/gov/sial/core/mvcb/business</directory>
+        </testsuite>
+
+        <testsuite name="output">
+            <directory>../../test/br/gov/sial/core/output</directory>
+        </testsuite>
+
+        <testsuite name="persist">
+            <directory>../../test/br/gov/sial/core/persist</directory>
+        </testsuite>
+
+        <testsuite name="saf">
+            <directory>../../test/br/gov/sial/core/saf</directory>
+        </testsuite>
+
+        <testsuite name="core-util">
+            <directory>../../test/br/gov/sial/core/util</directory>
+        </testsuite>
+
+        <testsuite name="core-valueObject">
+            <directory>../../test/br/gov/sial/core/valueObject</directory>
+        </testsuite>
+    -->
+    </testsuites>
+
+    <!-- <filter>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">../../br</directory>
+        </whitelist>
+    </filter> -->
+
+    <logging>
+        <log type="coverage-clover" target="../../output/logs/clover.xml"/>
+        <log type="coverage-html"   target="../../output/coverage" title="SIAL - Framework" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="junit"           target="../../output/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+</phpunit>

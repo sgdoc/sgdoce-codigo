@@ -1,0 +1,42 @@
+<form class="form-horizontal"
+      id="form-altera-senha"
+      name="form-altera-senha"
+      method="post"
+      action="<?php echo $this->url(array('action'=>'change-pass'))?>">
+    <fieldset>
+    <input type="hidden" name="iframe" id="iframe" value="iframe" />
+        <p id="error-pass"></span>
+        <p id="success-pass"></span>
+        <div class="control-group">
+            <label class="control-label" for="input01">* Senha Atual:</label>
+            <div class="controls">
+                <input type="password" name="txSenha"
+                    class="input-xlarge required validatePassword" minlength="6"
+                    maxlength="32" id="txSenha" value="" />
+                <span class="help-block">Digite a senha que você quer trocar</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="input01">* Nova Senha:</label>
+            <div class="controls">
+                <input type="password" name="txSenhaNova"
+                    class="input-xlarge required validatePassword" maxlength="32"
+                    minlength="6" id="txSenhaNova" value="" />
+                <span class="help-block">Digite sua nova senha</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="input01">* Confirmação Nova Senha:</label>
+            <div class="controls">
+                <input type="password" name="txSenhaNovaConfirm"
+                    class="input-xlarge required validatePassword" maxlength="32"
+                    minlength="6" id="txSenhaNovaConfirm" value="" />
+                <span class="help-block">Digite sua nova senha outra vez</span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="btnAlteraSenha">Concluir</button>
+            <button class="btn" id="cancel-iframe-change-pass" type="button">Cancelar</button>
+        </div>
+    </fieldset>
+</form>

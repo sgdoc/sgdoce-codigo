@@ -1,0 +1,60 @@
+<?php $label = ($this->data->getSqCarimbo() ? 'Alterar' : 'Cadastrar'); ?>
+
+<script type="text/javascript" src="/js/app/auxiliar/carimbo/form.js"></script>
+<h1><?php echo $label;?> Modelo de Carimbo </h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br />
+
+<!-- FORMULÁRIO INÍCIO-->
+<form class="form-horizontal" enctype="multipart/form-data" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-carimbo">
+
+    <input type="hidden" name="sqCarimbo" value="<?php echo $this->data->getSqCarimbo();?>" />
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+
+        <div class="control-group">
+            <label class="control-label">* Descrição do Carimbo</label>
+            <div class="controls">
+                <input type="text" id="noCarimbo" name="noCarimbo" maxlength="100" class="required" value="<?php echo $this->data->getNoCarimbo();?>"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">* Imagem</label>
+            <div class="controls">
+                <input type="file" name="deCaminhoArquivo" class="required" />
+            </div>
+        <?php
+        if ($this->data->getSqCarimbo()){
+        ?>
+            <img src="<?php echo $this->urlCurrent(array('action' => 'download-anexo','id'=>$this->data->getSqCarimbo()))?>" alt="">
+        <?php
+        }
+        ?>
+
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">* Tipo de Artefato</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoArtefato',
+                        ($this->data->getSqTipoArtefato() ?
+                        $this->data->getSqTipoArtefato()->getSqTipoArtefato():
+                        ''),
+                array('class'=>'span3 required'),
+                $this->items); ?>
+            </div>
+        </div>
+
+        <!-- BARRA DE AÇÔES INICIO -->
+        <div class="form-actions">
+            <button class="btn btn-primary">Salvar</button>
+            <a href="/auxiliar/carimbo" class="btn" id="cancelar">
+                <i class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+        <!-- ROW FLUID FIM -->
+    </fieldset>
+</form>

@@ -1,0 +1,47 @@
+<?php
+use Artefato\Service\Processo;
+$view = $this;
+
+$acao = function($row) use ($view) {
+    return $view->actionButton('Excluir', 'VincularDocumento.deletar', array($row['sqArtefatoVinculo']), 'trash');
+};
+
+$fnNuArtefato = function($row) use ($view) {
+    $nuArtefato = $row['nuArtefato'];
+    if ($row['coAmbitoProcesso'] == Processo::T_TIPO_AMBITO_PROCESSO_FEDERAL) {
+        $mask = null;
+        $nuArtefatoValue = str_replace(array('.','/','-'), '', $nuArtefato);
+        switch (strlen($nuArtefatoValue)) 
+        {
+            case 21:
+                $mask = Processo::T_MASK_21_DIGITS;
+                break;
+            case 17:
+                $mask = Processo::T_MASK_17_DIGITS;
+                break;
+            case 15:
+                $mask = Processo::T_MASK_15_DIGITS;
+                break;
+        }
+        
+        if( !is_null( $mask ) ){
+            //garante que o nr esteja limpo para formata-lo
+            $nuArtefato = $nuArtefatoValue;
+            $nuArtefato = $view->maskNumber($nuArtefato,$mask);
+        } 
+    }
+    return $nuArtefato;
+};
+
+$configArray = array('columns' => array(
+        array('column' => 'noTipoArtefato'),
+        array('column' => 'noPessoa'),
+        array('column' => $fnNuArtefato),
+        array('column' => 'nuDigital'),
+        array('column' => $acao)
+        ));
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

@@ -1,0 +1,54 @@
+<script type="text/javascript" src="/js/app/auxiliar/vincularprazo/form.js"></script>
+<script type="text/javascript" src="/js/app/auxiliar/vincularprazo/index.js"></script>
+
+<h1>Pesquisar Vinculo de Prazo</h1>
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>" method="post" id="form-pesq-vincular-prazo">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">Cadastrar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+    <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Tipo de Documento</label>
+            <div class="controls">
+                <input type="text" name="sqTipoDocumento" id="sqTipoDocumento" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Assunto</label>
+            <div class="controls">
+                <input type="text" name="sqAssunto" id="sqAssunto" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" id="pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+        </div>
+    </fieldset>
+</form>
+
+<!-- GRID -->
+<div class="control-group hidden" >
+    <table id="table-grid-vincular-prazo">
+        <thead>
+            <tr>
+                <th width="20%">Tipo de Documento</th>
+                <th width="45%">Assunto</th>
+                <th width="15%">Prazo</th>
+                <th width="5%">Dias</th>
+                <th width="15%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<!-- GRID -->
+
+<?php $this->headScript()->appendFile($this->baseUrl() . '/js/app/auxiliar/vincularprazo/index.js'); ?>

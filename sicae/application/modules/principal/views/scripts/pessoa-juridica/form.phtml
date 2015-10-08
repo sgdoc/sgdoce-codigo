@@ -1,0 +1,160 @@
+<form class="form-horizontal" method="post"
+    action="<?php echo $this->urlCurrent(array('action' => 'save')) ?>"
+    id="form-pessoa">
+    <fieldset>
+        <div class='formularioPj'>
+            <div class="control-group">
+                <label for="nuCnpj" class="control-label">
+                    <span title="Campo Obrigatório" class="required">* </span>CNPJ
+                </label>
+                <div class="controls">
+                    <?php
+                    //campos utilizado no cadastro de nova PJ
+                    //para inserir endereço, telefone e email
+                    echo $this->formHidden('address_infoconv'); //armazena json em caso de sincronização
+                    echo $this->formHidden('phone_infoconv');   //armazena json em caso de sincronização
+                    echo $this->formHidden('email_infoconv');   //armazena email em caso de sincronização
+
+                    echo $this->formHidden('aba', $this->aba);
+                    echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+                    echo $this->formHidden('', \Principal\Service\Pessoa::SQ_TIPO_PESSOA_JURIDICA, array('id' => 'sqTipoPessoa'));
+                    echo $this->formHidden('stRegistroAtivo', $this->data->getSqPessoa()->getStRegistroAtivo());
+                    echo $this->formText('nuCnpj', $this->data->getNuCnpj(), array('class' => 'span3 cnpj required', 'AUTOCOMPLETE' => 'OFF'));
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="razaoSocial" class="control-label">
+                    <span title="Campo Obrigatório" class="required">*</span> Razão Social
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('noPessoa_hidden', $this->data->getSqPessoa()->getNoPessoa(), array('class' => 'span8 required')); ?>
+                    <?php echo $this->formText('noPessoa', $this->data->getSqPessoa()->getNoPessoa(), array('class' => 'span8 required', 'AUTOCOMPLETE' => 'OFF')); ?>
+                </div>
+            </div>
+            <div class="control-group hide" id="groupTxJustificativaInfoconv">
+                <label class="control-label" for="txJustificativaInfoconv">
+                    <span title="Campo Obrigatório" class="required">*</span> Justificativa
+                </label>
+                <div class="controls">
+                    <?php
+                        echo $this->formHidden('dtIntegracaoInfoconv',
+                                $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getDtIntegracao(),
+                                array('class' => 'input-small dateBR datepicker',
+                                    'mask' => 'date',
+                                    'name'=>'sqIntegracaoPessoaInfoconv_dtIntegracao') );
+                        //
+
+                        $sqPessoaAutoraInfoconv = $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getSqPessoaAutora()->getSqPessoa();
+
+                        echo $this->formHidden('sqPessoaAutoraInfoconv',$sqPessoaAutoraInfoconv,array('name'=>'sqIntegracaoPessoaInfoconv_sqPessoaAutora'));
+                        //
+                        echo $this->formText('txJustificativaInfoconv',
+                                $this->data->getSqPessoa()->getSqIntegracaoPessoaInfoconv()->getTxJustificativa(),
+                                array('class' => 'span8 required',
+                                    'maxlength' => 250,
+                                    'AUTOCOMPLETE' => 'OFF',
+                                    'name'=>'sqIntegracaoPessoaInfoconv_txJustificativa') );
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="nmEmpresa" class="control-label">Nome Fantasia</label>
+                <div class="controls">
+                    <?php echo $this->formText('noFantasia', $this->data->getNoFantasia(), array('class' => 'span8')); ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="sgEmpresa" class="control-label"> Sigla </label>
+                <div class="controls">
+                    <?php echo $this->formText('sgEmpresa', $this->data->getSgEmpresa(), array('class' => 'span3', 'maxlength' => 10)); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="natJuridica" class="control-label">
+                    <span title="Campo Obrigatório" class="required">* </span>Natureza Jurídica
+                </label>
+                <div class="controls">
+                    <?php
+                        $natJurPaiAttr = array('class' => 'span8 required');
+                        $sqNatJurPai   = $this->data->getSqPessoa()->getSqNaturezaJuridica()->getSqNaturezaJuridicaPai()->getSqNaturezaJuridica();
+                        if ($sqPessoaAutoraInfoconv && $sqNatJurPai) {
+                            $natJurPaiAttr['name'] = 'sqNaturezaJuridicaPaiFake';
+                            $natJurPaiAttr['disabled'] = 'disabled';
+                            echo $this->formHidden('sqNaturezaJuridicaPai',$sqNatJurPai,array('id'=>'sqNaturezaJuridicaPaiFake'));
+                        }
+                        echo $this->comboCustom('sqNaturezaJuridicaPai', $sqNatJurPai, $natJurPaiAttr, $this->cmb['sqNaturezaJuridicaPai']);
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="classNatJuridica" class="control-label">
+                    <span title="Campo Obrigatório" class="required">* </span>Classificação da Natureza Jurídica
+                </label>
+                <div class="controls">
+                    <?php
+                        $natJurAttr = array('class' => 'span8 required');
+                        $sqNatJur   = $this->data->getSqPessoa()->getSqNaturezaJuridica()->getSqNaturezaJuridica();
+                        if ($sqPessoaAutoraInfoconv && $sqNatJur && $sqNatJurPai) {
+                            $natJurAttr['name'] = 'sqNaturezaJuridicaFake';
+                            $natJurAttr['disabled'] = 'disabled';
+                            echo $this->formHidden('sqNaturezaJuridica',$sqNatJur,array('id'=>'sqNaturezaJuridicaFake'));
+                        }
+
+                        echo $this->comboCustom('sqNaturezaJuridica', $sqNatJur, $natJurAttr, $this->cmb['sqNaturezaJuridica']);
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="tpEstab" class="control-label"> Tipo de
+                    Estabelecimento </label>
+                <div class="controls">
+                    <?php
+                        $inTipoEst = $this->data->getSqPessoa()->getSqPessoaJuridica()->getInTipoEstabelecimento();
+                        $inTipoEstAttr = array('class' => 'span8');
+                        if ($sqPessoaAutoraInfoconv) {
+                            $inTipoEstAttr['name'] = 'inTipoEstabelecimentoFake';
+                            $inTipoEstAttr['disabled'] = 'disabled';
+                            echo $this->formHidden('inTipoEstabelecimento',$inTipoEst, array('id'=>'inTipoEstabelecimentoFake'));
+                        }
+
+                        echo $this->comboCustom('inTipoEstabelecimento', $inTipoEst, $inTipoEstAttr, $this->cmb['inTipoEstabelecimento']);
+                    ?>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+    <div class="form-actions">
+        <button id="btnAnterior" class="btn disabled" type="button">
+            <span class="icon-chevron-left"></span> Anterior
+        </button>
+        <?php if ($this->visualizar): ?>
+            <a title="" href="#pessoa-vinculo"
+                class="btn btn-primary buttons"> Próxima <span
+                class="icon-chevron-right icon-white"></span>
+            </a>
+        <?php else: ?>
+            <button id="btnProximo" class="btn btn-primary" type="button"
+                title="Salva e segue para a próxima aba.">
+                Próxima <span class="icon-chevron-right icon-white"></span>
+            </button>
+        <?php endif; ?>
+        <button id="btnSalvar" class="btn" type="button"
+            title="Salva e permanece na mesma aba.">
+            <span class=""></span> Salvar
+        </button>
+        <button id="btnConcluir" class="btn" type="button"
+            title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <button  id="btnIntegrationInfoconv" class="btn" type="button" title="Atualiza os dados básicos conforme o cadastro da Receita Federal">
+            <i class="icon-leao"></i> Sincronizar RF
+        </button>
+        <a class="btn btnCancelar"
+            href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>

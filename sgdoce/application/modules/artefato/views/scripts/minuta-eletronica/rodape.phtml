@@ -1,0 +1,109 @@
+<div class="top-bar">
+    <p class="requiredLegend pull-left">
+        Campos obrigatórios <span class="required">*</span>
+    </p>
+</div>
+    <fieldset>
+<!--     somente se selecionar rodape no modelo  -->
+    <?php
+    $sqPessoa   = '';
+    if($this->rodape){
+        $sqPessoa         = isset($this->rodape) ? $this->rodape['sqPessoaSgdoce'] : '';
+        $sqPessoaRodape   = isset($this->rodape) ? $this->rodape['sqPessoaCorporativo'] : '';
+        $sqPessoaRodape   = isset($this->rodape) ? $this->rodape['sqPessoaCorporativo'] : '';
+        $noPessoaRodape   = isset($this->rodape) ? $this->rodape['noPessoa'] : '';
+        $coCepRodape      = isset($this->rodape) ? $this->rodape['coCep'] : '';
+        $txEnderecoRodape = isset($this->rodape) ? $this->rodape['txEndereco'] : '';
+        $nuDdd            = isset($this->rodape) ? $this->rodape['nuDdd'] : '';
+        $txTelefoneRodape = isset($this->rodape) ? $this->rodape['nuTelefone'] : '';
+        $txEmailRodape    = isset($this->rodape) ? $this->rodape['txEmail'] : '';
+    }else{
+        $sqPessoaRodape   = $this->unidadeOrg->getSqUnidadeOrg();
+        $noPessoaRodape   = $this->unidadeOrg->getNoUnidadeOrg();
+        $coCepRodape      = isset($this->dadosOrigem) ? $this->dadosOrigem->getSqCep() : '';
+        $txEnderecoRodape = isset($this->dadosOrigem) ? $this->dadosOrigem->getTxEndereco() : '';
+        $nuDdd            = '';
+        $txTelefoneRodape = isset($this->telefone) ? $this->telefone->getNuTelefone() : '';
+        $txEmailRodape    = isset($this->email) ? $this->email->getTxEmail() : '';
+    }
+    //persit error
+    if (isset($this->dataPost['sqPessoaRodape'])){
+        $sqPessoaRodape   = $this->dataPost['sqPessoaRodape'];
+        $noPessoaRodape   = $this->dataPost['sqPessoaRodape_autocomplete'];
+    }
+    if (isset($this->dataPost['sqTbPessoa'])){
+        $sqPessoa   = $this->dataPost['sqTbPessoa'];
+    }
+    if (isset($this->dataPost['coCepRodape'])){
+        $coCepRodape      = $this->dataPost['coCepRodape'];
+    }
+    if (isset($this->dataPost['txEnderecoRodape'])){
+        $txEnderecoRodape = $this->dataPost['txEnderecoRodape'];
+    }
+    if (isset($this->dataPost['txTelefoneRodape'])){
+        $txTelefoneRodape = $this->dataPost['txTelefoneRodape'];
+    }
+    if (isset($this->dataPost['txEmailRodape'])){
+        $txEmailRodape    = $this->dataPost['txEmailRodape'];
+    }
+    ?>
+     <div class="dv5-noPessoa dv5-coCep">
+        <div class="control-group">
+            <label class="control-label"><span class="required"
+                >*</span> Nome</label>
+            <div class="controls">
+            <input type="hidden" id="sqTbPessoa" name="sqTbPessoa" value="<?php echo $sqPessoa;?>" >
+            <input type="hidden" id="sqPessoaRodape_hidden" value="<?php echo $sqPessoaRodape;?>" >
+            <?php echo $this->formText('sqPessoaRodape', $noPessoaRodape, array('class' => 'required', 'maxlength' => 100));?>
+            </div>
+        </div>
+         <div class="control-group">
+             <label class="control-label" for="input01"><span class="required" >*</span> CEP</label>
+             <div class="controls">
+                 <?php echo $this->formText('coCepRodape', $coCepRodape,array('class' => 'required', 'maxlength' => 9));?>
+             </div>
+         </div>
+         <div class="control-group">
+             <label class="control-label" for="input01"><span class="required" >*</span> Endereço</label>
+             <div class="controls">
+                 <?php echo $this->formText('txEnderecoRodape', $txEnderecoRodape, array('class' => 'required', 'maxlength' => 100));?>
+             </div>
+         </div>
+         <div class="control-group">
+             <label class="control-label" for="input01"><span class="required" >*</span> Telefone</label>
+              <div class="controls">
+                <input type="text" maxlength="3" mask="numeric" value="<?php echo $nuDdd;?>" id="nuDdd" name="nuDdd" class="input-mini inline required">
+                <input type="text" value="<?php echo $txTelefoneRodape;?>"
+                      name="txTelefoneRodape" id="txTelefoneRodape"  class="input-medium inline required">
+              </div>
+        </div>
+        <div class="control-group">
+             <label class="control-label" for="input01"><span class="required" >*</span> E-mail</label>
+             <div class="controls">
+                 <?php echo $this->formText('txEmailRodape', $txEmailRodape, array('class' => 'required email', 'maxlength' => 100));?>
+             </div>
+         </div>
+     </div>
+     <!--     somente se selecionar logo rodape no modelo  -->
+    <div class="control-group dv6-deImagemRodape" hidden="true">
+        <label class="control-label" for="deImagemRodape">Logo rodapé</label>
+        <div class="controls">
+            <button type="button" id="controle-button-image" class="btn" data-image="<?php echo $this->data->getSqArtefato()->getDeImagemRodape() ;?>">
+                 <?php
+                    if($this->data->getSqArtefato()->getDeImagemRodape()) {
+                        echo 'Alterar Imagem';
+                    } else {
+                        echo 'Incluir Imagem';
+                    }
+                ?>
+            </button>
+
+            <span id="conteudo-nome-imagem"><?php echo $this->data->getSqArtefato()->getDeImagemRodape() ;?></span>
+
+            <div style="height:0px; overflow:hidden">
+                <input type="file" class="deImagemRodape" name="deImagemRodape" id="deImagemRodape" >
+                <input type="hidden" name="deImagemRodapeHidden" id="deImagemRodapeHidden" value="<?php echo $this->data->getSqArtefato()->getDeImagemRodape() ;?>"/>
+            </div>
+        </div>
+    </div>
+</fieldset>

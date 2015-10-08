@@ -1,0 +1,101 @@
+        <form class="form-horizontal" action="/auxiliar/pessoa-juridica/save" method="post" id="form-dados-basicos">
+<?php
+    $dateFilter = new \Core_Filter_Date();
+    $dateFilter->setFormatInput('yyyy-MM-dd')
+        ->setFormatOutput('dd/MM/yyyy');
+
+    echo $this->formHidden('sqPessoa', $this->data->getSqPessoaJuridica()->getSqPessoa());
+    echo $this->formHidden('sqPessoaSgdoce', $this->sqPessoaSgdoce ? : '');
+    echo $this->formHidden('sqTipoPessoa', \Core_Configuration::getCorpTipoPessoaJuridica());
+?>
+<input type="hidden" id="campoPessoa" name="campoPessoa" value="<?php echo $this->campoPessoa?>">
+<input type="hidden" id="campoCnpj" name="campoCnpj" value="<?php echo $this->campoCnpj?>">
+<input type="hidden" id="form" name="form" value="<?php echo $this->form?>">
+<fieldset>
+    <div class="control-group">
+        <label class="control-label" for="nuCnpj">
+            <span class="required" title="Required field">*</span> CNPJ
+        </label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="text" class="input-medium cnpj obrigatorio required" id="nuCnpj" name="nuCnpj" mask="cnpj" <?php if($this->data->getNuCnpj()) { ?>readonly="readonly"<?php } ?> ignore value="<?php echo $this->data ? $this->data->getNuCnpj() : null; ?>" title=""/>
+                <a class="btn right <?php if(!$this->data->getNuCnpj()) { ?>hide<?php } ?>" id="btnModalMatrizFilial" href="#modalMatrizFilial" data-toggle="modal" title="Visualizar Matriz/Filial"><i class="icon-eye-open"></i></a>
+                <span class="help-block hide"></span>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="noPessoa">
+            <span class="required" title="Required field">*</span> Razão Social
+        </label>
+        <div class="controls">
+            <input type="text" class="span9 obrigatorio required" id="noPessoa" name="noPessoa" title="" <?php if($this->data->getNuCnpj()) { ?>readonly="readonly"<?php } ?> maxlength="120" value="<?php
+                echo $this->data ? $this->data->getNoPessoa() : null;
+            ?>" />
+            <span class="help-block hide"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="sqNaturezaJuridica">
+            <span class="required" title="Required field">*</span> Tipo de Sociedade
+        </label>
+        <div class="controls">
+            <?php  echo $this->comboCustom('sqNaturezaJuridica',
+                    (!$this->data || !$this->data->getSqPessoa())
+                        ? null
+                        : $this->data->getSqPessoa()->getSqNaturezaJuridica()->getSqNaturezaJuridica(),
+                    array('class'=>'span4 obrigatorio required'),
+                    $this->combo['naturezaJuridica']); ?>
+            <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="noFantasia">
+            <span class="required" title="Required field">*</span> Nome Fantasia
+        </label>
+        <div class="controls">
+            <input type="text" class="span9 obrigatorio required" id="noFantasia" name="noFantasia" title="" maxlength="200" value="<?php
+                echo $this->data ? $this->data->getNoFantasia() : null;
+            ?>" />
+            <span class="help-block hide"></span>
+        </div>
+    </div>
+<?php
+    $sqDocumento = '';
+    $txDocumento = '';
+    foreach($this->data->getSqDocumento() as $documento) {
+        $sqDocumento = $documento->getSqDocumento();
+        $txDocumento = $documento->getTxValor();
+    }
+?>
+    			<div class="control-group clearfix">
+                    <label class="control-label" for="txValor">Inscrição Estadual</label>
+                    <div class="controls">
+                        <input type="hidden" name="sqDocumento" value="<?php echo $this->data ? $sqDocumento : null; ?>" />
+                        <input type="hidden" name="sqAtributoTipoDocumento" value="<?php echo \Core_Configuration::getSgdoceTipoDocumentoInscricao(); ?>" />
+    					<input type="text" class="span9" id="txValor" name="txValor" maxlength="30" value="<?php
+    					    echo $this->data ? $txDocumento : null;
+    					?>" />
+    					<span class="help-block hide">Campo de preenchimento obrigatório.</span>
+                    </div>
+                </div>
+    		</fieldset>
+        </form>
+
+        <!--Visualizar Matriz/Filial-->
+        <div class="modal fade" id="modalMatrizFilial">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        		<h3>Visualizar Matriz/Filial</h3>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+        		<a href="#" class="btn btn-print" data-toggle="modal">Imprimir</a>
+        		<a href="#" class="btn btn-primary" data-dismiss="modal"><i class="icon-white icon-remove"></i> Fechar</a>
+            </div>
+        </div>
+<?php
+    $this->headScript()->setFile($this->baseUrl() . '/js/app/auxiliar/pessoa-juridica/dados-basicos.js');
+
+    echo $this->headScript();
+?>

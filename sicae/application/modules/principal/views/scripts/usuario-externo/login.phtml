@@ -1,0 +1,81 @@
+<form class="form-horizontal"
+      name="form-login"
+      action="<?php echo $this->url(array('controller' => 'usuario-externo', 'action' => 'autenticate')); ?>"
+      method="post">
+    <!-- FIELDSET INICIO -->
+    <fieldset>
+        <legend>Login</legend>
+        <!-- INPUT INÍCIO -->
+        <div class="control-group">
+            <label class="control-label" for="email"><span title="Campo Obrigatório"
+ class="required">*</span> E-mail</label>
+            <div class="controls">
+                <?php echo $this->formText('email', $this->data['email'], array('class' => 'input-xlarge required email', 'maxlength' => 60, 'autocomplete' => 'off')); ?>
+            </div>
+        </div>
+        <!-- INPUT FIM -->
+        <!-- INPUT INÍCIO -->
+        <div class="control-group">
+            <label class="control-label" for="senha"><span title="Campo Obrigatório"
+ class="required">*</span> Senha</label>
+            <div class="controls">
+                <input type="password" maxlength="32" class="input-xlarge required" id="senha" name="txSenha">
+            </div>
+        </div>
+        <!-- INPUT FIM -->
+        <!-- CAPTCHA -->
+        <?php echo $this->captcha() ?>
+        <!-- FIM CAPTCHA -->
+        <!-- BARRA DE AÇÔES INICIO -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" >Login</button>
+            <a class="btn" data-toggle="modal" data-backdrop="static" data-keyboard="false" href="#esqueci-externo">Esqueci minha senha</a>
+            <a title="" href="<?php echo $this->url(array('controller' => 'usuario-externo', 'action' => 'rota')); ?>" class="btn">Cadastre-se</a>
+        </div>
+        <!-- BARRA DE AÇÔES FIM -->
+    </fieldset>
+</form>
+
+<div class="modal hide fade" id="esqueci-externo">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Esqueci Minha Senha</h3>
+    </div>
+    <div class="modal-body">
+        <div id="error-pass-externo"></div>
+        <form class="form-horizontal" name="form-revover-pass-externo" id="form-revover-pass-externo">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="tpValidacao"><span class="required">* </span> Tipo de Validação</label>
+                    <div class="controls">
+                        <select id="tpValidacao" class="required" name="tpValidacao">
+                            <option selected="cpf" value="cpf" selected="selected">CPF</option>
+                            <option value="cnpj">CNPJ</option>
+                            <option value="passaporte">Passaporte</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="login"><span class="required">* </span>CPF</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge required cpf"
+                               name="login" mask="cpf" id="txLogin" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txEmailRecover"><span class="required">* </span>E-mail</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge required email"
+                               name="txEmailRecover" id="txEmail" maxlength="60" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnRecoverPassExterno">Concluir</button>
+        <a href="#" class="btn" id="btnCancelar" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>
+<?php echo $this->headScript()->appendFile($this->assetUrl('sica/principal/loginExterno.js')); ?>
+

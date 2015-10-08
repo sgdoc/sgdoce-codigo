@@ -1,0 +1,221 @@
+<?php
+/**
+ * Angular based phtml
+ */
+?>
+
+<script type="text/javascript">
+    $('head').append(
+        $('<link />').attr({
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: '<?php echo $this->baseUrl('css/app/area-trabalho/index/index.css'); ?>',
+        })
+    );
+    window.core_configuration = {
+        sgdoceTipoArtefatoDocumento : "<?php echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>",
+        sgdoceTipoArtefatoProcesso  : "<?php echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>",
+    };
+</script>
+
+<h1>Área de Trabalho <small>(nova versão)</small></h1>
+<br />
+<div ng-app="workArea" id="work-area-container">
+    <!-- <div class="bubbling">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div> -->
+    <div ng-controller="mainCtrl">
+        <div class="alert alert-block alert-error hidden" ng-class="{hide: started}" id="not-started-alert">
+            <h4>): Ops!</h4>
+            Algo de errado aconteceu com o carregamento da área de trabalho. Clique <a href="/area-trabalho">aqui</a> para recarregar…
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#not-started-alert').removeClass('hidden');
+            });
+        </script>
+        <div class="fade" ng-class="{'in': started}">
+            <h2 ng-class="'work-area-title ' + artefact.active.className">
+                <i class="work-area-artefact-icon icon" ng-class="'icon-' + artefact.active.classIcon"></i>
+                {{artefact.active.title}}
+                <small class="work-area-change-artefact-text">trocar a visualização para <a href="#" title="Trocar a visualização para {{artefact.next.title | lowercase}}" ng-click="changeToNextArtefact()">{{artefact.next.title | lowercase}}</a>…</small>
+            </h2>
+            <hr />
+            <div class="row-fluid hidden-desktop">
+                <a href="/area-trabalho" ng-class="{'text-warning': !boxIdSelected}">
+                    <i class="icon-home"></i>
+                    Início
+                </a>
+                <a ng-repeat="box in boxes" ng-href="/area-trabalho/caixa/{{box.id}}" ng-class="{'text-warning': boxIdSelected == box.id}">
+                    | {{box.title}}
+                </a>
+            </div>
+            <div class="row-fluid">
+                <div class="span10 work-area-box-container">
+                    <div ng-view class="work-area-box"></div>
+                </div>
+                <div class="span2 work-area-box-options-container visible-desktop">
+                    <ul class="unstyled">
+                        <li ng-repeat="box in boxes" class="work-area-box-item">
+                            <a class="work-area-box-option" title="{{box.title}}" ng-href="/area-trabalho/caixa/{{box.id}}" ng-class="{'work-area-box-option-selected': boxIdSelected == box.id}">{{box.link}}</a>
+                        </li>
+                    </ul>
+                    <a href="/area-trabalho" ng-if="!!boxIdSelected">
+                        <i class="icon-home"></i>
+                        Voltar ao início
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="initTemplate">
+        <h5>
+            <i class="icon-home"></i>
+            Início
+        </h5>
+        <hr />
+        <p class="lead">
+            <span ng-if="!artefactiActiveChanged">Para começar, selecione se quer mudar para</span>
+            <span ng-if="artefactiActiveChanged">Voltar para</span>
+            <a href="#" title="Trocar a visualização para {{artefact.next.title | lowercase}}" ng-click="changeToNextArtefact()">{{artefact.next.title | lowercase}}s</a> ou
+            <br ng-if="!artefactiActiveChanged" />
+            continue vendo <strong>{{artefact.active.title | lowercase}}s</strong>.
+        </p>
+        <p class="lead muted">
+            Agora, você pode selecionar uma das <a title="Ir até sua caixa" href="{{viewServices.getFirstBoxHref()}}">caixas <i class="icon-share-alt"></i></a>
+            <br />
+            <small>ou</small>
+            </br />
+            pesquise no <a href="#" ng-click="viewServices.artefactFinder.setFocus()">campo abaixo</a> por um {{artefact.active.title | lowercase}}…
+        </p>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <form ng-submit="findArtefact(artefactSearch)">
+                    <div class="input-append control-group" ng-class="{error: artefactSearch.error}">
+                        <input type="text"
+                               placeholder="Pesquise por um {{artefact.active.title | lowercase}}…"
+                               id="artefactFinder"
+                               class="input-xlarge"
+                               value=""
+                               ng-readonly="artefactSearch.loading"
+                               ng-change="viewServices.artefactFinder.setMask(artefact.active.id);artefactSearch.error=null"
+                               ng-model="artefactSearch.query" /><button class="btn" ng-class="{
+                               'btn-primary': !artefactSearch.error&&artefactSearch.query,
+                               'btn-danger': artefactSearch.error
+                            }" type="submit">
+                            <i class="icon-search" ng-class="{'icon-white': artefactSearch.query||artefactSearch.error}" ></i>
+                        </button>
+                        <span class="help-inline">
+                            <div class="bubbling mini" ng-show="artefactSearch.loading">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </span>
+                        <span class="help-block">{{artefactSearch.error}}</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="alert alert-block" ng-if="myItensError">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>): Ops!</h4>
+            {{myItensError}}
+        </div>
+        <p class="well well-small" ng-if="!myItensError">
+            <ng-pluralize count="myItems" when="{
+                '-1': 'Contando a quantidade de itens',
+                '0': 'No momento, você tem nenhum item',
+                'one': 'No momento, você tem somente um item',
+                'other': 'No momento, você tem {} itens'
+            }"></ng-pluralize>
+            na <a title="Ir até sua caixa" href="{{viewServices.getFirstBoxHref()}}">sua caixa</a><span ng-if="myItems >= 0">.</span><span ng-if="myItems == -1"><span class="threeLittleDots">.</span><span class="threeLittleDots">.</span><span class="threeLittleDots">.</span></span>
+        </p>
+    </script>
+
+    <script type="text/ng-template" id="boxTemplate">
+        <h5>
+            <i class="icon-inbox"></i>
+            {{box.title}}
+        </h5>
+        <hr />
+        <div class="alert alert-block" ng-if="!gridData.length&&!gridLoading&&!gridError" ng-show="gridMessage" ng-init="gridMessageDelay()">
+            <h4>Nenhum {{artefact.active.title | lowercase}} encontrado!</h4>
+            Clique <a href="#" ng-click="grid()">aqui <i class="icon-refresh"></i></a> para tentar recarregar os registros&hellip;
+        </div>
+        <div class="alert alert-block alert-error" ng-if="gridError" ng-show="gridMessage" ng-init="gridMessageDelay()">
+            <h4>{{gridError}}</h4>
+            Clique <a href="#" ng-click="grid()">aqui <i class="icon-refresh"></i></a> para tentar recarregar os registros&hellip;
+        </div>
+        
+        <table class="table table-hover table-condensed" ng-init="grid()">
+            <thead ng-show="gridData.length">
+                <tr>
+                    <th>{{artefact.active.gridData.idLabel}}</th>
+                    <th>Movimentação</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="gridLoading">
+                    <td colspan="3">
+                        <div class="bubbling">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="work-area-grid-row" ng-repeat="gridItem in gridData" ng-class="{success:gridItem.selected}">
+                    <td>
+                        <input type="checkbox" class="work-area-checkbox" id="gridItem-{{gridItem.id}}" ng-model="gridItem.selected" />
+                        <label class="work-area-grid-cell-small-information" for="gridItem-{{gridItem.id}}">{{gridItem[artefact.active.gridData.idKey]}}</label>
+                    </td>
+                    <td>
+                        <span class="work-area-grid-cell-long-information">{{gridItem.handlingInformation}}</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" ng-click="showGridDetail($index)">
+                            <i class="icon-tasks"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot ng-show="gridData.length">
+                <tr>
+                    <td colspan="3">
+                        <ul class="pager">
+                          <li class="previous">
+                              <a href="#" ng-click="previousPage()">&larr; {{artefact.active.title}}s anteriores</a>
+                          </li>
+                          <li>
+                              <span>
+                                  <ng-pluralize count="gridTotal" when="{
+                                      '0': 'nenhum registro encontrado',
+                                      'one': 'Somente um registro encontrado',
+                                      'other': 'Foram encontrados {} registros'
+                                  }"></ng-pluralize>
+                              </span>
+                          </li>
+                          <li class="next">
+                              <a href="#" ng-click="nextPage()">Próximos {{artefact.active.title | lowercase}}s &rarr;</a>
+                          </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </script>
+</div>
+
+<?php //@todo: colocar NOME_DO_ARQUIVO.min.js ?>
+<script src="<?php echo $this->baseUrlCDN('angular-1.4.6/angular.js'); ?>"></script>
+<script src="<?php echo $this->baseUrlCDN('angular-1.4.6/angular-route.js'); ?>"></script>
+<script src="<?php echo $this->baseUrlCDN('angular-1.4.6/angular-animate.js'); ?>"></script>
+
+<script src="<?php echo $this->baseUrl('js/app/area-trabalho/index/index.js'); ?>"></script>

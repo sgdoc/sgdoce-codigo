@@ -1,0 +1,61 @@
+<div class="tab-pane" id="dadosDoc">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <br>
+    <fieldset>
+        <legend> Dados de Identifica&ccedil;&atilde;o do Documento </legend>
+        <div class="control-group dados-ident-doc">
+            <?php
+                $atribute['class'] = 'tipoCabecalho';
+                $template = new \Core_View_Helper_TemplateType();
+                $template->templateType($this->campos,1,NULL);
+            ?>
+        </div>
+        <br>
+        <div class="control-group">
+            <label class="control-label">Grau de Acesso
+            </label>
+            <div class="controls">
+
+                <?php
+                      echo $this->formSelect('sqGrauAcesso', $this->data->getSqGrauAcesso()->getSqGrauAcesso(),
+                              array('class'=>'span3 required'), $this->itensGrauAcesso);
+                      ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Posição do Tipo de documento</label>
+            <div class="controls">
+                <?php
+                      echo $this->formSelect('sqPosicaoTipoDocumento',
+                      $this->data->getSqPosicaoTipoDocumento()->getSqPosicaoTipoDocumento(),
+                      NULL,
+                      $this->itensPosicaoTipoDoc); ?>
+
+            </div>
+        </div>
+        <div class="control-group">
+        <?php if ($this->sqPadraoModeloDocumento != 3) {//só não exibe no padrão oficio?>
+            <label class="control-label">Posi&ccedil;&atilde;o da Data</label>
+            <div class="controls">
+                    <?php
+                      echo $this->formSelect('sqPosicaoData',
+                              $this->data->getSqPosicaoData()->getSqPosicaoData(),
+                              null, $this->itensPosicaoData);
+                      ?>
+            </div>
+        <?php }?>
+        </div>
+    </fieldset>
+<fieldset>
+    <legend>Dados do Documento</legend>
+    <div class="control-group">
+        <?php
+            $atribute['class'] = 'tipoDocumento';
+            $template = new \Core_View_Helper_TemplateType();
+            $template->templateType($this->campos,2,$atribute);
+        ?>
+    </div>
+</fieldset>
+</div>

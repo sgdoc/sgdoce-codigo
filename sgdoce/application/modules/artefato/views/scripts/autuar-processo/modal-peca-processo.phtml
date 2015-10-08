@@ -1,0 +1,54 @@
+<script type="text/javascript" src="/js/components/validation.js"></script>
+<script type="text/javascript" src="/js/app/artefato/autuar-processo/peca-processo.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Peça do Processo</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-peca-processo-modal"
+              method="post">
+            <input id="sqPessoaLogada" type="hidden" value="<?php echo $this->sqPessoaLogada?>">
+            <fieldset>
+                <div class="control-group">
+                    <label for="" class="control-label"> <span class="required"
+                                                               title="">* </span>Pesquisar Artefato
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText('nuArtefatoVinculacaoPeca', NULL, array('class'=>'required')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="" class="control-label" id="labelDigital"> <span class="required"
+                                                                                 title="">* </span>Digitais/N° Artefatos
+                    </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formSelect('nuDigital', 'Selecione', array('class'=>'required'));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="" class="control-label"> <span class="required"
+                                                               title="">* </span>Tipo de Documento
+                    </label>
+                    <div class="controls">
+                        <?php
+                        $tipo = array('' =>'Selecione');
+                        echo $this->formSelect('inOriginal',
+                            NULL,
+                            array('class'=>'required'),
+                            $tipo);
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirPeca"
+       data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarPeca" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>
+

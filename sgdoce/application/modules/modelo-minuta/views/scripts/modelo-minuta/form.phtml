@@ -1,0 +1,172 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/modelo-minuta/modelo-minuta/form.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/modelo-minuta/modelo-minuta/menuMinuta.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/library/jquery.colorbox.js');
+$this->headScript()->appendFile($this->baseUrl() . '/js/app/modelo-minuta/cabecalho/cabecalho.js');
+echo $this->headScript();
+$hidden = '';
+if ($this->data->getSqModeloDocumento()) {
+    $this->disabled    = 'disabled="disabled"';
+    $this->disabledArr = array('class'=>'span3 required', 'disabled'=>'disabled');
+    $this->checked = "checked='checked'";
+    $hidden = 'hidden';
+}else {
+    $this->disabled    = '';
+    $this->disabledArr = array('class'=>'span3 required');
+    $this->checked = '';
+}
+if ($this->sqTipoDocumento) {
+    echo $this->formHidden('tipoDocumentoSelecionado',TRUE);
+    $this->disabledArr = array('class'=>'span3 required', 'disabled'=>'disabled');
+}
+$padraoModeloDoc = $this->ComboCustom('sqPadraoModeloDocumento',
+        array($this->sqPadraoModeloDocumento),
+                                     $this->disabledArr,
+                                     $this->itens);
+echo $this->formHidden('idModeloDocumento', $this->data->getSqModeloDocumento());
+
+if ($this->data->getSqAssunto()->getSqAssunto()) {
+    $sqAssunto     = $this->data->getSqAssunto()->getSqAssunto();
+    $txAssunto     = $this->data->getSqAssunto()->getTxAssunto();
+    $hidden = 'hidden';
+}else {
+    $sqAssunto = '';
+    $txAssunto = '';
+}
+
+if ($this->data->getSqTipoDocumento()->getSqTipoDocumento()) {
+    $sqTipoDocumento = $this->data->getSqTipoDocumento()->getSqTipoDocumento();
+    $noTipoDocumento = $this->data->getSqTipoDocumento()->getNoTipoDocumento();
+}else {
+    $sqTipoDocumento = '';
+    $noTipoDocumento = '';
+}
+
+if ($this->sqTipoDocumento) {
+    $sqTipoDocumento = $this->sqTipoDocumento->getSqTipoDocumento();
+    $noTipoDocumento = $this->sqTipoDocumento->getNoTipoDocumento();
+    $this->disabled    = 'disabled="disabled"';
+    $hidden = 'hidden';
+}
+if ($this->sqAssunto) {
+    $sqAssunto = $this->sqAssunto->getSqAssunto();
+    $txAssunto = $this->sqAssunto->getTxAssunto();
+    $this->disabled    = 'disabled="disabled"';
+}
+?>
+
+<h1 id="divTitulo"></h1>
+<div class="alert alert-error campos-obrigatorio hidden"></div>
+<br/>
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>"
+      method="post" id="form-cadastro-modelo-minuta">
+    <input type="hidden" id="id" name="id" value="<?php echo $this->data->getSqModeloDocumento();?>" />
+    <ul class="nav nav-tabs hidden tabsForm" id="nav-tabs">
+        <li class="active"><a href="#dadosMinuta" data-toggle="tab" class="tab" >Dados Minuta</a></li>
+        <li class=""><a href="#dadosCabecalhoDoc" data-toggle="tab" class="tab" >Cabe&ccedil;alho</a></li>
+        <?php if($this->sqPadraoModeloDocumento == 1){?>
+        <li><a href="#dadosDoc" data-toggle="tab" class="tab">Documento</a></li>
+        <li><a href="#dadosAssinatura" data-toggle="tab" class="tab">Assinatura</a></li>
+        <?php } ?>
+        <?php if($this->sqPadraoModeloDocumento != 1){?>
+        <li><a href="#dadosDestinatario" data-toggle="tab" class="tab">Destinatário</a></li>
+        <li><a href="#dadosDoc" data-toggle="tab">Documento</a></li>
+        <li><a href="#dadosAssinatura" data-toggle="tab" class="tab">Assinatura</a></li>
+        <li><a href="#dadosRodape" data-toggle="tab" class="tab">Rodapé</a></li>
+        <?php } ?>
+
+    </ul>
+    <div class="tab-content hidden" id="tab-content">
+        <div class="tab-pane active" id="dadosMinuta">
+    <fieldset>
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+        </div>
+        <br>
+        <div class="control-group">
+            <label class="control-label"> <span class="required">*</span>
+                Modelo de Minuta
+            </label>
+            <div class="controls">
+                <?php echo $padraoModeloDoc; ?>
+                <input type="hidden" name="sqPadraoModeloDocumento"
+                       id="sqPadraoModeloDocumento" value="<?php echo $this->sqPadraoModeloDocumento;?>
+                       ">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"><span class="required">* </span>Tipo de Documento</label>
+            <div class="controls">
+                <input type="hidden" id="sqTipoDocumento_hidden" value="<?php echo $sqTipoDocumento;?>" />
+                <input type="text" name="sqTipoDocumento" id="sqTipoDocumento" class="span6 required" <?php echo $this->disabled;?>
+                       value="<?php echo $noTipoDocumento;?>" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Assunto</label>
+            <div class="controls">
+                <input type="hidden" id="sqAssunto_hidden" value="<?php echo $sqAssunto;?>" />
+                <input type="text" name="sqAssunto"  id="sqAssunto"
+                       class="span6" <?php echo $this->disabled;?> value="<?php echo $txAssunto;?>" />
+            </div>
+        </div>
+
+    <div class="form-actions <?php echo $hidden;?>" id="formButtons">
+        <button  id="btnProximo1" class="btn btn-primary" type="button">
+            <span class="icon-chevron-right icon-search icon-white"></span> Próxima
+        </button>
+        <a href="/modelo-minuta/modelo-minuta" class="btn" id="cancelar"> <i
+            class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+
+    </fieldset>
+    <br>
+        </div>
+        <div class="tab-pane" id="dadosCabecalhoDoc">
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+            </div>
+            <br>
+         <fieldset>
+            <legend>Lista de Cabeçalhos</legend>
+            <div class="control-group">
+                <table id="table-lista-cabecalho">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+           </fieldset>
+            <fieldset>
+            <legend>Complementos</legend>
+            <div class="control-group">
+                <?php
+                    $atribute['class'] = 'tipoCabecalho';
+                    $template = new \Core_View_Helper_TemplateType();
+                    $template->templateType($this->campos,4,$atribute);
+                ?>
+            </div>
+           </fieldset>
+        </div>
+            <?php echo $this->render('modelo-minuta/dados-destinatario.phtml');?>
+            <?php echo $this->render('modelo-minuta/dados-documento.phtml');?>
+            <?php echo $this->render('modelo-minuta/dados-assinatura.phtml');?>
+            <?php echo $this->render('modelo-minuta/dados-rodape.phtml');?>
+            <?php echo $this->render('modelo-minuta/form-action.phtml');?>
+    </div>
+</form>
+<div id="modal-justificativa" class="modal hide fade"></div>
+<div class="modal hide" id="modalCabecalho">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">×</button>
+<h3 id="modal-title"></h3>
+</div>
+<div class="modal-body">
+</div>
+</div>
+

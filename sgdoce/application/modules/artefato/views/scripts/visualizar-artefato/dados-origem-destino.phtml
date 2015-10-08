@@ -1,0 +1,190 @@
+<?php
+echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/visualizar-artefato/dados-origem-destino.js');
+?>
+
+<?php if (!empty($this->dadosOrigem)): ?>
+    <fieldset id="origem">
+        <legend>Origem</legend>
+        <div class="control-group">
+            <label class="control-label" for="Procedencia" >Procedência</label>
+            <div class="controls">
+                <span class="checkbox inline">
+                    <?php
+                        if ($this->dadosOrigem[1] == \Sgdoce_Constants::PROCEDENCIA_EXTERNA) {
+                            echo 'Externo';
+                        } else if($this->dadosOrigem[1] == \Sgdoce_Constants::PROCEDENCIA_INTERNA) {
+                            echo 'Interno';
+                        } else {
+                            echo '&nbsp;';
+                        }
+                    ?>
+                </span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Tipo_pessoa" >Tipo de Pessoa</label>
+            <div class="controls">
+                <?php
+                $entPessoaSgdoce_Origem = $this->dadosOrigem[0]->getSqPessoaSgdoce();
+
+
+                if ($entPessoaSgdoce_Origem->getSqTipoPessoa()) {
+                    if ($entPessoaSgdoce_Origem->getSqTipoPessoa() instanceof Sgdoce\Model\Entity\VwTipoPessoa) {
+                        $sqTipoPessoaOrigem = $entPessoaSgdoce_Origem->getSqTipoPessoa()->getSqTipoPessoa();
+                    }else{
+                        $sqTipoPessoaOrigem = $entPessoaSgdoce_Origem->getSqTipoPessoa();
+                    }
+                } else {
+                    $sqTipoPessoaOrigem = '';
+                }
+
+                // 1 = interna e 3 = externa
+                if ($this->dadosOrigem[1] == \Sgdoce_Constants::PROCEDENCIA_INTERNA) {
+                    if ($sqTipoPessoaOrigem == 4) {
+                        $tipoPessoaOrigem = "Unidade Organizacional Interna";
+                    } elseif ($sqTipoPessoaOrigem == 5) {
+                        $tipoPessoaOrigem = "Unidade Organizacional Externa";
+                    } elseif(! $sqTipoPessoaOrigem){
+                        $tipoPessoaOrigem = "";
+                    } else{
+                        $tipoPessoaOrigem = "Funcionario";
+                    }
+                } else {
+                    if ($this->nacionalidadeOrigem == 2) {
+                        $tipoPessoaOrigem = "Pessoa Estrangeira";
+                    } else {
+                        $tipoPessoaOrigem = $entPessoaSgdoce_Origem->getSqTipoPessoa()->getNoTipoPessoa();
+                    }
+                }
+                ?>
+                <span class="checkbox inline"><?php echo $tipoPessoaOrigem; ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="origemCpfCnpj" id="origemCpfCnpj"></label>
+            <div class="controls">
+                <?php
+                $nuCpfCnpjPassaporteOrigem = NULL;
+                if ($sqTipoPessoaOrigem == 1) {
+                    $nuCpfCnpjPassaporteOrigem = $entPessoaSgdoce_Origem->getNuCpfCnpjPassaporte();
+                    if( strlen($nuCpfCnpjPassaporteOrigem) == 11 ) {
+                        $nuCpfCnpjPassaporteOrigem = $this->maskNumber($nuCpfCnpjPassaporteOrigem, '999.999.999-99');
+                    }
+                    if ($this->nacionalidadeOrigem == 2) {
+                        $nuCpfCnpjPassaporteOrigem = $entPessoaSgdoce_Origem->getNuCpfCnpjPassaporte();
+                    }
+                }
+                if ($sqTipoPessoaOrigem == 2) {
+                    $nuCpfCnpjPassaporteOrigem = $this->maskNumber($entPessoaSgdoce_Origem->getNuCpfCnpjPassaporte(), '99.999.999/9999-99');
+                }
+                ?>
+                <span class="checkbox inline"><?php echo $nuCpfCnpjPassaporteOrigem; ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Nome" >Nome</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $entPessoaSgdoce_Origem->getNoPessoa(); ?></span>
+            </div>
+        </div>
+    </fieldset>
+<?php endif; ?>
+<?php if (!empty($this->dadosDestino)): ?>
+    <fieldset id="destino">
+        <legend>Destino</legend>
+        <div class="control-group">
+            <label class="control-label" for="Destino" >Destino</label>
+            <div class="controls">
+                <span class="checkbox inline">
+                    <?php
+                        if ($this->dadosDestino[1] == \Sgdoce_Constants::PROCEDENCIA_EXTERNA) {
+                            echo 'Externo';
+                        } else if($this->dadosDestino[1] == \Sgdoce_Constants::PROCEDENCIA_INTERNA) {
+                            echo 'Interno';
+                        } else {
+                            echo '&nbsp;';
+                        }
+                    ?>
+                </span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Tipo_destino" >Tipo de Destino</label>
+            <div class="controls">
+                <?php
+                $entPessoaSgdoce_Destino = $this->dadosDestino[0]->getSqPessoaSgdoce();
+
+                if ($entPessoaSgdoce_Destino->getSqTipoPessoa()) {
+                    if ($entPessoaSgdoce_Destino->getSqTipoPessoa() instanceof Sgdoce\Model\Entity\VwTipoPessoa) {
+                        $sqTipoPessoaDestino = $entPessoaSgdoce_Destino->getSqTipoPessoa()->getSqTipoPessoa();
+                    }else{
+                        $sqTipoPessoaDestino = $entPessoaSgdoce_Destino->getSqTipoPessoa();
+                    }
+                } else {
+                    $sqTipoPessoaDestino = '';
+                }
+
+                if ($this->dadosDestino[1] == 1) {
+                    if ($sqTipoPessoaDestino == 4 || $sqTipoPessoaDestino == 5) {
+                        $tipoPessoaDestino = "Unidade Organizacional Interna";
+                    } elseif(!$sqTipoPessoaDestino){
+                        $tipoPessoaDestino = "";
+                    } else {
+                        $tipoPessoaDestino = "Funcionario";
+                    }
+                } else {
+                    if ($this->nacionalidadeDestino == 2) {
+                        $tipoPessoaDestino = "Pessoa Estrangeira";
+                    } else {
+                        $tipoPessoaDestino = $entPessoaSgdoce_Destino->getSqTipoPessoa()->getNoTipoPessoa();
+                    }
+                }
+                ?>
+                <span class="checkbox inline"><?php echo $tipoPessoaDestino ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="destinoCpfCnpj" id="destinoCpfCnpj"></label>
+            <div class="controls">
+                <?php
+                $nuCpfCnpjPassaporteDestino = NULL;
+                if ($sqTipoPessoaDestino == 1) {
+                    $nuCpfCnpjPassaporteDestino = $entPessoaSgdoce_Destino->getNuCpfCnpjPassaporte();
+                    if( strlen($nuCpfCnpjPassaporteDestino) == 11 ) {
+                        $nuCpfCnpjPassaporteDestino = $this->maskNumber($nuCpfCnpjPassaporteDestino, '999.999.999-99');
+                    }
+                    if ($this->nacionalidadeDestino == 2) {
+                        $nuCpfCnpjPassaporteDestino = $entPessoaSgdoce_Destino->getNuCpfCnpjPassaporte();
+                    }
+                }
+                if ($sqTipoPessoaDestino == 2) {
+                    $nuCpfCnpjPassaporteDestino = $this->maskNumber($entPessoaSgdoce_Destino->getNuCpfCnpjPassaporte(), '99.999.999/9999-99');
+                }
+                ?>
+                <span class="checkbox inline"><?php echo $nuCpfCnpjPassaporteDestino; ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Nome" >Nome</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $entPessoaSgdoce_Destino->getNoPessoa(); ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Encaminhado_para" >Encaminhado para</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $this->dadosDestino[0]->getSqPessoaEncaminhado()->getNoPessoa(); ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Cargo" >Cargo/Função</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $this->dadosDestino[0]->getNoCargoEncaminhado(); ?></span>
+            </div>
+        </div>
+    </fieldset>
+<?php endif; ?>
+
+<script>
+    OrigemDestino.initAjustaCpfCnpj();
+</script>

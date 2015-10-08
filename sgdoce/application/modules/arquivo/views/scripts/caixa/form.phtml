@@ -1,0 +1,72 @@
+<?php
+$label = 'Cadastrar';
+$arrAttribsUnidade = array('class'=>'span8 required');
+
+$sqCaixa         = null;
+$sqClassificacao = null;
+$txClassificacao = null;
+$sqUnidadeOrg    = null;
+$noUnidadeOrg    = null;
+$nuAno           = date('Y');
+
+if ($this->data->getSqCaixa()) {
+    $label = 'Alterar';
+
+    $sqCaixa         = $this->data->getSqCaixa();
+    $sqClassificacao = $this->data->getSqClassificacao()->getSqClassificacao();
+    $txClassificacao = $this->data->getSqClassificacao()->getTxClassificacao();
+    $sqUnidadeOrg    = $this->data->getSqUnidadeOrg()->getSqUnidadeOrg();
+    $noUnidadeOrg    = $this->data->getSqUnidadeOrg()->getNoUnidadeOrg();
+    $nuAno           = $this->data->getNuAno();
+    $arrAttribsUnidade['disabled'] = 'disabled';
+}
+
+?>
+
+<h1><?php echo $label; ?> Caixa</h1>
+
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br/>
+
+<form class="form-horizontal"  method="post" id="form_caixa_arquivo"
+      action="<?php echo $this->urlCurrent(array('action' => 'save')); ?>">
+
+    <?php echo $this->formHidden('sqCaixa',$sqCaixa)?>
+
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Classificação</label>
+        <div class="controls">
+            <?php echo $this->formHidden('sqClassificacao_hidden',
+                                         $sqClassificacao,
+                                         array('name'=>'sqClassificacao'))?>
+                <?php echo $this->formText('sqClassificacao', $txClassificacao, array('class'=>'span8 required')); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Ano</label>
+        <div class="controls">
+            <?php echo $this->formText('nuAno',$nuAno,array('class'=>'span1 required', 'mask'=>'numeric', 'maxlength'=>4)); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><span class="required">* </span>Unidade</label>
+        <div class="controls">
+            <?php echo $this->formHidden('sqUnidadeOrg_hidden',
+                                         $sqUnidadeOrg,
+                                         array('name'=>'sqUnidadeOrg'))?>
+                <?php echo $this->formText('sqUnidadeOrg', $noUnidadeOrg,
+                        $arrAttribsUnidade); ?>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btn_gerar">Salvar</button>
+        <a href="<?php echo $this->urlCurrent(array('action' => 'index'))?>" class="btn" id="cancelar">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+
+
+</form>

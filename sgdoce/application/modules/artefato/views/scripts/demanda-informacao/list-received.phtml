@@ -1,0 +1,49 @@
+<?php
+    $view = $this;
+    $params = $this->params;
+    
+    $nuArtefato = function($row) use ($view, $params) {
+        if( $row['nuDigital'] != '' ){
+            return $row['nuDigital'];
+        } else {
+            return $row['nuArtefato'];
+        }
+    };
+    
+    $txSolicitacao = function($row) use ($view, $params) {
+        $txSolicitacao = $row['txSolicitacao'];
+        if(strlen($txSolicitacao) > 80){
+            $txSolicitacao = substr($row['txSolicitacao'], 0, 80) . "...";
+        }         
+        return $txSolicitacao;
+    };
+    
+    $dtPrazo = function($row) use ($view, $params) {
+        $objDtPrazo = new \Zend_Date($row['dtPrazo']);
+        return $objDtPrazo->get('dd/MM/yyyy');
+    };
+    
+    $acao = function($row) use ($view, $params) { 
+        $rtn = $view->actionButton('Visualizar',  'DemandaInformacaoMain.Acoes.Visualizar', array($row['sqPrazo']),'eye-open')
+             . $view->actionButton('Gerar',  'DemandaInformacaoMain.Acoes.Gerar', array($row['sqPrazo']), 'plus');
+        
+        if( is_null($row['dtResposta']) ) {
+            $rtn .= $view->actionButton('Responder',  'DemandaInformacaoMain.Acoes.Resposta', array($row['sqPrazo']), 'pencil');
+        } 
+        
+        return $rtn;
+    };
+    
+    $configArray = array('columns' => array(0 => array( 'column' => $nuArtefato),
+                                            1 => array( 'column' => 'txPessoaOrigem'),
+                                            2 => array( 'column' => 'txPessoaDestino'),
+                                            3 => array( 'column' => $txSolicitacao),
+                                            4 => array( 'column' => $dtPrazo),
+                                            5 => array( 'column' => $acao)
+    ));
+    
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

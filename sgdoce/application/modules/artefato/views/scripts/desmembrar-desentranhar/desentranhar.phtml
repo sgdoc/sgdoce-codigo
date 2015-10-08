@@ -1,0 +1,90 @@
+<?php
+	$this->headScript()
+                ->appendFile($this->baseUrl() . '/js/app/artefato/desmembrar-desentranhar/form.js')
+                ->appendFile($this->baseUrl() . '/js/components/limit.js');
+	echo $this->headScript();
+?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Desentranhar</h1>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" action="<?php echo $this->url(array('action' => 'save')); ?>" method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Número do Processo
+                </label>
+                <div class="controls">
+                    <?php $stDesmembramento = false; ?>
+
+                    <?php echo $this->formHidden('sqArtefato', $this->ArtefatoProcesso->getSqArtefato()->getSqArtefato()); ?>
+                    <?php echo $this->formHidden('stDesmembramento', (integer)$stDesmembramento); ?>
+                    <?php echo $this->formText('sqArtefato_text', $this->nuArtefatoFormatado, array('class' => 'span12 required sqArtefato', 'id' => 'sqArtefato', 'readonly' => true)); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="appendedInputButton"><span
+                    class="required" title="Required field">*</span> Data</label>
+                <div class="controls">
+                    <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-enddate="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                        <input value="" class="input-small dateBR endDate required" maxlength="60"
+                            name="dtOperacao" mask="date" type="text"/>
+                            <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Número de Peças
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('txNumeroPecas', $this->data->getTxNumeroPecas(), array('class' => 'span12 required txNuPecas')); ?>
+                </div>
+                <span class="help-block span7">
+                    <small>
+                        Exemplo: 1-10 (ou seja, sequência de páginas de 1 a 10).
+                        Para desmembrar intervalos de páginas deve ser colocado ","
+                        entre os intervalos (ou seja 1,3,7,21)
+                    </small>
+                </span>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    Unidade Solicitante
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('sqUnidadeSolicitacao', $this->data->getSqUnidadeSolicitacao(), array('class' => 'span12 required')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    Justificativa
+                </label>
+                <div class="controls">
+                    <?php echo $this->formTextarea('txJustificativaDesentranhamento', null, array('class' => 'span12', 'rows' => 3, 'maxlength' => 255)); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Assinatura
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('sqPessoaAssinatura', $this->data->getSqPessoaAssinatura(), array('class' => 'span12 required', 'id' => 'sqPessoaAssinatura' )); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Cargo
+                </label>
+                <div class="controls">
+                    <?php echo $this->ComboCustom('sqCargo', $this->data->getSqCargo(), array('class' => 'span12 required'), $this->arrCargos); ?>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluir" title="Concluir">Concluir</button>
+    <a href="#" class="btn btnCancelar" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

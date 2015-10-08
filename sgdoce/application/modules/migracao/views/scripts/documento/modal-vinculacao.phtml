@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Adicionar Referência</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal-modal" method="post" id="formModalReferencia">
+        <?php echo $this->formHidden('sqArtefato', $this->sqArtefato); ?>
+
+        <br />
+        <div class="control-group">
+            <label class="control-label" for="tipoDoc">
+                <span class="required" title="Required field">*</span> Tipo
+            </label>
+            <div class="controls">
+                <?php
+                unset($this->listTipoArtefato[6]);
+                echo $this->ComboCustom('sqTipoArtefatoVinculacao', $this->sqTipoArtefato, array('class' => 'span9 required'), $this->listTipoArtefato);
+                ?>
+                <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+            </div>
+        </div>
+        <div class="control-group divTipoDocumento hide">
+            <label class="control-label">
+                <span class="required">*</span> Tipo de Documento
+            </label>
+            <div class="controls">
+                <input type="hidden" id="sqTipoDocumentoReferencia_hidden"
+                       name="sqTipoDocumentoReferencia" value="" />
+                <input type="text"
+                       id="sqTipoDocumentoReferencia" name="sqTipoDocumentoReferencia"
+                       class="span9 required" />
+            </div>
+        </div>
+        <div class="control-group hide" id="divNuDigital">
+            <label class="control-label" for="numero2">
+                <span class="required" title="Required field">*</span> Digital
+            </label>
+            <div class="controls">
+                <input type="hidden" id="nuArtefatoVinculacao_hidden"
+                       name="nuArtefatoVinculacao" value=""/>
+                <input type="text"
+                       class="required span9" mask="numeric" name="nuArtefatoVinculacao"
+                       id="nuArtefatoVinculacao">
+                <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+            </div>
+        </div>
+        <div class="control-group hide" id="divNuartefato">
+            <label class="control-label" for="numero2">
+                <span class="required hidden" id="labelNumero" title="Required field">*</span> Número
+            </label>
+            <div class="controls">
+                <input type="hidden" id="nuArtefatoVinculo_hidden" name="nuArtefatoVinculo" value=""/>
+                <input type="text" id="nuArtefatoVinculo" name="nuArtefatoVinculo" class="span9">
+            </div>
+        </div>
+        <div class="control-group hide" id="divOrigem">
+            <label class="control-label" for="origem2">
+                <span class="required" title="Required field">*</span> Origem
+            </label>
+            <div class="controls">
+                <input type="text" class="required span9" readonly="readonly" id="noPessoaFantasia"
+                       name="noPessoaFantasia" value="" />
+                <!-- readonly="readonly" -->
+                <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="submit" data-dismiss="modal" id="btn-modal-vinculacao">Concluir</button>
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    $("#nuArtefatoVinculacao").setMask();
+    VincularDocumento.VincularDocumentoAutoComplete();
+    VincularDocumento.VincularDocumentoFuncoes();
+    VincularDocumento.Validation();
+</script>

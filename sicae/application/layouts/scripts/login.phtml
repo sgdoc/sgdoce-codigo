@@ -1,0 +1,119 @@
+<?php echo $this->doctype(), PHP_EOL; ?>
+<html>
+    <head>
+        <title>ICMBio</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <?php
+        $urlSica = rtrim(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOption('urlSica'), '/') . '/';
+        ?>
+
+        <base href="<?php echo $urlSica, $this->baseUrl(); ?>" data-url="<?php echo $urlSica; ?>"/>
+        <!-- CSS GERAL INICIO -->
+        <?php
+        $this->headLink()
+                ->setStylesheet($this->assetUrl('style.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('style-correct.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('style-responsive.css', array('address' => 'asset')));
+
+        echo $this->headLink();
+        ?>
+        
+		<!--[if IE 7]>
+			<link href="<?php echo $this->assetUrl('style-correct-ie.css', array('address' => 'asset')); ?>" rel="stylesheet" />
+		<![endif]-->
+        
+        <!-- CSS GERAL FIM -->
+        <!-- JAVASCRIPT INICIO -->
+        <?php
+        $this->headScript()->setFile($this->assetUrl('library/jquery.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootstrap.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('all-message.js'));
+
+        echo $this->headScript();
+        ?>
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+                    <script src="<?php echo $this->assetUrl('library/html5.js', array('address' => 'asset')) ?>"></script>
+                <![endif]-->
+        <!-- JAVASCRIPT FIM -->
+
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid"></div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid hidden-phone hidden-tablet">
+                <div class="span5">&nbsp;</div>
+                <div class="span2">
+                    <img class="img" src="<?php echo $this->assetUrl('icons/marcaICMBioBig.png', array('address' => 'asset')) ?>" alt="ICMBio"><br />
+                </div>
+                <div class="span5">&nbsp;</div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">&nbsp;</div>
+                <div class="span6">
+                    <br />
+                    <?php echo $this->userMessageStack() ?>
+                    <?php echo $this->layout()->content ?>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">&nbsp;</div>
+                <div class="span5">Caso seu navegador apresente algum problema relativo à certificação digital:
+                    <a href="http://www.icmbio.gov.br/intranet/download/arquivos/cotec/download/certnew2.crt">clique aqui</a>.</div>
+                <div class="span4">&nbsp;</div>
+            </div>
+            <div class="modal hide fade" id="esqueci">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Esqueci Minha Senha</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="error-pass"></div>
+                    <form class="form-horizontal" name="form-revover-pass">
+                        <fieldset>
+                            <div class="control-group">
+                                <label class="control-label" for="input01"><span class="required">* </span>Usuário:</label>
+                                <div class="controls">
+                                    <input type="text" class="input-xlarge required cpf"
+                                           name="nuCpfRecover" mask="cpf" id="nuCpfRecover">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01"><span class="required">* </span>E-mail:</label>
+                                <div class="controls">
+                                    <input type="text" class="input-xlarge required email"
+                                           name="txEmailRecover" id="txEmailRecover" maxlength="60">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" id="btnRecoverPass">Concluir</a>
+                    <a href="#" class="btn" id="btnCancelar" data-dismiss="modal">Cancelar</a>
+                </div>
+            </div>
+        </div>
+        <?php
+        $this->headScript()->setFile($this->assetUrl('components/load.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('sica/principal/init.js'));
+        $this->headScript()->appendFile($this->assetUrl('library/egg.min.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('sica/principal/login.js'));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.validate.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/validation.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.meio.mask.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/mask.js', array('address' => 'asset')));
+
+        echo $this->headScript();
+        ?>
+    </body>
+</html>

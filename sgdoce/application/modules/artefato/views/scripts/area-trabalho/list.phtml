@@ -1,0 +1,394 @@
+<?php
+
+$view = $this;
+
+$fnCanEditDocument = function($row) use ($view){
+
+    $hasSolicitacaoAberta = $row['hasSolicitacaoAberta'];
+    $isInconsistente      = $row['isInconsistente'];
+    $menuEditar           = $view->actionButton(NULL, 'Artefato.edit', array('sqArtefato' => $row['sqArtefato'],'view' => 3,'isInconsistente'=>$isInconsistente), NULL, 'Alterar');
+
+    $return = '';
+
+    //só pode editar enquanto estiver na area do autor do documento
+    //ou sendo o 1º tramite não possui vinculo
+    if ( $view->isAllowedAlter ) {
+
+        //sgi sempre pode alterar
+        $return = $menuEditar;
+
+    }else if (\Core_Configuration::getSgdocePerfilUsuarioSic() == Core_Integration_Sica_User::getUserProfile()) {
+        //se usuario logado for SIC só pode alterar documentos do tipo SIC
+        if ($row['sqTipoDocumento'] == \Core_Configuration::getSgdoceTipoDocumentoSic() &&
+                $row['nuTramite'] == 1 &&
+                    ! $row['hasVinculo'] &&
+                        ! $hasSolicitacaoAberta) {
+            $return =  $menuEditar;
+        }
+    }else if ( $isInconsistente ||
+                (!Zend_Registry::get('isUserSgi') &&
+                    ($row['nuTramite'] == 1 || ($row['nuTramite'] == 2 && $row['sqStatusTramite'] == \Core_Configuration::getSgdoceStatusTramiteCancelado()))&&
+                        ! $row['hasVinculo'] &&
+                            ! $hasSolicitacaoAberta
+                )
+             ) {
+
+        $return = $menuEditar;
+    }
+
+    return $return;
+
+};
+
+$status = function($row) use ($view) {
+
+$arrFlags = array();
+
+    switch ($row['sqPrioridade']) {
+        case \Core_Configuration::getSgdoceTipoPrioridadeAlta(): //alta
+            $arrFlags[] = '<span title="Prioridade Alta"><i class="icon icon-flag-red"></i></span>';
+            break;
+        case \Core_Configuration::getSgdoceTipoPrioridadeMedia(): //méida
+            $arrFlags[] = '<span title="Prioridade Média"><i class="icon icon-flag-yellow"></i></span>';
+            break;
+        default: //baixa
+            $arrFlags[] = '<span title="Prioridade Baixa"><i class="icon icon-flag-green"></i></span>';
+            break;
+    }
+
+    if ($row['hasVinculo']) {
+        $arrFlags[] = '<span title="Possui Vinculos"><i class="icon icon-retweet"></i></span>';
+    }
+
+    if ($row['foiCitado']) {
+        $arrFlags[] = '<span title="Foi citado em outro(s) artefato(s)"><i class="icon icon-random"></i></span>';
+    }
+    if ($row['hasSolicitacaoAberta']) {
+        $arrFlags[] = '<span title="Existe demanda aberta"><i class="icon icon-warning-sign"></i></span>';
+    }
+
+    $arrBtn = array();
+
+    switch ($view->dto->caixa) {
+        case 2: //minha
+
+            break;
+
+        case 3: //externo
+            if ($row['txCodigoRastreamento']) {
+                $arrBtn[] = $view->actionButton('Rastreamento', 'Artefato.trace', array('txCodigoRastreamento' => strtoupper($row['txCodigoRastreamento'])), 'envelope', NULL);
+            }
+            break;
+
+        default: //unidade
+
+            break;
+    }
+
+    $html = join(' ', $arrFlags);
+    if (count($arrBtn) > 0) {
+        $html .= $view->buttonGroup(join(' ', $arrBtn), count($arrBtn));
+    }
+
+    return $html;
+};
+
+$acao = function($row) use ($view, $fnCanEditDocument) {
+
+    $isTramitePessoaLogada = ($row['sqPessoaOrigem'] == \Core_Integration_Sica_User::getPersonId());
+    $isGestorUnidade = (\Core_Integration_Sica_User::getUserProfile() == \Core_Configuration::getSgdocePerfilGestorUnidade());
+
+    $arrSqArtefato   = array('sqArtefato' => $row['sqArtefato']);
+
+    $arrBtn = array();
+
+    $iconTramitar   = $view->actionButton('Tramitar'             , 'Tramite.send'        , $arrSqArtefato, 'tramitar');
+    $iconReceber    = $view->actionButton('Receber Trâmite'      , 'Tramite.receive'     , $arrSqArtefato, 'receber');
+    $iconDespacho   = $view->actionButton('Despacho'             , 'Despacho.go'         , $arrSqArtefato, 'despacho');
+    $iconComentario = $view->actionButton('Comentário'           , 'Comentario.go'       , $arrSqArtefato, 'comentario');
+    $iconRemover    = $view->actionButton('Cancelar Trâmite'     , 'Tramite.cancel'      , $arrSqArtefato, 'remove');
+    $iconVolume     = $view->actionButton('Abrir/Encerrar Volume', 'Artefato.volume'     , $arrSqArtefato, 'book');
+    $iconEtiqueta   = $view->actionButton('Imprimir Etiqueta'    , 'Artefato.printTicket', $arrSqArtefato, 'print');
+    $iconRetornar   = $view->actionButton('Retornar Trâmite'     , 'Tramite.back'        , $arrSqArtefato, 'retornar');
+    $iconRetornarExt= $view->actionButton('Retornar Trâmite'     , 'Tramite.externalBack', $arrSqArtefato, 'retornar');
+
+    $menuVincular     = $view->actionButton(NULL, 'Vinculo.go'                     , $arrSqArtefato, NULL, 'Vincular');
+    $menuDInfromacao  = $view->actionButton(NULL, 'Artefato.gerarDemandaInformacao', $arrSqArtefato, NULL, 'Demandar Informação');
+    $menuDetalhar     = $view->actionButton(NULL, 'Artefato.visualizarArtefato'    , $arrSqArtefato, NULL, 'Detalhar');
+    $menuRastrear     = $view->actionButton(NULL, 'Artefato.traceList'             , $arrSqArtefato, NULL, 'Rastreamentos');
+    $menuClassificar  = $view->actionButton(NULL, 'Artefato.classificar'           , $arrSqArtefato, NULL, 'Classificar');
+    $menuArquivar     = $view->actionButton(NULL, 'Artefato.arquivar'              , $arrSqArtefato, NULL, 'Arquivar');
+    $menuArquivarSetor= $view->actionButton(NULL, 'ArquivoSetorial.archive'        , $arrSqArtefato, NULL, 'Arquivar no Setor');
+    $menuAutuar       = $view->actionButton(NULL, 'Artefato.autuar'                , $arrSqArtefato, NULL, 'Autuar');
+    $menuFirstPiece   = $view->actionButton(NULL, 'Vinculo.firstPiece'             , $arrSqArtefato, NULL, '1ª Peça');
+    $menuCancelarTram = $view->actionButton(NULL, 'Tramite.cancel'                 , $arrSqArtefato, NULL, 'Cancelar Trâmite');
+    $menuEditarProc   = $view->actionButton(NULL, 'Artefato.editProcess'           , $arrSqArtefato+array('isInconsistente'=>$row['isInconsistente']), NULL, 'Alterar');
+    $menuResgateArt   = $view->actionButton(NULL, 'Tramite.rescue'                 , $arrSqArtefato, NULL, 'Resgatar');
+    $menuEditVolume   = $view->actionButton(NULL, 'Artefato.editVolume'            , $arrSqArtefato, NULL, 'Volume');
+
+    $btnImgClass = 'eye-open';
+    $btnImgLabel = 'Ver Imagem';
+
+    $hasSolicitacaoAberta = $row['hasSolicitacaoAberta'];
+
+    $arrButtonsDropdown = array(
+        'detalhar' => $menuDetalhar,
+        'vincular' => (! $hasSolicitacaoAberta) ? $menuVincular : '',
+        'gerar_demanda' => $menuDInfromacao,
+
+    );
+    if ($row['hasTramiteRastreamento']) {
+        $arrButtonsDropdown['rastrear'] = $menuRastrear;
+    }
+
+    switch ($view->dto->caixa) {
+        case 2: //minha
+
+            $arrPerfilQuePodeClassificarArquivar = array(
+                \Core_Configuration::getSgdocePerfilArquivo(),
+                \Core_Configuration::getSgdocePerfilSgi()
+            );
+
+            $arrPerfilQuePodeAutuar = array(
+                \Core_Configuration::getSgdocePerfilSgi(),
+                \Core_Configuration::getSgdocePerfilProtocolo(),
+            );
+
+            if ($isGestorUnidade) {
+                unset($arrButtonsDropdown['gerar_demanda']);
+            }
+
+            if ($row['sqStatusTramite'] != \Core_Configuration::getSgdoceStatusTramiteTramitado() &&
+                    ! $hasSolicitacaoAberta &&
+                        ! ($row['podeReceberTramite'] && $row['sqPessoaDestinoInterno'] == \Core_Integration_Sica_User::getPersonId())) {
+                $arrButtonsDropdown['arquivar_setor'] = $menuArquivarSetor;
+            }
+
+            switch ($view->dto->sqTipoArtefato) {
+                case \Core_Configuration::getSgdoceTipoArtefatoDocumento():
+                    if($row['hasImagem']){
+                        $imgAction = 'imageView';
+                    }else if(! $hasSolicitacaoAberta || Zend_Registry::get('isUserSgi')){
+                        $imgAction = 'image';
+                        $btnImgClass = 'arrow-up';
+                        $btnImgLabel = 'Adicionar Imagem';
+                    }else{
+                        $btnImgClass = 'arrow-up';
+                        $imgAction = 'imageAlert';
+                    }
+
+                    if ($row['podeReceberTramite'] && $row['sqPessoaDestinoInterno'] == \Core_Integration_Sica_User::getPersonId()) {
+                        $arrBtn[] = $iconReceber;
+                    } else {
+                        //tramite externo
+                        if ($row['podeCancelarTramite'] && $row['sqTipoPessoaDestino'] != \Core_Configuration::getCorpTipoPessoaUnidadeExt()) {
+                            $arrBtn[] = $iconRemover;
+                        } else {
+                            if(! $hasSolicitacaoAberta){
+                                $arrBtn[] = $iconTramitar;
+                            }
+
+                            $arrButtonsDropdown['editar'] = $fnCanEditDocument($row);
+
+                            if (in_array(\Core_Integration_Sica_User::getUserProfile(), $arrPerfilQuePodeClassificarArquivar) && ! $hasSolicitacaoAberta) {
+                                $arrButtonsDropdown[] = $menuClassificar;
+
+                                if ($row['podeArquivar'] && ! $hasSolicitacaoAberta) {
+                                    $arrButtonsDropdown[] = $menuArquivar;
+                                }
+                            }
+
+                            if ($row['inAbreProcesso']
+                                &&  in_array(\Core_Integration_Sica_User::getUserProfile(), $arrPerfilQuePodeAutuar)
+                                &&  $view->dto->currentUnitHasNUP
+                                && ! $hasSolicitacaoAberta){
+                                $arrButtonsDropdown[] = $menuAutuar;
+                            }
+                        }
+                    }
+                    $arrBtn[] = $iconDespacho;
+                    $arrBtn[] = $iconComentario;
+
+                    break;
+                case \Core_Configuration::getSgdoceTipoArtefatoProcesso():
+                    $imgAction = 'imageView';
+
+                    if (! $row['hasPrimeiraPeca'] && ! $hasSolicitacaoAberta) {
+                        $arrButtonsDropdown['vincular'] = $menuFirstPiece;
+                    }
+
+                    $arrBtn[] = $iconEtiqueta;
+
+                    if ($row['podeReceberTramite'] && $row['sqPessoaDestinoInterno'] == \Core_Integration_Sica_User::getPersonId() && ! $hasSolicitacaoAberta) {
+                        $arrBtn[] = $iconReceber;
+                    } else {
+                        //tramite externo
+                        if ($row['podeCancelarTramite'] && $row['sqTipoPessoaDestino'] != \Core_Configuration::getCorpTipoPessoaUnidadeExt()) {
+                            $arrBtn[] = $iconRemover;
+                        } else {
+                            if (! $hasSolicitacaoAberta) {
+                                $arrBtn[] = $iconTramitar;
+                            }
+
+                            if (in_array(\Core_Integration_Sica_User::getUserProfile(), $arrPerfilQuePodeClassificarArquivar) && ! $hasSolicitacaoAberta) {
+                                $arrButtonsDropdown['classificar'] = $menuClassificar;
+
+                                if ($row['podeArquivar']) {
+                                    $arrButtonsDropdown['arquivar'] = $menuArquivar;
+                                }
+                            }
+                        }
+                    }
+
+                    $arrButtonsDropdown['editar'] = $menuEditarProc;
+
+                    if (!$hasSolicitacaoAberta) {
+                        $arrButtonsDropdown['editarVolume'] = $menuEditVolume;
+                    }
+
+                    $arrBtn[] = $iconDespacho;
+                    $arrBtn[] = $iconComentario;
+                    $arrBtn[] = $iconVolume;
+
+                    break;
+
+                default: //DOSSIE
+                    //???????
+                    break;
+            }
+
+            break;
+
+        case 3: //externo
+            $imgAction = 'imageView';
+
+            if ($isTramitePessoaLogada) {
+                $arrBtn[] = $iconRemover;
+            } else {
+                $arrBtn[] = $iconRetornarExt;
+            }
+
+            $arrBtn[] = $iconDespacho;
+            $arrBtn[] = $iconComentario;
+
+            //neste caso seria apenas pra visualizar mas já exite a visualização dos vinculos
+            //no detalhamento de artefato
+            unset($arrButtonsDropdown['vincular']);
+
+            break;
+
+        default: //unidade
+            $imgAction = '';
+            if($row['hasImagem']){
+                $imgAction = 'imageView';
+            }
+
+            if ($row['podeReceberTramite'] && ! $row['sqPessoaDestinoInterno']) {
+                $arrBtn[] = $iconReceber;
+            }
+
+            $arrBtn[] = $iconDespacho;
+            $arrBtn[] = $iconComentario;
+
+            //na caixa da unidade não mostra a opção de vincular
+            unset($arrButtonsDropdown['vincular']);
+
+            //se pode cancelar e o tramite quando for da pessoa logada
+            if (! $isGestorUnidade && $row['podeCancelarTramite'] && $isTramitePessoaLogada && $row['sqUnidadeOrgOrigemTramite'] == \Core_Integration_Sica_User::getUserUnit()) {
+                array_unshift($arrButtonsDropdown, $menuCancelarTram);
+            }
+
+            if ($isGestorUnidade) {
+                unset($arrButtonsDropdown['gerar_demanda']);
+
+                if(! $row['podeReceberTramite']) {
+                    $arrButtonsDropdown['resgatar'] = $menuResgateArt;
+                }
+            }
+
+            break;
+    }
+    //adiciona o link para imagem
+    if ($imgAction) {
+        array_unshift($arrBtn, $view->actionButton($btnImgLabel, "Artefato.{$imgAction}", $arrSqArtefato, $btnImgClass));
+    }
+
+    $arrBtn[] = $view->actionButtonDropdown($arrButtonsDropdown);
+
+    return $view->buttonGroup(join(' ', $arrBtn), 7);
+};
+
+$nuArtefato = function($row) use($view) {
+    return ($row['nuArtefato']) ? $row['nuArtefato'] : '';
+};
+
+$dtCadastro = function($row) {
+    return $row['dtCadastro']->toString('dd/MM/YYYY');
+};
+
+$acoesMultiplas = function($row) use ($view) {
+    $disabled = '';
+
+    switch ($view->dto->caixa) {
+        case 2: //minha
+            if ($row['hasSolicitacaoAberta']) {
+                $disabled = 'disabled="disabled"';
+            }
+            break;
+
+        case 3: //externo
+            break;
+
+        default: //unidade
+            if (! $row['podeReceberTramite'] && ! $row['podeCancelarTramite']){
+                $disabled = 'disabled="disabled"';
+            }
+            break;
+    }
+
+    return '<input type="checkbox" class="multipleAction" name="sqArtefato[]" value="' . $row['sqArtefato'] . '" ' . $disabled . ' />';
+};
+
+if ($this->dto->sqTipoArtefato == \Core_Configuration::getSgdoceTipoArtefatoProcesso()) {
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplas),
+            array('column' => $status),
+            array('column' => 'nuArtefato'),
+            array('column' => $dtCadastro),
+            array('column' => 'txAssunto'),
+            array('column' => 'noPessoaOrigem'),
+            array('column' => 'txMovimentacao'),
+            array('column' => $acao)
+        )
+    );
+} else {
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplas),
+            array('column' => $status),
+            array('column' => function($row) {
+                if (! $row['nuDigital']) {
+                    return '';
+                }
+                if (strlen($row['nuDigital']) < 7) {
+                    $row['nuDigital'] = str_pad($row['nuDigital'], 7, '0', STR_PAD_LEFT);
+                }
+
+                return $row['nuDigital'];
+            }),
+            array('column' => 'nuArtefato'),
+            array('column' => $dtCadastro),
+            array('column' => 'txAssunto'),
+            array('column' => 'noTipoDocumento'),
+            array('column' => 'noPessoaOrigem'),
+            array('column' => 'txMovimentacao'),
+            array('column' => $acao)
+        )
+    );
+}
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

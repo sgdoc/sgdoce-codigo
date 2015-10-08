@@ -1,0 +1,95 @@
+<?php
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/volume/volume.js');
+	echo $this->headScript();
+?>
+<script type="text/javascript" src="/js/components/validation.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Adicionar Volume</h1>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <!-----Dados Básicos------>
+        <form class="form-horizontal" id="form-volume-adicionar" action="<?php echo $this->url(array('action' => 'save')) ?>" method="post">
+
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            <br />
+            <fieldset>
+
+                <div class="control-group">
+                    <label for="nuVolume" class="control-label">
+                        <span class="required">*</span> Volume
+                    </label>
+                    <div class="controls">
+                        <?php
+                            echo $this->formText( 'nuVolume', null,  array(
+                                'id' => 'nuVolumeInput',
+                                'class' => 'span10',
+                                'mask' => 'numeric'
+                            ));
+                        ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="nuFolhaInicial" class="control-label">
+                        <span class="required">* </span>Folha Inicial
+                    </label>
+
+                    <div class="controls">
+                        <?php
+                            echo $this->formText( 'nuFolhaInicial', null, array(
+                                'class' => 'span10',
+                                'mask' => 'numeric'
+                            ));
+                        ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="isVolumeAberto" class="control-label">
+                        <span class="required">* </span>Volume Aberto?
+                    </label>
+
+                    <div class="controls radios-inline">
+                        <div>
+                            <input type="radio" name="isVolumeAberto" value="1" class="required isVolumeAberto" id="isVolumeAbertoSim"/>
+                            <label for="isVolumeAbertoSim" style="display: inline; font-size: 1em;">Sim</label>
+                            <input type="radio" name="isVolumeAberto" checked="checked" value="0" class="required isVolumeAberto" id="isVolumeAbertoNao"/>
+                            <label for="isVolumeAbertoNao" style="display: inline; font-size: 1em;">Não</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group" id="divNuFolhaFinal">
+                    <label for="nu_folha_final" class="control-label">
+                        <span class="required">* </span>Última Folha
+                    </label>
+
+                    <div class="controls">
+                        <?php
+                            echo $this->formText( 'nuFolhaFinal', null, array(
+                                                    'class'=>'required span10',
+                                                    'min' => 0,
+                                                    'max' => 200,
+                                                    'mask' => 'numeric' ));
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluirVolume">Concluir</button>
+    <a href="#" class="btn btnCancelarVolume" data-dismiss="modal" ><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Volume.populateForm();
+    });
+</script>

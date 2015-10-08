@@ -1,0 +1,11 @@
+<?php
+header('Pragma: '                     . $this->pragma);
+header('Expires: 0');
+header('Cache-Control: '              . $this->cacheControl);
+header('Cache-Control: private'       , false);
+header('Content-Type: '               . $this->contentType);
+header('Content-Disposition: '        . $this->contentDisposition );
+header('Content-Transfer-Encoding: '  . $this->contentTransferEncoding);
+header('Content-Length: '             . $this->contentLength);
+header('Content-type: '               . $this->contentType);
+readfile($this->source);

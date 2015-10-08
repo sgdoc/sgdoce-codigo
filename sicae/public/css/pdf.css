@@ -1,0 +1,88 @@
+.content {
+    font-size: 10px;
+    font-family: "Arial";
+    clear: both;
+}
+
+#header {
+    width: 100%;
+    margin-bottom: 80px;
+    font-family: "Arial";
+    font-size: 11px;
+}
+
+h3, h2 {
+    font-family: "Arial";
+    text-align : center;
+}
+
+table {
+    width: 100%;
+    border: 1px solid #666;
+}
+
+th {
+    border: 1px solid #666;
+}
+
+td {
+    border: 1px solid #666;
+    border-top: 0px;
+}
+
+table tr:first-child td { border-top:0px; }
+
+.smallMargin {
+    margin: 0 0 4px 0;
+    padding: 0;
+}
+
+.mediumMargin {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.marginLeft {
+    margin-left: 50px;
+}
+
+.table th{
+    text-align: center;
+}
+
+#table-pdf .title{
+    background-color: #C0C0C0;
+}
+
+.table-footer td{
+    border-top: 0.2px solid #666;
+    border: 0px;
+    font-family: "Arial";
+    font-size: 10px;
+}
+.table-footer td.data{
+    width: 120px;
+}
+.table-footer td.responsavel{
+    width: 510px;
+    text-align: center;
+}
+.table-footer td.paginacao{
+    text-align: right;
+    width: 120px;
+}
+.total-registro{
+    width: 700px;
+    text-align: right;
+}
+.largura-total{
+    width: 700px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+}
+.sem-bordas{
+    border: none;
+}
+.odd{
+    background-color: #F2F2F2;
+}

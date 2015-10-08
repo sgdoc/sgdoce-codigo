@@ -1,0 +1,6 @@
+#
+# Mensagens padrões
+#
+"MD001";"Cadastro realizado com sucesso.";"Alerta"
+"MD002";"Alteração realizada com Sucesso";"Alerta"
+"MD003";"Exclusão realizada com Sucesso";"Alerta"

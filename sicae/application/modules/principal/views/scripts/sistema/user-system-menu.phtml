@@ -1,0 +1,50 @@
+<?php
+$sistemaJSON = $this->response;
+
+$urlSica = \Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOption('urlSica');
+
+$tipoArquiteturaExterna = \Core_Configuration::getSicaeTipoArquiteturaExterna();
+$tipoLeiauteDefault     = \Core_Configuration::getSicaeTipoLeiauteDefault();
+
+$js = <<<JAVASCRIPT
+
+(function ($, window) {
+    var sistema = {$sistemaJSON},
+        tipoArquiteturaExterna = {$tipoArquiteturaExterna},
+        tipoLeiauteDefault = {$tipoLeiauteDefault};
+
+    if (sistema.sqLeiaute === tipoLeiauteDefault){
+        window.location.assign('{$urlSica}/iframe/sistema/sys/' + sistema.sqSystemEnconded);
+    } else {
+        if (sistema.sqArquitetura === tipoArquiteturaExterna){
+            var hiddenForm = function ( url, data ){
+                var form  = $('<form />', {action: url, method: 'post'}), key;
+                for (key in data){
+                    if (data.hasOwnProperty(key)){
+                        $('<input />', {
+                            type: 'hidden',
+                            value: data[key],
+                            name: key
+                        }).appendTo(form);
+                    }
+                }
+                return form.appendTo('body');
+            }
+            hiddenForm(sistema.txUrl, {
+                sqSistema: sistema.sqSistema,
+                noSistema: sistema.noSistema,
+                sgSistema: sistema.sgSistema
+            }).submit();
+        } else {
+            window.location.assign(sistema.txUrl || '');
+        }
+    }
+}(jQuery, window, undefined));
+
+JAVASCRIPT;
+
+echo $js;
+
+if ($this->callback !== '') {
+    echo "{$this->callback}();";
+}

@@ -1,0 +1,103 @@
+<page>
+    <div id="content">
+        <div id="header">
+            <p style="text-align: center"><img src="<?php echo $this->layout()->logo; ?>" /></p>
+            <br />
+            <br />
+            <br />
+        </div>
+        <div id="body">
+
+            <p style="text-align: center"><?php echo $this->layout()->data->unidadeBase; ?></p>
+
+            <br />
+            <br />
+
+            <p style="text-align: center">TERMO DE JUNTADA POR <?php echo $this->layout()->data->tipoOperacao; ?></p>
+
+            <p class="text">
+                <?php 
+                    $nuArtefatoAnexado = "";
+                
+                    if( is_array($this->layout()->data->processoAnexado) ):
+                        foreach( $this->layout()->data->processoAnexado as $entArtefatoFilho ):
+                            $nuArtefatoAnexado .= $this->layout()->getView()->nuArtefato($entArtefatoFilho) . ", ";
+                        endforeach;
+                    else:
+                        $nuArtefatoAnexado = $this->layout()->getView()->nuArtefato($this->layout()->data->processoAnexado);
+                    endif;
+                    $nuArtefatoAnexado = trim($nuArtefatoAnexado);
+                    $nuArtefatoAnexado = rtrim($nuArtefatoAnexado, ",");
+                ?>
+                <?php echo
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+                    'Ao(s) <b>' . $this->layout()->data->dataExtenso .
+                    '</b>, atendendo o despacho interlocutório nº ' .
+                    $this->layout()->data->despacho .
+                    ' da '.
+                    $this->layout()->data->unidadeAtendida.
+                    'faço apensar ao presente processo nº '.
+                    $this->layout()->getView()->nuArtefato($this->layout()->data->processoAnexador).
+                    ' o(s) processo(s) nº '.
+                    $nuArtefatoAnexado.
+                    '.'
+                    ;
+                ?>
+            </p>
+            <br />
+            <p style="text-align: center">
+                _______________________________________<br />
+                <b><?php echo $this->layout()->data->assinante; ?></b>
+                <br />
+                <b><?php echo $this->layout()->data->cargoFuncao; ?></b>
+            </p>
+        </div>
+    </div>
+    <page_footer>
+        <p class="date">Data de impress&atilde;o <?php echo date('d/m/Y H:i:s'); ?></p>
+    </page_footer>
+</page>
+<style type="text/css">
+    <!--
+    #content {
+        margin-right: 0.79in;
+        margin-left: 0.79in;
+        font-size: 12pt;
+    }
+
+    #header {
+        width: 100%;
+        text-align: center;
+        font-family: "Times New Roman";
+        /*border-bottom: solid black 1px;*/
+        /*font-size: 9pt;*/
+    }
+
+    .name {
+        text-align: left;
+        margin-left: 0.4in;
+        font-family: "Times New Roman";
+    }
+
+    .text {
+        word-wrap: break-word;
+        text-align: justify;
+        margin-left: 0.6in;
+        font-family: "Arial";
+    }
+
+    .nameRight {
+        text-align: right;
+        font-family: "Arial";
+    }
+
+    .date {
+        float: right;
+        text-align: right;
+        font-family: "Arial";
+        font-size: 8pt;
+        margin-right: 0.8in
+    }
+
+    -->
+</style>

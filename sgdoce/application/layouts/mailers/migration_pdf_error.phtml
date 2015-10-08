@@ -1,0 +1,15 @@
+<?php
+    $sqSolicitacao  = $this->entSolicitacao->getSqSolicitacaoMigracaoImagem();
+    $entArtefato    = $this->entSolicitacao->getSqArtefato();
+    $nuDigital      = str_pad($entArtefato->getNuDigital()->getNuEtiqueta(), 7,'0',STR_PAD_LEFT);
+
+    $tentativas     = $this->qtdeTentativa - $this->entSolicitacao->getInTentativa();
+    $plural         = ($tentativas > 1) ? 's':'';
+?>
+<?php echo $this->render('header.phtml'); ?>
+<p>Caro usuário.</p>
+<br />
+<p>O SGDoc-e teve dificuldade em migrar as imagens do documento <b><?php echo $nuDigital; ?></b>.</p>
+<p>O sistema fará mais <?php echo $tentativas; ?> tentativa<?php echo $plural; ?> de processamento. Caso não receber email com a conclusão da solicitação, favor entrar em contato
+    com o suporte informando o número #<?php echo $sqSolicitacao; ?> do processamento de migração.</p>
+

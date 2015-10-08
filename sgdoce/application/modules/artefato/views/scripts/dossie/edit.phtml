@@ -1,0 +1,35 @@
+<?php
+echo $this->partial('dossie/form.phtml',
+        array('data'                       => $this->data ? $this->data : new Sgdoce\Model\Entity\Artefato(),
+                'usuario'                   => $this->usuario ? $this->usuario : NULL,
+                'sqArtefato'                => $this->data->getSqArtefato() ? $this->data->getSqArtefato() : NULL,
+                'nuDigital'                 => $this->data->getNuDigital() ? $this->data->getNuDigital() : NULL,
+                'noTitulo'                  => $this->data->getSqArtefatoDossie() ?
+                                               $this->data->getSqArtefatoDossie()->getNoTitulo() : NULL,
+                'sqGrauAcesso'              => $this->grauAcessoArtefato ?
+                                               $this->grauAcessoArtefato->getSqGrauAcesso()->getSqGrauAcesso() : NULL,
+                'sqAssunto'                 => $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ?
+                                               $this->grauAcessoArtefato->getSqGrauAcesso()->getSqGrauAcesso() : NULL,
+                'sqTipoDocumento'           => $this->data->getSqTipoDocumento() ? $this->data->getSqTipoDocumento()->getSqTipoDocumento() : NULL,
+                'itensGrauAcesso'           => $this->itensGrauAcesso ? $this->itensGrauAcesso : NULL,
+                'itensTipoDocumento'        => $this->itensTipoDocumento ? $this->itensTipoDocumento : NULL,
+                'itensAssunto'              => $this->itensAssunto ? $this->itensAssunto : NULL,
+                'nuArtefato'                => $this->data->getNuArtefato() ? $this->data->getNuArtefato() : NULL,
+                'dtArtefato'                => $this->data->getDtArtefato() ? $this->date($this->data->getDtArtefato()) : NULL,
+                'txAssuntoComplementar'     => $this->data->getTxAssuntoComplementar() ? $this->data->getTxAssuntoComplementar() : NULL,
+                'assinatura'                => $this->pessoaAssinante ?
+                                               $this->pessoaAssinante->getSqPessoaUnidadeOrg()->getSqPessoaSgdoce()->getNoPessoa() : NULL,
+        		'sqAssinatura'              => $this->pessoaAssinante ?
+        									   $this->pessoaAssinante->getSqPessoaUnidadeOrg()->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa() : NULL,
+                'sqPessoa'                  => $this->sqPessoaSgdoce ? $this->sqPessoaSgdoce : NULL,
+                'noCargoAssinante'          => $this->pessoaAssinante ?
+                                               $this->pessoaAssinante->getSqPessoaUnidadeOrg()->getNoCargo() : NULL,
+                'txObservacao'              => $this->data->getSqArtefatoDossie() ?
+                                               $this->data->getSqArtefatoDossie()->getTxObservacao() : NULL,
+                'sqUnidadeOrg'              => $this->sqUnidadeOrg ? $this->sqUnidadeOrg : NULL,
+                'noUnidadeOrg'              => $this->noUnidadeOrg ? $this->noUnidadeOrg : NULL,
+        		'redirect'                  => $this->redirect ? $this->redirect : NULL
+               )
+        );
+
+

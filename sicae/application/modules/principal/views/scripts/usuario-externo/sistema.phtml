@@ -1,0 +1,50 @@
+<fieldset>
+    <div class="control-group">
+        <label class="control-label" for="cp8">
+            <span class="required" title="Campo Obrigatório"
+>*</span> Sistemas
+        </label>
+        <div class="controls">
+            <?php echo $this->comboCustom('sqSistema', NULL, array('class' => 'required'), $this->cmb['sqSistema']) ?>
+
+            <ol class="asmList" id="asmList">
+                <?php foreach ($this->data->getSqUsuarioExternoPerfil() as $arrPerfil) { ?>
+                    <?php if (array_key_exists($arrPerfil->getSqPerfil()->getSqPerfil(), $this->cmb['sqSistema'])) { ?>
+                        <li class="asmListItem">
+                            <input
+                                type="hidden"
+                                name="sistemas[sqPerfil][]"
+                                value="<?php echo $arrPerfil->getSqPerfil()->getSqSistema()->getSqPerfilExternoPadrao()->getSqPerfil(); ?>"
+                                />
+                            <span class="asmListItemLabel">
+                                <?php echo $arrPerfil->getSqPerfil()->getSqSistema()->getSgSistema(); ?>
+                                -
+                                <?php echo $arrPerfil->getSqPerfil()->getSqSistema()->getNoSistema(); ?>
+                                <a class="asmListItemRemove" id="asmListItemRemove" rel="' + value + '">
+                                    <i title="Excluir" class="icon-trash"></i>
+                                </a>
+                            </span>
+                        </li>
+                    <?php } ?>
+                <?php } ?>
+            </ol>
+        </div>
+    </div>
+
+</fieldset>
+
+<br />
+<div class="form-actions">
+    <a data-toggle="tab" href="#2" class="btn btn_prev_wizard"><i class="icon-chevron-left"></i> Anterior</a>
+    <a data-toggle="tab" href="#" class="btn disabled">Próximo <i class="icon-chevron-right"></i></a>
+    <a data-toggle="modal" class="btn btn-primary concluir">Concluir</a>
+
+    <?php if ($this->data->getSqUsuarioExterno()) : ?>
+        <button id="btnConcluir" class="btn cancelar" type="button">
+            <i class="icon-remove"></i>  Cancelar
+        </button>
+    <?php else : ?>
+        <a href="<?php echo $this->url(array('controller' => 'usuario-externo', 'action' => 'login'), NULL, TRUE); ?>"
+           class="btn"><i class="icon-remove"></i> Cancelar</a>
+    <?php endif; ?>
+</div>

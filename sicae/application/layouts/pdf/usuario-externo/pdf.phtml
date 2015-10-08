@@ -1,0 +1,180 @@
+<?php
+$sgSistema = null;
+$count = 0;
+
+$maskNumber = new Core_View_Helper_MaskNumber();
+$maskNumber->setView($this);
+
+# valores baseados em pessoa fisica ou juridica
+$nuCpfCnpj = null;
+$noEmailXFantasia = null;
+$noLabelCpfCnpj = null;
+$noLabelNomeRazao = null;
+$noLabelEmailFantasia = null;
+
+$assetUrl = new Core_View_Helper_AssetUrl();
+$assetUrl->setView($this);
+$path = APPLICATION_PATH . '/../public/';
+
+$this->headLink()
+        ->setStylesheet($path . $assetUrl->assetUrl('style.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-correct.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-responsive.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style.css', true))
+        ->appendStylesheet($path . $assetUrl->assetUrl('pdf.css', true))
+        ->appendStylesheet($path . $assetUrl->assetUrl('pdf-sistema.css', true));
+
+echo $this->headLink();
+
+$pessoas = array();
+$sistemas = array();
+$perfis = array();
+
+foreach ($this->layout()->data['data'] as $userExterno) {
+    $identificador = $userExterno['sqUsuarioExterno'];
+
+    $number = md5(uniqid() . microtime());
+    $sistemas[$identificador][$number] = array();
+
+    if ($userExterno['sgSistema'] && $userExterno['noSistema']) {
+        if (!in_array($userExterno['sgSistema'], $sistemas[$identificador])) {
+            $sistemas[$identificador][$userExterno['sgSistema']] = $userExterno['noSistema'];
+            $perfis[$identificador][$userExterno['sgSistema']][] = $userExterno['noPerfil'];
+        }
+    }
+
+    if (!in_array($identificador, $pessoas)) {
+        $pessoas[$identificador] = $userExterno;
+    }
+
+    unset($sistemas[$identificador][$number]);
+}
+?>
+<page backtop="2mm" backbottom="3mm" backleft="3mm" backright="3mm">
+    <page_footer>
+        <div class="content">
+            <table class="table-footer">
+                <tr>
+                    <td class="data">
+                        Data: <?php echo date('d/m/Y') . ' às ' . date('H') . 'h' . date('i'); ?>
+                    </td>
+                    <td class="responsavel">
+                        Responsável: <?php echo \Core_Integration_Sica_User::getUserName(); ?>
+                    </td>
+                    <td class="paginacao">
+                        Página [[page_cu]] de [[page_nb]]
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </page_footer>
+    <div class="content">
+        <div>
+            <img src="<?php echo $path . $assetUrl->assetUrl('icons/marcaICMBioBig.png', true, array('address' => 'asset')) ?>" name="figura1" class="pull-left" width="100" border="0" />
+            <span align="center">
+                <h3>SICA-e - Sistema de Integra&ccedil;&atilde;o e Controle de Acesso</h3>
+                <h4>Resultado da Pesquisa de Usu&aacute;rio Externo</h4>
+            </span>
+        </div>
+        <br/>
+        <br/>
+        <?php foreach ($pessoas as $row): ?>
+
+            <?php if (!isset($row['sqUsuarioExterno'])): ?>
+                Nenhum registro encontrado.
+            <?php endif; ?>
+
+            <?php if (!empty($row['nuCpf'])): ?>
+                <?php $nuCpfCnpj = $row['nuCpf']; ?>
+                <?php $noEmailXFantasia = $row['txEmail']; ?>
+                <?php $noLabelCpfCnpj = 'CPF'; ?>
+                <?php $noLabelNomeRazao = 'Nome do Usuário'; ?>
+                <?php $noLabelEmailFantasia = 'Email'; ?>
+            <?php elseif (!empty($row['nuCnpj'])): ?>
+                <?php $nuCpfCnpj = $row['nuCnpj']; ?>
+                <?php $noEmailXFantasia = $row['txEmail']; ?>
+                <?php $noLabelCpfCnpj = 'CNPJ'; ?>
+                <?php $noLabelNomeRazao = 'Razão Social'; ?>
+                <?php $noLabelEmailFantasia = 'Nome Fantasia'; ?>
+            <?php endif; ?>
+            <?php if ($row['inNacionalidadeBrasileira'] === FALSE): ?>
+                <?php $nuCpfCnpj = $row['nuPassaporte']; ?>
+                <?php $noEmailXFantasia = $row['txEmail']; ?>
+                <?php $noLabelCpfCnpj = 'Passaporte'; ?>
+                <?php $noLabelNomeRazao = 'Nome do Usuário'; ?>
+                <?php $noLabelEmailFantasia = 'Email'; ?>
+            <?php endif; ?>
+            <?php $count++; ?>
+
+            <table class="table table-condensed" id="table-pdf">
+                <tr class="title">
+                    <th><?php echo $noLabelCpfCnpj; ?></th>
+                    <th><?php echo $noLabelNomeRazao; ?></th>
+                    <th><?php echo $noLabelEmailFantasia; ?></th>
+
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <?php
+                        if ($row['nuCnpj']) {
+                            $doc = $maskNumber->maskNumber($nuCpfCnpj, 'cnpj');
+                        } else {
+                            $doc = $maskNumber->maskNumber($nuCpfCnpj, 'cpf');
+                        }
+
+                        if ($row['inNacionalidadeBrasileira'] === FALSE) {
+                            $doc = $row['nuPassaporte'];
+                        }
+
+                        echo $doc;
+                        ?>
+                    </td>
+                    <td><?php echo $this->escape($row['noUsuarioExterno']); ?></td>
+                    <td><?php echo $this->escape($noEmailXFantasia); ?></td>
+                    <td>
+                        <?php
+                        $strRetornoStatus = 'Inativo';
+                        if ($row['stRegistroAtivo'] == \Core_Configuration::getSicaeUsuarioExtStRegistroAtivo()) {
+                            $strRetornoStatus = 'Ativo';
+                        } elseif ($row['stRegistroAtivo'] == \Core_Configuration::getSicaeUsuarioExtStRegistroPendAtivacao()) {
+                            $strRetornoStatus = 'Pendente de Ativação';
+                        }
+                        echo $strRetornoStatus;
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="largura-total">
+                    </td>
+                </tr>
+
+                <?php foreach ($sistemas[$row['sqUsuarioExterno']] as $sgSistema => $noSistema): ?>
+                    <tr>
+                        <td colspan="5" class="largura-total">
+                            <b>
+                                <?php echo $this->escape($sgSistema . ' - ' . $noSistema); ?>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr style="background-color: #C0C0C0;">
+                        <th colspan="5">Perfil</th>
+                    </tr>
+                    <?php foreach ($perfis[$row['sqUsuarioExterno']][$sgSistema] as $perfil): ?>
+                        <tr>
+                            <td colspan="5"><?php echo $this->escape($perfil); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </table>
+            <br /><br />
+        <?php endforeach; ?>
+        <table class="table" align="center">
+            <tr>
+                <td class="total-registro sem-bordas">
+                    Total de Usuários: <?php echo sprintf("%02d", $count); ?>
+                </td>
+            </tr>
+        </table>
+    </div>
+</page>

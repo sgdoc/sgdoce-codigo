@@ -1,0 +1,106 @@
+<?php
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/demanda-informacao/index.js');
+	echo $this->headScript();
+?>
+<h1>Demanda de Informação</h1>
+<br />
+<?php
+    $liUnidade = "active";
+    $liMeu     = "";
+
+    if( !is_null($this->sqPessoaDestino) ) {
+        $liUnidade = "";
+        $liMeu = "active";
+    }
+?>
+<ul class="nav nav-tabs">
+    <li id="liUnidade" class="<?php echo $liUnidade; ?>">
+        <a href="<?php echo $this->baseUrl('/artefato/demanda-informacao/index'); ?>">Demandas da Unidade</a></li>
+    <li id="liMeu" class="<?php echo $liMeu; ?>">
+        <a href="<?php echo $this->url(array('idMeu' => \Core_Integration_Sica_User::getPersonId())); ?>">Minhas Demandas</a></li>
+</ul>
+
+
+<div class="accordion" id="accordion1">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                Demandas Recebidas
+            </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse in">
+           <div class="accordion-inner">
+                <form id="received_box-form" action="<?php echo $this->url(array('action' => 'list-received')); ?>" name="received_box-form" method="post">
+                    <?php echo $this->formHidden('sqUnidadeOrgPessoaDestinoRecebida', $this->sqUnidadeOrgPessoaDestino); ?>
+                    <?php echo $this->formHidden('sqPessoaDestinoRecebida', $this->sqPessoaDestino); ?>
+                    <?php echo $this->formHidden('stRespostaIsNull', 'NULL'); ?>
+                    <div class="row">
+                        <div class="input-append pull-right">
+                            <?php echo $this->formText('search',null,array('id'=>'unit_search','placeholder'=>'Pesquisar...'))?>
+                            <button type="submit" class="btn right" title="Filtrar">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <table id="table-grid-di-received">
+                        <thead>
+                            <tr>
+                                <th>Número Artefato</th>
+                                <th>Origem</th>
+                                <th>Destino</th>
+                                <th>Solicitação</th>
+                                <th>Data do Prazo</th>
+                                <th width="15%">Ações</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+           </div>
+        </div>
+    </div>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo">
+                Demandas Geradas
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse">
+           <div class="accordion-inner">
+                <form id="generated_box-form" action="<?php echo $this->url(array('action' => 'list-generated')); ?>" name="generated_box-form" method="post">
+                    <?php echo $this->formHidden('sqUnidadeOrgPessoaPrazoGerada', $this->sqUnidadeOrgPessoaPrazo); ?>
+                    <?php echo $this->formHidden('sqPessoaPrazoGerada', $this->sqPessoaPrazo); ?>
+                    <div class="row">
+                        <div class="input-append pull-right">
+                            <?php echo $this->formText('search',null,array('id'=>'unit_search','placeholder'=>'Pesquisar...'))?>
+                            <button type="submit" class="btn right" title="Filtrar">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <table id="table-grid-di-generated">
+                        <thead>
+                            <tr>
+                                <th>Número Artefato</th>
+                                <th>Origem</th>
+                                <th>Destino</th>
+                                <th>Solicitação</th>
+                                <th>Data do Prazo</th>
+                                <th>Data de Resposta</th>
+                                <th>Situação</th>
+                                <th width="10%">Ações</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+           </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal_container" class="modal hide fade modal-large modal-without-scroll"></div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        DemandaInformacaoMain.Index.Init();
+    });
+</script>

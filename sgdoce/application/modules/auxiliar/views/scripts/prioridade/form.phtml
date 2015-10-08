@@ -1,0 +1,39 @@
+<?php $label = ($this->data->getSqTipoPrioridade() ? 'Alterar' : 'Cadastrar'); ?>
+<h1> <?php echo $label; ?> Tipo de Prioridade</h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br/>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-tipo-prioridade">
+    <input type="hidden" name="sqTipoPrioridade" value="<?php echo ($this->data->getSqTipoPrioridade());?>"/>
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">* Descrição </label>
+            <div class="controls">
+                <input class="span6 required" type="text" name="txTipoPrioridade" id="txTipoPrioridade"
+                       maxlength="150" value="<?php echo ($this->data->getTxTipoPrioridade());?>"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">* Prioridade </label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqPrioridade',
+                           ($this->data->getSqPrioridade() ? $this->data->getSqPrioridade()->getSqPrioridade(): ''),
+                           array('class'=>'span3 required'), $this->items);?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <?php
+            $sqPrioridade = $this->data->getSqPrioridade()->getSqPrioridade();
+            $label        = 'Salvar';
+            ?>
+            <button class="btn btn-primary"><?php echo $label; ?></button>
+            <a href="/auxiliar/prioridade" class="btn" id="cancelar">
+                <i class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+
+    </fieldset>
+</form>

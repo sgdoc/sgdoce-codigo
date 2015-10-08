@@ -1,0 +1,237 @@
+<?php
+$sqPessoa_hidden = NULL;                // Recebe o codigo PESSOA, EMPRESA, UNIDADE e etc, quando Externo
+$sqPessoa = NULL;                // Recebe o nome PESSOA, EMPRESA, UNIDADE e etc, quando Externo
+
+$sqTipoPessoaDestino = NULL;            // Recebe o codigo do tipo pessoa (havera tratamento abaixo), quando Externo
+$nuCPFDestino = NULL;            // Recebe o numero do Cpf da pessoa, quando Externo
+$nuCnpjDestino = NULL;            // Recebe o numero do Cnpj da empresa, quando Externo e Pessoa Juritica
+$nuPassaporteDestino = NULL;            // Recebe o numero do Passaporte da pessoa, quando Externo
+
+$sqTipoPessoaDestinoIcmbio = NULL;      // Recebe o codigo do tipo pessoa, quando Interno
+
+$sqPessoaIcmbioDestino_hidden = NULL;   // Recebe o codigo PESSOA, EMPRESA, UNIDADE e etc, quando Interno
+$sqPessoaIcmbioDestino = NULL;   // Recebe o nome PESSOA, EMPRESA, UNIDADE e etc, quando Interno
+
+$sqPessoaEncaminhado_hidden = '';              // Recebe o codigo do endereco
+$sqPessoaEncaminhado = NULL;              // Recebe o endereco
+
+$noPessoaFuncao = NULL;          // Recebe a descricao da funcao
+
+$tipoProcedencia = NULL;          // Recebe o tipo de registro
+$destinoInterno = NULL;
+//
+// tratanto os valores das variaveis para preenchimento
+if (count($this->dadosDestino)) {
+    $destinoInterno = $this->dadosDestino[1];
+    $nuCPFDestino = $this->dadosDestino[0]->getSqPessoaSgdoce()->getNuCpfCnpjPassaporte();
+    $noPessoaFuncao = $tipoPessoa = $this->dadosDestino[0]->getNoCargoEncaminhado();
+
+    $sqPessoaEncaminhado = $this->dadosDestino[0]->getSqPessoaEncaminhado()->getSqPessoaCorporativo()->getNoPessoa();
+    $sqPessoaEncaminhado_hidden = $this->dadosDestino[0]->getSqPessoaEncaminhado()->getSqPessoaCorporativo()->getSqPessoa();
+
+    if ($destinoInterno == 3) {
+        $sqPessoa = $this->dadosDestino[0]->getSqPessoaSgdoce()->getNoPessoa();
+        $sqPessoa_hidden = $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa();
+        $sqTipoPessoaDestino = $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqTipoPessoa()->getSqTipoPessoa();
+        if ($sqTipoPessoaDestino == 6) {
+            $sqTipoPessoaDestino = 5;
+        }
+    }
+    if ($destinoInterno == 1) {
+        $sqPessoaIcmbioDestino = $this->dadosDestino[0]->getSqPessoaSgdoce()->getNoPessoa();
+        $sqPessoaIcmbioDestino_hidden = $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa();
+        $sqTipoPessoaDestinoIcmbio = $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqTipoPessoa()->getSqTipoPessoa();
+    }
+}
+?>
+<div class="control-group <?php echo (!$destinoInterno) ? "error" : null; ?>">
+    <label class="control-label">
+        <span class="required">*</span> Destino
+    </label>
+    <div class="controls radios-inline">
+            <input type="radio" name="destinoInterno" id="chekDestinoInterno" value="interno"
+               <?php echo ($destinoInterno == 1) ? 'checked' : NULL ?> />
+            <label for="chekDestinoInterno">Interno</label>
+
+            <input type="radio"	name="destinoInterno" id="chekDestinoExterno" value="externo"
+               <?php echo ($destinoInterno == 3) ? 'checked' : NULL ?> />
+            <label for="chekDestinoExterno">Externo</label>
+
+        <input type="checkbox" id="anexo" name="anexo"	class="hidden " value="1" />
+    </div>
+</div>
+<!-- Destino -->
+<div class="control-group divDestinoTipoPessoaIcmbio">
+    <label class="control-label" for="sqTipoPessoaDestinoIcmbio">
+        <span class="required">*</span> <span id="labelTipoPessoaDestinoInterno">Tipo de Pessoa</span>
+    </label>
+    <div class="controls">
+        <?php
+        $pessoa = array('1' => 'Funcionário', '4' => 'Unidade Organizacional');
+        echo $this->ComboCustom('sqTipoPessoaDestinoIcmbio', $sqTipoPessoaDestinoIcmbio, array('class' => 'span7'), $pessoa);
+        ?>
+    </div>
+</div>
+<div class="control-group divDestinoSqPessoaIcmbio">
+    <label class="control-label" id="dvLabelSqPessoa">
+        <span class="required">*</span> Nome
+    </label>
+    <div class="controls">
+        <input type="hidden" name="sqPessoaIcmbioDestino_hidden"
+               id="sqPessoaIcmbioDestino_hidden"
+               value="<?php echo $sqPessoaIcmbioDestino_hidden ?>" />
+        <input type="text" name="sqPessoaIcmbioDestino"
+            id="sqPessoaIcmbioDestino" class="span7"
+            value="<?php echo $sqPessoaIcmbioDestino ?>" />
+    </div>
+</div>
+<div class="control-group divDestinoSqPessoaEncaminhado">
+    <label class="control-label" id="dvLabelSqPessoa">
+        Encaminhado para
+    </label>
+    <div class="controls">
+        <input type="hidden" name="sqPessoaEncaminhado_hidden" id="sqPessoaEncaminhado_hidden" value="<?php echo $sqPessoaEncaminhado_hidden ?>" />
+        <input class="span7" type="text" name="sqPessoaEncaminhado" id="sqPessoaEncaminhado"value="<?php echo $sqPessoaEncaminhado ?>" />
+    </div>
+</div>
+<div class="control-group divDestinoTipoPessoa">
+    <label class="control-label" for="sqTipoPessoaDestino">
+        <span class="required">*</span> Tipo de Destino
+    </label>
+    <div class="controls">
+        <?php
+        unset($this->tipoPessoa[3]);
+        unset($this->tipoPessoa[4]);
+        unset($this->tipoPessoa[6]);
+        echo $this->ComboCustom('sqTipoPessoaDestino', $sqTipoPessoaDestino, array('class' => 'span7'), $this->tipoPessoa);
+        ?>
+    </div>
+</div>
+
+<div class="control-group divNacionalidadeDestino">
+    <label class="control-label"><span class="required">*</span> Nacionalidade Brasileira? </label>
+    <div class="controls radios-inline">
+        <input type="radio" id="nacBrasileiraDestinho"
+               <?php echo ($this->nacionalidadeDestino == 1 || $this->nacionalidadeDestino == NULL) ? "checked='checked'" : '' ?>
+               name="tpNacionalidadeDestino" value="1" class="required"/>
+        <label for="nacBrasileiraDestinho">Sim</label>
+
+        <input type="radio" id="nacExtrangeriaDestinho"
+               <?php echo ($this->nacionalidadeDestino == 2) ? "checked='checked'" : '' ?>
+               name="tpNacionalidadeDestino" value="0" class="required"/>
+        <label for="nacExtrangeriaDestinho">Não</label>
+    </div>
+    <input type="hidden" name="extraParam" id="extraParam" value="" />
+</div>
+
+<div class="control-group divDestinoSqPessoa">
+    <label class="control-label" id="dvLabelSqPessoa">
+        <span class="required" >*</span> Nome
+    </label>
+    <div class="controls">
+        <input type="hidden" name="sqPessoa_hidden" id="sqPessoa_hidden" value="<?php echo $sqPessoa_hidden; ?>" />
+        <input type="text" name="sqPessoa" id="sqPessoa" value="<?php echo $sqPessoa; ?>" class="span7" />
+        <div class="input-append dropdown">
+            <button type="button" id="btnCadastraPessoa"
+                    class="btn right divCadastraPessoa" data-toggle="dropdown"
+                    title="Opções">
+                <i class="icon-cog"></i>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li class="liPessoaFisica">
+                    <a href="/auxiliar/pessoa-fisica/create/form/form-cadastro-documento/campoPessoa/sqPessoa/campoCpf/nuCPFDestino" 
+                       target="_blank">Cadastrar (PF)</a>
+                </li>
+                <li class="liPessoaJuridica">
+                    <a href="/auxiliar/pessoa-juridica/create/form/form-cadastro-documento/campoPessoa/sqPessoa/campoCnpj/nuCNPJDestino" 
+                       target="_blank">Cadastrar (PJ)</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="control-group divDestinoCPF">
+    <label class="control-label" id="dvLabelCPF">
+        CPF
+    </label>
+    <div class="controls">
+        <input class="cpf span4" type="text" name="nuCPFDestino" id="nuCPFDestino"
+               value="<?php echo $nuCPFDestino; ?>" maxlength="14" mask="cpf" />
+    </div>
+</div>
+<div class="control-group divDestinoCNPJ">
+    <label class="control-label" id="dvLabelCNPJ">
+        <span class="required">*</span> CNPJ
+    </label>
+    <div class="controls">
+        <input class="cnpj span4" type="text" name="nuCNPJDestino"
+               id="nuCNPJDestino" value="<?php echo $nuCPFDestino ?>" maxlength="18"
+               mask="cnpj" />
+    </div>
+</div>
+<div class="control-group divDestinoSqPessoaEncaminhadoExterno">
+    <label class="control-label" id="dvLabelSqPessoa">
+        Encaminhado para
+    </label>
+    <div class="controls">
+        <input type="hidden" name="sqPessoaEncaminhado_hidden" id="sqPessoaEncaminhadoExterno_hidden" value="<?php echo $sqPessoaEncaminhado_hidden ?>" />
+        <input type="text"   name="sqPessoaEncaminhadoExterno" id="sqPessoaEncaminhadoExterno" class="span7" value="<?php echo $sqPessoaEncaminhado ?>" />
+    </div>
+</div>
+<div class="control-group divDestinoPassaporte">
+    <label class="control-label" id="dvLabelPassaporteDestino">
+        <span class="required">*</span> Nº do Passaporte
+    </label>
+    <div class="controls">
+        <?php echo $this->formText('nuPassaporteDestino',$nuCPFDestino,array('class'=>"span4",'maxlength'=>"30"))?>
+            </div>
+</div>
+<div class="control-group divDestinoNoCargoEncaminhado">
+    <label class="control-label">
+        Cargo
+    </label>
+    <div class="controls">
+        <?php
+        echo $this->ComboCustom('cb_noCargoEncaminhado',
+                        $noPessoaFuncao,
+                        array('class' => 'span4 hide', 'name'=>'noCargoEncaminhado', 'disabled' => 'disabled'),
+                        $this->cargo); ?>
+
+        <input type="text" name="noCargoEncaminhado" id="noCargoEncaminhado" class="span4" maxlength="50" value="" />
+    </div>
+</div>
+      
+<div class="control-group">
+    <label class="control-label"></label>
+    <div class="controls">
+        <div class="alert alert-info left span7">
+            <b>No cadastro anterior:</b><br />
+            <i>Destino:</i> <?php echo ($this->dataSgdocFisico['destino']) ? $this->dataSgdocFisico['destino'] : 'Não informado.'; ?>
+        </div>
+    </div>
+</div>      
+
+<input type="checkbox" id="pesquisaEncaminhamento" name="pesquisaEncaminhamento" class="hidden " value="1" />
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#divDestinoSqPessoaEncaminhadoExterno').hide();
+        $('#divDestinoSqPessoaEncaminhado').hide();
+        $('#noCargoEncaminhado').val('<?php echo $noPessoaFuncao ?>');
+        $('#noCargoEncaminhado_hidden').val('<?php echo $noPessoaFuncao ?>');
+        $('#sqPessoa_hidden').val('<?php echo $sqPessoa_hidden ?>');
+        $('#sqPessoa').val('<?php echo $sqPessoa ?>');
+
+        var pen = '<?php echo $sqPessoaEncaminhado ?>';
+        var hdn = '<?php echo $sqPessoaEncaminhado_hidden ?>';
+
+        Encaminhado.autocomplete();
+        Encaminhado.init(pen, hdn);
+
+        Destino.init();
+
+        $('#nuCPFDestino,#nuCNPJDestino,#nuPassaporteDestino').blur(function() {
+            Destino.searchDadosPessoa();
+        });
+    });
+</script>

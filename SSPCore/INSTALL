@@ -1,0 +1,66 @@
+Instalacao do SIAL
+==================
+
+ - Baixe o arquivo sial_vs*.tar.gz
+ - descompacte o arquivo sial_vs*.tar.gz
+ 
+ - o uso do SIAL pode ser feito de duas formas:
+  - Include path
+    - Nesta modalidade coloquei o sial numa pasta de sua preferência.
+        - Edite o arquivo php.ini e insera o caminho do sial no include_path
+
+          php.ini: 
+             include_path = ".:CURRENT_CONTENT:/path/sial"
+
+        - Outra forma de incluir o SIAL no include_path sem editar o php.ini é atraves da função 'set_include_path', vide appdemo.
+
+  - Inclusão diretamente do projeto (desencorajado)
+    Sob a organização de seu projeto, copie a pasta do sial para dentro de seu projeto.
+
+  - Indepenete do modo de uso do SIAL, em seu projeto sera necessário configurar o classloader para que este carregue as classes do SIAL.
+
+  public/index.php
+
+  /* define caminho completo para pasta sial */
+  $SIAL_PATH = 'sial_fullpath';
+
+  /* inclui o SIAL no include path */
+  set_include_path(get_include_path() . PATH_SEPARATOR . $SIAL_PATH);
+
+  /* inclui o classe loader */
+  require_once 'ClassLoader.php';
+
+  /* registra o SIAL no classloader */
+  \br\gov\sial\core\ClassLoader::factory(
+    'br', current(preg_split('/\/br\//', $SIAL_PATH))
+  )->register();
+
+  /// deste ponto em diante todo o SIAL estará disponível para aplicação //
+  --------------------------------------------------------------------------
+
+USO
+===
+ - O uso do SIAL é exemplicado na APPDEMO disponibilizado junto ao SIAL. Ler o arquivo appdemo/LEIAME.
+
+Dependências
+============
+ Alguns componentes do SIAL fazem uso de recursos prontos de outros frameworks, alias esta é uma das diretrizes do SIAL, porém, todas as dependências necessárias ao funcionamento do SIAL são embacardas na pasta br\gov\sial\core\util\lib.
+
+ As atuais dependências do SIAL são:
+ - Componente          - Licença
+ ====================================
+ - Capctch              - GNU
+ - FPDF                 - *Livre
+ - JPGraph              - **Livre 
+ - NuSOAP               - GNU
+ - OdsPhpGenerator      - GNU
+ - PHPMailer            - LGPL
+ - Zend frameworks      - BSD license
+
+================================================================================
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software to use, copy, modify, distribute, sublicense, and/or sell
+copies of the software, and to permit persons to whom the software is furnished
+to do so.
+
+** Livre para fins não comercial

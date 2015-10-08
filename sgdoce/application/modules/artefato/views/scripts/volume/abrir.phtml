@@ -1,0 +1,100 @@
+<!-----Dados Básicos------>
+<form class="form-horizontal" id="form-volume-abrir" action="<?php echo $this->url(array('action'=>'save')) ?>" method="post">
+
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+    <br />
+    <fieldset>
+        <div class="control-group">
+            <label for="sq_estado" class="control-label">
+                Número do Processo
+            </label>
+
+            <div class="controls">
+                <?php 
+                    $nuArtefato = $this->nuArtefato($this->artefato);
+                    echo $this->formText( 'nuArtefato', $nuArtefato, array(
+                        'id' => 'nuArtefato',
+                        'class'     => 'span10',
+                        'readonly'  => 'readonly'
+                    ));
+                    echo $this->formHidden( 'sqArtefato', $this->artefato->getSqArtefato() );
+                    echo $this->formHidden( 'abertura', 'true' );
+                    echo $this->formHidden( 'stProcessoVolume', true );
+                ?>
+            </div>
+        </div>
+
+        <div class="control-group dvDataPrazo">
+            <label class="control-label" for="appendedInputButton"><span
+                class="required" title="Required field">*</span> Data de Abertura</label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" data-date-startdate="<?php echo isset($this->dtAberturaAnterior) ? $this->dtAberturaAnterior->get('dd/MM/yyyy') : \Zend_Date::now()->get('dd/MM/yyyy'); ?>" class="input-append date">
+                    <input value="" class="input-small dateBR required startDate" id="dtPrazo" maxlength="60"
+                        name="dtAbertura" mask="date" type="text"/>
+                        <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label for="nu_volume" class="control-label"> 
+                <span class="required" title="">* </span>Volume
+            </label>
+            <div class="controls">
+                <?php echo $this->formText( 'nuVolume', $this->nuVolume, array('id' => 'nuVolumeInput', 'class'=>'required span10', 'mask' => 'numeric', 'min' => $this->nuVolume, 'max' => $this->nuVolume, 'readonly' => 'readonly' )); ?>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label for="nu_folha_inicial" class="control-label"> 
+                <span class="required" title="">* </span> Folha Inicial
+            </label>
+
+            <div class="controls">
+                <?php echo $this->formText( 'nuFolhaInicial', $this->nuFolhaInicial, array('class'=>'required span10', 'mask' => 'numeric', 'min' => $this->nuFolhaInicial, 'max' => $this->nuFolhaInicial, 'readonly' => 'readonly')); ?>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label required">
+                <span class="required" title="Campo Obrigatório">*</span> Assinatura
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('sqPessoaAssinaturaAbertura', null, array('class' => 'required span10' )); ?>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <div class="controls radios-inline">
+                <input type="radio" name="stCargoFuncaoAbertura" value="1" checked="checked" class="required" id="stCargoFuncaoAbertura1"/>
+                <label for="stCargoFuncaoAbertura1" >Cargo</label>
+                <input type="radio" name="stCargoFuncaoAbertura" value="2" class="required" id="stCargoFuncaoAbertura2"/>
+                <label for="stCargoFuncaoAbertura2" >Função</label>
+            </div>
+        </div>
+        <div id="divCargo" class="control-group">
+            <label class="control-label"><span class="required">*</span> Cargo</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom(
+                        'sqCargoAssinaturaAbertura', 
+                        NULL, 
+                        array('class' => 'span10 required'), 
+                        $this->arrCargos
+                    ); ?>
+            </div>
+        </div>
+        <div id="divFuncao" class="control-group hidden">
+            <label class="control-label"><span class="required">*</span> Função</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqFuncaoAssinaturaAbertura',
+                                    NULL,
+                                    array('class'=>'span10'),
+                                    $this->arrFuncao); ?>
+            </div>
+        </div>
+    </fieldset>
+</form>

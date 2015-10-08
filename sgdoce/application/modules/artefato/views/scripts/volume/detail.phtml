@@ -1,0 +1,104 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl('/js/app/artefato/volume/detail.js')); ?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Visualizar Volume</h1>
+            <br />
+            <br />
+            <fieldset class="form-horizontal">
+                <?php echo $this->formHidden('sqArtefato' , $this->sqArtefato); ?>
+                <div class="control-group">
+                    <label for="nuArtefato" class="control-label">
+                        Número do Processo
+                    </label>
+        
+                    <div class="controls">
+                        <?php echo $this->formText(
+                                'nuArtefato', 
+                                $this->nuArtefato, 
+                                array('id'       => 'nuArtefato',
+                                      'class'    => 'span8',
+                                      'readonly' => 'readonly'));?>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="nuVolume" class="control-label"> 
+                        Volume
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText(
+                                'nuVolume', 
+                                $this->nuVolume, 
+                                array('id'       => 'nuVolumeInput', 
+                                      'class'    =>'required span8', 
+                                      'mask'     => 'numeric', 
+                                      'readonly' => 'readonly' )); ?>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="nuFolhaInicial" class="control-label"> 
+                         Folha Inicial
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText(
+                                'nuFolhaInicial', 
+                                $this->nuFolhaInicial, 
+                                array('class'    =>'required span8', 
+                                      'mask'     => 'numeric', 
+                                      'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label for="dtAbertura" class="control-label">
+                        Data de Abertura
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText(
+                                'dtAbertura', 
+                                $this->dtAbertura, 
+                                array('id'       => 'dtAbertura',
+                                      'class'    => 'span8',
+                                      'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                
+                <?php if ($this->nuFolhaFinal):?>
+                <div class="control-group">
+                    <label for="nuFolhaFinal" class="control-label">
+                         Folha Final
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText( 
+                                'nuFolhaFinal', 
+                                $this->nuFolhaFinal, 
+                                array('class'    =>'required span8',
+                                      'mask'     => 'numeric', 
+                                      'readonly' => 'readonly' ));
+                        ?>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label for="dtEncerramento" class="control-label">
+                        Data de Encerramento
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText(
+                                'dtEncerramento', 
+                                $this->dtEncerramento, 
+                                array('id'       => 'dtEncerramento',
+                                      'class'    => 'span8',
+                                      'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <?php endif;?>
+                <div class="form-actions">
+                    <a class="btn btn-primary btn-voltar" href="javascript:void(0);">Fechar</a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

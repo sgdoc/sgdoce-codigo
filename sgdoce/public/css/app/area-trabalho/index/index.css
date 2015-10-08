@@ -1,0 +1,207 @@
+/**
+ * Geral
+ */
+.work-area-title {
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.work-area-title.doc {
+    -webkit-transform: skewX(0deg);
+    -ms-transform: skewX(0deg);
+    -o-transform: skewX(0deg);
+    transform: skewX(0deg);
+}
+
+.work-area-title.proc {
+    -webkit-transform: skewX(180deg);
+    -ms-transform: skewX(180deg);
+    -o-transform: skewX(180deg);
+     transform: skewX(180deg);
+}
+
+.work-area-title.ng-animate {
+    opacity: 0.8;
+}
+
+.work-area-change-artefact-text {
+    font-size: 0.5em;
+}
+
+.work-area-artefact-icon {
+    margin: 10px -5px 0 0;
+}
+
+/**
+ * Box options area
+ */
+.work-area-box-options-container .work-area-box-option {
+    -webkit-transition: all .25s;
+    -o-transition: all .25s;
+    transition: all .25s;
+    border-left: 0px solid transparent;
+    font-size: 1.3em;
+}
+.work-area-box-options-container .work-area-box-option:hover,
+.work-area-box-options-container .work-area-box-option:focus {
+    outline: none;
+    text-decoration: none;
+    padding-left: 3px;
+    border-left-color: #3f8b56;
+    border-left-width: 3px;
+}
+
+.work-area-box-options-container .work-area-box-option-selected {
+    font-weight: bold;
+}
+
+/**
+ * Box area
+ */
+.work-area-box-container {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.work-area-box {
+  padding: 10px;
+  border: none;
+}
+.work-area-box.ng-enter,
+.work-area-box.ng-leave {
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .75s;
+  -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .75s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) .75s;
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+}
+.work-area-box.ng-enter {
+  left: 105%;
+}
+.work-area-box.ng-enter.ng-enter-active {
+  left: 0;
+}
+.work-area-box.ng-leave.ng-leave-active {
+  left: -105%;
+  opacity: 0;
+}
+
+/**
+ * Box table
+ */
+.work-area-grid-row td,
+.work-area-grid-cell-long-information {
+    -webkit-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;
+}
+.work-area-grid-row .work-area-grid-cell-small-information {
+    white-space: nowrap;
+}
+.work-area-grid-row:hover .work-area-grid-cell-long-information {
+    display: inline-block;
+    -webkit-transform: scale(0.98);
+    -ms-transform: scale(0.98);
+    -o-transform: scale(0.98);
+    transform: scale(0.98);
+}
+
+.work-area-checkbox {
+  /*display: none;*/
+    opacity: 0;
+    position: absolute;
+}
+.work-area-checkbox + label{
+    appearance: none;
+    cursor: pointer;
+    display: inline-block;
+    padding-left: 34px;
+    position: relative;
+    vertical-align: middle;
+}
+.work-area-checkbox + label:before {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 3px;
+    top: 6px;
+    left: 11px;
+    border: 2px solid rgba(63, 139, 86, 0);
+    border-top: none;
+    border-right: none;
+    -webkit-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg) ;
+    transform: rotate(-45deg);
+}
+.work-area-checkbox + label:after{
+    border: 3px solid rgba(63, 139, 86, 0.8);
+    border-radius: 100% 100% 100% 100%;
+    content: " ";
+    height: 15px;
+    left: 5px;
+    position: absolute;
+    top: -1px;
+    width: 15px;
+}
+.work-area-checkbox:checked + label{
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-animation: checked .2s ease 1;
+    -o-animation: checked .2s ease 1;
+    animation: checked .2s ease 1;
+}
+.work-area-checkbox:focus + label:before,
+.work-area-checkbox + label:hover:before {
+    border-color: rgba(63, 139, 86, 0.5);
+}
+.work-area-checkbox:checked + label:before {
+    border-color: rgba(63, 139, 86, 1);
+    -webkit-transform: rotate(-45deg) scale(1.2);
+    -ms-transform: rotate(-45deg) scale(1.2);
+    -o-transform: rotate(-45deg) scale(1.2);
+    transform: rotate(-45deg) scale(1.2);
+}
+
+.work-area-checkbox:checked + label:after{
+    border-color: rgba(63, 139, 86, 1);
+}
+
+@-o-keyframes checked {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}
+@-ms-keyframes checked {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}
+@-webkit-keyframes checked {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}
+@-moz-keyframes {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}
+@keyframes checked {
+  0%   { transform: scale(1);     }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}

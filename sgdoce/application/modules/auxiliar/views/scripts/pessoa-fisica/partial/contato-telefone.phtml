@@ -1,0 +1,25 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'telefone', 'action' => 'list')) ?>" id="form-telefone">
+    <?php
+            echo $this->formHidden('sqPessoa', $this->data->getSqPessoaFisica()->getSqPessoa());
+    ?>
+    <fieldset>
+		<legend>Telefones</legend>
+		<div class="control-group">
+			<div class="span6">
+				<button type="button" id="btn-add-telefone" class="btn btn-mini" href="#adicionarTelefone" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+			</div>
+			<table id="table-telefone" class="table table-bordered table-striped table-condensed table-hover">
+				<thead>
+					<tr>
+						<th>Tipo</th>
+						<th>DDD</th>
+						<th>Telefone</th>
+						<th width="100">Ações</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</fieldset>
+</form>
+<div class="modal hide fade" id="modalContatoTelefone"></div>
+<script type="text/javascript" src="/js/app/auxiliar/telefone/index.js"></script>

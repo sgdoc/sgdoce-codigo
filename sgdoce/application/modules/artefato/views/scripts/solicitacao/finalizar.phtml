@@ -1,0 +1,184 @@
+<?php
+    $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/solicitacao/form.js');
+    echo $this->headScript();
+?>
+<div class="modal-header">
+	<a class="close" data-dismiss="modal">×</a>
+	<h1>Detalhes da Demanda</h1>
+</div>
+<div class="alert alert-error campos-obrigatorios-modal hidden"></div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div id="error-material"></div>
+        <form enctype="multipart/form-data"
+              class="form-horizontal"
+              id="formModalSolicitacao"
+              method="post"
+              action="<?php echo $this->url(array('action' => 'save-status')); ?>" >
+            <?php if($this->visualizar == false): ?>
+                <div class="top-bar">
+                    <p class="requiredLegend pull-left">
+                        Campos obrigatórios <span class="required">*</span>
+                    </p>
+                </div>
+
+            <?php endif; ?>
+            <fieldset>
+                <legend>Solicitação</legend>
+
+                <div class="control-group">
+                    <label class="control-label"> Protocolo(s):
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("sqSolicitacao", $this->entSolicitacao->getSqSolicitacao(), array( 'rows' => 3, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Data Abertura</label>
+                    <div class="controls">
+                        <?php echo $this->formText('dtSolicitacao', $this->entSolicitacao->getDtSolicitacao()->get(\Zend_Date::DATE_MEDIUM), array('class' => 'input-small','readonly' => 'readonly')); ?>
+                        <?php echo $this->formHidden("sqPessoaResponsavel", \Core_Integration_Sica_User::getPersonId()); ?>
+                        <?php echo $this->formHidden("sqTipoStatusSolicitacao", \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada()); ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"> Usuário:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("noPessoa", $this->entSolicitacao->getSqPessoa()->getNoPessoa(), array( 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"> Email:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("txEmail", $this->entVwEmailSolicitante->getTxEmail(), array( 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+
+                <?php if($this->entSolicitacao->getSqArtefato() instanceof Sgdoce\Model\Entity\Artefato): ?>
+                <div class="control-group">
+                    <label class="control-label">Artefato:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("sqArtefato", $this->nuArtefato($this->entSolicitacao->getSqArtefato()), array( 'class' => 'span9', 'disabled' => 'disabled')); ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <div class="control-group">
+                    <label class="control-label">Assunto:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("noTipoAssuntoSolicitacao", $this->entSolicitacao->getSqTipoAssuntoSolicitacao()->getNoTipoAssuntoSolicitacao(), array( 'class' => 'span9 required', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Descrição:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("dsSolicitacao", $this->entSolicitacao->getDsSolicitacao(), array( 'rows' => 4, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+
+                <?php if( $this->dataUltimoTramite ): ?>
+                <!--linha de separação-->
+                <legend>Triagem</legend>
+
+                <div class="control-group">
+                    <label class="control-label">Data:</label>
+                    <div class="controls">
+                        <?php echo $this->formText('dtOperacaoTriagem', $this->dataUltimoTramite['dtOperacao'], array('class' => 'input-small', 'disabled' => 'disabled')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Atendente:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formText("noPessoaAtendenteTriagem", $this->dataUltimoTramite['noPessoaTriagem'], array( 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Comentário:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea("txComentarioTriagem", $this->dataUltimoTramite['txComentario'], array( 'rows' => 4, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if( $this->dataUltimoTriagem['sqTipoStatusSolicitacao'] == \Core_Configuration::getSgdoceTipoStatusSolicitacaoFinalizada() ): ?>
+                    <!--linha de separação-->
+                    <legend>Último Atendimento</legend>
+                        <?php if( !is_null($this->dataUltimoTriagem['noPessoaResponsavel']) ): ?>
+                        <div class="control-group">
+                            <label class="control-label">
+                                <?php if($this->visualizar == false): ?>
+                                    <span class="required">* </span>
+                                <?php endif; ?>
+                                Atendente:
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText("noPessoaResponsavel", $this->dataUltimoTriagem['noPessoaResponsavel'], array( 'rows' => 4, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Data:</label>
+                            <div class="controls">
+                                <?php echo $this->formText('dtOperacaoTriagem', $this->dataUltimoTriagem['dtOperacao'], array('class' => 'input-small', 'readonly' => 'readonly')); ?>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">
+                                <?php if($this->visualizar == false): ?>
+                                    <span class="required">* </span>
+                                <?php endif; ?>
+                                Comentário:
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formTextarea("txComentario", $this->dataUltimoTriagem['txComentario'], array( 'rows' => 4, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if( $this->visualizar == false ): ?>
+                    <!--linha de separação-->
+                    <legend>Último Atendimento</legend>
+                    <div class="control-group">
+                        <label class="control-label">
+                            <?php if($this->visualizar == false): ?>
+                                <span class="required">* </span>
+                            <?php endif; ?>
+                            Comentário Atendente:
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formTextarea("txComentario", null, array( 'rows' => 4, 'class' => 'span9 required canPaste')); ?>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    <div class="control-group">
+                        <label class="control-label">
+                            Situação:
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText("noPessoaResponsavel", $this->dataUltimoTriagem['noTipoStatusSolicitacao'], array( 'rows' => 4, 'class' => 'span9', 'readonly' => 'readonly')); ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <?php if( $this->visualizar == false ): ?>
+    <a class="btn btn-primary" id="btnSubmit">Finalizar</a>
+    <?php endif; ?>
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

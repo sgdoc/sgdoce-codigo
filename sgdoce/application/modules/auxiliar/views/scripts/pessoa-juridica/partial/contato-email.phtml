@@ -1,0 +1,28 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'email', 'action' => 'list')) ?>" id="form-email">
+    <?php
+        echo $this->formHidden('sqPessoa', $this->data->getSqPessoaJuridica()->getSqPessoa());
+    ?>
+	<fieldset>
+		<legend>Emails</legend>
+		<div class="control-group">
+			<div class="span6">
+				<button type="button" id="btn-add-email" class="btn btn-mini" href="#adicionarEmail" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+			</div>
+			<table id="table-email" class="table table-bordered table-striped table-condensed table-hover">
+				<thead>
+					<tr>
+						<th>Tipo</th>
+						<th>Email</th>
+						<th width="100">Ações</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</fieldset>
+</form>
+<div class="modal hide fade" id="modal-email"></div>
+<?php
+    $this->headScript()->setFile($this->baseUrl() . '/js/app/auxiliar/email/index.js');
+
+    echo $this->headScript();
+?>

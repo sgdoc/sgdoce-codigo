@@ -1,0 +1,14 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        return $view->actionButton('Excluir', 'Assinatura.deletar', array('sqPessoaUnidadeOrg' => $row['sqPessoaUnidadeOrg'] , 'sqArtefato' => $row['sqArtefato']),'trash');
+    };
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => 'noPessoa'),
+                                  1 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

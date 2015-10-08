@@ -1,0 +1,27 @@
+<div class="tab-pane" id="documentosVinculados">
+    <input type="hidden" id="sqArtefato" name="sqArtefato" value="<?php echo $this->sqArtefato; ?>">
+    <fieldset>
+        <legend>Lista de Documentos</legend>
+        <div class="control-group">
+            <div class="span6">
+                <div class="btn-group">
+                    <a class="btn btn-mini" data-toggle="modal" id="btnModalDocumentos">
+                        <i class="icon-plus" title="Adicionar"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="control-group ">
+                <table id="table-dados-documentos" >
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Digital</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div id="modalDocumentos" class="modal hide fade"></div>

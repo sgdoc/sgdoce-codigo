@@ -1,0 +1,104 @@
+<?php
+echo $this->headScript()
+          ->appendFile($this->baseUrl() . '/js/app/migracao/documento/form.js')
+          ->appendFile($this->baseUrl() . '/js/app/artefato/documento/menuMinuta.js')
+          ->appendFile($this->baseUrl() . '/js/app/artefato/pessoa/pessoa.js')
+          ->appendFile($this->baseUrl() . '/js/app/migracao/documento/edit.js');
+
+$titulo = "";
+$nuDigitalValida = null;
+if($this->data->getNuDigital()){
+    $nuDigitalValida = $this->formatDigital(
+                                $this->data->getNuDigital()->getNuEtiqueta(),
+                                $this->data->getNuDigital()->getSqLoteEtiqueta()->getNuAno()
+                            );
+    $nuDigital = $this->data->getNuDigital()->getNuEtiqueta();
+    if ( strlen($nuDigital) < 7 ) {
+        $nuDigital = str_pad($nuDigital, 7, '0', STR_PAD_LEFT);
+        $titulo = 'Corrigir Documento - '. $nuDigital;
+    } else {
+        $titulo = 'Corrigir Documento - '. $nuDigitalValida;
+    }
+
+}else{
+    if(isset($this->tipoDigital) && $this->tipoDigital == \Core_Configuration::getSgdoceTipoEtiquetaFisica()){
+        $nuDigitalValida = $this->nuDigital;
+    }
+    $titulo = 'Corrigir Documento - '. $nuDigitalValida;
+}
+
+echo $this->formHidden('divEdit','1');
+
+?>
+<h1 id="divTitulo"><?php echo $titulo;?></h1>
+<div
+    class="alert alert-error campos-obrigatorio hidden"></div>
+<br />
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save')) ?>"
+      method="post" id="form-cadastro-documento">
+
+    <?php
+
+        $dtCadastro = ($this->data->getSqArtefato()) ? $this->data->getDtCadastro()->toString('dd/MM/YYYY HH:mm:ss'): NULL;
+
+        echo $this->formHidden('dtCadastro'     , $dtCadastro);
+        echo $this->formHidden('sqArtefato'     , $this->data->getSqArtefato());
+        echo $this->formHidden('stMigracao'     , (integer) $this->data->getStMigracao());
+        echo $this->formHidden('arInconsistencia', $this->data->getArInconsistencia());
+        echo $this->formHidden('nuDigitalValida', $nuDigitalValida);
+        echo $this->formHidden('sqTipoArtefato' , \Core_Configuration::getSgdoceTipoArtefatoDocumento());
+        echo $this->formHidden('sqFecho'        , 1);
+        echo $this->formHidden('tpNavegacao'    , $this->tipoNavegacao == 'b' ? true : false);
+        echo $this->formHidden('redirect'       , $this->redirect);
+        echo $this->formHidden('inEletronico'   ,(integer) $this->isLoteEletronico);
+        echo $this->formHidden('isSic'          ,(integer) $this->isSIC);
+        echo $this->formHidden('controllerBack' , $this->controllerBack);
+        echo $this->formHidden('caixa'          , $this->caixa);
+    ?>
+
+    <ul class="nav nav-tabs tabsForm" id="nav-tabs">
+        <!-- 	    <li class="active"><a href="#dadosValidacao" data-toggle="tab" class="tab">Validação</a></li> -->
+        <li class="active"><a data-toggle="tab" class="tab" href="#dadosDocumento">Dados Gerais</a></li>
+        <li id="liDadosOrigem"><a data-toggle="tab" class="tab" href="#dadosDestino">Origem/Destino</a></li>
+        <li><a id="liDadosAssunto" data-toggle="tab" class="tab" href="#dadosAssunto">Assunto</a></li>
+        <li id="liDadosInteressado"><a data-toggle="tab" class="tab" href="#dadosInteressados">Interessados</a></li>
+
+        <?php if ($this->isSIC): ?>
+            <li><a data-toggle="tab" class="tab" href="#anexoSic">Anexos SIC</a></li>
+        <?php else: ?>
+            <li><a data-toggle="tab" class="tab" href="#dadosVinculacao">Referências</a></li>
+        <?php endif; ?>
+    </ul>
+
+    <div class="tab-content" id="tab-content">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+        <br />
+        <?php
+        echo $this->render('documento/dados-documento.phtml');
+        echo $this->render('documento/dados-destino.phtml');
+        echo $this->render('documento/dados-assunto.phtml');
+        echo $this->render('documento/dados-interessados.phtml');
+
+        if ($this->isSIC):
+            echo $this->render('documento/dados-anexo-sic.phtml');
+        else:
+            echo $this->render('documento/dados-vinculacao.phtml');
+        endif;
+
+        echo $this->render('documento/form-action.phtml');
+        ?>
+    </div>
+    <script>
+        ProcessoDoc._isSIC = <?php echo (integer) $this->isSIC; ?>;
+        <?php if( isset($this->dadosOrigem[0]) && $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa() ): ?>
+            ProcessoDoc._disabledProcedencia = '<?php echo $this->disabledProcedencia; ?>';
+        <?php endif; ?>
+        ProcessoDoc._tpDocWithoutSignature = <?php echo Zend_Json_Encoder::encode($this->arrWithoutSignature); ?>;
+    </script>
+</form>
+<div id="modal-vincular-documento" class="modal hide fade"></div>

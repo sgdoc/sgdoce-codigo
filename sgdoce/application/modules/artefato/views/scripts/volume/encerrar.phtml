@@ -1,0 +1,140 @@
+<!-----Dados Básicos------>
+<form class="form-horizontal" id="form-volume-encerrar" action="<?php echo $this->url(array('action'=>'save')) ?>" method="post">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+    <fieldset>
+        <div class="control-group">
+            <label for="nu_artefato" class="control-label">
+                Número do Processo
+            </label>
+
+            <div class="controls">
+                <?php
+                    echo $this->formText( 'nuArtefato', $this->nuArtefato($this->volume->getSqArtefato()), array(
+                        'class' => 'span10',
+                        'readonly' => 'readonly'
+                    ));
+                    echo $this->formHidden( 'sqVolume', $this->volume->getSqVolume() );
+                    echo $this->formHidden( 'sqArtefato', $this->volume->getSqArtefato()->getSqArtefato() );
+                    echo $this->formHidden( 'stProcessoVolume', false );
+                ?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="nu_volume" class="control-label">
+                Volume
+            </label>
+            <div class="controls">
+                <?php
+                    echo $this->formText( 'nuVolume', $this->volume->getNuVolume(),  array(
+                        'id' => 'nuVolumeInput',
+                        'class' => 'span10',
+                        'readonly' => 'readonly'
+                    ));
+                ?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="nu_folha_inicial" class="control-label">
+                Folha Inicial
+            </label>
+
+            <div class="controls">
+                <?php
+                    echo $this->formText( 'nuFolhaInicial', $this->volume->getNuFolhaInicial(), array(
+                        'class' => 'span10',
+                        'readonly' => 'readonly',
+                        'mask' => 'numeric'
+                    ));
+                ?>
+            </div>
+        </div>
+
+        <div class="control-group dvDataPrazo">
+            <label class="control-label" for="appendedInputButton">
+                Data de Abertura
+            </label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>"  data-date-format="dd/mm/yyyy" class="input-append">
+                    <input value="<?php echo $this->volume->getDtAbertura()->get('dd/MM/yyyy') ?>" class="input-small dateBR required" id="dtPrazo" maxlength="60"
+                           name="dtAbertura" mask="date" type="text" readonly="readonly" />
+                        <a href="javascript:void(0);" class="btn add-on right" disabled="disabled"><i class="icon-calendar"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="nu_folha_final" class="control-label">
+                <span class="required" title="">* </span> Última Folha
+            </label>
+
+            <div class="controls">
+                <?php
+                    echo $this->formText( 'nuFolhaFinal', null, array(
+                                            'class'=>'required span10',
+                                            'min' => $this->volume->getNuFolhaInicial(),
+                                            'max' => ($this->volume->getNuFolhaInicial() + 199),
+                                            'mask' => 'numeric' ));
+                ?>
+                <span style="display: block; font-size: 11px; font-weight: bold;">Considerar o termo de encerramento.</span>
+            </div>
+        </div>
+
+        <div class="control-group dvDataPrazo">
+            <label class="control-label" for="appendedInputButton"><span
+                class="required" title="Required field">*</span> Data de Encerramento</label>
+            <div class="controls">
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-startdate="<?php echo $this->volume->getDtAbertura()->get('dd/MM/yyyy'); ?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                    <input value="" class="input-small dateBR required startDate" id="dtPrazo" maxlength="60"
+                        name="dtEncerramento" mask="date" type="text"/>
+                        <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label required">
+                <span class="required" title="Campo Obrigatório">*</span> Assinatura
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('sqPessoaAssinaturaEncerramento', null, array('class' => 'required span10' )); ?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls radios-inline">
+                <input type="radio" name="stCargoFuncaoEncerramento" value="1" checked="checked" class="required" id="stCargoFuncaoEncerramento1"/>
+                <label for="stCargoFuncaoEncerramento1" >Cargo</label>
+                <input type="radio" name="stCargoFuncaoEncerramento" value="2" class="required" id="stCargoFuncaoEncerramento2"/>
+                <label for="stCargoFuncaoEncerramento2" >Função</label>
+            </div>
+        </div>
+        <div id="divCargo" class="control-group">
+            <label class="control-label"><span class="required">*</span> Cargo</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom(
+                        'sqCargoAssinaturaEncerramento', 
+                        NULL, 
+                        array('class' => 'span10 required'), 
+                        $this->arrCargos
+                    ); ?>
+            </div>
+        </div>
+        <div id="divFuncao" class="control-group hidden">
+            <label class="control-label"><span class="required">*</span> Função</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqFuncaoAssinaturaEncerramento',
+                                    NULL,
+                                    array('class'=>'span10'),
+                                    $this->arrFuncao); ?>
+            </div>
+        </div>
+
+    </fieldset>
+
+</form>

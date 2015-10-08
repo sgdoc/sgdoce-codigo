@@ -1,0 +1,38 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        $statusAcao = $view->registryStatus($row['stAtivo'], array('Desativar','Ativar'));
+        $sit = ($row['stAtivo'] == 1) ? 'false' : 'true';
+
+        $rtn = $view->actionButton('Excluir', 'TipoDocumento.deletar', array($row['sqTipoDocumento']), 'trash').
+        $view->actionButton('Alterar', 'TipoDocumento.alterar', array($row['sqTipoDocumento']), 'pencil').
+        $view->actionButton('Status', 'TipoDocumento.switchStatus'
+                           ,array($row['sqTipoDocumento'],$sit), NULL, $statusAcao);
+
+        return $rtn;
+    };
+
+    $abreProcesso = function ($data) use ($view) {
+        return $view->registryStatus($data['inAbreProcesso'], array('Sim','Não'));
+    };
+
+    $ativo = function ($data) use ($view) {
+        return $view->registryStatus($data['stAtivo']);
+    };
+
+    $tipoDoc = function ($row){
+        return mb_strtoupper($row['noTipoDocumento'],'UTF-8');
+    };
+
+    $configArray = array('columns' => array(
+            0 => array('column' => $tipoDoc),
+            1 => array('column' => $abreProcesso),
+            2 => array('column' => $ativo),
+            3 => array('column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

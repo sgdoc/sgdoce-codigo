@@ -1,0 +1,11 @@
+<?php
+$script = '$("#feijoadaProfile option").remove();';
+$script .= '$("#feijoadaProfile").append( $("<option></option>").text(\'Selecione uma opção\').val(\'\') );';
+$script .= "$.each({$this->response}, function(index, item) {";
+$script .= '$("#feijoadaProfile").append( $("<option></option>").text(item.noPerfil).val(item.sqPerfil) );';
+$script .= '});';
+$script .= '$("#feijoadaProfile").removeAttr(\'disabled\');';
+$script .= '$("#feijoadaProfile").parent(\'div\').parent(\'div\').show();';
+
+echo $script;
+exit();

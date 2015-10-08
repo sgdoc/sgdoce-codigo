@@ -1,0 +1,46 @@
+<script type="text/javascript" src="/js/app/artefato/pessoa/pessoa.js"></script>
+<?php
+    $this->headScript()->appendFile($this->baseUrl() . '/js/library/jquery.form.js');
+    echo $this->headScript();
+?>
+<h1>Autuar Documento</h1>
+<!------ INICIO DAS ABAS --------->
+<div class="alert alert-info">
+    Dados de preenchimento para Processo.
+</div>
+<ul class="nav nav-tabs tabsForm" id="nav-tabs">
+    <li class="active"><a href="#basicos" data-toggle="tab" class="tab">Dados Gerais</a></li>
+    <li><a href="#interessados" data-toggle="tab" class="tab">Interessados</a></li>
+</ul>
+<div class="tab-content">
+    <!-----Dados Básicos------>
+    <form class="form-horizontal form-processo-eletronico-principal"
+        id="form-cadastro-documento"
+        action="<?php echo $this->url(array('action'=>'save')) ?>"
+        method="post">
+        <div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div>
+        <?php // echo $this->formHidden('sqArtefato', $this->objEntArtefato->getSqArtefato()); ?>
+        <div class="tab-content" id="tab-content">        
+            <div class="tab-pane active" id="basicos">
+                <?php echo $this->render('autuar-documento/basico.phtml', array());?>
+            </div>
+            <div class="tab-pane" id="interessados"><?php echo $this->render('autuar-documento/interessados.phtml');?></div>
+            
+            <div class="form-actions" id="formButtonsPrincipal">
+                <a  id="btnAnterior" class="btn btn_prev" type="button">
+                    <i class="icon-chevron-left"></i> Anterior
+                </a>
+                <button id="btnProximo" class="btn btn_next btn-primary"  type="button">
+                     Próxima <i class="icon-chevron-right icon-search icon-white"></i>
+                </button>
+                <button class="btn btn-concluir">Concluir</button>
+                <a href="<?php echo $this->urlBack; ?>" class="btn btn-cancelar">Cancelar</a>
+            </div>
+            
+        </div>
+    </form>
+</div>

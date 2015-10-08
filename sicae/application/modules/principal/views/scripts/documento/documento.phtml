@@ -1,0 +1,42 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'documento', 'action' => 'list')) ?>" id="form-documento">
+    <fieldset>
+        <div class="control-group">
+            <div class="span6">
+                <button type="button" class="btn btn-mini" id="btn-add-documento" data-toggle="modal" title="Adicionar">
+                    <i class="icon-plus"></i>
+                </button>
+            </div>
+            <?php
+            echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+            ?>
+            <table id="table-documento">
+                <thead>
+                    <tr>
+                        <th>Tipo de Documento</th>
+                        <th>Número</th>
+                        <th width="60px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </fieldset>
+    <br/>
+    <div class="form-actions">
+        <a class="btn buttons" href="#dado-basico" title="Anterior">
+            <span class="icon-chevron-left"></span> Anterior
+        </a>
+        <a class="btn btn-primary buttons" href="#endereco" title="Salva e segue para a próxima aba.">
+            Próxima <span class="icon-chevron-right icon-white"></span>
+        </a>
+        <button  id="btnConcluir" class="btn" type="button" title="Salva e retorna para a pesquisa.">
+            <span class=""></span> Concluir
+        </button>
+        <a class="btn btnCancelar" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>">
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+<!--MODAL ADICIONAR DOCUMENTO-->
+<div class="modal hide fade" id="modal-documento"></div>
+<script src="<?php echo $this->assetUrl('sica/documento/index.js') ?>" type="text/javascript"></script>

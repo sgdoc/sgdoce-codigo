@@ -1,0 +1,132 @@
+<?php
+
+use Principal\Service\Pessoa;
+
+$view = $this;
+
+$mask = function ($row) {
+            if ($row['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_FISICA) {
+                return \Zend_Filter::filterStatic($row['nuCpf'], 'MaskNumber', array('cpf'), array('Core_Filter'));
+            }
+
+            if ($row['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_JURIDICA) {
+                return \Zend_Filter::filterStatic($row['nuCnpj'], 'MaskNumber', array('cnpj'), array('Core_Filter'));
+            }
+
+            return '';
+        };
+
+$status = function ($row) use ($view) {
+            if ($row['stRegistroAtivo']) {
+                return 'Ativo';
+            } else {
+                return 'Inativo';
+            }
+        };
+
+$arrPF = FALSE;
+$arrPJ = FALSE;
+
+foreach ($this->layout()->data['data'] as $pessoa) {
+    if ($pessoa['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_FISICA) {
+        $arrPF = TRUE;
+    }
+
+    if ($pessoa['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_JURIDICA) {
+        $arrPJ = TRUE;
+    }
+}
+?>
+<?php if ($arrPJ) { ?>
+    <table class="table table-condensed" id="table-pdf">
+        <thead>
+            <tr class="title">
+                <th colspan="4" align="left">
+                    Pessoa Jurídica
+                </th>
+            </tr>
+            <tr class="title">
+                <th>CNPJ</th>
+                <th>Razão Social</th>
+                <th>Nome Fantasia</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->layout()->data['data'] as $key => $value) { ?>
+                <?php if ($value['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_JURIDICA) { ?>
+                    <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                        <td align="center">
+                            <?php echo $mask($value); ?>
+                        </td>
+                        <td>
+                            <?php echo $value['noPessoa']; ?>
+                        </td>
+                        <td>
+                            <?php echo $value['noFantasia']; ?>
+                        </td>
+                        <td>
+                            <?php echo $status($value); ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+            <tr>
+                <td colspan="4" class="largura-total"></td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <br />
+<?php } ?>
+<?php if ($arrPF) { ?>
+    <table class="table table-condensed" id="table-pdf">
+        <thead>
+            <tr>
+                <th  colspan="4" class="title" align="left">
+                    Pessoa Física
+                </th>
+            </tr>
+            <tr class="title">
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Nacionalidade</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->layout()->data['data'] as $key => $value) { ?>
+                <?php if ($value['sqTipoPessoa'] == Pessoa::SQ_TIPO_PESSOA_FISICA) { ?>
+                    <tr class="<?php echo ($key % 2) ? 'odd' : 'even'; ?>">
+                        <td>
+                            <?php echo $mask($value); ?>
+                        </td>
+                        <td>
+                            <?php echo $value['noPessoa']; ?>
+                        </td>
+                        <td>
+                            <?php echo $value['sqMunicipio'] ? 'Brasileira' : 'Estrangeira'; ?>
+                        </td>
+                        <td>
+                            <?php echo $status($value); ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+            <tr>
+                <td colspan="4" class="largura-total"></td>
+            </tr>
+        </tbody>
+    </table>
+<?php } ?>
+<?php if ($arrPF || $arrPJ) { ?>
+    <br />
+    <br />
+    <table class="table" align="center">
+        <tr>
+            <td class="total-registro sem-bordas largura-total">
+                Total de Registros: <?php echo sprintf("%02d", count($this->layout()->data['data'])); ?>
+            </td>
+        </tr>
+    </table>
+<?php } ?>

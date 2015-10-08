@@ -1,0 +1,56 @@
+<div class="tab-pane" id="dadosAssunto">
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label required" for="titulo"><span class="required" title="Required field">*</span> Título</label>
+            <div class="controls">
+                <input type="text" class="span6 required" id="noTitulo" name="noTitulo" value="<?php echo $this->noTitulo ?>" maxlength="200"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="assunto"><span class="required" title="Required field">*</span> Assunto</label>
+            <div class="controls">
+                <?php
+                $sqAssunto_hidden = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getSqAssunto() : NULL;
+                $sqAssunto = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto() : NULL;
+                ?>
+                <input type="hidden" id="sqAssunto_hidden" name="sqAssunto_hidden" value="<?php echo $sqAssunto_hidden;  ?>">
+                <input class="required" type="text" name="sqAssunto" id="sqAssunto" style="width: 400px;" value="<?php echo $sqAssunto;  ?>" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="assComp"> Assunto Complementar </label>
+            <div class="controls">
+                <?php
+                $attibutes['maxlength'] = '250';
+                $attibutes['class'] = 'span11';
+                $attibutes['rows'] = 3;
+                echo $this->formTextarea('txAssuntoComplementar', $this->txAssuntoComplementar, $attibutes);
+                ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"><span class="required" title="Required field">*</span> Assinatura</label>
+            <div class="controls">
+                <input id="assinatura_hidden" type="hidden" name="assinatura" value="<?php echo $this->sqAssinatura; ?>">
+                <input type="text" class="span6 required" id="assinatura" name="assinatura" value="<?php echo $this->assinatura; ?>" >
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="cargo2"><span class="required" title="Required field">*</span> Cargo</label>
+            <div class="controls">
+                <input type="text" class="span6 required" id="noCargoAssinante" name="noCargoAssinante" value = "<?php echo $this->noCargoAssinante ?>" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="obs"> Observações </label>
+            <div class="controls">
+                <?php
+                $attibutes['maxlength'] = '500';
+                $attibutes['class'] = 'span11';
+                $attibutes['rows'] = 3;
+                echo $this->formTextarea('txObservacao', $this->txObservacao, $attibutes);
+                ?>
+            </div>
+        </div>
+    </fieldset>
+</div>

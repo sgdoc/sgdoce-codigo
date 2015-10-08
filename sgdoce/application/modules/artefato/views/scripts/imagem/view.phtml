@@ -1,0 +1,160 @@
+<?php $this->echoComponentResources(array('pdfViewer','treeview')); ?>
+<h3>IMAGEM DO ARTEFATO</h3>
+<div class="row-fluid">
+    <?php if ($this->hasImage): ?>
+        <style type="text/css">
+            #treeviewContainer {
+                position: relative;
+                position: sticky;
+                left: 0;
+                top: 0;
+                min-height: 50px;
+                overflow: hidden;
+                word-wrap: break-word;
+            }
+            @media (max-width: 767px) {
+                #treeviewContainer{
+                    position: relative;
+                }
+            }
+            @media (max-width: 480px) {
+                #treeviewContainer{
+                    position: relative;
+                }
+            }
+            #treeview {
+                display: none;
+            }
+            #treeview .hover {
+                color: #0b552b;
+                text-decoration: none;
+            }
+            #treeviewContainer.expanded #treeview {
+                display: block;
+            }
+            #treeviewContainer #sideTreeviewToggle {
+                position: absolute;
+                right: 8px;
+                top: 26px;
+                opacity: 0.75;
+            }
+            #treeviewContainer.expanded #sideTreeviewToggle {
+                top: 18px;
+            }
+            #treeviewContainer #sideTreeviewToggle,
+            #treeviewContainer #sideTreeviewToggle:before,
+            #treeviewContainer #sideTreeviewToggle:after {
+                cursor:pointer;
+                display: block;
+                z-index: 2;
+                width: 22px;
+                height: 4px;
+                background-color: #222;
+                border: solid 1px #AAA;
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+                -webkit-transition: all 0.75s;
+                -o-transition: all 0.75s;
+                -moz-transition: all 0.75s;
+                transition: all 0.75s;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            #treeviewContainer #sideTreeviewToggle:before,
+            #treeviewContainer #sideTreeviewToggle:after {
+                content: "";
+                -webkit-transition: all 0.75s;
+                -moz-transition: all 0.75s;
+                -o-transition: all 0.75s;
+                transition: all 0.75s;
+            }
+            #treeviewContainer #sideTreeviewToggle:before {
+                -webkit-transform: translate(-9px, -11px);
+                -moz-transform: translate(-9px, -11px);
+                -ms-transform: translate(-9px, -11px);
+                -o-transform: translate(-9px, -11px);
+                transform: translate(-9px, -11px);
+            }
+            #treeviewContainer #sideTreeviewToggle:after {
+                -webkit-transform: translate(8px, 3px);
+                -moz-transform: translate(8px, 3px);
+                -ms-transform: translate(8px, 3px);
+                -o-transform: translate(8px, 3px);
+                transform: translate(8px, 3px);
+            }
+            #treeviewContainer.expanded #sideTreeviewToggle,
+            #treeviewContainer.expanded #sideTreeviewToggle:focus {
+                background-color: transparent;
+                border-color: transparent;
+            }
+            #treeviewContainer.expanded #sideTreeviewToggle:before,
+            #treeviewContainer.expanded #sideTreeviewToggle:after {
+                background-color: #222;
+                border-color: transparent;
+                margin: 5px;
+                width: 13px;
+            }
+            #treeviewContainer.expanded #sideTreeviewToggle:before {
+                -webkit-transform: translateY(0) rotate(135deg);
+                -moz-transform: translateY(0) rotate(135deg);
+                -ms-transform: translateY(0) rotate(135deg);
+                -o-transform: translateY(0) rotate(135deg);
+                transform: translateY(0) rotate(135deg);
+            }
+            #treeviewContainer.expanded #sideTreeviewToggle:after {
+                -webkit-transform: translateY(-4px) rotate(-135deg);
+                -moz-transform: translateY(-4px) rotate(-135deg);
+                -ms-transform: translateY(-4px) rotate(-135deg);
+                -o-transform: translateY(-4px) rotate(-135deg);
+                transform: translateY(-4px) rotate(-135deg);
+            }
+            #treeviewContainer #sideTreeviewToggle:focus,
+            #treeviewContainer #sideTreeviewToggle:focus:before,
+            #treeviewContainer #sideTreeviewToggle:focus:after {
+                outline: none;
+                background-color: #000;
+                opacity: 1;
+            }
+        </style>
+        <div class="row-fluid">
+            <aside id="treeviewContainer" class="span1">
+            <!-- <aside id="treeviewContainer" class="span3 expanded"> -->
+                <a href="javascript:void(0);" id="sideTreeviewToggle" title="Árvore de Vínculos"></a>
+                <div id="treeview">
+                    <?php
+                    echo $this->formHidden('sqArtefato',$this->sqArtefato);
+                    echo $this->treeview($this->treeviewData, $this->sqArtefato, array(
+                        'id'          => 'tree',
+                        'hasActions'  => false,
+                        'hasLink'     => true,
+                        'linkHref'    => 'javascript:ImageView.load(id)',
+                        'childrenKey' => 'filhos',
+                        'displayKey'  => 'nuArtefato',
+                        'classKey'    => 'noTipoArtefato',
+                        'iconType'    => 'sqTipoVinculoArtefato'
+                    )); ?>
+                </div>
+            </aside>
+            <div class="viewerContainer span11"></div>
+            <!-- <div class="viewerContainer span9"></div> -->
+        </div>
+    <?php else: ?>
+            <div class="alert alert-error">
+                <!-- <button data-dismiss="alert" class="close">×</button> -->
+                Imagem do artefato não encontrada
+            </div>
+    <?php endif; ?>
+</div>
+<div class="form-actions">
+    <?php if($this->canAlterImage): ?>
+    <a class="btn btn-primary" href="javascript:ImageView.alterar('<?php echo "/artefato/imagem/update/id/%id/back/.artefato.area-trabalho.index.tipoArtefato.{$this->sqTipoArtefato}.caixa.minhaCaixa"; ?>');" id="btnAlterar">Alterar imagem</a>
+    <?php endif; ?>
+    <button class="btn btn-primary" id="btnDownload"><i class="icon-download"></i> Download</button>
+    <a href="javascript:window.close();" class="btn" ><i class="icon-remove"></i> Fechar</a>
+</div>
+<script type="text/javascript" src="/js/app/artefato/imagem/view.js"></script>

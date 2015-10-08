@@ -1,0 +1,151 @@
+#nestedAccordion{
+	display: inline-block;
+	width: 100%;
+	color: #999;
+	overflow: visible;
+	padding-bottom: 1em;
+	padding-top: 1em;
+	margin-bottom: 20px;
+	background: #f5f5f5;
+	border: 1px solid #e1e1e8;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;		
+}
+
+#nestedAccordion h2 {
+    font-size: 18px;
+	font-weight: normal;
+    line-height: 26px;
+	margin-bottom: 5px;
+	padding-left: 8px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+#nestedAccordion h2 a {
+	color: #398751 !important;
+}
+
+#nestedAccordion h2 i {
+	height: 14px !important;
+	margin-right: 10px;
+	margin-top: 6px !important;
+}
+
+#nestedAccordion .strong {
+	font-weight: 700;
+}
+
+#nestedAccordion .clear {
+	clear: both;
+}
+ 
+#nestedAccordion a {
+	display: block;
+	text-decoration: none;
+	color: #999;
+	margin: 1px 0 1px 0;
+}
+  
+#nestedAccordion a:hover,
+#nestedAccordion a:focus,
+#nestedAccordion a:active {
+	text-decoration: none;
+	outline: 0 none;
+	color: #999;
+	background-color: #eee;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+  
+#nestedAccordion a {
+	display: block;
+	border: none;
+	color: #999;
+}
+
+#nestedAccordion .menu {
+	margin: 0;
+	padding: 0 10px;
+}
+  
+#nestedAccordion .menu li {
+	list-style-type: none;
+}
+
+#nestedAccordion .divider {
+	height: 1px;
+	margin: 8px 1px;
+	overflow: hidden;
+	background-color: #e5e5e5;
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid #ffffff;
+	border-left: none;
+	*width: auto;
+	*margin: -5px 0 5px;
+	list-style: none !important;
+
+}
+  
+#nestedAccordion .menu li.last-child {
+	margin-left: 19px;
+	list-style-type: disc;
+}
+  
+#nestedAccordion ul.menu ul {
+	margin:0;
+	/*padding:0 0 0 20px; RESPONS�VEL PELA IDENTA��O DO MENU*/
+	padding: 0 0 0 10px;
+}
+
+#nestedAccordion .menu .outer {
+	background: #fff;
+}
+#nestedAccordion .menu .inner {
+	margin-bottom: 0;
+	padding: .5em 20px 1em;
+	position: relative;
+	overflow: hidden;
+}
+
+#nestedAccordion .menu .inner .inner {
+	padding-bottom: 0;
+}
+
+#nestedAccordion a.trigger {
+	padding-left: 20px;
+	background-image: url(../img/icons/plusGlyph.gif);
+	background-repeat: no-repeat;
+	background-position: 1px 50%;
+	font-weight: 700;
+}
+
+#nestedAccordion a.trigger.open {
+	background-image: url(../img/icons/minusGlyphWhite.gif);
+	color: white;
+	background-color: #67963f;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+#nestedAccordion .last-child a.trigger{
+	padding-left: 1px;
+	background-image: none;
+	font-weight: normal;
+}
+
+#nestedAccordion a.active{
+	font-weight: 700;
+	text-decoration: none;
+	color: white;
+}
+
+.arvore {
+	background-color:#fff !important;
+	border:0 !important;
+}

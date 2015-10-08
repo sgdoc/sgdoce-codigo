@@ -1,0 +1,566 @@
+<?php if(!empty($this->data['viewFor'])): ?>
+<h1>Assinar Minuta</h1>
+
+<div class="top-bar">&nbsp;</div>
+
+<?php endif; ?>
+
+<?php
+
+// Posicao Tipo Documento
+switch($this->data['arrOrigem']['sqPosicaoTipoDocumento']){
+    case 1:
+        $posicaoTipoDocumento = 'titulo-left';
+        $sqPosicaoTipoDocumento = 1;
+        break;
+    case 2:
+        $posicaoTipoDocumento = 'titulo-right';
+        $sqPosicaoTipoDocumento = 2;
+        break;
+    case 3:
+        $posicaoTipoDocumento = 'titulo-center';
+        $sqPosicaoTipoDocumento = 3;
+        break;
+    default:
+        $posicaoTipoDocumento = 'titulo-left';
+    $sqPosicaoTipoDocumento = 1;
+}
+
+// Posicao Data
+switch($this->data['arrOrigem']['sqPosicaoData']){
+    case 1:
+        $sqPosicaoData = 1;
+        break;
+    case 2:
+        $sqPosicaoData = 2;
+        break;
+    case 3:
+        $sqPosicaoData = 3;
+        break;
+    default:
+        $sqPosicaoData = 1;
+    break;
+}
+
+//cabecalho
+$inLocal    = FALSE;
+$inNumDoc   = FALSE;
+$inAnoDoc   = FALSE;
+$inSetorDoc = FALSE;
+$inDataDoc  = FALSE;
+$inAssunto  = FALSE;
+
+$inSetorAss = NULL;
+$inCargoAss  = NULL;
+$inSetorCab = NULL;
+$inEndCab   = NULL;
+$inTelCab   = NULL;
+$inEmailCab = NULL;
+
+foreach($this->data['arrCampo'] as $key => $data) {
+    foreach($data as $key2 => $data2){
+
+        #rodape
+        if($data2 == 'Rodapé'){
+            $inRodape = TRUE;
+        }
+
+        // cabecalho
+        if(substr(strtolower($data2),0,10) == 'nº do doc'){
+            $inNumDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'ano'){
+            $inAnoDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'sigla do s'){
+            $inSetorDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'local'){
+            $inLocal = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'data'){
+            $inDataDoc = TRUE;
+        }
+
+        #cargo assinatura
+        if($data2 === 17){
+            $inCargoAss = TRUE;
+        }
+
+        // assunto
+        if(strtolower($data['noCampo']) == 'assunto'){
+            $inAssunto = TRUE;
+        }
+
+        #setor assinatura
+        if($data2 === 18){
+            $inSetorAss = TRUE;
+        }
+
+        #setor cabecalho
+        if($data2 === 23){
+            $inSetorCab = TRUE;
+        }
+
+        #endereco cabecalho
+        if($data2 === 24){
+            $inEndCab = TRUE;
+        }
+
+        #telefone cabecalho
+        if($data2 === 25){
+            $inTelCab = TRUE;
+        }
+
+        #email cabecalho
+        if($data2 === 26){
+            $inEmailCab = TRUE;
+        }
+    }
+}
+
+?>
+
+<page>
+
+
+<?php if(empty($this->data['viewFor'])): ?> <page_footer
+    style="text-align: right;"> [[page_cu]] </page_footer>
+
+
+    <?php endif; ?>
+
+
+
+    <?php if(!empty($this->data['viewFor'])): ?>
+<div class="content-geral">
+
+
+<?php endif; ?>
+
+    <div class="content">
+        <div id="header">
+            <p class="smallMargin">
+<!-- cabeçalho -->
+
+            <?php if(!empty($this->data['arrOrigem']['sqCabecalho'])) :?>
+
+                <?php if(!empty($this->data['arrOrigem']['deArquivoImagem'])): ?>
+                    <img src="img/<?php echo $this->data['arrOrigem']['deArquivoImagem'] ?>"
+                        name="logo" alt="logo" title="logo" width=120 height=120 border=0>
+                <?php endif; ?>
+
+            <p class="smallMargin">
+                <b>
+                <?php if(!empty($this->data['arrOrigem']['txCabecalho'])
+                && $this->data['arrOrigem']['txCabecalho'] !== 'Nenhum'): ?>
+
+                <?php echo $this->data['arrOrigem']['txCabecalho'] ?>
+                <?php endif; ?> </b>
+            </p>
+            <span class="smallMargin" class="alignCenter">
+                <?php $virgula = null;
+                    $cabeçalho = "";
+                    if(!empty($this->data['arrOrigem']['noPessoa']) && $inSetorCab): ?>
+                        <?php $cabeçalho = $this->data['arrOrigem']['noPessoa'];
+                        $virgula = ', ';
+                         ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['txEndereco']) && $inEndCab): ?>
+                        <?php $cabeçalho .= $virgula . 'Endereco: ' .$this->data['arrOrigem']['txEndereco'];
+
+                        $virgula = ', ';
+                        ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['nuEndereco']) && $inEndCab): ?>
+                        <?php $cabeçalho .= $virgula . 'Número: ' .$this->data['arrOrigem']['nuEndereco'];
+                        $virgula = ', ';
+                        ?>
+
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['nuTelefone']) && $inTelCab): ?>
+                        <?php
+                            $telCabecalho = (string)$this->data['arrOrigem']['nuTelefone'];
+                            $telDDDRodape = (string)$this->data['arrOrigem']['nuDdd'];
+                            $telCabecalhoNum = substr($telCabecalho, -8);
+                            $telCabecalhoNum1 = substr($telCabecalhoNum, -8, 4);
+                            $telCabecalhoNum2 = substr($telCabecalhoNum, -4, 4);
+                            $cabeçalho .= $virgula . 'Número: ' . '(' . $telDDDRodape . ')' . ' ' . $telCabecalhoNum1 . '-' . $telCabecalhoNum2;
+                            $virgula = ', ';
+                            ?>
+                    <?php endif; ?>
+
+                    <?php
+                    if(!empty($this->data['arrOrigem']['txEmail']) && $inEmailCab): ?>
+                        <br /><?php $cabeçalho .= $virgula . '<br /> Email: ' .$this->data['arrOrigem']['txEmail'] ?>
+                    <?php
+                    endif;
+                    echo $cabeçalho;
+                    ?>
+            </span>
+<!-- cabeçalho -->
+
+            <?php endif;?>
+        </p>
+
+        <p class="smallMargin">
+
+    <!-- nome tipo documento -->
+        </p>
+    </div>
+
+        <p id="<?php echo $posicaoTipoDocumento ?>">
+
+        <?php if(!empty($this->data['arrOrigem']['noTipoDocumento'])): ?>
+            <?php echo $this->data['arrOrigem']['noTipoDocumento'] ?>
+        <?php endif; ?>
+
+            <?php if($inNumDoc): ?>
+                N&#186;
+            <?php endif; ?>
+
+            <?php if(empty($this->data['arrOrigem']['nuArtefato'])): ?>
+               <?php echo $this->data['arrOrigem']['nuArtefato'] ?>
+            <?php endif; ?>
+
+                <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inAnoDoc): ?>
+               /<?php echo $this->data['arrOrigem']['dtArtefato']->get('Y') ?>
+                <?php endif; ?>
+                <?php if(!empty($this->data['arrOrigem']['noPessoa']) && $inSetorDoc): ?>
+                   /<?php echo $this->data['arrOrigem']['noPessoa'] ?>
+                <?php endif; ?>
+
+                <?php if($sqPosicaoData == 1): ?>
+                    <span style="margin-left: 20px;">
+                            <?php if(!empty($this->data['arrOrigem']['noMunicipio']) && $inLocal): ?>
+                                <?php echo trim($this->data['arrOrigem']['noMunicipio']) ?>,
+                            <?php endif; ?>
+                            <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inDataDoc): ?>
+                                <?php $data = $this->data['arrOrigem']['dtArtefato'];?>
+                                <?php echo $data->get('d') ?> de
+                                <?php echo Zend_Locale_Data::getContent(Zend_Locale::findLocale(), 'month', (int) $data->get('M')); ?> de
+                                <?php echo $data->get('Y') ?>.
+                            <?php endif; ?>
+                    </span>
+                <?php endif; ?>
+        </p>
+
+        <?php if($sqPosicaoData == 2): ?>
+            <p id="date-abaixo-tipo-doc-right">
+                <?php if(!empty($this->data['arrOrigem']['noMunicipio']) && $inLocal): ?>
+                    <?php echo trim($this->data['arrOrigem']['noMunicipio']) ?>,
+                <?php endif; ?>
+                <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inDataDoc): ?>
+                    <?php $data = $this->data['arrOrigem']['dtArtefato'];?>
+                    <?php echo $data->get('d') ?> de
+                    <?php echo Zend_Locale_Data::getContent(Zend_Locale::findLocale(), 'month', (int) $data->get('M')); ?> de
+                    <?php echo $data->get('Y') ?>.
+                <?php endif; ?>
+            </p>
+        <?php endif; ?>
+
+        <br />
+        <table class="ementa">
+            <tr>
+                <td class="pre-ementa">
+
+                </td>
+                <td class="tx-ementa">
+                    <?php if(!empty($this->data['arrOrigem']['txEmenta'])): ?>
+                        <?php echo $this->data['arrOrigem']['txEmenta'] ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        <?php if(!empty($this->data['arrOrigem']['noCargoInterno'])): ?>
+            <br />
+            <div>
+                <?php echo $this->data['arrOrigem']['noCargoInterno'] ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if(!empty($this->data['arrOrigem']['txAssunto']) && $inAssunto): ?>
+        <div>
+                Assunto: <b><?php echo $this->data['arrOrigem']['txAssunto'] ?></b>
+        </div>
+        <?php endif; ?>
+        <?php if(!empty($this->data['arrOrigem']['txReferencia'])): ?>
+        <div style="text-align: justify;">
+                Ref: <?php echo nl2br($this->data['arrOrigem']['txReferencia']); ?>
+        </div>
+        <br />
+        <?php endif; ?>
+
+    <p  style="text-align: justify;"  class="alignJustify ajustaBox">
+            <span class="marginLeft">&nbsp;</span>
+                <table class="tableTexto">
+                <tr>
+                    <td style="text-align: justify;">
+                        <?php if(!empty($this->data['arrOrigem']['txTextoArtefato'])): ?>
+                            <?php echo nl2br($this->data['arrOrigem']['txTextoArtefato']) ?>
+                        <?php endif; ?>
+                   </td>
+                    </tr>
+                </table>
+                <br />
+
+                <?php if($sqPosicaoData == 3): ?>
+                    <p id="date-abaixo-texto">
+
+                        <?php if(!empty($this->data['arrOrigem']['noMunicipio']) && $inLocal): ?>
+                            <?php echo $this->data['arrOrigem']['noMunicipio'] ?>,
+                        <?php endif; ?>
+                        <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inDataDoc): ?>
+                            <?php $data = $this->data['arrOrigem']['dtArtefato'];?>
+                            <?php echo $data->get('d') ?> de
+                            <?php echo Zend_Locale_Data::getContent(Zend_Locale::findLocale(), 'month', (int) $data->get('M')); ?> de
+                            <?php echo $data->get('Y') ?>.
+                        <?php endif; ?>
+
+                    </p>
+                <?php endif; ?>
+    </p>
+
+<!--     FECHO -->
+    <p class="alignJustify">
+        <span class="marginLeft">&nbsp;</span>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+        <?php if(!empty($this->data['arrOrigem']['noFecho'])): ?>
+            <?php echo $this->data['arrOrigem']['noFecho'] . ',' ?>
+        <br /><br />
+        <?php endif; ?>
+</p>
+
+    <div id="signature">
+        <p class="mediumMargin">
+
+
+
+        <?php if(!empty($this->data['arrAssinatura'])): ?>
+
+        <?php
+            $contS = 0;
+        ?>
+
+        <?php foreach($this->data['arrAssinatura'] as $dado): ?>
+
+            <?php
+                if($contS !== 0):
+            ?>
+
+                <?php if(!empty($dado['noTipoMotivacao']) && $dado['sqTipoMotivacao'] > 1): ?>
+                    <br />
+                        <?php echo $dado['noTipoMotivacao'] ?>
+                <?php elseif(!empty($dado['deMotivacao'])): ?>
+                        <br />
+                        <?php echo $dado['deMotivacao'] ?>
+                <?php endif; ?>
+                        <br /><br />
+
+            <?php
+                endif;
+                $contS++;
+            ?>
+
+            <?php if(!empty($dado['noPessoa'])): ?>
+                <b>
+                    <?php echo $dado['noPessoa'] ?>
+                </b> <br />
+            <?php endif; ?>
+            <?php if(!empty($dado['noCargo']) && $inCargoAss): ?>
+                    <?php echo $dado['noCargo'] ?>
+            <?php endif; ?>
+            <?php if(!empty($dado['noUnidadeOrg']) && $inSetorAss): ?>
+                    /
+                    <?php echo $dado['noUnidadeOrg'] ?>
+
+            <?php endif; ?>
+            <br />
+    <?php endforeach; ?>
+<?php endif; ?>
+    </p>
+    </div>
+</div>
+
+
+
+
+
+<?php if(!empty($this->data['viewFor'])): ?>
+</div>
+
+<div class="form-actions">
+    <label class="pull-left span6"> <input type="checkbox" name=""
+        id="deAcordo"
+        onClick="
+                    if(this.checked == true){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary';
+                    }else if (this.checked == false){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary disabled';
+                    }
+                " /> De acordo com o conteúdo do documento.
+    </label>
+    <?php
+        $view = $this->view;
+        $sqArtefato = $this->data['arrOrigem']['sqArtefato'];
+        $url = "/artefato/visualizar-caixa-minuta/assinar-minuta/sqArtefato/{$sqArtefato}/view/{$view}";
+    ?>
+    <a class="btn btn-assinar btn-primary disabled" id="btn-assinar" href="<?php echo $url?>">
+        Assinar
+    </a>
+    <a class="btn" href="/artefato/visualizar-caixa-minuta/visualizar-minuta/sqArtefato/<?php echo $this->data['arrOrigem']['sqArtefato']?>">
+        <i class="icon-pdf"></i>
+        Gerar PDF
+    </a>
+    <a class="btn" href="javascript:history.back()"><i class="icon-remove"></i> Cancelar</a>
+</div>
+
+<?php endif; ?>
+
+</page>
+
+<style type="text/css">
+<!--
+.content { /*size: 8.27in 11.69in;*/
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    font-size: 12pt;
+    /*border: 1px solid grey;*/
+}
+
+#header {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: "Times New Roman";
+    font-size: 9pt;
+}
+
+#titulo-left {
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+#titulo-right {
+    text-align: right;
+    /* margin-right: 30px; */
+    /*  margin-bottom: 80px;*/
+}
+
+#titulo-center {
+    text-align: center;
+    margin-center: 30px;
+    /*  margin-bottom: 80px;*/
+}
+
+#date-abaixo-tipo-doc-right {
+    text-align: right;
+}
+
+#date-abaixo-texto {
+    text-align: left;
+    margin-right: 30px;
+}
+
+#date {
+    text-align: right;
+    margin-right: 30px;
+    margin-bottom: 0px;
+}
+
+.oficio {
+    border: 0px solid white;
+}
+
+td.pre-ementa {
+    width: 700px;
+    border: 0px solid white;
+    font-style: italic;
+}
+
+td.ementa {
+    width: 200px;
+    border: 0px solid white;
+    text-align: justify;
+    font-style: italic;
+}
+td.tx-ementa {
+        width:270px;
+        border: 1px solid white;
+        text-align: justify;
+        float: right;
+        font-style: italic;
+}
+
+#att {
+    margin-left: 50px;
+    margin-bottom: 70px;
+}
+
+#signature {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.smallMargin {
+    margin: 0 0 4px 0;
+    padding: 0;
+    font-size: 12px
+}
+
+.mediumMargin {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.marginLeft {
+    margin-left: 50px;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.alignCenter {
+    text-align: center;
+}
+
+.rodape-separator {
+    width: 600px;
+    border: 1px solid #ccc;
+    margin: 40px 0 0 70px;
+}
+
+table.rodape {
+    border: 0px;
+}
+
+td.rodape-left {
+    float: left;
+    width: 100px;
+    border: 0px;
+}
+
+td.rodape-right {
+    border: 0px;
+    padding-top: 10px;
+    width: 450;
+}
+
+.ajustaBox {
+    word-break: break-all;
+    text-align: justify;
+}
+
+.tableTexto ,td, tr{
+    border: 0px;
+}
+-->
+</style>
+

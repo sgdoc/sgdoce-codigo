@@ -1,0 +1,58 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/despacho-interlocutorio/index.js'); ?>
+
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <?php echo $this->userMessageStack() ?>
+
+            <h1>Detalhar Despachos - <?php echo $this->nuArtefato($this->entityArtefato)?></h1>
+            <br />
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend>Lista de Despachos</legend>
+                </fieldset>
+                <?php if($this->hasPermission):?>
+                    <div class="btn-group">
+                        <button title="Adicionar" class="btn btn-mini btnAddDespacho">
+                            <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                <?php endif;?>
+            
+            
+                <form class="hide" action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>"
+                      method="post"
+                      id="form-historico-despachos">
+                    <input type="hidden" id="sqArtefato" name="sqArtefato" value="<?php echo $this->entityArtefato->getSqArtefato(); ?>"/>
+                </form>
+            
+                <?php echo $this->formHidden('urlBack',(isset($this->backUrl)) ? str_replace('/','.',$this->backUrl) : ''); ?>
+            
+                <table id="table-grid-historico-despacho">
+                    <thead>
+                        <tr>
+                            <th width="" class="sorting_disabled">Nº</th>
+                            <th width="" class="sorting_disabled">Data/Hora</th>
+                            <th width="" class="sorting_disabled">Despacho</th>
+                            <th width="" class="sorting_disabled">Assinatura</th>
+                            <th width="" class="sorting_disabled">Origem</th>
+                            <th width="" class="sorting_disabled">Encaminhado Para</th>
+                            <th width="" class="sorting_disabled">Ações</th>
+                        </tr>
+                    </thead>
+                </table>
+            
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" id="btn_imprimir">Imprimir</button>
+                    <!-- <a href="<?php //echo $this->backUrl; ?>" class="btn" id="cancelar">
+                        <i class="icon-remove"></i> Cancelar
+                    </a> -->
+                    <button class="btn" id="cancelar"><i class="icon-remove"></i> Cancelar</button>
+                </div>
+            </div>
+            
+            <div id="modal_update_despacho" class="modal hide fade modal-large"></div>
+            <!--<div id="modal_detail_despacho" class="modal hide fade modal-medium"></div>-->
+        </div>
+    </div>
+</div>

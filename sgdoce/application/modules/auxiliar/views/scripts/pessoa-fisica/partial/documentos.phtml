@@ -1,0 +1,32 @@
+        <form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'documento', 'action' => 'list')) ?>" id="form-documento">
+            <?php
+                echo $this->formHidden('sqPessoaFisica', $this->data->getSqPessoaFisica()->getSqPessoa(), array('id' => 'sqPessoa-documento'));
+                echo $this->formHidden('sqPessoaSgdoce', $this->sqPessoaSgdoce, array('id' => 'sqPessoaSgdoce-documento'));
+
+                if($this->new) {
+                    echo $this->formHidden('new', true);
+                }
+            ?>
+            <fieldset>
+    			<div class="control-group">
+    				<div class="span6">
+    					<button type="button" class="btn btn-mini btn-adicionar-documento" id="btn-adicionar-documento" href="#modalDocumento" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+    				</div>
+    				<table class="table table-bordered table-striped table-condensed table-hover" id="table-documento">
+    					<thead>
+    						<tr>
+    							<th width="150">Tipo de Documento</th>
+    							<th width="150">Número</th>
+    							<th>Imagem</th>
+    							<th width="100">Ações</th>
+    						</tr>
+    					</thead>
+    				</table>
+    			</div>
+    		</fieldset>
+        </form>
+<?php
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/documento/documento.js');
+
+    echo $this->headScript();
+?>

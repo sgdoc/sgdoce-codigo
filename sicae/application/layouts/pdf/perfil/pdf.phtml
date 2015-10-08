@@ -1,0 +1,92 @@
+<?php
+$assetUrl = new Core_View_Helper_AssetUrl();
+$assetUrl->setView($this);
+$path = APPLICATION_PATH . '/../public/';
+
+$this->headLink()
+        ->setStylesheet($path . $assetUrl->assetUrl('style.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-correct.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-responsive.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style.css', true))
+        ->appendStylesheet($path . $assetUrl->assetUrl('pdf.css', true));
+
+echo $this->headLink();
+?>
+
+<page backtop="2mm" backbottom="3mm" backleft="3mm" backright="3mm">
+    <page_footer>
+        <div class="content">
+            <table class="table-footer">
+                <tr>
+                    <td class="data">
+                        Data: <?php echo date('d/m/Y') . ' às ' . date('H') . 'h' . date('i'); ?>
+                    </td>
+                    <td class="responsavel">
+                        Responsável: <?php echo \Core_Integration_Sica_User::getUserName(); ?>
+                    </td>
+                    <td class="paginacao">
+                        Página [[page_cu]] de [[page_nb]]
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </page_footer>
+    <div class="content">
+        <div>
+            <img src="<?php echo $path . $assetUrl->assetUrl('icons/marcaICMBioBig.png', true, array('address' => 'asset')) ?>" name="figura1" class="pull-left" width="100" border="0" />
+            <span align="center">
+                <h3>SICA-e - Sistema de Integra&ccedil;&atilde;o e Controle de Acesso</h3>
+                <h4 align="center">Resultado da Pesquisa de Perfil</h4>
+            </span>
+        </div>
+        <br/>
+        <br/>
+        <table class="table table-condensed" id="table-pdf">
+            <?php $cont = 0; ?>
+            <?php foreach ($this->layout()->data as $sistema): ?>
+                <tbody>
+                    <tr class="title">
+                        <td colspan="3" class="titulo">
+                            <b>
+                                <?php echo $sistema['sgSistema'] . ' - ' . $sistema['noSistema']; ?>
+                            </b>
+                        </td>
+                    </tr>
+                    <?php foreach ($sistema['perfil'] as $perfil): ?>
+                        <tr>
+                            <td colspan="3" class="largura-total"></td>
+                        </tr>
+                        <tr class="title">
+                            <td align="center">Perfil</td>
+                            <td align="center">Interno?</td>
+                            <td align="center">Status</td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $perfil['noPerfil'] ?></td>
+                            <?php $cont++; ?>
+                            <td align="center"><?php echo!$perfil['inPerfilExterno'] ? 'Sim' : 'Não' ?></td>
+                            <td align="center"><?php echo ($perfil['stRegistroAtivo'] == '1') ? 'Ativo' : 'Inativo' ?></td>
+                        </tr>
+                        <?php foreach ($perfil['menu'] as $menu): ?>
+                            <tr>
+                                <td colspan="3" class="title"><?php echo $menu['noMenu']; ?></td>
+                            </tr>
+                            <?php foreach ($menu['funcionalidade'] as $key => $funcionalidade): ?>
+                                <tr>
+                                    <td colspan="3" style="text-align: left; padding-left: 40px;">
+                                        <?php echo $funcionalidade; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            <?php endforeach; ?>
+            <tr>
+                <td colspan="4" class="total-registro">
+                    Total de Registros: <?php echo $cont; ?>
+                </td>
+            </tr>
+        </table>
+    </div>
+</page>

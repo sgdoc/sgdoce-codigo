@@ -1,0 +1,43 @@
+<script type="text/javascript" src="/js/app/artefato/tramite/return-modal.js"></script>
+
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Retornar Artefato - <?php echo $this->nuArtefato($this->entityArtefato); ?></h1> <!--deve ser h1 para o validador saber onde coloca a mensagem-->
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form_artefato_return_sigiloso"
+              action="<?php echo $this->urlCurrent(array(
+                  'module'=>'artefato',
+                  'controller'=>'tramite',
+                  'action' => 'aaaaaa')); ?>">
+            <?php echo $this->formHidden('sqArtefato',$this->entityArtefato->getSqArtefato()); ?>
+
+            <div class="alert alert-info">Para retornar um artefato sigiloso é obrigatório informar o destino para onde o artefato será tramitado.</div>
+
+            <br />
+            <div class="control-group">
+                <label class="control-label"><span class="required">* </span>Unidade</label>
+                <div class="controls">
+                    <?php
+                        echo $this->formHidden('sqPessoaDestino_hidden', 0);
+                        echo $this->formText('sqPessoaDestino', NULL, array('class' => 'span11 required'));
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><span class="required">* </span>Pessoa</label>
+                <div class="controls">
+                    <?php
+                        echo $this->formHidden('sqPessoaDestinoInterno_hidden',0);
+                        echo $this->formText('sqPessoaDestinoInterno',NULL,array('class'=>'span11 required', 'disabled' => 'disabled'));
+                    ?>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" id="btnSave" class="btn btn-primary btnConcluirReturnSigiloso" title="Salvar">Salvar</button>
+    <a href="#" class="btn btnCancelarReturnSigiloso" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

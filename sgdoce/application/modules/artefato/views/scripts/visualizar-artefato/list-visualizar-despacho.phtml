@@ -1,0 +1,35 @@
+<?php
+$view = $this;
+
+$fnDateFormatter = function ($row) {
+    return $row ? $row['dtDespacho']->get( 'dd/MM/yyyy HH:mm:ss') : NULL;
+};
+
+$fnTxDespachoFormatter = function ($row) use ($view) {
+    return mb_substr($row['txDespacho'], 0, $view->limitComment, 'utf-8') .
+           (mb_strlen($row['txDespacho'], 'utf-8') > $view->limitComment ? '<b>&hellip;</b>' : NULL);
+};
+
+$fnAcao = function ($row) use ($view){
+	$arrBtn = array(
+	        'view'  => $view->actionButton('Visualizar' , 'VisualizarArtefato.viewDespacho'  , array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'eye-open'  ),
+	);
+	return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+
+$configArray = array(
+        'columns'  => array(
+                array('column' => 'sqDespachoInterlocutorio'),
+                array('column' => $fnDateFormatter),
+                array('column' => $fnTxDespachoFormatter),
+                array('column' => 'noAssinatura'),
+                array('column' => 'noOrigem'),
+                array('column' => 'noEncaminhado'),
+                array('column' => $fnAcao)
+        )
+);
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

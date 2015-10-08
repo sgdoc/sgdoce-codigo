@@ -1,0 +1,50 @@
+<script type="text/javascript" src="/js/app/artefato/interessado/interessado.js"></script>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/interessado.js"></script>
+<div class="tab-pane" id="interessados">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Interessados</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <?php if($this->bloqueioArtefato): ?>
+                            <a class="btn btn-mini" disabled="disabled">
+                                <i title="Adicionar" class="icon-plus"></i>
+                            </a>
+                        <?php else: ?>
+                            <a id="btnAdicionarInteressado" data-toggle="modal" class="btn btn-mini">
+                                <i title="Adicionar" class="icon-plus"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+                $class = '';
+                $body = '';
+                if (!$this->objEntArtefato->getSqArtefato()){
+                    $class = 'class="table table-bordered table-striped tableInteressado"';
+                    $body = '<tbody>
+                                 <tr class="mensagemInteressado">
+                                     <td colspan="3">Nenhum registro encontrado.</td>
+                                 </tr>
+                             </tbody>';
+                }
+            ?>
+
+            <table  id="table-interessado" <?php echo $class; ?> >
+                <thead>
+                    <tr>
+                        <th width="75%">Nome</th>
+                        <th width="20%">CPF/CNPJ/Passaporte</th>
+                        <th width="5%">Ação</th>
+                    </tr>
+                </thead>
+                <?php echo $body; ?>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<!-- INICIO MODAL INTERESSADOS -->
+<div id="modal-interessado" class="modal hide fade modal-large modal-without-scroll"></div>
+<!-- FIM MODAL INTERESSADOS -->

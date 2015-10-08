@@ -1,0 +1,32 @@
+<?php
+$view = $this;
+$acao = function($row) use ($view) {
+    return $view->actionButton('Excluir', 'Interessado.deletar', array('sqArtefato' => $row['sqArtefato']
+                                                                         ,'sqPessoaSgdoce' => $row['sqPessoaSgdoce']),'trash');
+};
+
+$configArray =
+    array('columns'  =>
+        array(
+            array('column' => 'noPessoa'),
+            array('column' => function($data) use ($view) {
+                    switch (strlen($data['nuCpfCnpjPassaporte'])) {
+                        case 11: //cpf
+                            return $view->maskNumber($data['nuCpfCnpjPassaporte'],'cpf');
+                            break;
+                        case 14: //cnpj
+                            return $view->maskNumber($data['nuCpfCnpjPassaporte'],'cnpj');
+                            break;
+                        default: //passaport
+                            return $data['nuCpfCnpjPassaporte'];
+                            break;
+                    }
+                }),
+            array('column' => $acao)
+        )
+    );
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

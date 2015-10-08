@@ -1,0 +1,111 @@
+<?php
+
+echo $this->headScript()
+        ->appendFile($this->baseUrl() . '/js/app/artefato/visualizar-artefato/index.js')
+        ->appendFile($this->baseUrl() . '/js/app/artefato/artefato/index.js')
+        ->appendFile($this->baseUrl() . '/js/app/artefato/visualizar-artefato/dados-origem-destino.js');
+
+$sqPessoaOrigem     = (!empty ($this->dadosOrigem)) ? $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqPessoaSgdoce() : '';
+$sqPessoaDestino    = (!empty ($this->dadosDestino)) ? $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqPessoaSgdoce() : '';
+$sqTipoPessoaOrigem = (!empty ($this->dadosOrigem)) ? $this->dadosOrigem[0]->getSqPessoaSgdoce()->getSqtipoPessoa()->getSqtipoPessoa() : '';
+$sqTipoPessoaDestino= (!empty ($this->dadosDestino)) ? $this->dadosDestino[0]->getSqPessoaSgdoce()->getSqtipoPessoa()->getSqtipoPessoa() : '';
+$procedenciaOrigem  = (!empty ($this->dadosOrigem)) ? $this->dadosOrigem[1] : '';
+$procedenciaDestino = (!empty ($this->dadosDestino)) ? $this->dadosDestino[1]: '';
+$artTipoDoc         = \Core_Configuration::getSgdoceTipoArtefatoDocumento();
+$artTipoDossie      = \Core_Configuration::getSgdoceTipoArtefatoDossie();
+$artTipoProcesso    = \Core_Configuration::getSgdoceTipoArtefatoProcesso();
+
+$noTipoArtefato = $this->entityArtefato->getSqTipoArtefatoAssunto()->getSqTipoArtefato()->getNoTipoArtefato();
+$sqTipoArtefato = $this->entityArtefato->getSqTipoArtefatoAssunto()->getSqTipoArtefato()->getSqTipoArtefato();
+?>
+
+<div class="row-fluid">
+    <h1 class="pull-left">Detalhar <?php echo "{$noTipoArtefato} - {$this->NuArtefato($this->entityArtefato)}"; ?></h1>
+</div>
+<br/>
+<div class="row-fluid">
+    <div class="form-horizontal visualizar">
+
+        <?php echo $this->formHidden('sqArtefato', $this->entityArtefato->getSqArtefato());?>
+
+        <ul class="nav nav-tabs tabsForm" id="nav-tabs">
+            <?php if ($sqTipoArtefato == $artTipoDoc): ?>
+                <li class="active" id="liDadosArtefato"><a href="#dadosArtefato" data-toggle="tab" class="tab"      >Dados Básicos</a></li>
+                <li class="" id="liDadosOrigemDestino" ><a href="#dadosOrigemDestino" data-toggle="tab" class="tab" >Origem/Destino</a></li>
+                <li class="" id="liDadosInteressados"  ><a href="#dadosInteressados" data-toggle="tab" class="tab"  >Interessados</a></li>
+                <li class="" id="liDadosHistorico"     ><a href="#dadosHistorico" data-toggle="tab" class="tab"     >Histórico</a></li>
+                <li class="" id="liDadosVinculo"       ><a href="#dadosVinculo" data-toggle="tab" class="tab"       >Vínculos</a></li>
+                <li class="" id="liDadosReferencia"    ><a href="#dadosReferencia" data-toggle="tab" class="tab"    >Referências</a></li>
+                <li class="" id="liDadosDespacho"       ><a href="#dadosDespacho" data-toggle="tab" class="tab"     >Despachos</a></li>
+                <li class="" id="liDadosComentario"    ><a href="#dadosComentario" data-toggle="tab" class="tab"    >Comentários</a></li>
+            <?php elseif ($sqTipoArtefato == $artTipoProcesso): ?>
+                <li class="active" id="liDadosArtefato"><a href="#dadosArtefato" data-toggle="tab" class="tab"  >Dados Básicos</a></li>
+                <li class="" id="liDadosAutuacao"      ><a href="#dadosAutuacao" data-toggle="tab" class="tab"  >Dados Autuação</a></li>
+                <li class="" id="liDadosVolume"        ><a href="#dadosVolume" data-toggle="tab" class="tab"    >Volumes</a></li>
+                <li class="" id="liDadosHistorico"     ><a href="#dadosHistorico" data-toggle="tab" class="tab" >Histórico</a></li>
+                <li class="" id="liDadosVinculo"       ><a href="#dadosVinculo" data-toggle="tab" class="tab"   >Vínculos</a></li>
+                <li class="" id="liDadosReferencia"    ><a href="#dadosReferencia" data-toggle="tab" class="tab">Referências</a></li>
+                <li class="" id="liDadosDespacho"      ><a href="#dadosDespacho" data-toggle="tab" class="tab"  >Despachos</a></li>
+                <li class="" id="liDadosComentario"    ><a href="#dadosComentario" data-toggle="tab" class="tab">Comentários</a></li>
+
+            <?php endif; ?>
+
+
+
+        </ul>
+        <div class="tab-content" id="tab-content">
+
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">&nbsp;</p>
+            </div>
+            <div class="tab-pane active" id="dadosArtefato">
+                <?php echo $this->render('visualizar-artefato/dados-artefato.phtml'); ?>
+            </div>
+
+            <?php if ($sqTipoArtefato == $artTipoDoc): ?>
+                <div class="tab-pane" id="dadosOrigemDestino">
+                    <?php echo $this->render('visualizar-artefato/dados-origem-destino.phtml'); ?>
+                </div>
+                <div class="tab-pane" id="dadosInteressados">
+                    <?php echo $this->render('visualizar-artefato/dados-interessados.phtml'); ?>
+                </div>
+
+            <?php elseif ($sqTipoArtefato == $artTipoProcesso): ?>
+
+                <div class="tab-pane" id="dadosAutuacao">
+                    <?php echo $this->render('visualizar-artefato/dados-autuacao.phtml'); ?>
+                </div>
+                <div class="tab-pane" id="dadosVolume">
+                    <?php echo $this->render('visualizar-artefato/dados-volume.phtml'); ?>
+                </div>
+
+            <?php endif; ?>
+
+            <div class="tab-pane" id="dadosHistorico">
+                <?php echo $this->render('visualizar-artefato/dados-historico.phtml'); ?>
+            </div>
+            <div class="tab-pane" id="dadosVinculo">
+                <?php echo $this->render('visualizar-artefato/dados-vinculo.phtml'); ?>
+            </div>
+            <div class="tab-pane" id="dadosReferencia">
+                <?php echo $this->render('visualizar-artefato/dados-referencia.phtml'); ?>
+            </div>
+            <div class="tab-pane" id="dadosDespacho">
+                <?php echo $this->render('visualizar-artefato/dados-despacho.phtml'); ?>
+            </div>
+            <div class="tab-pane" id="dadosComentario">
+                <?php echo $this->render('visualizar-artefato/dados-comentario.phtml'); ?>
+            </div>
+        </div>
+
+        <fieldset>
+            <div class="form-actions" id="formButtonsPrincipal">
+                <a href="<?php echo $this->urlBack; ?>" class="btn btn_prev">
+                    Voltar
+                </a>
+                <button type="button" class="btn btn-primary" id="btn_imprimir">Imprimir</button>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div id="modal_container_medium" class="modal hide fade modal-medium"></div>

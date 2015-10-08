@@ -1,0 +1,13 @@
+<?php
+    $entArtefato    = $this->entSolicitacao->getSqArtefato();
+    $nuDigital      = str_pad($entArtefato->getNuDigital()->getNuEtiqueta(), 7,'0',STR_PAD_LEFT);
+?>
+
+<?php echo $this->render('header.phtml'); ?>
+
+<p>Caro usuário.</p>
+<br />
+<p>Em <?php echo $this->dtProcessamento->get(\Zend_Date::DATETIME_MEDIUM); ?> o SGDoc-e
+    realizou o processamento de migração das imagens do documento <b><?php echo $nuDigital; ?></b>, no entanto,
+    este documento possui imagem original "tiff" corrompida.</p>
+<p>Adicione as imagens na funcionalidade de correção dos dados da migração.</p>

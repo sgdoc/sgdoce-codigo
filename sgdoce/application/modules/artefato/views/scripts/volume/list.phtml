@@ -1,0 +1,67 @@
+<?php
+$view        = $this;
+$inDashboard =  TRUE;
+
+$acao = function($row) use ($view, $inDashboard)
+{
+    $arrBtn = array(
+        'view'       => $view->actionButton('Visualizar'                 , 'VolumeGrid.viewVolume', array('sqVolume' => $row['sqVolume']), 'eye-open'),
+        'printOpen'  => $view->actionButton('Gerar Termo de Abertura'    , 'VolumeGrid.printOpen' , array('sqVolume' => $row['sqVolume']), 'print-abertura')
+    );
+
+    if ($row['dtEncerramento']) {
+        $arrBtn['printClose'] = $view->actionButton(
+                'Gerar Termo de Encerramento',
+                'VolumeGrid.printClose',
+                array('sqVolume' => $row['sqVolume']),
+                'print-encerramento'
+        );
+    }
+
+    # SGI pode alterar e excluir se estiver na área "minha" e se houver demanda
+    if ( \Zend_Registry::get('isUserSgi') && $view->hasDemandaVolumeDeProcesso ) {
+        $arrBtn['up'] = $view->actionButton(
+                'Alterar',
+                'VolumeGrid.edit',
+                array('sqVolume' => $row['sqVolume']),
+                'pencil'
+        );
+        # somente o último volume pode ser excluído e caso ele não seja único
+        if ( ($row['sqVolume'] == $view->lastVolume) && $view->notTheOnlyVolume ) {
+            $arrBtn['del'] = $view->actionButton(
+                    'Excluir',
+                    'VolumeGrid.confirmDelete',
+                    array('sqVolume' => $row['sqVolume']),
+                    'trash'
+            );
+        }
+    }
+    # usuário comum pode alterar o último volume se: 1) não tiver sido tramitado ou 2) com primeiro trâmite cancelado
+    if ((!\Zend_Registry::get('isUserSgi') &&
+                $view->hasPermission &&
+                    !$view->hasTramiteEfetivo) ||
+                        ($row['sqVolume'] == $view->lastVolume) ) {
+
+        $arrBtn['up'] = $view->actionButton(
+                'Alterar',
+                'VolumeGrid.edit',
+                array('sqVolume' => $row['sqVolume']),
+                'pencil'
+        );
+    }
+
+    return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+
+$configArray = array(
+        'columns'  => array(
+                array('column' => 'nuVolume'),
+                array('column' => 'nuFolhaInicial'),
+                array('column' => 'nuFolhaFinal'),
+                array('column' => $acao)
+        )
+);
+
+$this->grid->setConfig($configArray);
+
+echo json_encode($this->grid->parseData($this->result));

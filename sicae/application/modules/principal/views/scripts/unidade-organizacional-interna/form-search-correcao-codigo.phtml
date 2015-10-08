@@ -1,0 +1,139 @@
+<div id="container-bl">
+
+    <div class="control-group">
+        <label for="coCnuc" class="control-label">Código CNUC</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coCnuc',
+                    NULL,
+                    array(
+                        'mask'     => 'cnuc',
+                        'class'    => 'span4',
+                        'maxlength' => 10,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coUnidadeGestora" class="control-label">Código UGE</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coUnidadeGestora',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4',
+                        'maxlength' => 6,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coUorg" class="control-label">Código UORG</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coUorg',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4',
+                        'maxlength' => 4,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coIcmbio" class="control-label">Código SISICMBio</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coIcmbio',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4'
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coUgr" class="control-label">Código UGR</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coUgr',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4',
+                        'maxlength' => 6,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coUasg" class="control-label">Código UASG</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coUasg',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4',
+                        'maxlength' => 6,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coSiorg" class="control-label">Código SIORG</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'coUasg',
+                    NULL,
+                    array(
+                        'mask'     => 'numeric',
+                        'class'    => 'span4',
+                        'maxlength' => 6,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="coSiorg" class="control-label">Código CNPJ</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'nuCnpj',
+                    NULL,
+                    array(
+                        'mask'     => 'cnpj',
+                        'class'    => 'span4',
+                        'maxlength' => 18,
+                    )
+                );
+            ?>
+        </div>
+    </div>
+
+
+</div>

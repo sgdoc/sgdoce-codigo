@@ -1,0 +1,23 @@
+<table class="table table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th width="5%"><input type="checkbox" id="profile-all" /></th>
+            <th>Perfil</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->perfis as $perfil): ?>
+            <?php $checked = ''; ?>
+            <?php foreach ($this->binds as $perfilUsuario): ?>
+            <?php $sqPerfil = is_object($perfilUsuario) ? $perfilUsuario->getSqPerfil()->getSqPerfil() : $perfilUsuario['sqPerfil']; ?>
+                <?php if ($perfil['sqPerfil'] == $sqPerfil): ?>
+                    <?php $checked = ' checked="checked"'; break;?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <tr>
+            <td><input id="ckPerfil-<?php echo $perfil['sqPerfil']; ?>" type="checkbox" name="perfil[]" value="<?php echo $perfil['sqPerfil'];?>"<?php echo $checked;?> /></td>
+            <td><label for="ckPerfil-<?php echo $perfil['sqPerfil']; ?>" ><?php echo $perfil['noPerfil'];?></label></td>
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>

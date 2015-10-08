@@ -1,0 +1,52 @@
+<script type="text/javascript" src="/js/app/artefato/volume/volume.js"></script>
+<script type="text/javascript" src="/js/app/artefato/processo-eletronico/volume.js"></script>
+<div class="tab-pane" id="volume">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Volumes</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <?php if($this->bloqueioArtefato): ?>
+                            <a class="btn btn-mini" disabled="disabled">
+                                <i title="Adicionar" class="icon-plus"></i>
+                            </a>
+                        <?php else: ?>
+                            <a id="btnAdicionarVolume" data-toggle="modal" class="btn btn-mini">
+                                <i title="Adicionar" class="icon-plus"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+                $class = '';
+                $body = '';
+                if (!$this->objEntArtefato->getSqArtefato()){
+                    $class = 'class="table table-bordered table-striped tableVolume"';
+                    $body = '<tbody>
+                                 <tr class="mensagemVolume">
+                                     <td colspan="4">Nenhum registro encontrado.</td>
+                                 </tr>
+                             </tbody>';
+                }
+            ?>
+
+            <table  id="table-volume" <?php echo $class; ?> >
+                <thead>
+                    <tr>
+                        <th width="20%">Volume</th>
+                        <th width="20%">Folha Inicial</th>
+                        <th width="20%">Folha Final</th>
+                        <th width="5%">Ação</th>
+                    </tr>
+                </thead>
+                <?php echo $body; ?>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<!-- INICIO MODAL INTERESSADOS -->
+<div id="modal-volume" class="modal hide fade modal-medium">
+</div>
+<!-- FIM MODAL INTERESSADOS -->

@@ -1,0 +1,103 @@
+<?php
+$view = $this;
+$acao = function($row) use ($view) {
+
+    $btnEdit = $view->actionButton(
+        'Alterar',
+        'Funcionalidade.edit',
+        array($row['sqFuncionalidade']),
+        'pencil'
+    );
+
+    $btnView = $view->actionButton(
+        'Visualizar',
+        $view->urlCurrent(
+            array(
+                'action' => 'view',
+                'id'     => $row['sqFuncionalidade']
+            )
+        ),
+        array(),
+        'eye-open',
+        NULL,
+        array(
+            'data-toggle'   => 'modal',
+            'data-keyboard' => 'false',
+            'data-backdrop' => 'static',
+            'data-target'   => '#modal-view'
+        ),
+        'href'
+    );
+
+    $titleIcon  = 'Reativar';
+    $toggleIcon = 'ativado';
+    if ($row['stRegistroAtivo']) {
+        $titleIcon  = 'Inativar';
+        $toggleIcon = 'inativado';
+    }
+    $btnToggle = $view->actionButton(
+        $titleIcon,
+        $view->urlCurrent(
+            array(
+                'controller' => 'funcionalidade',
+                'action'     => 'toggle-status',
+                'id'         => $row['sqFuncionalidade']
+            )
+        ),
+        array(),
+        $toggleIcon,
+        NULL,
+        array(
+        'active'        => $row['stRegistroAtivo'],
+        'msgActive'     => Core_Registry::getMessage()->translate('MN056'),
+        'msgInactive'   => Core_Registry::getMessage()->translate('MN058'),
+        'titleActive'   => 'Reativar',
+        'titleInactive' => 'Inativar',
+        'class'         => 'active-inactive',
+        ),
+        'href',
+        array('action'=>'toggle-status')
+    );
+
+    $btnRemove = '';
+    if ((int)$row['nuQuantidadePerfil'] === 0) {
+        $btnRemove = $view->actionButton(
+            'Remover',
+            'Funcionalidade.remove',
+            array($row['sqFuncionalidade']),
+            'trash'
+        );
+    }
+
+    return sprintf(
+        '<div class="btn-group">%s%s%s%s</div>',
+        $btnEdit,
+        $btnView,
+        $btnToggle,
+        $btnRemove
+    );
+};
+
+$funcionalidadePrincipal = function($data) {
+    return $data['inFuncionalidadePrincipal'] ? 'Sim' : 'Não';
+};
+
+$registroAtivo = function($data) {
+    return $data['stRegistroAtivo'] ? 'Ativo' : 'Inativo';
+};
+
+$array = array(
+    'columns' => array(
+        array('column' => 'sgSistema'),
+        array('column' => 'noMenu'),
+        array('column' => 'noFuncionalidade'),
+        array('column' => $funcionalidadePrincipal),
+        array('column' => $registroAtivo),
+        array('column' => $acao)
+    )
+);
+
+$this->grid->setConfig($array);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

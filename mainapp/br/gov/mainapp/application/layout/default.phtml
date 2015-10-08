@@ -1,0 +1,32 @@
+<?php
+/*
+ * Copyright 2013 ICMBio
+ * Este arquivo é parte do programa SISICMBio
+ * O SISICMBio é um software livre; você pode redistribuí-lo e/ou modificá-lo dentro dos termos
+ * da Licença Pública Geral GNU como publicada pela Fundação do Software Livre (FSF); na versão
+ * 2 da Licença.
+ *
+ * Este programa é distribuído na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem
+ * uma garantia implícita de ADEQUAÇÃO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a
+ * Licença Pública Geral GNU/GPL em português para maiores detalhes.
+ * Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o título "LICENCA.txt",
+ * junto com este programa, se não, acesse o Portal do Software Público Brasileiro no endereço
+ * www.softwarepublico.gov.br ou escreva para a Fundação do Software Livre(FSF)
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+if ('development' == $this->_environment) {
+    $cdn = 'http://dev.static.cdn.icmbio.gov.br/';
+}
+
+$this->add('title',    (object) array('content'     => 'MainApp - ICMBio'), 'head')
+     ->add('meta',         (object) array('http-equiv'  => 'Content-Type', 'content' => 'text/html; charset=utf-8'), 'head')
+     ->add('meta',         (object) array('name'        => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'), 'head')
+     ->add('comment',      (object) array('content'     => 'CSS GERAL INICIO'), 'head')
+     ->add('stylesheet',   (object) array('href' => 'https://tcti.sicae.sisicmbio.icmbio.gov.br/assets/css/style.css'           , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet',   (object) array('href' => 'https://tcti.sicae.sisicmbio.icmbio.gov.br/assets/css/style-correct.css'   , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet',   (object) array('href' => 'https://tcti.sicae.sisicmbio.icmbio.gov.br/assets/css/nestedAccordion.css' , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('stylesheet',   (object) array('href' => 'http://dev.static.cdn.icmbio.gov.br/component/css/smartFilter.css'         , 'media' => 'screen', 'rel' => 'stylesheet', 'type' =>' text/css'), 'head')
+     ->add('javascript',    (object) array('src'  => $cdn . 'common/js/jquery.js'), 'head')
+     ->add('javascript',    (object) array('src'  => $cdn . 'bootstrap/js/bootstrap.js'), 'head')
+     ->add('menu', (object) array('type' => 'H'));

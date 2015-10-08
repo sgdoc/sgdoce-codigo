@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3>Alterar Email</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div class="alert alert-error hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Campos de preenchimento obrigatório não foram preenchidos.
+        </div>
+        <form class="form-horizontal" method="post" id="form-email-modal">
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="tpEmail" ><span title="Required field" class="required">*</span> Tipo de E-mail</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                        echo $this->formHidden('sqEmail', $this->data->getSqEmail());
+                        echo $this->formHidden('sqTipoEmail', $this->data->getSqTipoEmail()->getSqTipoEmail());
+                        echo $this->ComboCustom('sqTipoEmail', $this->data->getSqTipoEmail()->getSqTipoEmail(), array('disabled' => 'disabled'), $this->cmb['sqTipoEmail']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="email"><span title="Required field" class="required">*</span> Email</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('txEmail', $this->data->getTxEmail(), array('class' => 'span9 required', 'maxlength' => 120));
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarEmail" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn" data-dismiss="modal" title="Fechar">Fechar</a>
+</div>
+<?php
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/email/modal.js');
+
+    echo $this->headScript();
+?>

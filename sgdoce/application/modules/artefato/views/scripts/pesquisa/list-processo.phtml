@@ -1,0 +1,48 @@
+<?php
+
+$view = $this;
+$params = $this->params;
+
+$acao = function($row) use ($view, $params) {
+    $arrBtn = array();
+    if (!isset($params['noDelete'])) {
+        $arrBtn[] = $view->actionButton('Imagem', 'Processo.fnc.imagem', array($row['sqArtefato']), 'eye-open');
+        $arrBtn[] = $view->actionButton('Detalhes', 'Processo.fnc.detalhar', array($row['sqArtefato']), 'list-alt');
+    }
+    return $view->buttonGroup(join(' ', $arrBtn), count($arrBtn));
+};
+
+$interessado = function($row) {
+    $interessados_line = "";
+    if (mb_strlen($row['noPessoaInteressados'],'utf-8') > 50) {
+        $interessados_line = mb_substr($row['noPessoaInteressados'], 0, 50, 'utf-8');
+        return $interessados_line . " <a href='javascript:void(0);' title='{$row['noPessoaInteressados']}' class='tooltip_grid'>...</a>";
+    } else {
+        return $row['noPessoaInteressados'];
+    }
+};
+
+$movimentacao = function($row) {
+    $movimentacao_line = "";
+    if (mb_strlen($row['txMovimentacao'],'utf-8') > 50) {
+        $movimentacao_line = mb_substr($row['txMovimentacao'], 0, 50,'utf-8');        
+        return $movimentacao_line . " <a href='javascript:void(0);' title='{$row['txMovimentacao']}' class='tooltip_grid'>...</a>";
+    } else {
+        return $row['txMovimentacao'];
+    }
+};
+
+$configArray = array('columns' => array(
+        0 => array('column' => 'nuArtefato'),
+        1 => array('column' => $interessado),
+        2 => array('column' => 'txAssunto'),
+        3 => array('column' => 'noPessoaOrigem'),
+        4 => array('column' => $movimentacao),
+        5 => array('column' => $acao)
+        ));
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data = $parse->parse($this->result);
+
+echo json_encode($data);

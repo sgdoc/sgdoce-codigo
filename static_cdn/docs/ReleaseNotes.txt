@@ -1,0 +1,17 @@
+*system: STATIC.CDN
+*version: 1.7.10
+*iteration: -
+*deliver: 07-08-2015 [17:17:17]
+
+*objective:
+- Adição dos ícones referentes ao programa Bolsa Verde (histórico, inclusão e exclusão) para o SISFAMILIAS.
+
+*products:
+- Plano de Implantação;
+- Código Fonte.
+
+*new_functionality:
+- n/a
+
+*changed_funcionality:
+- n/a

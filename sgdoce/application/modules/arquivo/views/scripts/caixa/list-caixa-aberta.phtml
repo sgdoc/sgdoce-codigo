@@ -1,0 +1,26 @@
+<?php
+
+$view = $this;
+
+$radio = function($row) use ($view) {
+    return '<input type="radio" name="sqCaixa" value="' . $row['sqCaixa'] . '" />';
+};
+
+$fnDtCadastro = function($row) {
+    return $row['dtCadastro']->toString('dd/MM/YYYY');
+};
+
+$configArray = array('columns' => array(
+        array('column' => $radio),
+        array('column' => 'nuCaixa'),
+        array('column' => 'nuAno'),
+        array('column' => 'txClassificacao'),
+        array('column' => 'noUnidadeOrg'),
+        array('column' => $fnDtCadastro),
+        array('column' => 'qtdeArtefatoCaixa'),
+        ));
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

@@ -1,0 +1,812 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<title>SGDOC-e (Sistema de Gerenciamento de Documentos)- Table of Contents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.6.2.573">
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/silver-theme/jquery-ui-1.8.12.custom.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/dynatree/chm/ui.dynatree.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/toc.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#tabs .ui-widget-header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.dynatree.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+		var sHelpIdToActivate = '';
+	
+		$(document).ready(function()
+		{
+			var sAnchorName = '';
+			try { sAnchorName = top.location.href.substring(top.location.href.lastIndexOf("#") + 1, top.location.href.length); }
+			catch(err) { sAnchorName = ''; }
+			var nSelectedTab = 0;
+			if (sAnchorName == '_index') nSelectedTab = 1
+			else if (sAnchorName == '_search') nSelectedTab = 2;			
+			$("#tabs").tabs({
+				selected: nSelectedTab,
+				select: function(event, ui) { HideKwPopup(); }
+			});
+			
+			// Toc
+			if ($("#tab-toc").length) {
+				$("#tab-toc").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#tab-keywords").length && $("#tab-keywords").dynatree && $("#tab-keywords").dynatree("getTree") && $("#tab-keywords").dynatree("getTree").activateKey)
+							$("#tab-keywords").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-toc").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				// Select the active help id
+				if (sHelpIdToActivate != '') $("#tab-toc").dynatree("getTree").activateKey(sHelpIdToActivate);
+			}
+			
+			// Keywords
+			
+			if ($("#tab-keywords").length) {
+				$("#tab-keywords").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onClick: function(node, event){
+						HideKwPopup();
+						if (node.data && node.data.click)
+						{
+							var aRefList = null;
+							eval('aRefList=' + node.data.click);
+							if (ShowKwPopup(node.li, aRefList))
+							{
+								if ($("#tab-toc") && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").activateKey)
+									$("#tab-toc").dynatree("getTree").activateKey(null);
+								if(node.data.href && node.data.href != '#'){
+									window.open(node.data.href, node.data.target);
+								}
+							}
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-keywords").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				}
+			
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		$('body').click(function() {
+			HideKwPopup();
+		});
+		
+		function SelectTocItem(sHelpId)
+		{
+			if ($("#tab-toc").length && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").getNodeByKey) {
+				$("#tab-toc").dynatree("getTree").getNodeByKey(sHelpId).activateSilently();
+			}
+			else {
+				sHelpIdToActivate = sHelpId;
+			}
+		}
+		
+		function HideKwPopup()
+		{
+			if($("#popupMenu")) $("#popupMenu").remove();
+		}
+		
+		function ShowKwPopup(oSender, aLinks)
+		{
+			HideKwPopup();
+			if (!aLinks || !aLinks.length || aLinks.length == 0) return false
+			else if (aLinks.length == 1) return true
+			else
+			{
+				var oParentDiv = document.createElement("DIV");
+				oParentDiv.id = "popupMenu";
+				var oLink = null;
+				// Close button
+				oLink = document.createElement("SPAN");
+				oLink.className = "close-button";
+				oLink.innerHTML = "X";
+				oLink.href = "#";
+				oLink.onclick = HideKwPopup;
+				oParentDiv.appendChild(oLink);
+				// Items
+				for (var nCnt=0; nCnt<aLinks.length; nCnt++)
+				{
+					oLink = document.createElement("A");
+					oLink.innerHTML = aLinks[nCnt][0];
+					oLink.href = aLinks[nCnt][1];
+					oLink.target = "FrameMain";
+					oLink.onclick = HideKwPopup;
+					oParentDiv.appendChild(oLink);
+				}
+				document.body.appendChild(oParentDiv);
+				var pos = $(oSender).offset(); 
+				var height = $(oSender).height();
+				$(oParentDiv).css({
+					"left": (pos.left+20) + "px",
+					"top": (pos.top + height + 5) + "px"
+				});
+				$(oParentDiv).show();
+				return false;
+			}
+		}
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search_value").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('No results found.');
+			}
+			else
+			{
+				$("#search_results").html('<div id="search_results_content"></div>');
+				var oUl = $("#search_results_content").append("<ul id='lr'></ul>").find("ul");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "' target='FrameMain'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</a></li>");
+					}
+				}
+				// Tree
+				$("#search_results_content").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#search_results_content") && $("#search_results_content").dynatree && $("#search_results_content").dynatree("getTree") && $("#search_results_content").dynatree("getTree").activateKey)
+							$("#search_results_content").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tab-toc">Contents</a></li>
+			<li><a href="#tab-keywords">Index</a></li>
+			<li><a href="#tab-search">Search</a></li>
+			</ul>
+		<div id="tab-toc">
+			<ul id="toc" class="">
+
+				<li class="folder" id="Introducao" data="">
+							<a
+							href="Introducao.html"
+							target="FrameMain">
+								Introdu&ccedil;&atilde;o</a>
+
+				<ul><li class="" id="Bemvindo" data="">
+							<a
+							href="Bemvindo.html"
+							target="FrameMain">
+								Bem vindo</a>
+
+				</li><li class="" id="Telaprincipaldosistema" data="">
+							<a
+							href="Telaprincipaldosistema.html"
+							target="FrameMain">
+								Tela principal do sistema</a>
+
+				</li><li class="" id="DefinicoeseConceitosBasicosdaGes" data="">
+							<a
+							href="DefinicoeseConceitosBasicosdaGes.html"
+							target="FrameMain">
+								Defini&ccedil;&otilde;es e Conceitos B&aacute;sicos da Gest&atilde;o Documental</a>
+
+				</li></ul></li><li class="folder" id="Menu" data="">
+							<a
+							href="Menu.html"
+							target="FrameMain">
+								Menu</a>
+
+				<ul><li class="folder" id="AreadeTrabalho" data="">
+							<a
+							href="AreadeTrabalho.html"
+							target="FrameMain">
+								&Aacute;rea de Trabalho</a>
+
+				<ul><li class="folder" id="AcoesdaAreadeTrabalho" data="">
+							<a
+							href="AcoesdaAreadeTrabalho.html"
+							target="FrameMain">
+								A&ccedil;&otilde;es da &Aacute;rea de Trabalho</a>
+
+				<ul><li class="folder" id="Comentarartefatos" data="">
+							<a
+							href="Comentarartefatos.html"
+							target="FrameMain">
+								Comentar artefatos</a>
+
+				<ul><li class="" id="CadastrarComentario" data="">
+							<a
+							href="CadastrarComentario.html"
+							target="FrameMain">
+								Cadastrar Coment&aacute;rio</a>
+
+				</li><li class="" id="VisualizarComentario" data="">
+							<a
+							href="VisualizarComentario.html"
+							target="FrameMain">
+								Visualizar Coment&aacute;rio</a>
+
+				</li><li class="" id="AlterarComentario" data="">
+							<a
+							href="AlterarComentario.html"
+							target="FrameMain">
+								Alterar Coment&aacute;rio</a>
+
+				</li><li class="" id="ExcluirComentario" data="">
+							<a
+							href="ExcluirComentario.html"
+							target="FrameMain">
+								Excluir Coment&aacute;rio</a>
+
+				</li><li class="" id="GerarHistoricodeComentario" data="">
+							<a
+							href="GerarHistoricodeComentario.html"
+							target="FrameMain">
+								Gerar Hist&oacute;rico de Coment&aacute;rio</a>
+
+				</li></ul></li><li class="folder" id="Despacharartefatos" data="">
+							<a
+							href="Despacharartefatos.html"
+							target="FrameMain">
+								Despachar artefatos</a>
+
+				<ul><li class="" id="CadastrarDespacho" data="">
+							<a
+							href="CadastrarDespacho.html"
+							target="FrameMain">
+								Cadastrar Despacho</a>
+
+				</li><li class="" id="VisualizarDespacho" data="">
+							<a
+							href="VisualizarDespacho.html"
+							target="FrameMain">
+								Visualizar Despacho</a>
+
+				</li><li class="" id="AlterarDespacho" data="">
+							<a
+							href="AlterarDespacho.html"
+							target="FrameMain">
+								Alterar Despacho</a>
+
+				</li><li class="" id="ExcluirDespacho" data="">
+							<a
+							href="ExcluirDespacho.html"
+							target="FrameMain">
+								Excluir Despacho</a>
+
+				</li><li class="" id="ImprimirFolhadeDespacho" data="">
+							<a
+							href="ImprimirFolhadeDespacho.html"
+							target="FrameMain">
+								Imprimir Folha de Despacho</a>
+
+				</li><li class="" id="GerarHistoricodeDespacho" data="">
+							<a
+							href="GerarHistoricodeDespacho.html"
+							target="FrameMain">
+								Gerar Hist&oacute;rico de Despacho</a>
+
+				</li></ul></li><li class="folder" id="Tramitarartefatos" data="">
+							<a
+							href="Tramitarartefatos.html"
+							target="FrameMain">
+								Tramitar artefatos</a>
+
+				<ul><li class="" id="TramiteexternoPessoaFisica" data="">
+							<a
+							href="TramiteexternoPessoaFisica.html"
+							target="FrameMain">
+								Tr&acirc;mite externo - Pessoa F&iacute;sica</a>
+
+				</li><li class="" id="TramiteexternoPessoaJuridica" data="">
+							<a
+							href="TramiteexternoPessoaJuridica.html"
+							target="FrameMain">
+								Tr&acirc;mite externo - Pessoa Jur&iacute;dica</a>
+
+				</li><li class="" id="TramiteexternoUnidadeOrganizacio" data="">
+							<a
+							href="TramiteexternoUnidadeOrganizacio.html"
+							target="FrameMain">
+								Tr&acirc;mite externo - Unidade Organizacional Externa</a>
+
+				</li><li class="" id="Tramiteinterno" data="">
+							<a
+							href="Tramiteinterno.html"
+							target="FrameMain">
+								Tr&acirc;mite interno</a>
+
+				</li></ul></li><li class="" id="Recebertramite" data="">
+							<a
+							href="Recebertramite.html"
+							target="FrameMain">
+								Receber tr&acirc;mite</a>
+
+				</li><li class="" id="Cancelartramite" data="">
+							<a
+							href="Cancelartramite.html"
+							target="FrameMain">
+								Cancelar tr&acirc;mite</a>
+
+				</li><li class="" id="Retornartramite" data="">
+							<a
+							href="Retornartramite.html"
+							target="FrameMain">
+								Retornar tr&acirc;mite</a>
+
+				</li><li class="" id="Adicionarimagem" data="">
+							<a
+							href="Adicionarimagem.html"
+							target="FrameMain">
+								Adicionar imagem</a>
+
+				</li><li class="folder" id="Visualizarimagem" data="">
+							<a
+							href="Visualizarimagem.html"
+							target="FrameMain">
+								Visualizar imagem</a>
+
+				<ul><li class="" id="VisualizarimagensdaArvoredeVincu" data="">
+							<a
+							href="VisualizarimagensdaArvoredeVincu.html"
+							target="FrameMain">
+								Visualizar imagens da &Aacute;rvore de V&iacute;nculos</a>
+
+				</li><li class="" id="Efetuardownloaddoartefato" data="">
+							<a
+							href="Efetuardownloaddoartefato.html"
+							target="FrameMain">
+								Efetuar download do artefato</a>
+
+				</li></ul></li><li class="folder" id="Vincularartefato" data="">
+							<a
+							href="Vincularartefato.html"
+							target="FrameMain">
+								Vincular artefato</a>
+
+				<ul><li class="" id="Anexar" data="">
+							<a
+							href="Anexar.html"
+							target="FrameMain">
+								Anexar</a>
+
+				</li><li class="" id="Apensar" data="">
+							<a
+							href="Apensar.html"
+							target="FrameMain">
+								Apensar</a>
+
+				</li><li class="" id="Pesquisarartefatos" data="">
+							<a
+							href="Pesquisarartefatos.html"
+							target="FrameMain">
+								Pesquisar artefatos</a>
+
+				</li><li class="" id="VisualizarVinculacao" data="">
+							<a
+							href="VisualizarVinculacao.html"
+							target="FrameMain">
+								Visualizar Vincula&ccedil;&atilde;o</a>
+
+				</li><li class="" id="Desapensar" data="">
+							<a
+							href="Desapensar.html"
+							target="FrameMain">
+								Desapensar</a>
+
+				</li><li class="" id="Inserirpeca" data="">
+							<a
+							href="Inserirpeca.html"
+							target="FrameMain">
+								Inserir pe&ccedil;a</a>
+
+				</li></ul></li><li class="" id="Inserir1apeca" data="">
+							<a
+							href="Inserir1apeca.html"
+							target="FrameMain">
+								Inserir 1&ordf; pe&ccedil;a</a>
+
+				</li><li class="folder" id="Detalharartefatos" data="">
+							<a
+							href="Detalharartefatos.html"
+							target="FrameMain">
+								Detalhar artefatos</a>
+
+				<ul><li class="folder" id="DetalharDocumento" data="">
+							<a
+							href="DetalharDocumento.html"
+							target="FrameMain">
+								Detalhar Documento</a>
+
+				<ul><li class="" id="ImprimirHistoricodoDocumento" data="">
+							<a
+							href="ImprimirHistoricodoDocumento.html"
+							target="FrameMain">
+								Imprimir Hist&oacute;rico do Documento</a>
+
+				</li></ul></li><li class="folder" id="DetalharProcesso" data="">
+							<a
+							href="DetalharProcesso.html"
+							target="FrameMain">
+								Detalhar Processo</a>
+
+				<ul><li class="" id="ImprimirHistoricodoProcesso" data="">
+							<a
+							href="ImprimirHistoricodoProcesso.html"
+							target="FrameMain">
+								Imprimir Hist&oacute;rico do Processo</a>
+
+				</li></ul></li></ul></li><li class="" id="ImprimiretiquetadeProcesso" data="">
+							<a
+							href="ImprimiretiquetadeProcesso.html"
+							target="FrameMain">
+								Imprimir etiqueta de Processo</a>
+
+				</li><li class="folder" id="Corrigirartefatos" data="">
+							<a
+							href="Corrigirartefatos.html"
+							target="FrameMain">
+								Corrigir artefatos</a>
+
+				<ul><li class="" id="Corrigir" data="">
+							<a
+							href="Corrigir.html"
+							target="FrameMain">
+								Corrigir</a>
+
+				</li><li class="folder" id="Visualizarimagem1" data="">
+							<a
+							href="Visualizarimagem1.html"
+							target="FrameMain">
+								Visualizar imagem</a>
+
+				<ul><li class="" id="Confirmaroualterarimagem" data="">
+							<a
+							href="Confirmaroualterarimagem.html"
+							target="FrameMain">
+								Confirmar ou alterar imagem</a>
+
+				</li><li class="" id="Inseririmagem" data="">
+							<a
+							href="Inseririmagem.html"
+							target="FrameMain">
+								Inserir imagem</a>
+
+				</li></ul></li></ul></li></ul></li><li class="" id="AreaUnidade" data="">
+							<a
+							href="AreaUnidade.html"
+							target="FrameMain">
+								&Aacute;rea Unidade</a>
+
+				</li><li class="" id="AreaMinha" data="">
+							<a
+							href="AreaMinha.html"
+							target="FrameMain">
+								&Aacute;rea Minha</a>
+
+				</li><li class="" id="AreaExternos" data="">
+							<a
+							href="AreaExternos.html"
+							target="FrameMain">
+								&Aacute;rea Externos</a>
+
+				</li><li class="" id="AreaMigracao" data="">
+							<a
+							href="AreaMigracao.html"
+							target="FrameMain">
+								&Aacute;rea Migra&ccedil;&atilde;o</a>
+
+				</li></ul></li><li class="folder" id="CadastrarDocumento" data="">
+							<a
+							href="CadastrarDocumento.html"
+							target="FrameMain">
+								Cadastrar Documento</a>
+
+				<ul><li class="" id="ValidarDigital" data="">
+							<a
+							href="ValidarDigital.html"
+							target="FrameMain">
+								Validar Digital</a>
+
+				</li><li class="folder" id="Procedenciaexterna" data="">
+							<a
+							href="Procedenciaexterna.html"
+							target="FrameMain">
+								Proced&ecirc;ncia externa</a>
+
+				<ul><li class="" id="AbaDadosGerais1" data="">
+							<a
+							href="AbaDadosGerais1.html"
+							target="FrameMain">
+								Aba Dados Gerais</a>
+
+				</li><li class="" id="AbaOrigemDestino1" data="">
+							<a
+							href="AbaOrigemDestino1.html"
+							target="FrameMain">
+								Aba Origem/Destino</a>
+
+				</li><li class="" id="AbaAssunto1" data="">
+							<a
+							href="AbaAssunto1.html"
+							target="FrameMain">
+								Aba Assunto</a>
+
+				</li><li class="" id="AbaInteresssados" data="">
+							<a
+							href="AbaInteresssados.html"
+							target="FrameMain">
+								Aba Interesssados</a>
+
+				</li><li class="" id="AbaReferencias1" data="">
+							<a
+							href="AbaReferencias1.html"
+							target="FrameMain">
+								Aba Refer&ecirc;ncias</a>
+
+				</li></ul></li><li class="folder" id="Procedenciainterna" data="">
+							<a
+							href="Procedenciainterna.html"
+							target="FrameMain">
+								Proced&ecirc;ncia interna</a>
+
+				<ul><li class="" id="AbaDadosGerais" data="">
+							<a
+							href="AbaDadosGerais.html"
+							target="FrameMain">
+								Aba Dados Gerais</a>
+
+				</li><li class="" id="AbaOrigemDestino" data="">
+							<a
+							href="AbaOrigemDestino.html"
+							target="FrameMain">
+								Aba Origem/Destino</a>
+
+				</li><li class="" id="AbaAssunto" data="">
+							<a
+							href="AbaAssunto.html"
+							target="FrameMain">
+								Aba Assunto</a>
+
+				</li><li class="" id="AbaInteressados" data="">
+							<a
+							href="AbaInteressados.html"
+							target="FrameMain">
+								Aba Interessados</a>
+
+				</li><li class="" id="AbaReferencias" data="">
+							<a
+							href="AbaReferencias.html"
+							target="FrameMain">
+								Aba Refer&ecirc;ncias</a>
+
+				</li></ul></li></ul></li><li class="folder" id="CadastrarProcesso" data="">
+							<a
+							href="CadastrarProcesso.html"
+							target="FrameMain">
+								Cadastrar Processo</a>
+
+				<ul><li class="" id="ValidarProcesso" data="">
+							<a
+							href="ValidarProcesso.html"
+							target="FrameMain">
+								Validar Processo</a>
+
+				</li><li class="" id="AbaDadosGerais2" data="">
+							<a
+							href="AbaDadosGerais2.html"
+							target="FrameMain">
+								Aba Dados Gerais</a>
+
+				</li><li class="" id="AbaVolumes" data="">
+							<a
+							href="AbaVolumes.html"
+							target="FrameMain">
+								Aba Volumes</a>
+
+				</li><li class="" id="AbaInteressados1" data="">
+							<a
+							href="AbaInteressados1.html"
+							target="FrameMain">
+								Aba Interessados</a>
+
+				</li><li class="" id="AbaAssunto2" data="">
+							<a
+							href="AbaAssunto2.html"
+							target="FrameMain">
+								Aba Assunto</a>
+
+				</li><li class="" id="AbaReferencias2" data="">
+							<a
+							href="AbaReferencias2.html"
+							target="FrameMain">
+								Aba Refer&ecirc;ncias</a>
+
+				</li></ul></li><li class="folder" id="GerenciarDigitais" data="">
+							<a
+							href="GerenciarDigitais.html"
+							target="FrameMain">
+								Gerenciar Digitais</a>
+
+				<ul><li class="" id="Gerar" data="">
+							<a
+							href="Gerar.html"
+							target="FrameMain">
+								Gerar</a>
+
+				</li></ul></li><li class="folder" id="DemandadeInformacao" data="">
+							<a
+							href="DemandadeInformacao.html"
+							target="FrameMain">
+								Demanda de Informa&ccedil;&atilde;o</a>
+
+				<ul><li class="" id="GerarDemandadeInformacao" data="">
+							<a
+							href="GerarDemandadeInformacao.html"
+							target="FrameMain">
+								Gerar Demanda de Informa&ccedil;&atilde;o</a>
+
+				</li><li class="folder" id="AcompanharDemandadeInformacao" data="">
+							<a
+							href="AcompanharDemandadeInformacao.html"
+							target="FrameMain">
+								Acompanhar Demanda de Informa&ccedil;&atilde;o</a>
+
+				<ul><li class="folder" id="DemandasdaUnidade" data="">
+							<a
+							href="DemandasdaUnidade.html"
+							target="FrameMain">
+								Demandas da Unidade</a>
+
+				<ul><li class="folder" id="DemandasRecebidas" data="">
+							<a
+							href="DemandasRecebidas.html"
+							target="FrameMain">
+								Demandas Recebidas</a>
+
+				<ul><li class="" id="Visualizardetalhamentodademanda" data="">
+							<a
+							href="Visualizardetalhamentodademanda.html"
+							target="FrameMain">
+								Visualizar detalhamento da demanda</a>
+
+				</li><li class="" id="Gerarnovademanda" data="">
+							<a
+							href="Gerarnovademanda.html"
+							target="FrameMain">
+								Gerar nova demanda</a>
+
+				</li><li class="" id="Responderdemandarecebida" data="">
+							<a
+							href="Responderdemandarecebida.html"
+							target="FrameMain">
+								Responder demanda recebida</a>
+
+				</li></ul></li><li class="folder" id="DemandasGeradas" data="">
+							<a
+							href="DemandasGeradas.html"
+							target="FrameMain">
+								Demandas Geradas</a>
+
+				<ul><li class="" id="Visualizarodetalhamentodademanda" data="">
+							<a
+							href="Visualizarodetalhamentodademanda.html"
+							target="FrameMain">
+								Visualizar o detalhamento da demanda</a>
+
+				</li></ul></li></ul></li><li class="" id="Minhasdemandas" data="">
+							<a
+							href="Minhasdemandas.html"
+							target="FrameMain">
+								Minhas demandas</a>
+
+				</li></ul></li></ul></li><li class="folder" id="SuporteaoUsuario" data="">
+							<a
+							href="SuporteaoUsuario.html"
+							target="FrameMain">
+								Suporte ao Usu&aacute;rio</a>
+
+				<ul><li class="" id="Pesquisardemandasdesuporte" data="">
+							<a
+							href="Pesquisardemandasdesuporte.html"
+							target="FrameMain">
+								Pesquisar demandas de suporte</a>
+
+				</li><li class="" id="CadastrarDemandas" data="">
+							<a
+							href="CadastrarDemandas.html"
+							target="FrameMain">
+								Cadastrar Demandas</a>
+
+				</li></ul></li><li class="folder" id="Pesquisar" data="">
+							<a
+							href="Pesquisar.html"
+							target="FrameMain">
+								Pesquisar</a>
+
+				<ul><li class="" id="PesquisarProcesso" data="">
+							<a
+							href="PesquisarProcesso.html"
+							target="FrameMain">
+								Pesquisar Processo</a>
+
+				</li><li class="" id="PesquisarDocumento" data="">
+							<a
+							href="PesquisarDocumento.html"
+							target="FrameMain">
+								Pesquisar Documento</a>
+
+				</li></ul></li></ul></li></ul>
+		</div>
+		
+		<div id="tab-keywords">
+			<ul id="keywords">
+
+				</ul>
+		</div>
+		
+		<div id="tab-search">
+			<form onsubmit="PerformSearch(); return false;">
+				<label for="search_value">Search:</label>
+				<input id="search_value" name="search_value"></input>
+				<input type="submit" value="Search"/>
+			</form>
+			<div id="search_results"></div>
+		</div>
+		
+		</div>
+    
+</body>
+
+</html>
+

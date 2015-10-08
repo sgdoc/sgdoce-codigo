@@ -1,0 +1,86 @@
+<h1>Pesquisar Processo</h1>
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+<br />
+<form class="form-horizontal" id="form-pesquisa-processo" name="form-create"
+      action="<?php echo $this->url(array('action' => 'list-processo')); ?>" method="post">
+    <div class="accordion" id="accordion1">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                    Básico
+                </a>
+            </div>
+            <div id="collapseOne" class="accordion-body collapse in">
+               <div class="accordion-inner">
+                    <?php echo $this->render('pesquisa/processo_basico.phtml', array()); ?>
+               </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo">
+                    Datas
+                </a>
+            </div>
+            <div id="collapseTwo" class="accordion-body collapse">
+               <div class="accordion-inner">
+                    <?php echo $this->render('pesquisa/processo_datas.phtml', array()); ?>
+               </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTree">
+                    Tipo de Pesquisa
+                </a>
+            </div>
+            <div id="collapseTree" class="accordion-body collapse in">
+               <div class="accordion-inner">
+                   <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Tipo de Pesquisa</label>
+                            <div class="controls">
+                                <?php
+                                    echo $this->formSelect('stTipoPesquisa', NULL,
+                                            array('class'=>'input-small span6 required'),
+                                            array(
+                                                "0" => "Por fragmento",
+                                                "1" => "Palavra Completa"
+                                    ));
+                                ?>
+                            </div>
+                        </div>
+                   </fieldset>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+	    <button type="button" class="btn btn-primary" id="btnPesquisar">Pesquisar</button>
+        <button type="reset" class="btn">Limpar</button>
+    </div>
+</form>
+
+<div class="control-group" id="grid-processo-container" hidden="true">
+    <fieldset>
+        <legend>
+            Resultado da Pesquisa
+        </legend>
+    </fieldset>
+    <table id="table-grid-processo">
+        <thead>
+            <tr>
+                <th>Processo</th>
+                <th>Interessado</th>
+                <th>Assunto</th>
+                <th>Origem</th>
+                <th>Movimentaçao</th>
+                <th width="13%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="modal_container" class="modal hide fade modal-large"></div>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl("/js/app/artefato/pesquisa/processo.js"); ?>"></script>

@@ -1,0 +1,30 @@
+<body>
+    <b align="center">
+        INSTITUTO CHICO MENDES DE CONSERVAÇÃO DA BIODIVERSIDADE
+    </b>
+    <br />
+    <br />
+    Prezado(a): <b><?php echo $this->escape($this->usuario['noUsuarioExterno']) ?></b>,
+    <br />
+    <br />
+    <?php $sistema = current($this->perfis) ?>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Foi atribuído um novo perfil ao seu cadastro para o sistema:
+    <br />
+    <br />
+    <ul style="list-style: none">
+        <?php foreach ($this->perfis as $perfil): ?>
+            <li>
+                <?php echo $this->escape($sistema['sgSistema'])." - ".$this->escape($sistema['noSistema'])." - ".$this->escape($perfil['noPerfil']); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <br />
+    Atenciosamente,
+    <br />
+    ICMBio.
+    <br />
+    <br />
+    <p style="font-size:10px">
+        <i>Esta é uma mensagem automática enviada pelo SICA-e - Sistema de Integração e Controle de Acesso. Por favor não responda</i>
+    </p>
+</body>

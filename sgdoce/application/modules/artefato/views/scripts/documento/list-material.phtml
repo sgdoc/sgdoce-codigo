@@ -1,0 +1,27 @@
+<?php
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+	$rtn =
+	$view->actionButton('Visualizar',
+			$view->urlCurrent(array('action' => 'download-material')),
+			array('codigo' => $row['sqAnexoArtefatoVinculo']),
+			'eye-open',
+			NULL,
+			array(),
+			'href').
+	$view->actionButton('Excluir', 'Material.deletar', array($row['sqAnexoArtefatoVinculo']),'trash');
+	return $rtn;
+};
+$configArray = array('columns' => array(
+		0 =>array( 'column' => 'noTipoAnexo'),
+		1 =>array( 'column' => 'nuDigital'),
+		2 =>array( 'column' => 'noTituloAnexo'),
+		3 =>array( 'column' => $acao)
+));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

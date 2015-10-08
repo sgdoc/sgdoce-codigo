@@ -1,0 +1,107 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <title>ICMBio</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <base href="<?php echo $this->baseUrl()?>/" />
+
+    <!-- CSS GERAL INICIO -->
+    <?php
+        $this->headLink()
+             ->setStylesheet($this->assetUrl('style.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('style-correct.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('style-responsive.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('nestedAccordion.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('datatable_bootstrap.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('jquery.simpleautocomplete.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('datepicker.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('bootstrap-wysihtml5.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('prettify.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('colorbox.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('jquery.spellchecker.css', array('address' => 'css')))
+             ->appendStylesheet($this->assetUrl('library/dreamerslab-jquery.msg/jquery.msg.css', array('address' => 'css')))
+                ;
+
+        echo $this->headLink();
+    ?>
+    <!-- CSS GERAL FIM -->
+
+    <!-- JAVASCRIPT INICIO -->
+    <?php
+        $this->headScript()->setFile($this->assetUrl('library/jquery.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.ui.bootstrap.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootstrap.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/load.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/menu.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('resources/lista_mensagens.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('resources/functions.js', array('address' => 'js')));
+
+        $this->headScript()->appendFile($this->assetUrl('library/dreamerslab-jquery.msg/jquery.center.min.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/dreamerslab-jquery.msg/jquery.msg.min.js', array('address' => 'js')));
+
+        $this->headScript()->appendFile($this->assetUrl('components/limit.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.jqEasyCharCounter.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootstrap-datepicker.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/datepicker.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.colorbox.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/sistemas.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('app/auxiliar/pessoa-fisica/preenche-campo.js', array('address' => 'js')));
+
+        echo $this->headScript();
+	?>
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="<?php echo $this->baseUrl().'/js/library/html5.js'?>"></script>
+    <![endif]-->
+	<!-- JAVASCRIPT FIM -->
+
+    <!-- ICONS INICIO -->
+    <link rel="shortcut icon" href="favicon.ico" />
+	<!-- ICONS FIM -->
+
+</head>
+
+    <body>
+
+    <!-- CONTAINER INICIO -->
+    <div class="modal-container-fluid container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <?php echo $this->userMessageStack() ?>
+                <?php echo $this->layout()->content ?>
+            </div>
+        </div>
+    </div>
+
+    <?php
+
+        $this->headScript()->setFile($this->assetUrl('library/jquery.colorbox.js', array('address' => 'js')));
+        $this->headScript()->setFile($this->assetUrl('library/jquery.dataTables.js', array('address' => 'js')));
+//         $this->headScript()->appendFile($this->assetUrl('components/grid.js', array('address' => 'js')));
+//         $this->headScript()->appendFile($this->assetUrl('library/jquery.spellchecker.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootstrap-wysihtml5.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.meio.mask.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/mask.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/message.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootbox.min.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.validate.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/validation.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.simpleautocomplete.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/modal.js', array('address' => 'js')));
+        $this->headScript()->appendFile($this->assetUrl('components/grid.js', array('address' => 'js')));
+
+
+        echo $this->headScript();
+    ?>
+    <!-- CONTAINER FIM -->
+    <script type="text/javascript">
+        (function($, undefined){
+            $(function(){
+                $('[rel=popover]').popover();
+            });
+        })(jQuery);
+    </script>
+    </body>
+</html>

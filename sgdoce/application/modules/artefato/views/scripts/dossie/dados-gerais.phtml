@@ -1,0 +1,114 @@
+<div class="tab-pane active" id="dadosGerais">
+	<fieldset>
+		<div class="control-group">
+			<label class="control-label" for="digital"> <span class="required"
+				title="Required field">*</span> Digital
+			</label>
+			<div class="controls">
+				<input type="text" class="input-large required" id="nuDigital"
+					readonly="readonly" name="nuDigital" maxlength="15"
+					value="<?php echo $this->nuDigital ?>"> <span
+					class="help-block hide">Campo de preenchimento obrigatório.</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="grauAcesso"> Grau de Acesso </label>
+			<div class="controls">
+				<?php echo $this->ComboCustom('sqGrauAcesso', $this->sqGrauAcesso, array('class' => 'span3'), $this->itensGrauAcesso); ?>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="tipo"> <span class="required"
+				title="Required field">*</span> Tipo <span class="help-block hide">Campo
+					de preenchimento obrigatório.</span>
+			</label>
+			<div class="controls obrigatorio">
+				<?php
+				$sqTipoDocumento_hidden = 46;
+				$sqTipoDocumento = 'DOSSIE';
+				?>
+				<input type="hidden" id="sqTipoDocumento_hidden"
+					name="sqTipoDocumento_hidden"
+					value="<?php echo $sqTipoDocumento_hidden; ?>" />
+					<input class="required" type="text" name="sqTipoDocumento"
+					id="sqTipoDocumento" readonly="readonly" value="<?php echo $sqTipoDocumento; ?>" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="required control-label" for="numero"> <span
+				class="required">*</span> Número do Dossiê
+			</label>
+			<div class="controls">
+				<input type="text" class="span5 required" id="nuArtefato"
+					value="<?php echo $this->nuArtefato; ?>" name="nuArtefato"
+					maxlength="30" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"> <span class="required"
+				title="Required field">*</span> Data do Dossiê
+			</label>
+			<div class="controls">
+				<div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>"
+					data-date-format="dd/mm/yyyy" class="input-append date">
+					<input value="<?php echo $this->dtArtefato; ?>"
+						class="input-small dateBR required" id="dtArtefato"
+						name="dtArtefato" mask="date" type="text" /> <a href="#"
+						class="btn add-on right"><i class="icon-calendar"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Origem</legend>
+		<div class="control-group divOrigemSqPessoaIcmbio">
+			<label class="control-label" id="dvLabelSqPessoa"> <span
+				class="required" title="Required field">*</span> Unidade
+			</label>
+			<div class="controls">
+				<input class="" type="hidden" name="sqTipoPessoaOrigem" id="sqTipoPessoaOrigemIcmbio" value="4" />
+				<input class="" type="hidden" name="sqPessoaIcmbio_hidden" id="sqPessoaIcmbio_hidden" value="<?php echo $this->sqUnidadeOrg; ?>" />
+				<input class="span4 required" type="text" name="sqPessoaIcmbio" id="sqPessoaIcmbio" value="<?php echo $this->noUnidadeOrg; ?>" />
+			</div>
+		</div>
+		<br />
+	</fieldset>
+</div>
+
+<div id="modalDuplicidade" class="modal hide fade">
+    <div class="modal-header">
+        <a title="Fechar" data-dismiss="modal" class="close">×</a>
+        <h3>Não permitido duplicidades</h3>
+        <h5>Já existe documento cadastrado com essas informações:</h5>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label"> <span
+                    class="required" title="Required field">*</span> Tipo
+            </label>
+            <div class="controls">
+                <input class="input-xlarge required" type="text" name="tipo" id="tipo" readonly="readonly" value="" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"> <span
+                    class="required" title="Required field">*</span> Número
+            </label>
+            <div class="controls">
+                <input class="input-xlarge required" type="text" id="numero" readonly="readonly" value="" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"> <span
+                    class="required" title="Required field">*</span> Origem
+            </label>
+            <div class="controls">
+                <input class="input-xlarge required" type="text" id="origem" readonly="readonly" value="" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="close-button btn btn-primary" id="btnFecharDuplicidade">Fechar</a>
+        </div>
+    </div>
+</div>

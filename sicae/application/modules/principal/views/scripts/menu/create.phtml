@@ -1,0 +1,8 @@
+<?php
+    $this->headScript()->appendFile($this->assetUrl('sica/menu/menu.js'));
+    $this->headScript()->appendFile($this->assetUrl('sica/menu/create.js'));
+    echo $this->headScript();
+?>
+<form class="form-horizontal" action="<?php echo $this->url(array('action'=>'save')) ?>" method="post">
+    <?php echo $this->render('menu/form.phtml');?>
+</form>

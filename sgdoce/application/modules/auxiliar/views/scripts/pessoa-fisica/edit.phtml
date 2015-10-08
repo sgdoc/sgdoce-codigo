@@ -1,0 +1,41 @@
+<script type="text/javascript" src="/js/app/auxiliar/pessoa/form.js" ></script>
+<script type="text/javascript" src="/js/app/auxiliar/pessoa-fisica/form.js" ></script>
+<script type="text/javascript" src="/js/app/auxiliar/pessoa-fisica/justificativa.js" ></script>
+<script type="text/javascript" src="/js/app/auxiliar/pessoa-fisica/form-control.js" ></script>
+<script type="text/javascript" src="/js/library/jquery.simpleautocomplete.js" ></script>
+
+<div class="alert alert-error fade in hide" id="body-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    Campos de preenchimento obrigatório não foram preenchidos.
+</div>
+<div class="alert alert-success fade in hide msgSalvar">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+	Dados salvos com sucesso.
+</div>
+
+<?php if($this->new) { ?>
+<h1>Cadastrar Pessoa Física</h1>
+<?php } else { ?>
+<h1>Alterar Pessoa Física</h1>
+<?php } ?>
+
+<br/>
+
+<?php
+    echo $this->partial('/pessoa-fisica/form.phtml', array(
+        'new'       => $this->new,
+        'user'      => $this->user,
+        'data'      => $this->data,
+        'comboDas'  => $this->comboDas,
+        'listaPais' => $this->listaPais,
+        'dataPost'  => $this->dataPost,
+        'sqPessoaSgdoce' => $this->sqPessoaSgdoce,
+        'listaDocumentos' => $this->listaDocumentos,
+        'txInformacaoComplementar' => $this->txInformacaoComplementar,
+        'campoPessoa' => $this->campoPessoa,
+        'campoCpf' => $this->campoCpf,
+        'form' => $this->form
+    ));
+
+ ?>
+

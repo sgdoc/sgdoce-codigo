@@ -1,0 +1,15 @@
+<?php
+//$view = $this;
+$configArray = array('columns' => array(
+                        array('column' => 'noPessoa'),
+                        array('column' => 'noUnidadeOrg'),
+                        array('column' => 'txOperacao'),
+                        array('column' => function($row) {
+                                            return $row['dtOperacao']->toString('dd/MM/YYYY H:mm');
+                                        }),
+));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

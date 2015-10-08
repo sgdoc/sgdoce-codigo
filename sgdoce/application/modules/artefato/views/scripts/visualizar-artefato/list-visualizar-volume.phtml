@@ -1,0 +1,21 @@
+<?php
+$view = $this;
+
+$fnAcao = function ($row) use ($view){
+    $arrBtn = array(
+            'view'  => $view->actionButton('Visualizar' , 'VisualizarArtefato.viewVolume'  , array('sqVolume' => $row['sqVolume']), 'eye-open'  ),
+    );
+    return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+
+$configArray = array('columns' => array(
+                        array('column' => 'nuVolume'),
+                        array('column' => 'nuFolhaInicial'),
+                        array('column' => 'nuFolhaFinal'),
+                        array('column' => $fnAcao)
+));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

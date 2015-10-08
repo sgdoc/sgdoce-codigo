@@ -1,0 +1,80 @@
+<script type="text/javascript" src="/js/app/arquivo/artefato-classificacao/modal-classificacao.js"></script>
+
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Classificar <?php echo $this->nuArtefato ?></h1> <!--deve ser h1 para o validador saber onde coloca a mensagem-->
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form_artefato_classificacao"
+              action="<?php echo $this->urlCurrent(array('action' => 'save')); ?>">
+            <?php
+                echo $this->formHidden('sqArtefato',$this->entityArtefato->getSqArtefato());
+                echo $this->formHidden('back',$this->backUrl);
+
+                $sqClassificacao = null;
+                $txClassificacao = null;
+
+                if ($this->entityArtefato->getSqArtefatoClassificacao()){
+                    $sqClassificacao  = $this->entityArtefato->getSqArtefatoClassificacao()->getSqClassificacao()->getSqClassificacao();
+                    $txClassificacao  = $this->entityArtefato->getSqArtefatoClassificacao()->getSqClassificacao()->getNuClassificacao();
+                    $txClassificacao .= ' - ';
+                    $txClassificacao .= $this->entityArtefato->getSqArtefatoClassificacao()->getSqClassificacao()->getTxClassificacao();
+                }
+            ?>
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required">*</span> Classificação
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('sqClassificacao_hidden',$sqClassificacao,array('name'=>'sqClassificacao'));
+                          echo $this->formText('sqClassificacao', $txClassificacao, array('class'=>'span8 required sqClassificacao'));
+                    ?>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Arquivar agora?</label>
+                <div class="controls">
+                    <div>
+                        <input type="radio" id="arquivar-1" name="arquivar" value="1"/>
+                        <label for="arquivar-1" style="display: inline; font-size: 1em;">Sim</label>
+
+                        <input type="radio" id="arquivar-0" name="arquivar"value="0" checked="checked" />
+                        <label for="arquivar-0" style="display: inline; font-size: 1em;">Não</label>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div class="control-group archivingGrid hide">
+            <fieldset>
+                <legend>Caixa</legend>
+                <form class="form-horizontal" method="post" id="form_artefato_arquivar"
+                      action="<?php echo $this->urlCurrent(array(
+                            'module'=>'arquivo',
+                            'controller'=>'caixa',
+                            'action' => 'list-caixa-aberta')); ?>">
+                    <?php echo $this->formHidden('sqClassificacao'); ?>
+                    <table id="grid_caixa">
+                        <thead >
+                            <tr>
+                                <th width="5%" class="sorting_disabled">&nbsp;</th>
+                                <th>Caixa</th>
+                                <th>Ano</th>
+                                <th>Classificacao</th>
+                                <th>Unidade</th>
+                                <th>Data</th>
+                                <th>Docs. Arquivados</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" id="btnSave" class="btn btn-primary btnConcluirClassificacao" title="Salvar">Salvar</button>
+    <a href="#" class="btn btnCancelarClassificacao" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

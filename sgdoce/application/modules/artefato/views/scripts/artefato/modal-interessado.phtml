@@ -1,0 +1,161 @@
+<script type="text/javascript" src="/js/components/validation.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Adicionar Interessado</h1>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" name="form-interessado-modal" id="form-interessado-modal">
+            <?php echo $this->formHidden('sqArtefato', $this->sqArtefato) ?>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">
+                        <span class="required">*</span> Interessado
+                    </label>
+                    <div class="controls radios-inline">
+                          <input type="radio" name="tpInternoExterno" value="interno" class="required" id="tpInternoExterno1"/>
+                          <label for="tpInternoExterno1" >Interno</label>
+                          <input type="radio" name="tpInternoExterno" value="externo" class="required" id="tpInternoExterno2"/>
+                          <label for="tpInternoExterno2" >Externo</label>
+                    </div>
+                </div>
+
+                <div class="hidden interno">
+                    <div class="control-group">
+                        <label class="control-label" for="sqTipoPessoaInteressado">
+                            <span class="required">*</span> Tipo de Pessoa
+                        </label>
+                        <div class="controls">
+                            <?php $pessoa = array('unidade' => 'Unidade Organizacional', 'funcionario' => 'Funcionário'); ?>
+                            <?php echo $this->ComboCustom('unidFuncionario', NULL, array('class' => 'span6 required'), $pessoa); ?>
+                        </div>
+                    </div>
+                    <div class="control-group hidden unidade">
+                        <label class="control-label" for="unidIcmbio">
+                            <span class="required">* </span>Unidade do ICMBio
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('unidIcmbio', NULL, array('class' => 'span8 required')); ?>
+                            <span style="display: block; font-size: 11px; font-weight: bold; width: 58%;">A pesquisa apresenta os 30 primeiros resultados encontrados. À medida que o campo é preenchido com mais informações, a pesquisa apresenta novos resultados.</span>
+                        </div>
+                    </div>
+                    <div class="control-group hidden funcionario">
+                        <label class="control-label" for="funcIcmbio">
+                            <span class="required">* </span>Funcionário do ICMBio
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText('funcIcmbio', NULL, array('class' => 'span8 required')); ?>
+                            <span style="display: block; font-size: 11px; font-weight: bold; width: 58%;">A pesquisa apresenta os 30 primeiros resultados encontrados. À medida que o campo é preenchido com mais informações, a pesquisa apresenta novos resultados.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden externo">
+                    <div class="control-group">
+                        <label class="control-label" for="sqTipoPessoaInteressado">
+                            <span class="required">*</span> Tipo de Pessoa
+                        </label>
+                        <div class="controls">
+                            <?php
+                            unset($this->tipoPessoa[3]);
+                            unset($this->tipoPessoa[4]);
+                            unset($this->tipoPessoa[6]);
+                            echo $this->ComboCustom('sqTipoPessoaInteressado', NULL, array('class' => 'span6 required'), $this->tipoPessoa);
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="control-group hidden" id="divNacionalidade">
+                        <label class="control-label">
+                            <span class="required">* </span>Nacionalidade Brasileira?
+                        </label>
+                        <div class="controls">
+                            <label class="radio inline">
+                                <input type="radio" name="tpNacionalidadeInteressado" value="1" class="required" checked="checked"/> Sim
+                            </label>
+                            <label class="radio inline">
+                                <input type="radio" name="tpNacionalidadeInteressado" value="0" class="required" /> Não
+                            </label>
+                        </div>
+                        <input type="hidden" name="extraParam[]" id="extraParam" value="" />
+                    </div>
+
+                    <div class="hidden noPessoa div-externo">
+                        <div class="control-group">
+                            <label class="control-label" id="dvLabelNomeInteressado">
+                                <span class="required">* </span>Nome
+                            </label>
+                            <div class="controls">
+                                <input type="text" name="sqPessoaInteressado" id="sqPessoaInteressado" value="" class="span8"/>
+                                <div class="input-append dropdown">
+                                    <button type="button" id="btnCadastraPessoa"
+                                            class="btn right btnCadastraPessoa" data-toggle="dropdown"
+                                            title="Opções">
+                                        <i class="icon-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li class="liPessoaFisica"><a href="/auxiliar/pessoa-fisica/create/form/form-interessado-modal/campoPessoa/sqPessoaInteressado/campoCpf/nuCpf"
+                                                                      target="_blank">Cadastrar (PF)</a></li>
+                                        <li class="liPessoaJuridica"><a
+                                                href="/auxiliar/pessoa-juridica/create/form/form-interessado-modal/campoPessoa/sqPessoaInteressado/campoCnpj/nuCnpj" target="_blank">Cadastrar (PJ)</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <span style="display: block; font-size: 11px; font-weight: bold; width: 58%;">A pesquisa apresenta os 30 primeiros resultados encontrados. À medida que o campo é preenchido com mais informações, a pesquisa apresenta novos resultados.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden nuCpf div-externo">
+                        <div class="control-group">
+                            <label class="control-label" for="nuCpf">
+                                CPF
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText('nuCpf', NULL, array('class' => 'cpf', 'mask' => 'cpf', 'maxlength' => '11')); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden nuCnpj div-externo">
+                        <div class="control-group">
+                            <label class="control-label" for="nuCnpj">
+                                <span class="required">* </span>CNPJ
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText('nuCnpj', NULL, array('class' => 'required cnpj', 'mask' => 'cnpj', 'maxlength' => '14')); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden nuPassaporte div-externo">
+                        <div class="control-group">
+                            <label class="control-label" for="nuPassaporte">
+                                <span class="required">* </span>Nº do Passaporte
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText('nuPassaporte', NULL, array('class' => 'required span5', 'maxlength' => '30')); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluirInteressado" >Concluir</button>
+    <a href="#" class="btn btnCancelarInteressado" data-dismiss="modal"><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    Interessado.interessadoAutoComplete();
+    Interessado.interessadoFuncoes();
+    $('#nuCpf').setMask('999.999.999-99');
+    $('#nuCnpj').setMask('99.999.999/9999-99');
+    $('#nuCpf').blur(function() {
+        if ($('#sqPessoaInteressado').val() == '') {
+            Interessado.searchDadosPessoa();
+        }
+    });
+</script>

@@ -1,0 +1,46 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl('/js/app/artefato/comentario/detail.js')); ?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Visualizar Comentário</h1>
+            <br />
+            <br />
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">Data/Hora</label>
+                    <div class="controls">
+                        <?php echo $this->formText('1',$this->dtArtefato,array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Usuário</label>
+                    <div class="controls">
+                        <?php echo $this->formText('2',$this->noPessoa,array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+               </div>
+            
+                <div class="control-group">
+                    <label class="control-label">Setor</label>
+                    <div class="controls">
+                        <?php echo $this->formText('3',$this->noUnidadeOrg,array('readonly'=>'readonly', 'class'=>'span8')) ;?>
+                    </div>
+               </div>
+            
+                <div class="control-group">
+                    <label class="control-label">Comentário</label>
+                    <div class="controls">
+                        <?php echo $this->formTextarea('4',$this->txComentario,array('readonly'=>'readonly', 'class' =>'span8', 'rows'=>'10')) ;?>
+            <!--            <p align="center" alt="Final do comentário">
+                            <font color="#ff0000">*</font>
+                        </p>-->
+                    </div>
+               </div>
+                <?php echo $this->formHidden('sqArtefato' , $this->sqArtefato); ?>
+                
+                <div class="form-actions">
+                    <a class="btn btn-primary btn-voltar" href="javascript:void(0);">Fechar</a>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

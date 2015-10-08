@@ -1,0 +1,139 @@
+<fieldset>
+    <legend>Dados do Documento</legend>
+    <div class="control-group">
+        <label class="control-label">Digital</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->NuArtefato($this->entityArtefato); ?></span>
+        </div>
+    </div>
+    <?php
+        $nupSiorg = $this->entityArtefato->getNuDigital()->getNuNupSiorg();
+        if ($nupSiorg):?>
+            <div class="control-group">
+                <label class="control-label">NUP Siorg</label>
+                <div class="controls">
+                    <span class="checkbox inline"><?php echo $this->maskNumber($nupSiorg,'9999999.99999999/9999-99'); ?></span>
+                </div>
+            </div>
+    <?php endif; ?>
+
+    <div class="control-group">
+        <label class="control-label" >Tipo</label>
+        <div class="controls">
+            <span class="checkbox inline">
+                <?php
+                    if ($this->entityArtefato->getSqTipoDocumento()):
+                        echo $this->entityArtefato->getSqTipoDocumento()->getNoTipoDocumento();
+                    else:
+                        echo 'Indefinido';
+                    endif;
+                ?>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Número do Documento</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getNuArtefato(); ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Grau de Acesso</label>
+        <div class="controls">
+            <span class="checkbox inline">
+                <?php
+                    $grauAcesso = 'Indefinido';
+                    if ($this->entityArtefato->getSqGrauAcessoArtefato()) {
+                        $grauAcesso = $this->entityArtefato->getSqGrauAcessoArtefato()->getSqGrauAcesso()->getNoGrauAcesso();
+                    }
+                    echo $grauAcesso;
+                ?>
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Assunto</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto(); ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Assunto Complementar</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getTxAssuntoComplementar(); ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Data Documento</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getDtArtefato()->toString('dd/MM/YYYY'); ?></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Data de Cadastro</label>
+        <div class="controls">
+            <span class="checkbox inline"><?php echo $this->entityArtefato->getDtCadastro()->toString('dd/MM/YYYY'); ?></span>
+        </div>
+    </div>
+    <?php if ($this->entityArtefato->getDtPrazo()): ?>
+        <div class="control-group">
+            <label class="control-label">Data do Prazo</label>
+            <div class="controls">
+                <span class="checkbox inline" id="Data_prazo"><?php echo $this->entityArtefato->getDtPrazo()->toString('dd/MM/YYYY'); ?></span>
+            </div>
+        </div>
+    <?php elseif ($this->entityArtefato->getNuDiasPrazo()): ?>
+        <div class="control-group">
+            <label class="control-label">Dias de Prazo</label>
+            <div class="controls">
+                <span class="checkbox inline" id="nuDiasPrazo" ><?php
+                $inDiasCorridos = $this->entityArtefato->getInDiasCorridos();
+                $labelInDiasCorridos = '';
+                if (TRUE === $inDiasCorridos) {
+                    $labelInDiasCorridos = 'Dias Corridos';
+                }else if(FALSE === $inDiasCorridos) {
+                    $labelInDiasCorridos = 'Dias Úteis';
+                }
+
+                echo ($this->entityArtefato->getNuDiasPrazo()); ?></span><span class="checkbox inline" id="inDiasCorridos"><?php echo ($labelInDiasCorridos); ?></span>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($this->entityArtefato->getSqTipoPrioridade()): ?>
+
+        <div class="control-group">
+            <label class="control-label">Prioridade</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $this->entityArtefato->getSqTipoPrioridade()->getSqPrioridade()->getNoPrioridade(); ?></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Descrição da Prioridade</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $this->entityArtefato->getSqTipoPrioridade()->getTxTipoPrioridade(); ?></span>
+            </div>
+        </div>
+    <?php endif; ?>
+
+
+    <!--  SO TEM DT_ENTRADA SE ORIGEM FOR EXTERNA  -->
+    <?php if ($this->entityArtefato->getDtEntrada()): ?>
+        <div class="control-group">
+            <label class="control-label">Data de Entrada</label>
+            <div class="controls">
+                <span class="checkbox inline"><?php echo $this->entityArtefato->getDtEntrada()->toString('dd/MM/YYYY'); ?></span>
+            </div>
+        </div>
+        <?php if($this->entityArtefato->getSqPessoaRecebimento()): ?>
+            <div class="control-group">
+                <label class="control-label" >Recebido por</label>
+                <div class="controls">
+                    <span class="checkbox inline"><?php
+                    echo $this->entityArtefato->getSqPessoaRecebimento()->getNoPessoa(); ?></span>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+</fieldset>

@@ -1,0 +1,28 @@
+<?php
+    echo $this->headScript()->appendFile($this->baseUrl().'/js/app/artefato/visualizar-caixa-minuta/devolver-minuta.js');
+?>
+<form class="form-horizontal"
+      action="artefato/visualizar-caixa-minuta/devolver-minuta"
+      method="post"
+      id="form-devolver-minuta"
+      name="form-devolver-minuta"
+>
+    <?php echo $this->formHidden('sqPessoa', $this->dataHistoricoEnvioAnterior['sqPessoa']) ?>
+    <?php echo $this->formHidden('sqHistoricoArtefato', $this->dataHistoricoEnvioAnterior['sqHistoricoArtefato']) ?>
+    <?php echo $this->formHidden('sqUnidadeOrg', $this->dataHistoricoEnvioAnterior['sqUnidadeOrg']) ?>
+    <?php echo $this->formHidden('sqArtefato', $this->dataHistoricoEnvioAnterior['sqArtefato']) ?>
+
+    <div class="control-group">
+        <label class="control-label">* Nome do Usuário</label>
+        <div class="controls">
+            <input type="text" disabled="disabled" value="<?php echo $this->dataHistoricoEnvioAnterior['noPessoa'] ?>" name="" id="" class="span11">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="txJustificativa">* Justificativa</label>
+        <div class="controls">
+            <textarea class="input-xlarge span11" name="txJustificativa" id="txJustificativa" maxlength="200"></textarea>
+            <p for="group4" generated="true" class="help-block" id="infoCampoObrig">Campo de preenchimento obrigatório.</p>
+        </div>
+    </div>
+</form>

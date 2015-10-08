@@ -1,0 +1,51 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl('/js/app/artefato/dossie/form.js'));
+$this->headScript()->appendFile($this->baseUrl('/js/app/artefato/dossie/menuDossie.js'));
+echo $this->headScript();
+?>
+
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+<?php
+if($this->data->getSqTipoArtefatoAssunto()->getSqTipoArtefatoAssunto()){
+    $titulo = 'Alterar Dossiê Eletrônico';
+    echo $this->formHidden('divEdit','1');
+}else{
+    $titulo = 'Cadastrar Dossiê Eletrônico';
+    echo $this->formHidden('divEdit','0');
+}
+?>
+<h1 id="divTitulo"><?php echo $titulo;?></h1>
+<div
+    class="alert alert-error campos-obrigatorio hidden"></div>
+<br />
+<!-- <div class="tab-pane active" id="1"> -->
+<form class="form-horizontal "
+    action="<?php echo $this->urlCurrent(array('controller' => 'dossie', 'action' => 'save')) ?>" method="post" id="formDossie" name="formDossie" >
+
+    <ul class="nav nav-tabs tabsForm" id="nav-tabs">
+        <li class="active"><a href="#dadosGerais" data-toggle="tab" class="tab">Dados Gerais</a></li>
+        <li class=""><a href="#dadosAssunto" data-toggle="tab" class="tab">Assunto</a></li>
+        <li class=""><a href="#dadosVinculacao" data-toggle="tab" class="tab">Referências</a></li>
+        <li class=""><a href="#dadosMaterial" data-toggle="tab" class="tab">Material Apoio</a></li>
+        <li class=""><a href="#documentosVinculados" data-toggle="tab" class="tab">Vinculação de Documentos</a></li>
+    </ul>
+
+    <input type="hidden" id="sqArtefato" name="sqArtefato" value="<?php echo $this->sqArtefato; ?>">
+    <input type="hidden" id="usuario" name="usuario" value="<?php echo $this->usuario; ?>">
+    <input type="hidden" id="sqPessoa" name="sqPessoa" value="<?php echo $this->sqPessoa; ?>">
+    <?php echo $this->formHidden('redirect', $this->redirect); ?>
+
+    <div class="tab-content" id="tab-content">
+    	<div class="top-bar">
+            <p class="requiredLegend pull-left">
+                Campos obrigatórios <span class="required">*</span>
+            </p>
+        </div><br />
+        <?php echo $this->render('dossie/dados-gerais.phtml'); ?>
+        <?php echo $this->render('dossie/dados-assunto.phtml'); ?>
+        <?php echo $this->render('documento/dados-vinculacao.phtml'); ?>
+        <?php echo $this->render('documento/dados-material.phtml'); ?>
+        <?php echo $this->render('dossie/dados-documentos.phtml'); ?>
+        <?php echo $this->render('dossie/form-action.phtml'); ?>
+    </div>
+</form>

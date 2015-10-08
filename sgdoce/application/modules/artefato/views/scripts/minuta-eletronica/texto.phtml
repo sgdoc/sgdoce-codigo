@@ -1,0 +1,167 @@
+<script type="text/javascript" src="/js/library/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="/js/library/prettify.js"></script>
+<script type="text/javascript" src="/js/library/bootstrap-wysihtml5.js"></script>
+
+<div class="top-bar">
+    <p class="requiredLegend pull-left">
+        Campos obrigatórios <span class="required">*</span>
+    </p>
+</div>
+<fieldset>
+    <br />
+    <div class="control-group dv2-txEmenta" hidden="true">
+        <label class="control-label" for="txEmenta"><span class="required"
+                                                          title="Required field">*</span> Ementa</label>
+        <div class="controls">
+            <?php
+            $attibutes['maxlength'] = '250';
+            $attibutes['class'] = 'span11';
+            $attibutes['rows'] = 3;
+            echo $this->formTextarea('txEmenta', $this->data->getTxEmenta(), $attibutes);
+            ?>
+        </div>
+    </div>
+    <div class="control-group dv2-sqTipoArtefatoAssunto" hidden="true">
+        <label class="control-label" for="noAssunto"><span
+                class="required" title="Required field">*</span> Assunto</label>
+        <div class="controls">
+            <input type="text" readonly="readonly" class="span8" id="noAssunto" maxlength="200"
+                   value="<?php echo $this->assunto->getTxAssunto(); ?>" />
+        </div>
+    </div>
+    <?php
+    $txAssuntoComplementar = $this->data->getSqArtefato()->getTxAssuntoComplementar();
+    if ($this->dataPost['txAssuntoComplementar']) {
+        $txAssuntoComplementar = $this->dataPost['txAssuntoComplementar'];
+    }
+    ?>
+    <div class="control-group dv2-txAssuntoComplementar" hidden="true">
+        <label class="control-label" for="txAssuntoComplementar"><span
+                class="required" title="Required field">*</span> Assunto Complementar</label>
+        <div class="controls">
+            <?php
+            $attibutes['maxlength'] = '250';
+            $attibutes['class'] = 'span11';
+            $attibutes['rows'] = 3;
+            echo $this->formTextarea('txAssuntoComplementar', $txAssuntoComplementar, $attibutes);
+            ?>
+        </div>
+    </div>
+    <div class="control-group dv2-txReferencia" hidden="true">
+        <label class="control-label" for="txReferencia"><span class="required"
+                                                              title="Required field">*</span> REF</label>
+        <div class="controls">
+            <?php
+            $attibutes['maxlength'] = '250';
+            $txReferencia = rtrim($this->data->getTxReferencia(),"&nbsp;.<br>.\n.' '");
+            echo $this->formTextarea('txReferencia', $txReferencia, $attibutes);
+            ?>
+        </div>
+    </div>
+    <div class="control-group dv2-noCargoInterno" hidden="true">
+        <label class="control-label" for="noCargoInterno">Cargo de Destino</label>
+        <div class="controls">
+            <input type="text" class="span4" id="noCargoInterno" maxlength="150"
+                   name="noCargoInterno" value="<?php echo $this->data->getSqArtefato()->getNoCargoInterno() ?>" >
+        </div>
+    </div>
+    <div class="control-group dv2-txTextoArtefato" hidden="true">
+        <label class="control-label" for="txTexto"><span class="required"
+                                                         title="Required field">*</span> Texto</label>
+        <div class="controls">
+            <?php
+	            unset($attibutes['maxlength']);
+	            $attibutes['rows'] = 8;
+	            $attibutes['class'] = 'txTextoArtefato span11 required';
+	            $textoAtual = str_replace(array('\n','\r' ,'\r\n','\<br>', '\<br><br>'),'<br/>' ,$this->data->getTxTextoArtefato());
+	            $textoAtual = rtrim($textoAtual,"&nbsp;.<br>.\n.' '");
+	            echo $this->formTextarea('txTextoArtefato', nl2br($textoAtual), $attibutes);
+            ?>
+            <input type="checkbox" id="txTextoArtefatoHidden" name="txTextoArtefatoHidden" class="hidden required" value="1" />
+        </div>
+    </div>
+
+    <div class="control-group dv2-nuDiasPrazo" hidden="true">
+        <label class="control-label" for="nuDiasPrazo">Prazo</label>
+        <div class="controls">
+            <?php
+            echo $this->formSelect('sqPrazo', NULL, array('class' => 'input-small span2'), array('' => 'Selecione', '1' => 'Data', '2' => 'Dias'));
+            ?>
+        </div>
+    </div>
+    <?php
+    $dtPrazo = $this->data->getSqArtefato()->getDtPrazo();
+    if ($this->dataPost['dtPrazo']) {
+        $dtPrazo = $this->dataPost['dtPrazo'];
+    }
+    $nuDiasPrazo = $this->data->getSqArtefato()->getNuDiasPrazo();
+    if ($this->dataPost['nuDiasPrazo']) {
+        $nuDiasPrazo = $this->dataPost['nuDiasPrazo'];
+    }
+    ?>
+    <input class="" type="hidden" name="inDiasCorridos"
+           id="inDiasCorridos" value="" />
+    <div class="control-group dvDataPrazo">
+        <label class="control-label" for="appendedInputButton"><span
+                class="required" title="Required field">*</span> Data do Prazo</label>
+        <div class="controls">
+            <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy') ?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                <input value="<?php echo $dtPrazo; ?>" class="input-small dateBR" id="dtPrazo" maxlength="60"
+                       name="dtPrazo" mask="date" type="text"/>
+                <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="control-group dvDiasPrazo">
+        <label class="control-label" for="nuDiasPrazo"><span class="required"
+                                                             title="Required field">*</span> Dias</label>
+        <div class="controls">
+            <?php
+            $value = NULL;
+            if ($this->data->getSqArtefato()->getInDiasCorridos() == '0' || $this->data->getSqArtefato()->getInDiasCorridos() == '1') {
+                $value = ($this->data->getSqArtefato()->getInDiasCorridos()) ? '2' : '1';
+            }
+            if ($this->dataPost['inDias']) {
+                $value = $this->dataPost['inDias'];
+            }
+            echo $this->formSelect('inDias', $value, array('class' => 'required'), array('' => 'selecione', '1' => 'Úteis', '2' => 'Corridos'));
+            ?>
+            <input type="text" class="input-small inline required" id="nuDiasPrazo" name="nuDiasPrazo"
+                   maxlength="4" value="<?php echo $nuDiasPrazo; ?>" />
+        </div>
+    </div>
+    <?php
+    $txDescricaoPrazo = $this->data->getSqArtefato()->getTxDescricaoPrazo();
+    if ($this->dataPost['txDescricaoPrazo']) {
+        $txDescricaoPrazo = $this->dataPost['txDescricaoPrazo'];
+    }
+    $sqFecho = $this->data->getSqArtefato()->getSqFecho() ? $this->data->getSqArtefato()->getSqFecho()->getSqFecho() : NULL;
+    if ($this->dataPost['sqFecho']) {
+        $sqFecho = $this->dataPost['sqFecho'];
+    }
+    $txDescricaoPrazo = rtrim($txDescricaoPrazo,"&nbsp;.<br>.\n.' '");
+
+    ?>
+    <div class="control-group dv2-txDescricaoPrazo" hidden="true">
+        <label class="control-label" for="txTexto">Descrição do Prazo</label>
+        <div class="controls">
+            <textarea name="txDescricaoPrazo" id="txDescricaoPrazo" maxlength="150" class="span11" cols="30" rows="3"><?php echo $txDescricaoPrazo; ?></textarea>
+        </div>
+    </div>
+    <div class="control-group dv2-sqFecho" hidden="true">
+        <label class="control-label" for="sqFecho"><span class="required"
+                                                         title="Required field">* </span>Fecho</label>
+        <div class="controls">
+            <?php
+            echo $this->ComboCustom('sqFecho', $sqFecho, array('class' => 'span3'), $this->fecho);
+            ?>
+        </div>
+    </div>
+</fieldset>
+<?php
+$this->headScript()->appendFile($this->assetUrl('library/jquery.spellchecker.js', array('address' => 'js')));
+$this->headScript()->appendFile($this->assetUrl('components/wysi.js', array('address' => 'js')));
+$this->headScript()->appendFile($this->assetUrl('library/wysihtml5-0.3.0.js', array('address' => 'js')));
+
+echo $this->headScript();
+?>

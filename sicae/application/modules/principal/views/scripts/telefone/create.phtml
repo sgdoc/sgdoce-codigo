@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3 class="title-main">Adicionar Telefone</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" method="post" id="form-telefone-modal">
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="sqTipoTelefone" ><span title="Campo Obrigatório"
+ class="required">*</span> Tipo de Telefone</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                        echo $this->ComboCustom('sqTipoTelefone', $this->data->getSqTipoTelefone()->getSqTipoTelefone(), array('class' => 'required span7'), $this->cmb['sqTipoTelefone']);
+                        echo $this->formHidden('nuDdd', $this->data->getNuDDD(), array('class' => 'span2 required'));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nuTelefone"><span title="Campo Obrigatório"
+ class="required">*</span> Telefone</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuTelefone', $this->data->getNuDDD() . $this->data->getNuTelefone(), array('class' => 'span7 required foneBR'));
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarTelefone" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn" data-dismiss="modal" title="Fechar">Fechar</a>
+</div>
+<script src="<?php echo $this->assetUrl('sica/telefone/modal.js') ?>" type="text/javascript"></script>

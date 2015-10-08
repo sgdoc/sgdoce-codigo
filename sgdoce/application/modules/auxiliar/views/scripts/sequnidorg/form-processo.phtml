@@ -1,0 +1,62 @@
+<script type="text/javascript" src="js/app/auxiliar/sequnidorg/form.js"></script>
+
+<h1>Alterar Sequencial de Unidade Organizacional </h1>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save'))?>" method="post" id="form-manter-seq-unid-org">
+    <input type="hidden" name="sqSequencialArtefato" value="<?php echo $this->data->getSqSequencialArtefato();?>" />
+    <input type="hidden" name="sqTipoArtefato"       value="<?php echo $this->data->getSqTipoArtefato()->getSqTipoArtefato();?>" />
+    <input type="hidden" name="sqUnidadeOrg"         value="<?php echo $this->unidadeOrg->getSqUnidadeOrg();?>" />
+    <input type="hidden" name="sqPessoa"             value="<?php echo $this->unidadeOrg->getSqUnidadeOrg();?>" />
+    <input type="hidden" name="nuNup" id="nuNup"   value="<?php echo $this->unidadeOrg->getNuNup();?>" />
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <fieldset>
+        <br>
+        <div class="control-group" <?php echo ($this->data->getSqTipoArtefato()->getSqTipoArtefato() == 1) ? 'style="display:none"' : '' ?> >
+            <label class="control-label">Código NUP</label>
+            <div class="controls" >
+                <input class="required" type="text" name="coUorg" id="nup" readonly="readonly" value="<?php echo $this->unidadeOrg->getNuNup();?>" />
+            </div>
+        </div>
+        <?php  if($this->unidadeOrg->getCoUorg() == "") { ?>
+        <div class="control-group">
+        <?php $desabilita = ($this->data->getNuAno()) !== (int) date('Y') ? 'true' : ''; ?>
+            <label class="control-label">Tipo Documento</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoDocumento', $this->data->getSqTipoDocumento()->getSqTipoDocumento(), array('class'=>'span3' ,'disable'=>$desabilita), $this->items); ?>
+            </div>
+        </div>
+        <?php } ?>
+        <?php $anula = ($this->data->getNuAno()) !== (int) date('Y') ? 'readonly="readonly"' : ''; ?>
+        <div class="control-group">
+            <label class="control-label">* Sequencial</label>
+            <div class="controls">
+                <input type="hidden" id="nuSequencialHidden" name="nuSequencialHidden" value="<?php echo $this->data->getNuSequencial();?>"/>
+                <input class="required" type="text" name="nuSequencial" id="nuSequencial" <?php echo $anula?> maxlength="7" value="<?php echo $this->data->getNuSequencial();?>" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Ano</label>
+            <div class="controls">
+                <input class="required" type="text" name="nuAno" id="nuAno" readonly="readonly" value ="<?php echo $this->data->getNuAno(); ?>"/>
+            </div>
+        </div>
+
+        <div class="control-group"<?php echo ($this->data->getSqTipoArtefato()->getSqTipoArtefato() == 1) ? 'style="display:none"' : '' ?> >
+            <label class="control-label">Digito Verificador</label>
+            <div class="controls">
+                <input class="" type="text" name="nuVerificador" id="nuVerificador" mask="integer" readonly="readonly" value=""/>
+            </div>
+        </div>
+
+        <?php $botao = ($this->data->getNuAno()) !== (int) date('Y') ? '' : '<button class="btn btn-primary">Salvar</button>' ?>
+        <div class="form-actions">
+                <?php echo $botao;?>
+                <a href="/auxiliar/sequnidorg" class="btn" id="voltar">
+                <i class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+    </fieldset>
+</form>

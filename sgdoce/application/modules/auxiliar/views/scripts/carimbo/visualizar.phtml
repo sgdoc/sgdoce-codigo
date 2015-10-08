@@ -1,0 +1,20 @@
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="noCarimbo"><strong>Descrição do Carimbo</strong></label>
+            <div class="controls">
+            <?php echo $this->data->getNoCarimbo();?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="sqTipoArtefato"><strong>Tipo de Artefato</strong></label>
+            <div class="controls">
+                <?php  echo $this->data->getSqTipoArtefato()->getNoTipoArtefato();?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="deCaminhoArquivo"><strong>Imagem</strong></label>
+            <div class="controls">
+            <img src="<?php echo $this->urlCurrent(array('action' => 'download-anexo','id'=>$this->data->getSqCarimbo()))?>" alt="">
+            </div>
+        </div>
+    </fieldset>

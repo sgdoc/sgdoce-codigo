@@ -1,0 +1,5 @@
+# public/.htaccess
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !/media/ 
+RewriteCond %{REQUEST_FILENAME} !/tmpdir/ 
+RewriteRule !\.(js|html|ico)$ index.php [NC,L]

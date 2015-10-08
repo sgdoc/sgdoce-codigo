@@ -1,0 +1,7 @@
+<?php
+$script = "if({$this->response}){";
+$script .= 'Sistemas.redirectSystem($("#systemId").val());';
+$script .= '}';
+
+echo $script;
+exit();

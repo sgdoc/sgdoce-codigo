@@ -1,0 +1,22 @@
+<thead>
+    <tr>
+        <th width="" class="sorting_disabled">
+            <input type="checkbox" class="allSqArtefato" value="" <?php //echo $disabled ?> />
+        </th>
+        <th width="" class="sorting_disabled" ></th>
+        <?php if ($this->tipoArtefato != \Core_Configuration::getSgdoceTipoArtefatoProcesso()): ?>
+            <th width="" class="sorting_disabled">Digital</th>
+        <?php else: ?>
+            <th width="" class="sorting_disabled">Número</th>
+        <?php endif; ?>
+        <th width="" class="sorting_disabled">Data de Arquivo</th>
+        <th width="" class="sorting_disabled">Classificação</th>
+        <?php if ($this->tipoArtefato != \Core_Configuration::getSgdoceTipoArtefatoProcesso()): ?>
+            <th width="" class="sorting_disabled">Tipo</th>
+        <?php endif; ?>
+        <th width="" class="sorting_disabled">Caixa/Ano</th>
+        <th width="" class="sorting_disabled">Unidade</th>
+        <th width="" class="sorting_disabled">Situação</th>
+        <th width="" class="sorting_disabled">Ações</th>
+    </tr>
+</thead>

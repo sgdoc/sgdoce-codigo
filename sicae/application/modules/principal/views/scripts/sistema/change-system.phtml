@@ -1,0 +1,52 @@
+<?php
+$this->headScript()->appendFile($this->assetUrl('library/jquery.validate.js', array('address' => 'asset')));
+$this->headScript()->appendFile($this->assetUrl('components/validation.js', array('address' => 'asset')));
+$this->headScript()->appendFile($this->assetUrl('sica/usuario-perfil/usuario-perfil.js'));
+$this->headScript()->appendFile($this->assetUrl('sica/principal/sistemas.js'));
+$this->headScript()->appendFile($this->assetUrl('sica/usuario-perfil/form-perfil.js'));
+
+echo $this->headScript();
+?>
+<div class="span3">&nbsp;</div>
+<div class="span6">
+    <form class="form-horizontal"
+          name="form-user-profile"
+          id="form-user-profile"
+          action="<?php echo $this->urlCurrent(array('controller' => 'usuario-perfil', 'action' => 'user-profile')) ?>"
+          method="post">
+        <!-- FIELDSET INICIO -->
+        <fieldset>
+            <legend>Altera sistema</legend>
+            <input type="hidden" name="systemId" id="systemId" value="<?php echo $this->sistema; ?>" />
+            <div class="control-group">
+                <label class="control-label"><span class="required">*</span> Unidade</label>
+                <div class="controls">
+                    <select name="sqUnidadeOrg" class="span6 required" id="usersList">
+                        <option value=""><?php echo $this->translate('label-select') ?></option>
+                        <?php $itens = array(); ?>
+                        <?php foreach ($this->listUnidade as $key => $value) : ?>
+                            <?php if (!in_array($value['sqPessoa'], $itens)) { ?>
+                                <option value="<?php echo $value['sqPessoa'] ?>"><?php echo $value['sgUnidadeOrg'] ?> - <?php echo $value['noPessoa'] ?></option>
+                                <?php array_push($itens, $value['sqPessoa']); ?>
+                            <?php } ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><span class="required">*</span> Perfil</label>
+                <div class="controls">
+                    <select name="sqPerfil" id="sqPerfil" class="span6 required"
+                            disabled="disabled">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" id="btnConcluir">Concluir</button>
+                <a href="<?php echo $this->lastUrl; ?>" class="btn" >Cancelar</a>
+            </div>
+            <!-- BARRA DE AÇÔES FIM -->
+        </fieldset>
+    </form>
+</div>

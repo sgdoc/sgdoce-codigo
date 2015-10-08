@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Selenium tests">
+    <!-- The tests should only depend on three libraries: Selenium, TestNG and the MySQL Java Connector. -->
+    <property name="source_code_app"  value="${basedir}/application" />
+    <property name="build_dir" value="${basedir}/build" />
+    <property name="resources" value="${build_dir}/scripts/resources" />
+    <property name="jmeter-home" value="${basedir}/tests/gqs/apache-jmeter-2.12" />
+    <property name="selenium_jar" value="${basedir}/tests/gqs/apache-jmeter-2.12/lib/selenium-server-standalone-2.44.0.jar" />
+    <property name="migraAmbientesDbs-home" value="${basedir}/tests/gqs/migra_ambientes_dbs" />
+    
+    <property name="ant.dir" location="${ant.home}" />
+    <echo message="Ant directory: ${ant.dir}" />
+ 
+    <property name="lib.ant.dir" location="${ant.dir}/lib" />
+    <echo message="Ant lib directory: ${lib.ant.dir}" />
+  
+    
+    <path id="ant.selenium.classpath">
+        <pathelement
+            location="tests/gqs/apache-jmeter-2.12/lib/selenium-2.44.0/selenium-java-2.44.0.jar" />
+
+    </path>
+    
+    <echo message="Caminho do selenium jar em ant.selenium.classpath: tests/gqs/apache-jmeter-2.12/lib/selenium-2.44.0/selenium-java-2.44.0.jar" />
+             
+    <taskdef
+        name="selenese"
+        classname="org.openqa.selenium.server.ant.SeleneseAntTask"
+        classpathref="ant.selenium.classpath" />
+    
+    
+    <!-- Targets to start and stop the Selenium RC server. Taken from the Selenium documentation -->
+    <!-- http://wiki.openqa.org/display/SRC/Selenium-RC+and+Continuous+Integration -->  
+    <target name="start-selenium-server">
+        <echo message="Starting Selenium RC server (runs as a separate process)" />
+        <!-- To make it easier to see if the Selenium RC server is running, we copy the -->
+        <!-- normal java.exe to create a different executable called -->
+        <!-- javaSeleniumRCServer.exe. That way, if you list the processes Windows is running -->
+        <!-- you can see if the Selenium RC server is running, rather than just seeing a -->
+        <!-- process called "java". -->
+        <echo message="Selenium jar : ${selenium_jar}" />
+        
+        <java jar="${selenium_jar}" fork="true" spawn="true" >
+            <!-- Enable logging for the Selenium server 
+            <arg line="-log selenium.log  -browserSideLog"/>
+            -->
+            <arg line="-trustAllSSLCertificates -log selenium.log "/>
+            
+            <arg line="-htmlSuite *firefox https://dsv.sgdoce.sisicmbio.icmbio.gov.br tests/gqs/suite-selenium/suiteteste.suite.html seleniumresult.html"/>
+            
+        </java>
+    </target>
+ 
+    <target name="stop-selenium-server">
+        <echo message="Stopping Selenium RC server" />
+        <get taskname="selenium-shutdown" 
+             src="http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer"
+             dest="result.txt" ignoreerrors="true" />
+        <echo taskname="selenium-shutdown" message="DGF Errors during shutdown are expected" />
+    </target>
+ 
+    <!-- Run tests. -->
+    <target name="run-selenium-tests">
+ 
+        <!-- Start the Selenium RC server 
+        <antcall target="start-selenium-server" />
+ 
+        <echo message="Running Selenium Tests." />
+--> 
+        <selenese
+             suite="${basedir}/tests/gqs/suite-selenium/suiteteste.suite.html"
+            browser="*firefox"
+            results="${basedir}/seleniumresult.html"
+            multiWindow="true"
+            timeoutInSeconds="900"
+            startURL="https://dsv.sgdoce.sisicmbio.icmbio.gov.br" />
+        <!-- Stop the Selenium RC server -->
+        <antcall target="stop-selenium-server" />
+            
+    </target>
+</project>

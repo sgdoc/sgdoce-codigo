@@ -1,0 +1,59 @@
+<?php
+$view = $this;
+$data = array(
+    'aaData' => array(),
+    'sEcho'  => $this->dto->getSEcho(),
+    'iTotalDisplayRecords' => 0,
+    'iTotalRecords' => 0
+);
+
+foreach($this->result as &$result) {
+    // Cep
+    $cep = $result['sq_cep3'];
+    $cep = str_replace('-', '', $cep);
+    $cep = substr($cep, 0, 2) . '.' . substr($cep, 2, 3) . '-' . substr($cep, 5);
+
+    // Actions
+    $btDropdown   = array();
+    $btVisualizar = null;
+    $btEditar     = $view->actionButton('Alterar', 'Endereco.alterar', array($result['sq_endereco1'], $result['sq_pessoa0']), 'pencil');
+    $actions      = null;
+
+    $btDropdown[] = '<a href="javascript:Endereco.deletar(' . $result['sq_endereco1'] . ', ' . ($result['sq_endereco_sgdoce12'] ? : 0) . ');">Excluir registro</a>';
+
+    if(!empty($result['sq_anexo_comprovante11'])) {
+        //$btEditar = null;
+        $btDropdown[] = '<a href="javascript:Endereco.deletarImagem(' . $result['sq_anexo_comprovante11'] . ');">Excluir imagem</a>';
+        $btVisualizar = $view->actionButton('Visualizar', 'Endereco.visualizar', array($result['sq_anexo_comprovante11'], $result['sq_endereco_sgdoce12']), 'eye-open');
+    }
+
+    $button = $btEditar
+        . $btVisualizar
+        . $view->actionButtonDropdown($btDropdown);
+
+    $actions = '<div class="btn-group pull-left">' . $button . '</div>';
+
+    $result['sq_cep3'] = $cep;
+    $result['actions'] = $actions;
+}
+
+$finalResult = array();
+foreach($this->result as $row) {
+    $finalResult[] = array(
+        $row['sq_cep3'],
+        $row['no_tipo_endereco4'],
+        $row['tx_endereco5'],
+        $row['nu_endereco6'],
+        $row['no_bairro7'],
+        $row['no_estado9'],
+        $row['no_municipio8'],
+        $row['sclr10'],
+        $row['actions'],
+    );
+}
+
+$data['aaData']               = $finalResult;
+$data['iTotalRecords']        = count($this->result);
+$data['iTotalDisplayRecords'] = count($this->result);
+
+echo json_encode($data);

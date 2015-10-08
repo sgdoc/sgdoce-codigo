@@ -1,0 +1,106 @@
+<?php
+    $total = count($this->result);
+
+    $this->headScript()->appendFile($this->baseUrl() . '/js/library/jquery.form.js');
+    $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/imagem.js');
+    $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/imagem/upload-simple.js');
+    $this->headScript()->appendFile($this->baseUrl() . '/js/components/modal.js');
+    echo $this->headScript();
+?>
+<h1>Visualizar Imagem</h1>
+<br />
+<div id="messageImage"></div>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br />
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Imagens</legend>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="btn-group">
+                    <a class="btn btn-mini" data-toggle="modal" href="#adicionarImagem"><i class="icon-plus"></i></a>
+                    <a class="btn btn-mini" id="removeImage"><i class="icon-trash"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="control-group well">
+        <?php if ($total < 1) :?>
+        <?php else :?>
+            <ul class="thumbnails">
+            <?php $count = 1; ?>
+            <?php foreach ($this->result as $anexo) : ?>
+                <?php $fileinfo = pathinfo($anexo['deCaminhoArquivo']); ?>
+                <?php $nome     = $fileinfo['filename'];?>
+                <?php $extensao = strtolower($fileinfo['extension']);?>
+                <li class="span2">
+                    <div class="thumbnail">
+                        <a class="view-image" href="artefato/imagem/show?sqAnexoArtefato=<?php echo $anexo['sqAnexoArtefato']; ?>&resize=1&crop=0&width=800&height=600"><img src="img/app/thumbs/<?php echo $nome . '_133_X_89.' . $extensao; ?>" alt="" width="133" height="89" /></a>
+                        <div class="caption">
+                            <label class="checkbox inline">
+                                <span><b><?php echo $nome, '.', $extensao; ?></b></span><br>
+                                <input type="checkbox" name="sqAnexoArtefato[]" class="checkbox-remove-image" value="<?php echo $anexo['sqAnexoArtefato']; ?>" />
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                <?php if ($count%6 == 0 && $count != $total): ?>
+                        </ul>
+                        <ul class="thumbnails">
+                <?php endif; ?>
+                <?php $count++; ?>
+            <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+        </div>
+        <div class="row-fluid">
+        </div>
+        <br />
+    </fieldset>
+</div>
+
+<div class="modal hide fade" id="adicionarImagem">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Adicionar Imagem</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div id="error-image"></div>
+            <form class="form-horizontal" id="formUpload" method="post"
+                  action="artefato/imagem/upload">
+                <input type="hidden" name="sqArtefato" id="sq-artefato" value="<?php echo $this->dto->getSqArtefato(); ?>" />
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="imageFile">
+                            <span class="required" title="Campo obrigatório">*</span> Selecionar Imagem(ns)
+                        </label>
+                        <div class="controls">
+                            <input type="file" name="imageFile[]" id="imageFile" multiple="multiple" />
+                            <input type="hidden" name="inFrente" value="F" />
+                            <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary" id="concluirUpload">Concluir</a>
+        <a class="btn" data-dismiss="modal" href="#"><i class="icon-remove"></i> Cancelar</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="modalImagem">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Atenção</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid"></div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>

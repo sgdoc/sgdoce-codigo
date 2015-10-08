@@ -1,0 +1,60 @@
+<?php
+
+$view = $this;
+
+$acaoArquivo = function($row) use ($view) {
+    $arrSqArtefato = array('sqArtefato' => $row['sqArtefato']);
+    $arrBtn = array(
+//        $view->actionButton('Visualizar' , 'Arquivo.view'           , $arrSqArtefato, 'eye-open'),
+        $view->actionButton('Desarquivar', 'ArquivoSetorial.unarchive', $arrSqArtefato, 'share'),
+    );
+
+    return $view->buttonGroup(join(' ', $arrBtn), 7);
+};
+
+$nuArtefato = function($row) {
+    return $row['digitalNumero'];
+};
+
+$dtArquivamento = function($row) {
+    return $row['dtArquivamento']->get(Zend_Date::DATETIME_MEDIUM);
+};
+
+$acoesMultiplasArquivo = function($row) {
+    return '<input type="checkbox" class="multipleAction" name="sqArtefato[]" value="' . $row['sqArtefato'] . '" />';
+};
+
+
+if ($this->dto->getTipoArtefato() == \Core_Configuration::getSgdoceTipoArtefatoProcesso()) { //processo
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplasArquivo),
+            array('column' => 'digitalNumero'),
+            array('column' => $dtArquivamento),
+
+            array('column' => 'noPessoaArquivamento'),
+            array('column' => 'txAssunto'),
+            array('column' => 'noPessoaOrigem'),
+            array('column' => $acaoArquivo)
+        )
+    );
+} else {
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplasArquivo),
+            array('column' => 'digitalNumero'),
+            array('column' => $dtArquivamento),
+
+            array('column' => 'noPessoaArquivamento'),
+            array('column' => 'txAssunto'),
+            array('column' => 'noTipoDocumento'),
+            array('column' => 'noPessoaOrigem'),
+            array('column' => $acaoArquivo)
+        )
+    );
+}
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

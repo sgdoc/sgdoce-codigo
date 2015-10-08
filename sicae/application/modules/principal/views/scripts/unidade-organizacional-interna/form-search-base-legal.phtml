@@ -1,0 +1,96 @@
+<div id="container-bl">
+
+    <div class="control-group">
+        <label for="noTipoAtoLegal" class="control-label">
+            Ato Legal
+        </label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'noTipoAtoLegal',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="noPessoa" class="control-label">
+            Ato Legal
+        </label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'noPessoa',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="nuAto">Número do Ato</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'nuAto',
+                    NULL,
+                    array('class' => 'span4', 'maxlength' => 12)
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="dtAssinatura">Data de Assinatura</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'dtAssinatura',
+                    NULL,
+                    array('class' => 'input-small dateBR datepicker', 'maxlength' => 10)
+                );
+            ?>
+            <button class="btn right datepicker-icon" title="Calendário" type="button">
+                <i class="icon-calendar"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="dtPublicacao">Data de Publicação</label>
+        <div class="controls">
+            <?php
+                echo $this->formText(
+                    'dtPublicacao',
+                    NULL,
+                    array('class' => 'input-small dateBR datepicker', 'maxlength' => 10)
+                );
+            ?>
+            <button class="btn right datepicker-icon" title="Calendário" type="button">
+                <i class="icon-calendar"></i>
+            </button>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="noTipoImpactoAto" class="control-label">Impacto do Ato</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom(
+                    'noTipoImpactoAto',
+                    NULL,
+                    array('class'=>'span9'),
+                    array()
+                );
+            ?>
+        </div>
+    </div>
+
+
+</div>

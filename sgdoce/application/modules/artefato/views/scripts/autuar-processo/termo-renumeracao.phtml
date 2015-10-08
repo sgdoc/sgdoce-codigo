@@ -1,0 +1,55 @@
+<script type="text/javascript" src="/js/app/artefato/autuar-processo/tema-renumerado.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Termo de Mudança de Suporte do Processo</h3>
+</div>
+<div class="modal-body">
+	<div class="row-fluid">
+		<form class="form-horizontal" id="form-termo-renumeracao-modal"
+			method="post">
+                <p style="text-align: center;">
+                <img src="img/<?php echo $this->cabecalho->getDeArquivoImagem(); ?>"
+                        name="logo" alt="logo" title="logo" width=120 height=120 border=0>
+ 				</p>
+                <p style="text-align: center;"><?php echo $this->cabecalho->getTxCabecalho() ; ?></p>
+
+
+                <p style="text-align: center;">TERMO DE MUDANÇA DE SUPORTE DO PROCESSO</p>
+                 
+                 <?php
+                $nuProcesso = $this->artefato['nuArtefato'];
+                if($this->coAmbitoProcesso == 'F'){
+					$nuProcesso = $this->maskNumber($nuProcesso, '99999.999999/9999-99');
+				}
+                ?>
+                 
+                <p>O presente processo de número <?php echo $nuProcesso; ?> com o suporte original em papel e com sua numeração original de 1 a <?php echo $this->nuPaginaProcesso; ?>, contendo XX volumes, tem nesta data seu suporte transferido para eletrônico, sendo certificado eletronicamente com motivação confere com o original.</p>
+                <p>Este termo só tem validade legal se certificado por um servidor público, partindo do princípio da fé pública, mantendo a legalidade do processo, garantindo a originalidade de sua composição e conteúdo.</p>
+                <p>Com a mudança de suporte é legítima a numeração do processo de forma eletrônica, não sendo obrigatoriamente o mesmo padrão do documento em papel no que dispõe sobre a numeração iniciada fisicamente, desde que seja legível nas imagens certificadas a numeração original do documento físico, permitindo a avaliação do seqüencial de páginas.</p>
+                <p>De acordo com a legislação vigente o documento físico deve ser mantido sob guarda até a finalização do processo, devendo ser apresentado caso haja contestação da veracidade da informação.</p>
+                 
+                 
+                <p style="text-align: center;">Brasília, <?php echo \Zend_Date::now()->get('dd') . ' de ' . ucfirst(\Zend_Date::now()->get(Zend_Date::MONTH_NAME))
+                										  .  ' de '  . \Zend_Date::now()->get(Zend_Date::YEAR) ?>.</p>
+                 
+                 
+                <p style="text-align: center;">Assinado Eletronicamente</p>
+                <p style="text-align: center;">Nome:</p>
+                <p style="text-align: center;">Matricula SIAPE:</p>
+		</form>
+	</div>
+</div>
+<div class="modal-footer">
+    <label class="pull-left span6"> <input type="checkbox" name=""
+        id="deAcordo"
+        onClick="
+                    if(this.checked == true){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary';
+                    }else if (this.checked == false){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary disabled';
+                    }
+                " /> De acordo com o conteúdo do documento.
+    </label>
+    <button type="button" class="btn btn-primary btn-assinar btnConcluirTermo disabled" id="btn-assinar" data-dismiss="modal" title="Concluir">Assinar</button>
+    <a href="#" class="btn btnCancelarTermo" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

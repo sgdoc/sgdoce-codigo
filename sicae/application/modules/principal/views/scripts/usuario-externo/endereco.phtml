@@ -1,0 +1,71 @@
+<fieldset>
+    <legend>Endereço</legend>
+    <div class="control-group">
+        <label class="control-label" for="complementar-sqPais">
+            <span class="required">*</span> País
+        </label>
+        <div class="controls">
+             <?php
+             echo $this->ComboCustom('complementar[sqPais]',
+                                        $this->data->getDadoComplementar()->getSqPais(),
+                                        array('class' => 'required', 'multiple' => false),
+                                        $this->cmb['sqPais']
+                );
+             ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="complementar-nuCep">CEP</label>
+        <div class="controls">
+            <div class="input-append">
+                <input
+                    type="text"
+                    class="input-medium"
+                    maxlength="11"
+                    name="complementar[coCep]"
+                    id="complementar-nuCep"
+                    value="<?php echo $this->data->getDadoComplementar()->getCoCep(); ?>"
+                    />
+                <button class="btn right" id="btnCep" type="button" title="Pesquisar"><i class="icon-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="complementar[txEndereco]">Endereço</label>
+        <div class="controls">
+            <input
+                type="text"
+                class="span6"
+                name="complementar[txEndereco]"
+                id="complementar-txEndereco"
+                maxlength="100"
+                value="<?php echo $this->data->getDadoComplementar()->getTxEndereco(); ?>"
+                />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="complementar-sqEstado">UF</label>
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom('complementar[sqEstado]',
+                                        $this->data->getDadoComplementar()->getSqEstado()->getSqEstado(),
+                                        array('multiple' => false),
+                                        $this->cmb['sqEstado']
+                );
+             ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="complementar-sqMunicipio">Cidade</label>
+
+        <div class="controls">
+            <?php
+                echo $this->ComboCustom('complementar[sqMunicipio]',
+                                        $this->data->getDadoComplementar()->getSqMunicipio()->getSqMunicipio(),
+                                        array('multiple' => false),
+                                        $this->cmb['sqMunicipio']
+                );
+             ?>
+        </div>
+        </div>
+</fieldset>

@@ -1,0 +1,43 @@
+<?php 
+$objEntity   = $this->layout()->objVolume; 
+$cargoFuncao = '';
+
+if ($objEntity->getSqCargoAssinaturaAbertura()) {
+    $cargoFuncao = $objEntity->getSqCargoAssinaturaAbertura()->getNoCargo();
+} 
+if ($objEntity->getSqFuncaoAssinaturaAbertura()) {
+    $cargoFuncao = $objEntity->getSqFuncaoAssinaturaAbertura()->getNoFuncao();
+}
+?>
+<page backtop="5mm" backbottom="20mm" backleft="10mm" backright="10mm">
+
+<div style="text-align: center;">
+    <img src="<?php echo $this->layout()->logo; ?>" width="150" name="ICMBio Logo" title="ICMBio Logo" border="0">
+</div>
+
+<p style="text-align: center; margin-top:50px;"><?php echo $this->layout()->noUnidadeOrg; ?></p>
+
+<p style="text-align: center; margin-top:80px; margin-bottom:80px;">TERMO DE ABERTURA DE VOLUME</p>
+
+<p style="text-indent:75px; text-align:justify;">Ao(s)
+    <?php echo $objEntity->getDtAbertura()->get($this->layout()->dtFormatPrint); ?>,
+    procedemos a abertura do <?php echo $objEntity->getNuVolume(); ?>º volume do processo de n°
+    <?php $nuArtefato = str_replace(array("/", "-", "."), "", $objEntity->getSqArtefato()->getNuArtefato()); ?>
+    <?php if( strlen($nuArtefato) >= 17 ): ?>
+        <?php echo $this->layout()->getView()->nuArtefato($objEntity->getSqArtefato()); ?>,
+    <?php else: ?>
+        <?php echo $objEntity->getSqArtefato()->getNuArtefato(); ?>,
+    <?php endif; ?> que se inicia com a folha <?php echo $objEntity->getNuFolhaInicial(); ?>. Para constar subscrevo e assino.
+</p>
+<?php
+    $strAssinatura = " - ";
+    if( $objEntity->getSqPessoaAssinaturaAbertura() ) {
+      $strAssinatura = $objEntity->getSqPessoaAssinaturaAbertura()->getNoPessoa() . " - " . $cargoFuncao;
+    }
+?>
+
+<p style="text-align: center; margin-top:100px;">
+   <?php echo str_repeat("_", strlen($strAssinatura) + 2); ?><br />
+   <?php echo $strAssinatura ?><br />
+   (Assinatura/Carimbo)</p>
+</page>

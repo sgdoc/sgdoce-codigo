@@ -1,0 +1,306 @@
+<div class="tab-pane" id="dadosAssunto">
+    <div class="control-group">
+        <label class="control-label" for="sqAssunto"> <span class="required">* </span>
+                Assunto
+        </label>
+        <div class="controls">
+            <?php
+            $sqAssunto_hidden = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getSqAssunto() : NULL;
+            $sqAssunto = $this->data->getSqTipoArtefatoAssunto()->getSqAssunto() ? $this->data->getSqTipoArtefatoAssunto()->getSqAssunto()->getTxAssunto() : NULL;
+
+            echo $this->formHidden('sqAssunto_hidden',$sqAssunto_hidden);
+            echo $this->formText('sqAssunto',$sqAssunto, array('class'=>'required span6'));
+            ?>
+        </div>
+        <?php if( !$sqAssunto_hidden ): ?>
+        <div class="controls">
+            <div class="alert alert-info left span6">
+                <b>No cadastro anterior:</b> <?php echo $this->dataSgdocFisico['assunto']; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <div class="control-group">
+        <?php
+            $attibutes['class'] = 'span11 ';
+            $attibutes['rows'] = 3;
+
+        if ($this->isSIC):
+            $attibutes['class'] .= ' required canPaste'; //.canPaste para permitir colar no campo?>
+            <label class="control-label" for="txAssuntoComplementar"><span class="required">* </span>Conteúdo da Solicitação </label>
+        <?php else: ?>
+            <label class="control-label" for="txAssuntoComplementar"> Assunto Complementar </label>
+        <?php endif; ?>
+
+        <div class="controls">
+            <?php echo $this->formTextarea('txAssuntoComplementar', $this->data->getTxAssuntoComplementar(), $attibutes);?>
+        </div>
+    </div>
+    <?php
+	$sqPessoaAssinante = NULL;
+	$noPessoaAssinante = NULL;
+	$cargoAssinante    = NULL;
+
+        $procInterna       = true;
+        $recebidoPor_name  = NULL;
+        $recebidoPor_id    = NULL;
+
+        $origem = isset($this->dadosOrigem[1]) ? $this->dadosOrigem[1] : NULL;
+	if($origem == \Sgdoce_Constants::PROCEDENCIA_EXTERNA && count($this->assinanteArtefatoExterno)>0){
+            $sqPessoaAssinante = $this->assinanteArtefatoExterno->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa();
+            $noPessoaAssinante = $this->assinanteArtefatoExterno->getSqPessoaSgdoce()->getNoPessoa();
+
+            $procInterna       = false;
+            if( $this->data->getSqPessoaRecebimento() ) {
+                $recebidoPor_name  = $this->data->getSqPessoaRecebimento()->getNoPessoa();
+                $recebidoPor_id    = $this->data->getSqPessoaRecebimento()->getSqPessoa();
+            }
+        }
+
+        if($origem == \Sgdoce_Constants::PROCEDENCIA_INTERNA && count($this->assinanteArtefatoInterno)>0){
+            $sqPessoaAssinante = $this->assinanteArtefatoInterno->getSqPessoaUnidadeOrg()->getSqPessoaSgdoce()->getSqPessoaCorporativo()->getSqPessoa();
+            $noPessoaAssinante = $this->assinanteArtefatoInterno->getSqPessoaUnidadeOrg()->getSqPessoaSgdoce()->getNoPessoa();
+            $cargoAssinante    = $this->assinanteArtefatoInterno->getSqPessoaUnidadeOrg()->getNoCargo();
+        }
+
+        if ($this->isSIC) {
+            $procInterna = false;
+        }
+    ?>
+    <?php if (!$this->isSIC): ?>
+        <div class="control-group" id="divResponsavelAssinatura">
+            <?php
+
+                $classSpanAssinante = '';
+
+                $paramsAssinatura = array('class'=>'span11 required');
+                $sqTipoDocumento_hidden = ( $this->data->getSqTipoDocumento()) ?
+                                            $this->data->getSqTipoDocumento()->getSqTipoDocumento() :
+                                                NULL;
+                $isProcedenciaExterna = NULL;
+                if( isset($this->dadosOrigem[1]) ) {
+                    $isProcedenciaExterna = ($this->dadosOrigem[1] == 3);
+                }
+
+                if (in_array($sqTipoDocumento_hidden, $this->arrWithoutSignature) || $isProcedenciaExterna) {
+                    $paramsAssinatura = array('class'=>'span11');
+                    $classSpanAssinante = 'hide';
+                }
+
+            ?>
+            <label class="control-label" for="noResponsavelAssinatura">
+                <span id="spanRequiredSignature" class="required <?php echo $classSpanAssinante; ?>">* </span>Assinatura
+            </label>
+            <div class="controls">
+                <?php echo $this->formHidden('noResponsavelAssinatura_hidden',$sqPessoaAssinante)?>
+                <?php echo $this->formText('noResponsavelAssinatura',$noPessoaAssinante,array('class'=>'span4 required'))?>
+
+                <div class="input-append dropdown">
+                    <button type="button" id="btnCadastraPessoa"
+                            class="btn right btnCadastraPessoa" data-toggle="dropdown"
+                            title="Opções">
+                        <i class="icon-cog"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li class="liPessoaFisica">
+                            <a href="/auxiliar/pessoa-fisica/create/form/form-cadastro-documento/campoPessoa/noResponsavelAssinatura"
+                               target="_blank">Cadastrar (PF)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <?php if( !$sqPessoaAssinante ): ?>
+            <div class="controls">
+                <div class="alert alert-info left span4">
+                    <b>No cadastro anterior:</b> <?php echo (empty($this->dataSgdocFisico['assinatura'])) ? 'Não informado' : $this->dataSgdocFisico['assinatura']; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        <div class="control-group" id="divCargoResponsavelAssinatura">
+            <label class="control-label" for="cb_noPessoaFuncaoAssinante">
+                Cargo
+            </label>
+            <div class="controls">
+
+                <?php echo $this->ComboCustom('cb_noPessoaFuncaoAssinante',
+                        $cargoAssinante,
+                        array('class' => 'span4', 'name'=>'noPessoaFuncaoAssinante'),
+                        $this->cargo);
+
+                echo $this->formText('noPessoaFuncaoAssinante',
+                                     $cargoAssinante,
+                                     array('class'=>'span4 hide',
+                                           'disabled'=>'disabled',
+                                           'maxlength'=>'20'))?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div id="div_recebidoPor" style="display: <?php echo ($procInterna) ? 'none': 'block' ?>;">
+        <?php
+
+        $dtEntrada = ($this->data->getDtEntrada())? $this->data->getDtEntrada()->get(Zend_Date::DATE_MEDIUM): \Zend_Date::now()->get(Zend_Date::DATE_MEDIUM);
+
+        if( $this->data->getDtEntrada() ) :
+            $alterar = 'disabled="disabled"';
+            $startDate = ''
+        ?>
+            <div class="control-group">
+                <label class="control-label" for="appendedInputButton">
+                    <span class="required" >* </span>Data de Entrada
+                </label>
+                <div class="controls">
+                    <div data-date="<?php echo $dtEntrada ?>" data-date-format="dd/mm/yyyy" class="input-append">
+                        <input value="<?php echo $dtEntrada ?>"
+                                class="input-small" readonly="readonly" id="dtEntrada"
+                                name="dtEntrada" mask="date" type="text" />
+                        <a class="btn add-on disabled right" title="Calendário"><i class="icon-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+        <?php else :
+            $alterar = '';
+            $startDate = 'startDate'
+            ?>
+            <div class="control-group">
+                <label class="control-label" for="appendedInputButton"><span class="required">* </span>Data de Entrada</label>
+                <div class="controls">
+                    <div data-date="<?php echo $dtEntrada; ?>"
+                         data-date-format="dd/mm/yyyy" class="input-append date">
+                        <input value="<?php echo $dtEntrada; ?>"
+                               class="input-small" id="dtEntrada"
+                               name="dtEntrada" mask="date" type="text" />
+                        <a href="#" class="btn add-on right" title="Calendário"><i class="icon-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+
+        <?php $alterar = ($recebidoPor_id) ? 'disabled="disabled"' : null ; ?>
+        <div class="control-group">
+            <label class="control-label" for="sqPessoaRecebimento">Recebido por</label>
+            <div class="controls">
+                <?php echo $this->formHidden('sqPessoaRecebimento_hidden',$recebidoPor_id)?>
+                <input type="text" <?php echo $alterar;?>
+                        name="sqPessoaRecebimento" id="sqPessoaRecebimento" class="span4" maxlength="200"
+                        value="<?php echo $recebidoPor_name ?>" />
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group dv2-nuDiasPrazo">
+            <label class="control-label" for="sqPrazo"> Prazo do Documento</label>
+            <div class="controls">
+                    <?php
+                    $value = NULL;
+                    if($this->data->getDtPrazo()) $value = '1';
+                    if($this->data->getNuDiasPrazo()) $value = '2';
+                    echo $this->comboCustom('sqPrazo', $value, array('class' => 'input-small span4'), array('1' => 'Data', '2' => 'Dias'));
+                    ?>
+            </div>
+    </div>
+    <div class="control-group dvDataPrazo" style="display: <?php ($this->data->getDtPrazo()) ? 'block' : 'none'; ?>">
+        <label class="control-label" for="appendedInputButton"> <span
+                class="required" >*</span> Data do Prazo
+        </label>
+        <div class="controls">
+            <?php
+            $dtPrazo = count($this->data->getDtPrazo()) ? $this->data->getDtPrazo()->get('dd/MM/yyyy') : NULL;
+            ?>
+            <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy') ?>"
+                data-date-format="dd/mm/yyyy" <?php echo ($startDate) ? 'data-date-startdate="'.$dtPrazo.'"':""; ?> class="input-append date">
+                <?php echo $this->formText('dtPrazo',$dtPrazo,array('class'=>"input-small {$startDate}",'mask'=>'date','maxlength'=>10))?>
+                <a href="#" class="btn add-on right" title="Calendário"><i class="icon-calendar"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="dvDiasPrazo">
+        <div class="control-group">
+            <label class="control-label" for="inDiasCorridos"> <span class="required">* </span>Dias</label>
+            <div class="controls">
+                <?php
+                $value = NULL;
+                if ($this->data->getInDiasCorridos() === FALSE) {
+                    $value = 'N';
+                }else if($this->data->getInDiasCorridos() === TRUE) {
+                    $value = 'S';
+                }
+                echo $this->comboCustom('inDiasCorridos', $value, array('class' => 'required span4'), array('N' => 'Úteis', 'S' => 'Corridos'));
+                ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inDiasCorridos"><span class="required">* </span>Qtde. Dias</label>
+            <div class="controls">
+                <input type="text" class="span1 inline required" id="nuDiasPrazo" name="nuDiasPrazo" style="display: <?php ($this->data->getNuDiasPrazo()) ? 'block' : 'none'; ?>" maxlength="3" value="<?php echo $this->data->getNuDiasPrazo(); ?>" />
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="sqPrioridade"><span class="required">* </span>Prioridade</label>
+        <div class="controls">
+            <?php
+            $arrAttribsPrioridade = array('class' => 'required span4');
+            if ($this->isSIC){
+                $sqPrioridade   = \Core_Configuration::getSgdoceTipoPrioridadeAlta();
+                $tipoPrioridade =  \Core_Configuration::getSgdoceTipoPrioridadeSic();
+                $arrAttribsPrioridade['disabled'] = 'disabled';
+
+                echo '<input type="hidden" name="sqPrioridade" value="'.$sqPrioridade. '">';
+                echo '<input type="hidden" name="sqTipoPrioridade" value="'.$tipoPrioridade. '">';
+
+            }else{
+                $sqPrioridade   = $this->data->getSqTipoPrioridade() ?
+                                    $this->data->getSqTipoPrioridade()->getSqPrioridade()->getSqPrioridade() :
+                                        \Core_Configuration::getSgdoceTipoPrioridadeBaixa();
+                $tipoPrioridade = $this->data->getSqTipoPrioridade() ?
+                                    $this->data->getSqTipoPrioridade()->getSqTipoPrioridade() :
+                                        NULL;
+
+            }
+
+            echo $this->ComboCustom('sqPrioridade', $sqPrioridade, $arrAttribsPrioridade, $this->tipoPrioridade);
+            ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="sqTipoPrioridade">
+            <span class="required" >* </span>Descrição da Prioridade
+        </label>
+        <div class="controls">
+            <?php
+                if (!$sqPrioridade) {
+                    $arrAttribsPrioridade['disabled'] = 'disabled';
+                }
+
+            echo $this->ComboCustom('sqTipoPrioridade', $tipoPrioridade, $arrAttribsPrioridade, array()); ?>
+        </div>
+    </div>
+</div>
+<script	type="text/javascript" src="/js/app/migracao/documento/assunto.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        if ($('input[name=procedenciaInterno]:checked').val() == 'interno'){
+            $('#divCargoResponsavelAssinatura').show();
+        }
+        if($('input[name=procedenciaInterno]:checked').val() == 'externo') {
+            $('#divCargoResponsavelAssinatura').hide();
+        }
+        $('#nuDiasPrazo').setMask('999');
+        $('.dvDiasPrazo').hide();
+        $('.dvDataPrazo').hide();
+        Assunto.initCampos();
+        if($('#inDiasCorridos').val() != ''){
+            $('#nuDiasPrazo').removeAttr('disabled');
+        }
+
+        if($('#sqPrioridade').val() != ''){
+            Assunto.loadPrioridade(<?php echo $tipoPrioridade ?>);
+        }
+        $('#sqPrioridade').change(Assunto.loadPrioridade);
+        
+        Assunto._tpDocWDuplicityVerification = <?php echo Zend_Json_Encoder::encode($this->arrWithDuplicityCheck); ?>;
+    });
+</script>

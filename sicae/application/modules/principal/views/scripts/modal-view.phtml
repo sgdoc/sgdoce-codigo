@@ -1,0 +1,16 @@
+<div class="modal hide fade" id="modal-view">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="title-main"><?php echo $this->translate($this->title) ?></h3>
+    </div>
+    <div class="modal-body" id="body-view">
+    </div>
+    <div class="modal-footer">
+        <?php if ($this->btnConcluir): ?>
+            <a class="btn btn-primary btn-concluir" href="#">Concluir</a>
+        <?php endif; ?>
+        <a href="#" data-dismiss="modal" class="btn <?php echo !$this->btnConcluir ? 'btn-primary' : '' ?>">
+            Fechar
+        </a>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<script type="text/javascript" src="js/app/auxiliar/prioridade/index.js"></script>
+<script type="text/javascript" src="js/app/auxiliar/prioridade/form.js"></script>
+
+<h1>Pesquisar Tipo de Prioridade</h1>
+
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'list'))?>" method="post" id="form-tipo-prioridade">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <div class="btn-group pull-right">
+                    <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">
+                        Cadastrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+    <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Descrição</label>
+            <div class="controls">
+                <input class="span6" type="text" name="txTipoPrioridade" id="txTipoPrioridade"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Prioridade </label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqPrioridade', 'sqPrioridade', array('class'=>'span3'), $this->items);?>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+             <button class="btn " type="reset">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+
+<div class="control-group hidden" id="gridPesquisa">
+<fieldset>
+    <legend>
+        Resultado da Pesquisa
+    </legend>
+</fieldset>
+    <table id="table-grid-prioridade">
+        <thead>
+            <tr>
+                <th width="45%">Descrição</th>
+                <th width="35%">Prioridade</th>
+                <th width="20%">Ações</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="form-actions">
+        <a class="btn btn-primary" title="Filtros" href="auxiliar/prioridade/index">Filtros</a>
+        <a class="btn" title="Cadastrar" href="auxiliar/prioridade/create">Cadastrar</a>
+    </div>
+</div>

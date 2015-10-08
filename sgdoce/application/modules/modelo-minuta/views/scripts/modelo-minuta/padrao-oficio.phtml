@@ -1,0 +1,578 @@
+<?php
+$idPosicaoTitulo = $this->layout()->entity->getSqPosicaoTipoDocumento()->getSqPosicaoTipoDocumento();
+$idPosicaoData = $this->layout()->entity->getSqPosicaoData()->getSqPosicaoData();
+
+switch ($idPosicaoTitulo){
+    case 1:
+        $idPosicaoTitulo = 'oficio-titulo-left';
+        break;
+    case 2:
+        $idPosicaoTitulo = 'oficio-titulo-right';
+        break;
+    case 3:
+        $idPosicaoTitulo = 'oficio-titulo-center';
+        break;
+}
+?>
+<page>
+<page_footer style="text-align: right;">
+[[page_cu]]
+</page_footer>
+
+<div class="content">
+    <div id="header">
+        <?php
+        $imagem = $this->layout()->entity->getSqCabecalho()->getDeArquivoImagem() != '' ?
+                  $this->layout()->entity->getSqCabecalho()->getDeArquivoImagem() : NULL;
+        if($this->layout()->entity->getSqCabecalho()->getSqCabecalho()) :?>
+             <?php if($imagem) :?>
+                <img src="../public/img/<?php echo $this->layout()->entity->getSqCabecalho()->getDeArquivoImagem();?>"
+                     name="figura1" width=126 height=108 border=0>
+            <?php endif;?>
+            <p class="smallMargin">
+                <b><?php
+                 echo $this->layout()->entity->getSqCabecalho()->getTxCabecalho();?>
+                </b>
+            </p>
+        <?php endif;?>
+        <p class="smallMargin">
+            <?php
+            $count = 0;
+            foreach ($this->layout()->data[4] as $key => $campo){
+                if ($campo['checked']){
+                    $count++;
+                }
+            }
+            $cont  = 1;
+            foreach ($this->layout()->data[4] as $key => $campo){
+                if ($campo['checked']){
+                    if(substr(strtolower($campo['noCampo']),0,9) == 'setor por'){
+                         $this->layout()->data[4][$key];
+                         echo 'Setor' ;
+                    }else{
+                        echo $campo['noCampo'] ;
+                    }
+                    if($count > $cont){
+                        echo '/';
+                    }
+                }
+                ++$cont;
+            }
+           ?>
+        </p>
+    </div>
+
+    <p id="<?php echo $idPosicaoTitulo;?>">
+
+        <?php
+        $documeto = $this->layout()->entity->getSqTipoDocumento() ?
+                    'Tipo Documento' : 'Tipo Documento';
+        echo $documeto . ' ';
+
+        $arrCamDo = array();
+        $count = 2;
+        foreach ($this->layout()->data[1] as $key => $campo){
+            if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                switch (substr(strtolower($campo['noCampo']),0,3)){
+                    case 'nº':
+                        $arrCamDo[0] = 'n° ';
+                        break;
+                    case 'ano':
+                        $arrCamDo[1] = strtolower($campo['noCampo']);
+                        break;
+                    default:
+                        if($campo['noCampo'] === 'Sigla do Setor'){
+                            $arrCamDo[$count] = 'Setor';
+                        }elseif($campo['noCampo'] === 'Sigla por Hierarquia'){
+                            $arrCamDo[$count] = 'Setor Hierárquia';
+                        }
+                        else{
+                            $arrCamDo[$count] = $campo['noCampo'];
+                        }
+                        break;
+                }
+                $count++;
+            }
+        }
+        ksort($arrCamDo);
+        $cdDoc = 0;
+        foreach ($arrCamDo as $key => $val) {
+            if($cdDoc > 0){
+                if($val == 'Setor'){
+                    echo ' - ';
+                }
+                else{
+                    echo '/';
+                }
+            }
+
+            echo $val;
+            $cdDoc++;
+        }
+        ?>
+    </p>
+    <p id="oficio-date" style="font-size: 12pt;">
+        <?php
+        foreach ($this->layout()->data[1] as $key => $campo){
+            if ($campo['checked']){
+                if(substr(strtolower($campo['noCampo']),0,3) == 'loc'){
+                    echo $campo['noCampo'] . ',';
+                }
+                if(substr(strtolower($campo['noCampo']),0,3) == 'dat'){
+                    echo $campo['noCampo'];
+                }
+            }
+        }?>
+    </p>
+    <p>
+
+    <?php
+        $inDestInt = FALSE;
+        $inVarDest = FALSE;
+        $inUniDest = FALSE;
+        $inNomUnid = FALSE;
+        $inTipUnid = FALSE;
+        $inNomDest = FALSE;
+
+        $inCargoDest = '';
+        $noUnidade   = '';
+        $noDestina   = '';
+        $tiUnidade   = '';
+
+        foreach ($this->layout()->data[5] as $keyDest => $campoDest) {
+            if ($campoDest['checked']) {
+                switch ($campoDest['noCampo']) {
+                    case 'Destino Interno':
+                        $inDestInt = TRUE;
+                    break;
+                    case 'Vários Destinos?':
+                        $inVarDest = TRUE;
+                    break;
+                    case 'Único Destino?':
+                        $inUniDest = TRUE;
+                    break;
+                    case 'Cargo':
+                        $inCargoDest = TRUE;
+                        $noCargoDest = $campoDest['noCampo'];
+                    break;
+                    case 'Nome da Unidade':
+                        $inNomUnid = TRUE;
+                        $noUnidade = $campoDest['noCampo'];
+                    break;
+                    case 'Tipo da Unidade':
+                        $inTipUnid = TRUE;
+                        $tiUnidade = $campoDest['noCampo'];
+                    break;
+                    case 'Nome do Destinatário':
+                        $inNomDest = TRUE;
+                        $noDestina = $campoDest['noCampo'];
+                    break;
+                }
+            }
+        }
+
+        if ($inDestInt) {
+
+            if ($inCargoDest) {
+                echo $noCargoDest . '<br />';
+            }
+
+            /*
+                1. Ùnico Destino?
+                    Destinatário interno
+                    Tipo da unidade
+                    Nome da unidade
+                    Nome do destinatário:
+
+                    * Nome da Unidade
+                    * A/C: Nome do destinatário
+            */
+            if ((($inDestInt && $inUniDest)
+                || ($inDestInt && !$inVarDest))
+                && ($inNomUnid && $inTipUnid && $inNomDest)) {
+                echo $noUnidade . '<br />';
+                echo 'A/C: <strong>'. $noDestina .'</strong><br>';
+            }
+
+            /*
+                2. Destinatário interno
+                    Tipo da unidade
+                    Nome da unidade:
+
+                    * Nome da Unidade
+            */
+            else if ($inDestInt && $inTipUnid && $inNomUnid) {
+                echo $noUnidade . '<br />';
+            }
+
+            /*
+                3. Destinatário interno
+                    Tipo da unidade:
+
+                    * Tipo da Unidade
+            */
+            else if ($inDestInt && $inTipUnid) {
+                echo $tiUnidade . '<br />';
+            }
+
+            /*
+                 4. Ùnico Destino?
+                   Destinatário interno:
+
+                * Nome da unidade
+                * Nome de destinatário
+             */
+            else if (($inDestInt && $inUniDest) || ($inDestInt && !$inVarDest)) {
+                echo 'Nome da Unidade <br />';
+                echo '<strong>Nome do Destinatário </strong><br>';
+            }
+
+            /*
+                5. Vários destinatários
+                    Destinatário interno:
+
+                    * Tipo da Unidade
+                    * Nome da Unidade
+            */
+            else if ($inDestInt && $inVarDest) {
+                echo 'Tipo da Unidade <br />';
+                echo 'Nome da Unidade <br />';
+            }
+
+        }
+        else{
+
+            $guardaCep = '';
+            $inGuardaCep = FALSE;
+            foreach ($this->layout()->data[5] as $key => $campo) {
+                if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                    if(substr(strtolower($campo['noCampo']),0,3) == 'des'){
+                        echo '<strong>'. $campo['noCampo'].'</strong><br>';
+                    }
+                    if(substr(strtolower($campo['noCampo']),0,3) != 'des'){
+                        if(substr(strtolower($campo['noCampo']),0,3) == 'cep'){
+                            $guardaCep = $campo['noCampo'];
+                            $inGuardaCep = TRUE;
+                        }
+                        else{
+                            echo $campo['noCampo'].'<br>';
+                            if(substr(strtolower($campo['noCampo']),0,3) == 'car'){
+                                echo 'Empresa ou órgão - Nome <br>';
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($inGuardaCep){
+               echo $guardaCep;
+            }
+        }
+    ?>
+    </p>
+    <p style="text-align: justify;">
+        <?php
+        foreach ($this->layout()->data[2] as $key => $campo) {
+            if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                if(strtolower($campo['noCampo']) == 'assunto'){
+                    echo '<strong>'. $campo['noCampo'].':</strong><br>';
+                }
+            }
+        }
+        foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(strtolower($campo['noCampo']) == 'interessado'){
+                    echo $campo['noCampo'].'<br>';
+                }
+            }
+        }
+        foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(strtolower($campo['noCampo']) == 'ref.'){
+                    echo $campo['noCampo'].'<br>';
+                }
+            }
+        }?>
+    </p>
+    <p style="text-align: justify;">
+        <span class="marginLeft">&nbsp;</span>
+        <?php foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(substr(strtolower($campo['noCampo']),0,3) == 'voc'){
+                    echo $campo['noCampo'] . ' ';
+                }
+                if(substr(strtolower($campo['noCampo']),0,3) == 'car'){
+                    echo $campo['noCampo'] .',';
+                }
+            }
+        }?>
+    </p>
+
+    <p style="text-align: justify;">
+        <span class="marginLeft">&nbsp;</span>
+        <?php foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(substr(strtolower($campo['noCampo']),0,3) == 'tex'){
+                    echo $campo['noCampo'] . '<br>';
+                }
+            }
+        }?>
+    </p>
+    <p style="text-align: justify;">
+        <?php foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(substr(strtolower($campo['noCampo']),0,3) == 'des'){
+                    echo $campo['noCampo'] . ',';
+                }
+            }
+        }?>
+        <?php foreach ($this->layout()->data[2] as $key => $campo) {
+            if ($campo['checked']){
+                if(substr(strtolower($campo['noCampo']),0,3) == 'dat'){
+                    echo $campo['noCampo'];
+                }
+            }
+        }?>
+
+     </p>
+</div>
+    <br />
+
+    <div class="espacoAssinatura" style="font-size: 12pt;">
+        <p class="marginLeft">
+            <?php foreach ($this->layout()->data[2] as $key => $campo) {
+                if ($campo['checked']){
+                    if(substr(strtolower($campo['noCampo']),0,3) == 'fec'){
+                        echo $campo['noCampo'] . ',<br>';
+                    }
+                }
+            }?>
+        </p>
+        <div id="oficio-signature">
+            <p class="mediumMargin">
+            <?php
+                foreach ($this->layout()->data[3] as $key => $campo) {
+                    if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                        if (substr(strtolower($campo['noCampo']),0,3) == 'ass'){
+                            echo $campo['noCampo'].'<br >';
+                        }else if(substr(strtolower($campo['noCampo']),0,3) == 'car'){
+                            echo $campo['noCampo'].'/';
+                        }
+                        else if (substr(strtolower($campo['noCampo']),0,3) == 'set'){
+                            echo $campo['noCampo'].'';
+                        }
+                    }
+                }
+            ?>
+
+        <?php
+            $inMultAss = FALSE;
+
+                foreach ($this->layout()->data[3] as $key => $campo) {
+                if (($campo['checked'])){
+                    if(substr(strtolower($campo['noCampo']),0,3) == 'mú'){
+                        $inMultAss = TRUE;
+                    }
+
+                    $campoMult = explode( ' ', $campo['noCampo']);
+
+                    if(count($campoMult) > 1){
+                        if(substr(strtolower($campoMult[1]),0,3) == 'hie'){
+                            $inMultAss = TRUE;
+                        }
+                    }
+                }
+            }
+        ?>
+
+        <?php
+        if($inMultAss){
+
+        ?>
+        <br /><br />
+
+            <?php
+                $campMot = '';
+                $campAss = '';
+                $campCar = '';
+                $campSet = '';
+            ?>
+
+            <?php
+                foreach ($this->layout()->data[3] as $key => $campo) {
+                    if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                        if (substr(strtolower($campo['noCampo']),0,3) == 'mot'){
+                            $campMot = $campo['noCampo'].'<br ><br >';
+                        }else if (substr(strtolower($campo['noCampo']),0,3) == 'ass'){
+                            $campAss = $campo['noCampo'].'<br >';
+                        }else if(substr(strtolower($campo['noCampo']),0,3) == 'car'){
+                            $campCar = $campo['noCampo'].'/';
+                        }
+                        else if (substr(strtolower($campo['noCampo']),0,3) == 'set'){
+                            $campSet = $campo['noCampo'].'<br ><br >';
+                        }
+                    }
+                }
+
+                if(!empty($campMot)){
+                    echo $campMot;
+                }
+                if(!empty($campAss)){
+                    echo $campAss;
+                }
+                if(!empty($campCar)){
+                    echo $campCar;
+                }
+                if(!empty($campSet)){
+                    echo $campSet;
+                }
+        }
+            ?>
+
+            </p>
+        </div>
+        <div id="oficio-rodape">
+            <p class="mediumMargin">
+            <br >
+            <?php
+            $existe = false;
+            foreach ($this->layout()->data[6] as $key => $campo) {
+                if (($campo['checked']) && ($campo['inVisivelDocumento'])){
+                        echo '_____________________________________________________________<br >';
+                        $existe = true;
+
+                }
+             }
+             if($existe){
+                     echo "<table border='0'>
+                                <tr>
+                                    <td>Logo Rodapé&nbsp;&nbsp;</td>
+                                     <td>Nome da Unidade</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Endereço</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>CEP</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Telefone</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>E-mail</td>
+                                </tr>
+                            </table>";
+             }
+            ?>
+            </p>
+        </div>
+    </div>
+</page>
+
+<style type="text/css">
+<!--
+.content { /*size: 8.27in 11.69in;*/
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    font-size: 12pt;
+    /*border: 1px solid grey;*/
+}
+.espacoAssinatura {
+        margin-right: 0.79in;
+        margin-left: 0.79in;
+/*    margin-top: 155px;*/
+        margin-top: 15px;
+}
+
+#header {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: "Times New Roman";
+    font-size: 9pt;
+}
+
+.contRodape img {
+    float: left;
+    margin-right: 15px;
+}
+
+.contRodape span {
+    width: 150px;
+    height: 150px;
+    display: block;
+    float: left !important;
+    margin-right: 15px;
+}
+
+.contRodape p {
+    float: left !important;
+    width: 200px;
+    background: blue;
+}
+
+#oficio-titulo-left {
+    text-align: left;
+/*    margin-bottom: 40px;*/
+    margin-bottom: 20px;
+}
+
+#oficio-titulo-right {
+    text-align: right;
+    margin-right: 30px;
+/*    margin-bottom: 80px;*/
+    margin-bottom: 20px;
+}
+
+#oficio-titulo-center {
+    text-align: center;
+    margin-center: 20px;
+/*    margin-bottom: 80px;*/
+    margin-bottom: 20px;
+}
+
+#oficio-date {
+    text-align: right;
+/*    margin-right: 30px;
+    margin-bottom: 80px;*/
+}
+
+#oficio-to {
+    margin-bottom: 100px;
+}
+
+#oficio-att {
+    margin-left: 50px;
+    margin-bottom: 70px;
+}
+
+#oficio-signature {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 12pt;
+}
+
+#oficio-rodape {
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    font-size: 10pt;
+}
+
+.smallMargin {
+    margin: 0 0 4px 0;
+    padding: 0;
+}
+
+.mediumMargin {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.marginLeft {
+    margin-left: 50px;
+}
+</style>

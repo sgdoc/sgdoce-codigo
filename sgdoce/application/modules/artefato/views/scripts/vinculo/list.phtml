@@ -1,0 +1,110 @@
+<?php
+echo $this->headScript()
+          ->appendFile($this->assetUrl('app/artefato/vinculo/vinculo-grid.js', array('address' => 'js')));
+
+$artTipoDoc = \Core_Configuration::getSgdoceTipoArtefatoDocumento();
+$artTipoDossie = \Core_Configuration::getSgdoceTipoArtefatoDossie();
+$artTipoProcesso = \Core_Configuration::getSgdoceTipoArtefatoProcesso();
+
+$podeDesmembrarDesentranhar = (isset($this->artefatoProcesso) && $this->hasPermission);
+?>
+
+<h1>Vincular - <?php echo $this->nuArtefato($this->entityArtefato) ? : 'Não identificado'; ?> </h1>
+
+<div class="notificationContainer hide"></div>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br />
+<div class="form-horizontal">
+
+    <fieldset>
+        <legend>Filtros</legend>
+
+        <!--<div id="combo-input"></div>-->
+
+        <div class="control-group">
+            <label class="control-label">
+                <span class="required">* </span>Tipo de Artefato
+            </label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('tpArt')?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">
+                <span class="required">* </span>Número
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('nrArt',null,array('readonly'=> 'readonly','placeholder'=>'Informe o número Artefato'))?>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="span12 pull-left">
+            <div class="btn-group">
+                <button title="Ações Multiplas" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+                    <i class="icon-cog"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="acaoMultApenProc" class="acaoMultDesApenProc">Apensar Processos</a></li>
+                    <li><a id="acaoMultDesApenProc" class="acaoMultDesApenProc">Desapensar Processos</a></li>
+                </ul>
+            </div>
+        </div>
+        <legend>Lista de artefatos</legend>
+        <table id="grid-artefato-vinculo">
+            <thead>
+                <tr>
+                    <th width="3%"></th>
+                    <th width="3%">#</th>
+                    <th width="10%">Digital</th>
+                    <!--<th width="10%">Data/Hora</th>-->
+                    <th width="10%">Documento</th>
+                    <th width="10%">Tipo</th>
+                    <th width="29%">Assunto</th>
+                    <th width="30%">Movimentação</th>
+                    <th width="11%">Vinculado</th>
+                    <th width="10%" class="sorting_disabled">Ações</th>
+                </tr>
+            </thead>
+        </table>
+    </fieldset>
+    <div class="form-actions">
+        <a class="btn btn-primary" id="btn-list-viculo" href="/artefato/vinculo/motrar-arvore/sqArtefato/<?php echo $this->sqArtefato; ?>"><i class="icon-white icon-indent-left"></i> Visualizar Vinculação</a>
+        <?php if ($podeDesmembrarDesentranhar): ?>
+            <?php if ($this->permissionAction['desmembrar']): ?>
+            <a class="btn" href="javascript:vGrid.desmembrar(<?php echo $this->sqArtefato?>);">
+                <i class="icon-remove"></i>
+                Desmembrar
+            </a>
+            <?php endif; ?>
+            <?php if (!\Zend_Registry::get('isUserSgi') && $this->permissionAction['desentranhar']): ?>
+            <a  class="btn" href="javascript:vGrid.desentranhar(<?php echo $this->sqArtefato?>);">
+                <i class="icon-remove"></i>
+                Desentranhar
+            </a>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if (isset($this->backUrl)): ?>
+            <a href="<?php echo $this->backUrl; ?>" class="btn">
+                <i class="icon-remove"></i>
+                Cancelar
+            </a>
+        <?php endif; ?>
+    </div>
+</div>
+
+<div id="modal-artefato-vinculo" class="modal hide fade"></div>
+<form id="form-artefato-vinculo" action="<?php echo $this->urlCurrent(array('action' => 'workspace-artefato-list')) ?>">
+    <input type="hidden" name="nuArtefato"           id="nuArtefato" value="" />
+    <input type="hidden" name="sqArtefatoTipo"       id="sqArtefatoTipo" value="" />
+    <input type="hidden" name="sqArtefatoParent"     id="sqArtefatoParent" value="<?php echo $this->artefato['sqArtefato']; ?>" />
+    <input type="hidden" name="sqTipoArtefatoParent" id="sqTipoArtefatoParent" value="<?php echo $this->artefato['sqTipoArtefato']; ?>" />
+</form>
+
+<div id="modal-form-termo-juntada-por-apensacao-anexacao" class="modal hide fade modal-large"></div>
+<?php if ($podeDesmembrarDesentranhar): ?>
+    <div id="modal-form-desmembrar-desentranhar" class="modal hide fade modal-large"></div>
+<?php endif; ?>

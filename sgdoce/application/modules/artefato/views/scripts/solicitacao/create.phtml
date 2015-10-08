@@ -1,0 +1,61 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl("/js/app/artefato/solicitacao/form.js"); ?>"></script>
+
+<h1>Cadastrar Demandas</h1>
+<!------ INICIO DAS ABAS --------->
+<br />
+<div class="top-bar">
+    <p class="requiredLegend pull-left">
+        Campos obrigatórios <span class="required">*</span>
+    </p>
+</div>
+<form class="form-horizontal form-demanda"
+    id="form-cadastro-demanda"
+    action="<?php echo $this->url(array('action'=>'save')) ?>"
+    method="post">
+    <fieldset>
+       <div class="control-group">
+           <label class="control-label"><span class="required">*</span> Artefato</label>
+           <div class="controls radios-inline">
+                <div>
+                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>" checked="checked" class="required sqTipoArtefato" id="sqTipoArtefatoProcesso" />
+                    <label for="sqTipoArtefatoProcesso">Processo</label>
+                    <br />
+                    <input type="radio" name="sqTipoArtefato" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>" class="required sqTipoArtefato" id="sqTipoArtefatoDocumento" />
+                    <label for="sqTipoArtefatoDocumento">Documento</label>
+                    <br />
+                    <input type="radio" name="sqTipoArtefato" value="0" class="required sqTipoArtefato" id="sqTipoArtefatoOutro" />
+                    <label for="sqTipoArtefatoOutro">Outros</label>
+                </div>
+           </div>
+       </div>
+       <div class="control-group">
+           <label class="control-label"><span class="required">*</span> Assunto</label>
+           <div class="controls">
+               <?php echo $this->ComboCustom('sqTipoAssuntoSolicitacao', NULL, array('class' => 'span6 required'), $this->comboTipoAssuntoSolicitacao); ?>
+           </div>
+       </div>
+       <div class="control-group">
+           <label class="control-label"><span class="required">*</span> Documento / Processo</label>
+           <div class="controls">
+               <?php echo $this->formText('sqArtefato', null, array('class'=>'span6 required')); ?>
+           </div>
+       </div>
+       <div class="control-group">
+           <label class="control-label"><span class="required">*</span> Descrição</label>
+           <div class="controls">
+               <?php echo $this->formTextarea('dsSolicitacao', null, array('rows' => 6, 'class' => 'span6 required', 'maxlength' => 500)); ?>
+           </div>
+       </div>
+    </fieldset>
+    <div class="form-actions" id="formButtonsPrincipal">
+        <button class="btn btn-primary" type="submit">Salvar</button>
+        <a href="javascript:history.back(-1);" class="btn btn-cancelar">Cancelar</a>
+    </div>
+    <?php //echo $this->formHidden('demandaVolume', \Core_Configuration::getSgdoceTipoAssuntoSolicitacaoVolumeDeProcesso()); ?>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        Form.init();
+    });
+</script>

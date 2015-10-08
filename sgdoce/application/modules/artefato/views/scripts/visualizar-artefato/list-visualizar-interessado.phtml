@@ -1,0 +1,21 @@
+<?php
+$view = $this;
+$acaoDocumento = function($row) use ($view) {
+	$docMask = $row['nuCpfCnpjPassaporte'];
+	if (strlen($row['nuCpfCnpjPassaporte']) == 11) {
+		$docMask = $view->maskNumber($row['nuCpfCnpjPassaporte'], '999.999.999-99');
+	} else if (strlen($row['nuCpfCnpjPassaporte']) == 14) {
+		$docMask = $view->maskNumber($row['nuCpfCnpjPassaporte'], '99.999.999/9999-99');
+	}
+
+	return $docMask;
+};
+$configArray = array('columns' => array(
+                                  0 => array('column' => 'noPessoa'),
+                                  1 => array('column' => $acaoDocumento),
+));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

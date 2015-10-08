@@ -1,0 +1,32 @@
+<?php
+    $classBtnConcluir = "btn btn-concluir";
+    $disabledBtnConcluir = "";
+    if( $this->bloqueioArtefato ) {
+        $classBtnConcluir = "btn";
+        $disabledBtnConcluir = "disabled=\"disabled\"";
+    }
+
+    if (!$this->objEntArtefato || !$this->objEntArtefato->getSqArtefato()) {
+        $disabledBtnConcluir = "disabled=\"disabled\"";
+    }
+
+?>
+<div class="form-actions" id="formButtonsPrincipal">
+    <a  id="btnAnterior" class="btn btn_prev" type="button">
+        <i class="icon-chevron-left"></i> Anterior
+    </a>
+    <button id="btnProximo" class="btn btn_next btn-primary"  type="button">
+         Próxima <i class="icon-chevron-right icon-search icon-white"></i>
+    </button>
+    <button class="<?php echo $classBtnConcluir; ?>"<?php echo $disabledBtnConcluir; ?>>Concluir</button>
+        
+    <?php if(!$this->urlBack): ?>
+    <button id="cancelarDoc" class="btn"  type="button">
+        <i class="icon-remove"></i> Cancelar
+    </button>
+    <?php else: ?>
+    <a href="<?php echo $this->urlBack; ?>" class="btn btn-cancelar">
+        <i class="icon-remove"></i> Cancelar
+    </a>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,36 @@
+<?php
+
+    $view = $this;
+
+    $acao = function($row) use ($view) {
+        $rtn = "";
+        if ($row['inOriginal']) {
+            $rtn .= $view->actionButton('Visualizar','/artefato/visualizar-artefato/index/', array('sqArtefato'=>$row['sqArtefato']), 'eye-open', NULL, array('target' => '_blank'), 'href');
+        }
+        $rtn .= $view->actionButton('Excluir', 'Dossie.deletarVinuloDocumento', array($row['sqArtefatoVinculo']),'trash');
+        return $rtn;
+    };
+
+    $inOriginal = function($row) use ($view) {
+        switch ($row['inOriginal']) {
+            case TRUE:
+                return 'Original';
+                break;
+            case FALSE:
+                return 'Cópia';
+                break;
+        }
+        return $rtn;
+    };
+
+    $configArray = array('columns' => array(
+                                     0 =>array( 'column' => $inOriginal),
+                                     1 =>array( 'column' => 'nuDigital'),
+                                     2 =>array( 'column' => $acao)
+
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

@@ -1,0 +1,36 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        if($row['sqCabecalho'] == '1'){
+            return '';
+        }else{
+            return $view->actionButton('Visualizar',
+                    '/modelo-minuta/cabecalho/view-cabecalho/',
+                    array('sqCabecalho'=>$row['sqCabecalho']),
+                    'eye-open',
+                    NULL,
+                    array('data-toggle'=>'modal', 'data-target' => '#modalCabecalho'),
+                    'href'
+            );
+        }
+    };
+
+    $acoesRadio = function($row) use ($view) {
+        $checked = '';
+        if($view->cabecalho == $row['sqCabecalho']){
+            $checked = " checked='checked'";
+        }
+       return '<input type="radio" id="sqCabecalho" name="sqCabecalho" value="'.$row['sqCabecalho'].'"'.$checked.' />';
+    };
+
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => $acoesRadio),
+                                  1 => array('column' => 'noCabecalho'),
+                                  2 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);
+

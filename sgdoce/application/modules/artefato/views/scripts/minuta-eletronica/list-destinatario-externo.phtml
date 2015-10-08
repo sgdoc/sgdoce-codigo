@@ -1,0 +1,44 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        return $view->actionButton('Excluir', 'DestinatarioExterno.deletar', array('sqArtefato' => $row['sqArtefato']
+                                                                                    ,'sqPessoaSgdoce' => $row['sqPessoaSgdoce']
+                                                                                    ,'sqPessoaFuncao' => $row['sqPessoaFuncao']),'trash');
+    };
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => 'noPessoa'),
+                                  1 => array('column' => 'noTipoEndereco'),
+                                  2 => array(
+                                        'column' => function($data) use ($view) {
+                                            return $view->maskNumber($data['coCep'], '99.999-999');
+                                        },
+                                  ),
+                                  3 => array(
+                                          'column' => function($data) use ($view) {
+                                              return $data['txEndereco'] . ' ' .$data['nuEndereco'];},
+                                  ),
+                                  4 => array('column' => $acao)
+    ));
+
+$this->grid->setConfig($configArray);
+
+
+$parms = $this->grid->getParams();
+$totalData = $this->result['data']->count();
+
+$arrResult = array();
+if($totalData){
+    for ($index = 0; $index < $parms['iDisplayLength']; $index++) {
+        $arrResult[] = $this->result['data'][$index];
+            if($index == $totalData - 1) break;
+    };
+}
+
+
+$this->result['data'] = $arrResult;
+
+$data = $this->grid->parseData($this->result);
+$data['iTotalDisplayRecords'] = $parms['iDisplayLength'];
+$data['iTotalRecords'] = $totalData;
+
+echo json_encode($data);

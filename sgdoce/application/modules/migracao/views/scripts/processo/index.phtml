@@ -1,0 +1,29 @@
+<h1>Validar Processo</h1>
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+
+<form class="form-horizontal form-processo-eletronico"
+    name="form-create"
+    action="<?php echo $this->url(array('action'=>'form-data')) ?>"
+    method="post">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+    <br />
+    <?php
+    echo $this->render('processo/basico.phtml', array(
+                'municipio' => $this->arrOptMunicipio ,
+                'coAmbitoProcesso' => $this->coAmbitoProcesso
+         ));
+    ?>
+    <div class="form-actions" id="formButtonsPrincipal">
+	    <button type="button" class="btn btn-primary" id="btnValidar">Validar</button>
+        <a href="#" class="btn" id="cancelar"> <i class="icon-remove"></i> Cancelar </a>
+    </div>
+</form>
+<?php
+    echo $this->headScript()
+            ->appendFile($this->baseUrl("/js/app/artefato/processo-eletronico/processo-eletronico.js"))
+            ->appendFile($this->baseUrl("/js/app/artefato/processo-eletronico/nu-processo.js"));
+?>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Sandbox" 
+         default="all"
+         basedir="./../"
+         phingVersion="2.4.7"
+>
+   <php function="dirname" returnProperty="currentdir">
+       <param value="${phing.file}" />
+   </php>
+   <property name="rootdir" value="${currentdir}/../../" />
+
+    <property name="htaccess.cancreate" value="false" />
+    <property name="env" value="production" />
+
+    <available file="${rootdir}/build-config.properties" property="build_properties_exists" value="true" />
+    <fail message="Está faltando o arquivo de propriedade." unless="build_properties_exists" />
+
+    <property file="${rootdir}/build-config.properties" override="true" />
+
+    <property name="mail.existsfile" value="false" override="true" />
+    <available file="${rootdir}/application/configs/mail.ini.dist" property="mail.existsfile" value="true" />
+
+    <property name="debug.existsfile" value="false" override="true" />
+    <available file="${rootdir}/application/configs/debug.ini.dist" property="debug.existsfile" value="true" />
+
+    <target name="all">
+        <property name="targets" value="application, database, doctrine, chmod, mail, extras" />
+        <foreach list="${targets}" param="target" target="each" />
+    </target>
+
+    <target name="each">
+       <phingcall target="${target}" />
+    </target>
+
+    <target name="application" description="Geração application.ini">
+        <copy file="${rootdir}/application/configs/application.ini.dist" tofile="${rootdir}/application/configs/application.ini" overwrite="true" >
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="APPNAME" value="${appname}"/>
+                    <token key="APPNAMESPACE" value="${appnamespace}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <target name="extras" description="Geração configurações extras">
+        <if>
+            <istrue value="${htaccess.cancreate}" />
+            <then>
+                <echo msg="Gerando [public/.htaccess]..."/>
+                <copy file="${rootdir}/public/.htaccess.dist" tofile="${rootdir}/public/.htaccess" overwrite="true">
+                    <filterchain>
+                        <replacetokens begintoken="##" endtoken="##">
+                            <token key="ENV" value="${env}"/>
+                        </replacetokens>
+                    </filterchain>
+                </copy>
+            </then>
+        </if>
+
+        <if>
+            <istrue value="${debug.existsfile}" />
+            <then>
+                <echo msg="Gerando [application/configs/debug.ini]..."/>
+                <copy file="${rootdir}/application/configs/debug.ini.dist" tofile="${rootdir}/application/configs/debug.ini" overwrite="true" />
+            </then>
+        </if>
+        
+        <echo msg="Gerando [application/configs/services.ini]..."/>
+        <copy file="${rootdir}/application/configs/services.ini.dist" tofile="${rootdir}/application/configs/services.ini" overwrite="true" />
+    </target>
+
+    <target name="mail" description="Geração configuração mail">
+        <if>
+            <istrue value="${mail.existsfile}" />
+            <then>
+                  <echo msg="Gerando [application/configs/mail.ini]..."/>
+                  <copy file="${rootdir}/application/configs/mail.ini.dist" tofile="${rootdir}/application/configs/mail.ini" overwrite="true">
+                      <filterchain>
+                          <replacetokens begintoken="##" endtoken="##">
+                              <token key="HOSTNAME" value="${mail.host}"/>
+                              <token key="USERNAME" value="${mail.username}"/>
+                              <token key="PASSWORD" value="${mail.password}"/>
+                              <token key="PORT"     value="${mail.port}"/>
+                          </replacetokens>
+                      </filterchain>
+                  </copy>
+            </then>
+        </if>
+    </target>
+
+    <target name="chmod" description="Permissão de pastas">
+        <chmod file="${rootdir}/data/cache/" mode="0777" />
+        <chmod file="${rootdir}/data/proxy_cache/" mode="0777" />
+        <chmod mode="0777">
+            <fileset dir="${rootdir}/data/upload/" >
+              <include name="**" />
+            </fileset>
+        </chmod> 
+    </target>
+
+    <target name="doctrine" description="Geração doctrine.ini e orm.ini">
+        <echo msg="Gerando config Doctrine [application/configs/doctine.ini]..."/>
+        <copy file="${rootdir}/application/configs/doctrine.ini.dist" tofile="${rootdir}/application/configs/doctrine.ini" overwrite="true" />
+
+        <echo msg="Gerando config ORM [application/configs/orm.ini]..."/>
+        <copy file="${rootdir}/application/configs/orm.ini.dist" tofile="${rootdir}/application/configs/orm.ini" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="APPNAMESPACE" value="${appnamespace}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+    </target>
+
+    <target name="database" description="Geração de configuração database">
+        <echo msg="Gerando config DBAL [application/configs/database.ini]..."/>
+        <copy file="${rootdir}/application/configs/database.ini.dist" tofile="${rootdir}/application/configs/database.ini" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="HOSTNAME" value="${db.host}"/>
+                    <token key="PORT"     value="${db.port}"/>
+                    <token key="USERNAME" value="${db.user}"/>
+                    <token key="PASSWORD" value="${db.password}"/>
+                    <token key="DATABASE" value="${db.name}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+</project>

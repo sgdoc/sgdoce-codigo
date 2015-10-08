@@ -1,0 +1,36 @@
+<?php $label = ($this->data->getSqTipoDocumento() ? 'Alterar' : 'Incluir'); ?>
+<h1><?php echo $label;?> Tipo de Documento</h1>
+<div class="top-bar">
+    <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+</div>
+<br/>
+
+<form class="form-horizontal" method="post" id="form-tipo-documento" action="<?php echo $label == 'Incluir' ?
+    $this->urlCurrent(array('action' => 'save')) :
+    $this->urlCurrent(array('action' => 'update'))?>">
+    <input type="hidden" name="sqTipoDocumento" value="<?php echo $this->data->getSqTipoDocumento();?>" />
+    <input type="hidden" name="stAtivo" value="TRUE" />
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">* Tipo de Documento</label>
+            <div class="controls">
+                <input type="text" class="span4 required" id="noTipoDocumento" name="noTipoDocumento"
+                       value="<?php echo ($this->data->getNoTipoDocumento());?>" maxlength="50"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">* Abre processo?</label>
+            <div class="controls">
+                <?php echo $this->formRadio('inAbreProcesso', $this->data->getInAbreProcesso(), NULL, array(TRUE => 'Sim', FALSE => 'Não')); ?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <button id="cancelar" class="btn voltar" type="button">
+                <span class="icon-remove"></span> Cancelar
+            </button>
+        </div>
+    </fieldset>
+</form>

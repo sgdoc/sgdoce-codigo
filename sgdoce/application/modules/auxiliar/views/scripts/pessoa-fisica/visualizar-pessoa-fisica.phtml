@@ -1,0 +1,242 @@
+<script>
+$(function(){
+    if($('#form-cadastrar-artefato ul.tabsForm li#botao_aba7').hasClass('active')){
+        $(".btnfecharModalIntDest").attr('href','#modal-interessado');
+    }
+    if($('#form-cadastrar-artefato ul.tabsForm li#botao_aba5').hasClass('active')){
+        $(".btnfecharModalIntDest").attr('href','#modal-destinatario');
+    }
+});
+</script>
+
+<div class="modal-header">
+    <a href="#" class="close btnfecharModalIntDest" data-toggle="modal"
+        title="Fechar" data-dismiss="modal">×</a>
+    <h3>Visualizar Pessoa Física</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal visualizar">
+            <?php if(isset($this->entity['pessoaFisica'])) : ?>
+
+            <div class="control-group">
+                <label class="control-label" for="cpf">CPF</label>
+                <div class="controls">
+                    <span class="checkbox inline"> <?php echo $this->maskNumber($this->entity['pessoaFisica']->getNuCpf(),'cpf');?>
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="cpf">Nome</label>
+                <div class="controls">
+                    <span class="checkbox inline"> <?php echo $this->entity['pessoaFisica']->getNoPessoaFisica();?>
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="cpf">Data de Nascimento</label>
+                <div class="controls">
+
+
+                    <span class="checkbox inline"> <?php echo $this->entity['pessoaFisica']->getDtNascimento() ?
+                                                              $this->entity['pessoaFisica']->getDtNascimento()->get('dd/MM/yyyy') : '';?>
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="cpf">Nome da Mãe</label>
+                <div class="controls">
+                    <span class="checkbox inline"> <?php echo $this->entity['pessoaFisica']->getNoMae();?>
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="cpf">Nacionalidade Brasileira?</label>
+                <div class="controls">
+                    <?php
+                    if($this->entity['pessoaFisica']->getSqNacionalidade()->getSqPais() == 1){
+                        $nacionalidade = 'Sim';
+                    }else{
+                        $nacionalidade = 'Não';
+                    }?>
+                    <span class="checkbox inline"> <?php echo $nacionalidade;?>
+                    </span>
+                </div>
+            </div>
+            <br>
+            <fieldset>
+                <legend>Documentos</legend>
+                <table
+                    class="table table-bordered table-striped table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo Documento</th>
+                            <th>Nº Documento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($this->entity['documento'] as $key => $value) {
+                        echo '<tr>';
+                        echo '<td>' .  $value->getSqAtributoTipoDocumento()->getSqTipoDocumento()->getNoTipoDocumento() .'</td>';
+                        echo '<td>' .  $value->getTxValor() . '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Telefones</legend>
+                <table
+                    class="table table-bordered table-striped table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>DDD</th>
+                            <th>Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                   foreach ($this->entity['telefone'] as $key => $value) {
+                    switch (strlen($value->getNuTelefone())) {
+                        case 8:
+                            $telefone = $this->maskNumber($value->getNuTelefone(), '9999-9999');
+                        break;
+                        case 9:
+                             $telefone = $this->maskNumber($value->getNuTelefone(), '99999-9999');
+                            break;
+                        default:
+                            $telefone = $value->getNuTelefone();
+                        break;
+                    }
+                    echo '<tr>';
+                    echo '<td>' .  $value->getSqTipoTelefone()->getNoTipoTelefone() .'</td>';
+                    echo '<td>' .  $value->getNuDdd() . '</td>';
+                    echo '<td>' .  $telefone  . '</td>';
+                    echo '</tr>';
+                }
+                ?>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Emails</legend>
+                <table
+                    class="table table-bordered table-striped table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($this->entity['email'] as $key => $value) {
+                        echo '<tr>';
+                        echo '<td>' .  $value->getSqTipoEmail()->getNoTipoEmail() .'</td>';
+                        echo '<td>' .  $value->getTxEmail() . '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Endereço</legend>
+                <?php
+                $verifica = FALSE;
+                foreach ($this->entity['endereco'] as $key => $value) :
+                    if($value->getSqTipoEndereco()->getSqTipoEndereco() == 1):
+                        $verifica = TRUE;
+                ?>
+                <dl class="dl-horizontal">
+                    <div class="clearfix">
+                        <dt>Tipo de Endereço</dt>
+                        <dd><?php echo $value->getSqTipoEndereco()->getNoTipoEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>CEP</dt>
+                        <dd><?php echo $this->maskNumber($value->getSqCep(), '99.999-999');?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Logradouro</dt>
+                        <dd><?php echo  $value->getTxEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Complemento</dt>
+                        <dd><?php echo $value->getTxComplemento();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Número</dt>
+                        <dd><?php echo $value->getNuEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Bairro</dt>
+                        <dd><?php echo $value->getNoBairro();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>UF</dt>
+                        <dd><?php echo $value->getSqMunicipio()->getNoMunicipio();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Município</dt>
+                        <dd><?php echo $value->getSqMunicipio()->getSqEstado()->getNoEstado();?></dd>
+                    </div>
+                </dl>
+                <?php
+                    endif;
+                    if (!$verifica):
+                ?>
+                <dl class="dl-horizontal">
+                    <div class="clearfix">
+                        <dt>Tipo de Endereço</dt>
+                        <dd><?php echo $value->getSqTipoEndereco()->getNoTipoEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>CEP</dt>
+                        <dd><?php echo $this->maskNumber($value->getSqCep(), '99.999-999');?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Logradouro</dt>
+                        <dd><?php echo  $value->getTxEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Complemento</dt>
+                        <dd><?php echo $value->getTxComplemento();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Número</dt>
+                        <dd><?php echo $value->getNuEndereco();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Bairro</dt>
+                        <dd><?php echo $value->getNoBairro();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>UF</dt>
+                        <dd><?php echo $value->getSqMunicipio()->getNoMunicipio();?></dd>
+                    </div>
+                    <div class="clearfix">
+                        <dt>Município</dt>
+                        <dd><?php echo $value->getSqMunicipio()->getSqEstado()->getNoEstado();?></dd>
+                    </div>
+                </dl>
+                <?php
+                    endif;
+                    endforeach;
+                ?>
+            </fieldset>
+            <?php else :
+            echo 'Dados não cadastrados no Corporativo';
+            endif;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="row-fluid"></div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnfecharModalIntDest"
+        data-toggle="modal" data-dismiss="modal">Fechar</a>
+</div>

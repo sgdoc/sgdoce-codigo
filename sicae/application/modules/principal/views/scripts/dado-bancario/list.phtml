@@ -1,0 +1,43 @@
+<?php
+$view = $this;
+
+$acao = function($row) use ($view) {
+            $codigo = array($row['sqDadoBancario'], $row['sqPessoa']);
+
+            $button = $view->actionButton('Alterar', 'DadoBancario.alterar', $codigo, 'pencil')
+                    . $view->actionButton('Excluir', 'DadoBancario.deletar', $codigo, 'trash');
+
+            return $button;
+        };
+
+$nomeBanco = function($row) {
+                return sprintf("%03d", $row['coBanco']) . ' - ' . $row['noBanco'];
+           };
+
+$coAgencia = function($row) {
+            return '<div class="center">' . $row['coAgencia'] . '</div>';
+        };
+$coDigitoAgencia = function($row) {
+            return '<div class="center">' . $row['coDigitoAgencia'] . '</div>';
+        };
+$nuConta = function($row) {
+            return '<div class="center">' . $row['nuConta'] . '</div>';
+        };
+
+$nuContaDv = function($row) {
+            return '<div class="center">' . $row['nuContaDv'] . '</div>';
+        };
+
+$configArray = array();
+$configArray['columns'][0]['column'] = 'noTipoDadoBancario';
+$configArray['columns'][1]['column'] = $nomeBanco;
+$configArray['columns'][2]['column'] = $coAgencia;
+$configArray['columns'][3]['column'] = $coDigitoAgencia;
+$configArray['columns'][4]['column'] = $nuConta;
+$configArray['columns'][5]['column'] = $nuContaDv;
+$configArray['columns'][6]['column'] = $acao;
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

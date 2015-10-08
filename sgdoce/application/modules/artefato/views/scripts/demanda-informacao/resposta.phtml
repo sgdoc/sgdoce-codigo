@@ -1,0 +1,121 @@
+<?php
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/demanda-informacao/form.js');
+	echo $this->headScript();
+?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Resposta da Demanda de Informação - <small><?php echo $this->nuArtefato($this->entPrazo->getSqArtefato()); ?></small></h1>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal form-di-resposta" action="<?php echo $this->url(array('action' => 'save')); ?>" method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="control-group">
+                <label class="control-label required">
+                    Origem
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('isResposta', TRUE); ?>
+                    <?php echo $this->formHidden('sqArtefato', $this->entPrazo->getSqArtefato()->getSqArtefato()); ?>
+                    <?php echo $this->formHidden('sqPrazo', $this->entPrazo->getSqPrazo()); ?>
+                    <?php
+                        if( $this->entPrazo->getSqPessoaDestino() instanceof Sgdoce\Model\Entity\VwPessoa ) {
+                            echo $this->formHidden('sqPessoaDestino', $this->entPrazo->getSqPessoaDestino()->getSqPessoa());
+                        }
+                    ?>
+                    <?php echo $this->formHidden('sqUnidadeOrgPessoaDestino', $this->entPrazo->getSqUnidadeOrgPessoaDestino()->getSqUnidadeOrg()); ?>
+                    <?php $noUnidadeOrgOrigem = $this->entPrazo->getSqUnidadeOrgPessoaPrazo()->getSgUnidadeOrg() . " - " . $this->entPrazo->getSqUnidadeOrgPessoaPrazo()->getNoUnidadeOrg(); ?>
+                    <?php echo $this->formText('sqUnidadeOrgPessoaPrazo', $noUnidadeOrgOrigem, array('class' => 'span12 required', 'id' => 'sqUnidadeOrgPessoaPrazo', 'disabled' => 'disabled')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    Destino
+                </label>
+                <div class="controls">
+                    <?php $noUnidadeOrgDestino = $this->entPrazo->getSqUnidadeOrgPessoaDestino()->getSgUnidadeOrg() . " - " . $this->entPrazo->getSqUnidadeOrgPessoaDestino()->getNoUnidadeOrg(); ?>
+                    <?php echo $this->formText('sqUnidadeOrgPessoaDestino', $noUnidadeOrgDestino, array('class' => 'span12 required', 'id' => 'sqUnidadeOrgPessoaDestino', 'disabled' => 'disabled')); ?>
+                </div>
+            </div>
+            <?php
+                $noPessoaDestino = " - nenhum - ";
+
+                if( $this->entPrazo->getSqPessoaDestino() instanceof Sgdoce\Model\Entity\VwPessoa){
+                    $noPessoaDestino = $this->entPrazo->getSqPessoaDestino()->getNoPessoa();
+                }
+            ?>
+            <div class="control-group">
+                <label class="control-label required">
+                    Nome do Destinatário
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('sqPessoaDestino', $noPessoaDestino, array('class' => 'span12 required', 'id' => 'sqPessoaPrazo', 'disabled' => 'disabled')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="appendedInputButton">
+                    Data do Prazo</label>
+                <div class="controls">
+                    <div data-date-format="dd/mm/yyyy" class="input-append date">
+                        <input value="<?php echo $this->entPrazo->getDtPrazo()->get('dd/MM/yyyy'); ?>" class="input-small dateBR required" maxlength="60"
+                            name="dtPrazo" disabled="disabled" mask="date" type="text"/>
+                            <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    Solicitação
+                </label>
+                <div class="controls">
+                    <?php echo $this->formTextarea('txSolicitacao', $this->entPrazo->getTxSolicitacao(), array('class' => 'span12', 'rows' => 4, 'disabled' => 'disabled')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Resposta da solicitação
+                </label>
+                <div class="controls">
+                    <?php echo $this->formTextarea('txResposta', null, array('class' => 'span12 required', 'rows' => 4)); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Gerou documento de Resposta?
+                </label>
+                <div class="controls">
+                    <div>
+                        <input type="radio" name="stDocumentoResposta" value="1" class="required stDocumentoResposta" id="stDocumentoRespostaSim"/>
+                        <label for="stDocumentoRespostaSim" style="display: inline; font-size: 1em;">Sim</label>
+                        <input type="radio" name="stDocumentoResposta" checked="checked" value="0" class="required stDocumentoResposta" id="stDocumentoRespostaNao"/>
+                        <label for="stDocumentoRespostaNao" style="display: inline; font-size: 1em;">Não</label>
+                    </div>
+                </div>
+            </div>
+            <div id="sqArtefatoRespostaDiv" class="control-group hide">
+                <label class="control-label required">
+                    Número Digital / Processo
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('sqArtefatoResposta', null, array('class' => 'span12')); ?>
+                    <div id="sqTipoArtefatoContainer">
+                        <input type="radio" name="sqTipoArtefatoRadio" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoProcesso(); ?>" checked="checked" class="required sqTipoArtefato" id="sqTipoArtefatoProcesso" />
+                        <label for="sqTipoArtefatoProcesso" style="display: inline; font-size: 1em;">Processo</label>
+                        <input type="radio" name="sqTipoArtefatoRadio" value="<?php echo \Core_Configuration::getSgdoceTipoArtefatoDocumento(); ?>" class="required sqTipoArtefato" id="sqTipoArtefatoDocumento" />
+                        <label for="sqTipoArtefatoDocumento" style="display: inline; font-size: 1em;">Digital</label>
+                        <?php echo $this->formHidden('sqTipoArtefato', \Core_Configuration::getSgdoceTipoArtefatoProcesso()); ?>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluir" title="Concluir">Concluir</button>
+    <a href="#" class="btn btnCancelar" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        DemandaInformacao.Form.Events();
+        DemandaInformacao.Form.Resposta();
+    });
+</script>

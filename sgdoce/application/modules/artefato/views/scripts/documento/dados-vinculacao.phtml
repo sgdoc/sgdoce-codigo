@@ -1,0 +1,45 @@
+<script type="text/javascript" src="/js/app/artefato/vincular-documento/vincularDocumento.js"></script>
+<script type="text/javascript" src="/js/app/artefato/documento/vincularDocumento.js"></script>
+<div class="tab-pane" id="dadosVinculacao">
+    <div class="control-group">
+        <fieldset>
+            <legend>Lista de Referências</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="btn-group">
+                        <a href="#" id="btnAdicionarVincularDocumento" data-toggle="modal" class="btn btn-mini"><i title="Adicionar" class="icon-plus"></i> </a>
+                    </div>
+                </div>
+                <?php if (!$this->data->getSqArtefato()): ?>
+                    <div class="span6"></div>
+                    <div class="span6"></div>
+                <?php endif; ?>
+            </div>
+            <?php
+                $class = '';
+                $body  = '';
+                if (!$this->data->getSqArtefato()){
+                    $class = 'class="table table-bordered table-striped tableVinculo"';
+                    $body = '<tbody>
+                                 <tr class="mensagemVinculo">
+                                     <td colspan="5">Nenhum registro encontrado.</td>
+                                 </tr>
+                             </tbody>';
+                }
+            ?>
+            <table id="table-vincular-documento"  <?php echo $class; ?> >
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Origem</th>
+                        <th>Número</th>
+                        <th>Digital</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <?php echo $body; ?>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<div id="modal-vincular-documento" class="modal hide fade modal-large modal-without-scroll"></div>

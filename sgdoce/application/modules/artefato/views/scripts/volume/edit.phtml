@@ -1,0 +1,271 @@
+<script type="text/javascript" src="/js/app/artefato/volume/edit.js"></script>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Alterar Volume</h1>
+            <div class="alert alert-error campos-obrigatorios hidden"></div>
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">
+                    Campos obrigatórios <span class="required">*</span>
+                </p>
+            </div>
+            
+            <form class="form-horizontal" id="formVolume">
+                <?php 
+                echo $this->formHidden('sqArtefato'     , $this->sqArtefato    ); 
+                echo $this->formHidden('sqVolume'       , $this->sqVolume      ); 
+                echo $this->formHidden('isVolumeAberto' , $this->isVolumeAberto);
+                echo $this->formHidden('dataMin'        , $this->dataMin);
+                echo $this->formHidden('dataMax'        , $this->dataMax);
+                # dados de abertura
+                echo $this->formHidden('sqPessoaAbertura'                    , $this->sqPessoaAbertura          );
+                echo $this->formHidden('sqUnidadeOrgAbertura'                , $this->sqUnidadeOrgAbertura      );
+                echo $this->formHidden('sqPessoaAssinaturaAberturaBD_hidden' , $this->sqPessoaAssinaturaAbertura);
+                echo $this->formHidden('sqCargoAssinaturaAbertura_hidden'    , $this->sqCargoAssinaturaAbertura );
+                echo $this->formHidden('sqFuncaoAssinaturaAbertura_hidden'   , $this->sqFuncaoAssinaturaAbertura);
+                # dados de encerramento
+                echo $this->formHidden('sqPessoaEncerramento'                   , $this->sqPessoaEncerramento          );
+                echo $this->formHidden('sqUnidadeOrgEncerramento'               , $this->sqUnidadeOrgEncerramento      );
+                echo $this->formHidden('sqPessoaAssinaturaEncerramentoBD_hidden', $this->sqPessoaAssinaturaEncerramento);
+                echo $this->formHidden('sqCargoAssinaturaEncerramento_hidden'   , $this->sqCargoAssinaturaEncerramento );
+                echo $this->formHidden('sqFuncaoAssinaturaEncerramento_hidden'  , $this->sqFuncaoAssinaturaEncerramento);
+                ?>
+                <fieldset>
+                    <legend>Abertura</legend>
+                    <div class="control-group">
+                        <label for="nuArtefato" class="control-label">
+                            Número do Processo
+                        </label>
+            
+                        <div class="controls">
+                            <?php echo $this->formText(
+                                    'nuArtefato', 
+                                    $this->nuArtefato, 
+                                    array('id'       => 'nuArtefato',
+                                          'class'    => 'span8',
+                                          'readonly' => 'readonly'));?>
+                        </div>
+                    </div>
+                
+                    <div class="control-group">
+                        <label for="nuVolume" class="control-label">
+                            <span class="required">*</span> Volume
+                        </label>
+                        <div class="controls">
+                            <?php
+                                echo $this->formText( 
+                                        'nuVolume', 
+                                        $this->nuVolume,  
+                                        array(
+                                                'id'       => 'nuVolumeInput',
+                                                'class'    => 'span8', 
+                                                'mask'     => 'numeric', 
+                                                'readonly' => 'readonly'));
+                            ?>
+                        </div>
+                    </div>
+    
+                    <div class="control-group">
+                        <label for="nuFolhaInicial" class="control-label">
+                            <span class="required">* </span>Folha Inicial
+                        </label>
+    
+                        <div class="controls">
+                            <?php
+                                echo $this->formText(
+                                        'nuFolhaInicial', 
+                                        $this->nuFolhaInicial, 
+                                        array(
+                                                'class'    => 'span8',
+                                                'mask'     => 'numeric', 
+                                                (\Zend_Registry::get('isUserSgi')) ? '' : 'readonly' => 'readonly'));
+                            ?>
+                        </div>
+                    </div>
+            
+                    <div class="control-group">
+                        <label for="dtAbertura" class="control-label">
+                            <span class="required">* </span> Data
+                        </label>
+                        <div class="controls">
+                            <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" 
+                                 data-date-startdate="<?php echo $this->dataMin; ?>"
+                                 data-date-format="dd/mm/yyyy" 
+                                 class="input-append date">
+                                <input value="<?php echo $this->dtAbertura; ?>" 
+                                       class="input-small dateBR required startDate datepicker" 
+                                       id="dtAbertura" 
+                                       maxlength="60"
+                                       name="dtAbertura" 
+                                       mask="date" 
+                                       type="text"/>
+                                <a href="#" class="btn add-on right btn-calendar-open"><i class="icon-calendar"></i></a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="control-group">
+                        <label class="control-label required">
+                            <span class="required">* </span> Assinatura
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formText(
+                                    'sqPessoaAssinaturaAbertura', 
+                                    $this->noPessoaAssinaturaAbertura, 
+                                    array('class' => 'required span8' )); 
+                            ?>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="controls radios-inline">
+                            <input type="radio" name="stCargoFuncaoAbertura" value="1" checked="checked" class="required" id="stCargoFuncaoAbertura1"/>
+                            <label for="stCargoFuncaoAbertura1" >Cargo</label>
+                            <input type="radio" name="stCargoFuncaoAbertura" value="2" class="required" id="stCargoFuncaoAbertura2"/>
+                            <label for="stCargoFuncaoAbertura2" >Função</label>
+                        </div>
+                    </div>
+                    <div id="divCargoAbertura" class="control-group">
+                        <label class="control-label">
+                            <span class="required">* </span>Cargo
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->ComboCustom(
+                                    'sqCargoAssinaturaAbertura', 
+                                    $this->sqCargoAssinaturaAbertura, 
+                                    array('class' => 'span8 required'), 
+                                    $this->arrCargos
+                                ); ?>
+                        </div>
+                    </div>
+                    <div id="divFuncaoAbertura" class="control-group hidden">
+                        <label class="control-label">
+                            <span class="required">* </span>Função
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->ComboCustom(
+                                    'sqFuncaoAssinaturaAbertura',
+                                    $this->sqFuncaoAssinaturaAbertura,
+                                    array('class'=>'span8'),
+                                    $this->arrFuncao); 
+                            ?>
+                        </div>
+                    </div>
+    
+                    <div class="control-group">
+                        <label for="isVolumeAberto" class="control-label">
+                            <span class="required">* </span>
+                            Volume Aberto?
+                        </label>
+    
+                        <div class="controls radios-inline">
+                            <div>
+                                <input type="radio" name="isVolumeAberto" value="1" class="required isVolumeAberto" id="isVolumeAbertoSim"/>
+                                <label for="isVolumeAbertoSim" style="display: inline; font-size: 1em;">Sim</label>
+                                <input type="radio" name="isVolumeAberto" checked="checked" value="0" class="required isVolumeAberto" id="isVolumeAbertoNao"/>
+                                <label for="isVolumeAbertoNao" style="display: inline; font-size: 1em;">Não</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset id="grupoEncerramento">
+                    <legend>Encerramento</legend>
+                    <div>
+                        <div class="control-group" id="divNuFolhaFinal">
+                            <label for="nu_folha_final" class="control-label">
+                                <span class="required">* </span>Última Folha
+                            </label>
+        
+                            <div class="controls">
+                                <?php
+                                    echo $this->formText(
+                                            'nuFolhaFinal', 
+                                            $this->nuFolhaFinal, 
+                                            array(
+                                                    'class' =>'required span8',
+                                                    'min'   => (integer) $this->nuFolhaInicial + 1,
+                                                    'max'   => (integer) $this->nuFolhaInicial + 199,
+                                                    'mask'  => 'numeric' ));
+                                ?>
+                                <span style="display: block; font-size: 11px; font-weight: bold; width: 19%;">Considerar o termo de encerramento.</span>
+                            </div>
+                        </div>
+            
+                        <div class="control-group" id="divDtEncerramento">
+                            <label for="dtEncerramento" class="control-label">
+                                <span class="required">* </span>Data
+                            </label>
+                            <div class="controls">
+                                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" 
+                                     data-date-enddate="<?php echo $this->dataMax; ?>"
+                                     data-date-format="dd/mm/yyyy" 
+                                     class="input-append date">
+                                    <input value="<?php echo $this->dtEncerramento; ?>" 
+                                           class="input-small dateBR required endDate datepicker" 
+                                           id="dtEncerramento" 
+                                           maxlength="60"
+                                           name="dtEncerramento" 
+                                           mask="date" 
+                                           type="text"/>
+                                    <a href="#" class="btn add-on right btn-calendar-close"><i class="icon-calendar"></i></a>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="control-group">
+                            <label class="control-label required">
+                                <span class="required">* </span>Assinatura
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->formText(
+                                        'sqPessoaAssinaturaEncerramento', 
+                                        $this->noPessoaAssinaturaEncerramento, 
+                                        array('class' => 'required span8' )); 
+                                ?>
+                            </div>
+                        </div>
+                
+                        <div class="control-group">
+                            <div class="controls radios-inline">
+                                <input type="radio" name="stCargoFuncaoEncerramento" value="1" checked="checked" class="required" id="stCargoFuncaoEncerramento1"/>
+                                <label for="stCargoFuncaoEncerramento1" >Cargo</label>
+                                <input type="radio" name="stCargoFuncaoEncerramento" value="2" class="required" id="stCargoFuncaoEncerramento2"/>
+                                <label for="stCargoFuncaoEncerramento2" >Função</label>
+                            </div>
+                        </div>
+                        <div id="divCargoEncerramento" class="control-group">
+                            <label class="control-label">
+                                <span class="required">*</span> Cargo</label>
+                            <div class="controls">
+                                <?php echo $this->ComboCustom(
+                                        'sqCargoAssinaturaEncerramento', 
+                                        $this->sqCargoAssinaturaEncerramento, 
+                                        array('class' => 'span8 required'), 
+                                        $this->arrCargos
+                                    ); ?>
+                            </div>
+                        </div>
+                        <div id="divFuncaoEncerramento" class="control-group hidden">
+                            <label class="control-label">
+                                <span class="required">*</span> Função
+                            </label>
+                            <div class="controls">
+                                <?php echo $this->ComboCustom(
+                                        'sqFuncaoAssinaturaEncerramento',
+                                        $this->sqFuncaoAssinaturaEncerramento,
+                                        array('class'=>'span8'),
+                                        $this->arrFuncao); 
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            
+                <div class="form-actions" id="form-volume-artefato">
+                    <button class="btn btn-primary" id="btnSubmit"><i class=""></i> Salvar </button>
+                    <button class="btn"             id="btnCancel"><i class="icon-remove"></i> Cancelar </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

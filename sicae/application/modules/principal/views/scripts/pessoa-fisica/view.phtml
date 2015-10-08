@@ -1,0 +1,111 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3>Visualizar Pessoa Física</h3>
+</div>
+<div class="modal-body view">
+    <div class="row-fluid">
+        <dl class="dl-horizontal">
+            <div class="clearfix">
+                <dt>CPF</dt>
+                <dd><?php echo $this->maskNumber($this->data->getNuCpf(), 'cpf'); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Nome</dt>
+                <dd><?php echo $this->data->getSqPessoa()->getNoPessoa(); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Data de Nascimento</dt>
+                <dd><?php echo $this->date($this->data->getDtNascimento(), 'dd/MM/YYYY'); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Telefone</dt>
+                <dd>
+                    <?php $telefone = $this->data->getSqTelefone()->first() 
+                                      ? $this->data->getSqTelefone()->first()
+                                      : new \Sica\Model\Entity\Telefone();?>
+                    <?php $fone     = $telefone->getNuDdd() . ' - ' . 
+                                      substr($telefone->getNuTelefone(), 0, 4) . '-' . 
+                                      substr($telefone->getNuTelefone(), 4); ?>
+                    <?php echo (!$telefone->getNuDdd() && !$telefone->getNuTelefone()) ? : $fone ?>
+                </dd>
+            </div>
+            <div class="clearfix">
+                <dt>E-mail</dt>
+                <dd>
+                    <?php $email = $this->data->getSqEmail()->first()  
+                                   ? $this->data->getSqEmail()->first() 
+                                   : new \Sica\Model\Entity\Email();?>
+                    <?php echo $email->getTxEmail(); ?>
+                </dd>
+            </div>
+            <?php if ($this->data->getSqPessoa()->getSqCadastroSemCpf()->getSqCadastroSemCpf()) : ?>             
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                <h5 class="titulo-visualizar">&nbsp;&nbsp;&nbsp;Justificativa do Responsável</h5>
+                <hr class="no-margin" />
+                <div class="clearfix">
+                    <dt>CPF do Usuário Interno</dt>
+                    <dd>
+                        <?php echo $this->data
+                                        ->getSqPessoa()
+                                        ->getSqCadastroSemCpf()
+                                        ->getSqUsuario()
+                                        ->getSqPessoaFisica()
+                                        ->getNuCpf(); ?>
+                    </dd>
+                </div>
+                <div class="clearfix">
+                    <dt>Nome do Usuário Interno</dt>
+                    <dd>
+                        <?php echo $this->data
+                                        ->getSqPessoa()
+                                        ->getSqCadastroSemCpf()
+                                        ->getSqUsuario()
+                                        ->getNoPessoa(); ?>
+                    </dd>
+                </div>
+                <div class="clearfix">
+                    <dt>Justificativa</dt>
+                    <dd>
+                        <?php echo $this->data
+                                        ->getSqPessoa()
+                                        ->getSqCadastroSemCpf()
+                                        ->getTxJustificativa(); ?>
+                    </dd>
+                </div>
+            <?php endif; ?>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+            <h5 class="titulo-visualizar">&nbsp;&nbsp;&nbsp;Endereço</h5>
+            <hr class="no-margin">
+            <div class="clearfix">
+                <?php $endereco = $this->data->getSqEndereco()->first() 
+                                  ? $this->data->getSqEndereco()->first() 
+                                  : new \Sica\Model\Entity\Endereco();?>
+                <dt>CEP</dt>
+                <dd><?php echo $this->maskNumber($endereco->getSqCep(), 'cep'); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Logradouro</dt>
+                <dd><?php echo $endereco->getTxEndereco(); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Número</dt>
+                <dd><?php echo $endereco->getNuEndereco(); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Bairro</dt>
+                <dd><?php echo $endereco->getNoBairro(); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>UF</dt>
+                <dd><?php echo $endereco->getSqMunicipio()->getSqEstado()->getNoEstado(); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Município</dt>
+                <dd><?php echo $endereco->getSqMunicipio()->getNoMunicipio(); ?></dd>
+            </div>
+        </dl>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal" >Fechar</a>
+</div>

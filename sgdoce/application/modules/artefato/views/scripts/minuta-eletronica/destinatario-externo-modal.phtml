@@ -1,0 +1,179 @@
+<?php $sqTratamento = NULL; ?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Destinatário</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-destinatario-modal"
+            method="post">
+            <fieldset>
+                <div class="control-group dv5-sqTratamento" hidden="true">
+                    <label class="control-label" for="select01"><span class="required"
+                        title="Required field">*</span> Tratamento</label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqTratamento', $sqTratamento, array('class' => 'required'), $this->tratamento); ?>
+                    </div>
+                </div>
+
+                <div class="control-group dv5-txPosTratamento" hidden="true">
+                    <label class="control-label"> Cargo </label>
+                    <div class="controls">
+                        <input type="text" class="" name="txPosTratamento"
+                            id="txPosTratamento">
+                    </div>
+                </div>
+
+                <div class="control-group dv2-sqVocativo" hidden="true">
+                    <label class="control-label" for="sqVocativo"><span
+                        class="required" title="Required field">*</span> Vocativo</label>
+                    <div class="controls" id="divVocativo">
+                        <?php echo $this->ComboCustom('sqVocativo',NULL,array('class'=>''), $this->vocativo); ?>
+                    </div>
+                </div>
+                <div class="control-group dv2-txPosVocativo" hidden="true">
+                    <label class="control-label"> Cargo </label>
+                    <div class="controls">
+                        <input type="text" class="" name="txPosVocativo"
+                            id="txPosVocativo">
+                    </div>
+                </div>
+                <div class="control-group tpDestinatario">
+                    <label class="control-label" for="select01"><span class="required"
+                        title="Required field">*</span> Tipo de Pessoa</label>
+                    <div class="controls">
+                        <?php
+                        unset($this->tipoPessoa[3]);
+                        unset($this->tipoPessoa[4]);
+                        unset($this->tipoPessoa[6]);
+                        echo $this->ComboCustom('sqTipoPessoa', NULL, array('class' => 'span9 required'), $this->tipoPessoa); ?>
+                    </div>
+                </div>
+                <div class="control-group divGeralEstrangeiroDes hide">
+                    <label class="control-label"><span class="required"
+                        title="Required field">*</span> Nacionalidade Brasileira?</label>
+                    <div class="controls">
+                        <label class="radio inline"> <input type="radio"
+                            name="TipoNacionalidadeDest" id="pessoaBrasilieiraDest" value="1"
+                            checked="checked"> Sim
+                        </label> <label class="radio inline"> <input type="radio"
+                            name=TipoNacionalidadeDest id="pessoaEstrangeiraDest" value="3">
+                            Não
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group dvGeralNome">
+                    <label class="control-label" id="dvLabelNome"></label>
+                    <div class="controls">
+                        <div class="input-append dropdown">
+                            <?php
+                            echo $this->formText('sqPessoaDestinatario','', array('class' => 'input-xxlarge required','maxlength' => 60));
+                            ?>
+                            <button type="button" class="btn right multiplaPessoa" data-toggle="dropdown" title="Opções"><i class="icon-cog"></i></button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#visualizarPJ" id="visualizarPJDest" data-toggle="modal" data-dismiss="modal">Visualizar</a></li>
+                                            <li><a id="alterarPJ" target="_blank">Alterar</a></li>
+                                            <li><a href="/auxiliar/pessoa-juridica/create/form/form-destinatario-modal/campoPessoa/sqPessoaDestinatario/campoCnpj/nuCnpj" target="_blank">Cadastrar</a></li>
+                                        </ul>
+                            <button id="btnLimpar" class="btn right btnLimpar" title="Limpar"
+                                type="button">
+                                <i class="icon-refresh" style="cursor: pointer;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group dvGeralNomePF">
+                    <label class="control-label" id="dvLabelNomePF"></label>
+                    <div class="controls">
+                        <div class="input-append dropdown">
+                            <?php
+                            echo $this->formText('sqPessoaDestinatarioPf','', array('class' => 'input-xxlarge required','maxlength' => 60));
+                            ?>
+                            <button type="button" class="btn right" data-toggle="dropdown" title="Opções"><i class="icon-cog"></i></button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#visualizarPF" id="visualizarPFDest" data-toggle="modal" data-dismiss="modal">Visualizar</a></li>
+                                <li><a id="alterarPF" target="_blank">Alterar</a></li>
+                                <li><a href="/auxiliar/pessoa-fisica/create/form/form-destinatario-modal/campoPessoa/sqPessoaDestinatarioPf/campoCpf/nuCPF" target="_blank">Cadastrar (PF)</a></li>
+                            </ul>
+                            <button id="btnLimpar" class="btn right btnLimpar" title="Limpar"
+                                type="button">
+                                <i class="icon-refresh" style="cursor: pointer;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group divGeralCPF">
+                    <label class="control-label" id="dvLabelCPF"></label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuCPF','', array('class' => 'cpf'));
+                        ?>
+                        <!--                         <a class="btn right" id="btnCadastrarPessoa"  title="Cadastrar" target="_blank" href="#">Cadastrar</a> -->
+                    </div>
+                </div>
+
+                <div class="control-group idDadosCorporativo hide">
+                    <fieldset>
+                        <legend>
+                            <h4>Dados do Corporativo</h4>
+                        </legend>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tipo de Endereço</th>
+                                    <th>Cep</th>
+                                    <th>Endereço</th>
+                                    <th>UF</th>
+                                    <th>Múnicipio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listCorporativo">
+                            </tbody>
+                     </table>
+<!--                      <div class="pull-left hide"> -->
+                            <input type="checkbox" id="radioCorporativo"
+                                name="radioCorporativo" class="hidden required pull-left" value="0" />
+<!--                     </div> -->
+                    </fieldset>
+                </div>
+
+                <div class="control-group idDadosSgdoce hide">
+                    <fieldset>
+                        <legend>
+                            <h4>Dados do SGDOCe</h4>
+                        </legend>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tipo de Endereço</th>
+                                    <th>Cep</th>
+                                    <th>Endereço</th>
+                                    <th>UF</th>
+                                    <th>Múnicipio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listSgdoce">
+                            </tbody>
+                        </table>
+<!--                         <div class="pull-left hide" > -->
+                            <input type="checkbox" id="radioSgdoce" name="radioSgdoce"
+                                class="hidden required pull-left" value="0" />
+<!--                         </div> -->
+                    </fieldset>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirDestinatarioExterno"
+        data-dismiss="modal" title="Concluir">Concluir</a> <a href="#"
+        class="btn btnCancelarDestinatarioExterno" data-dismiss="modal"
+        title="Cancelar">Cancelar</a>
+</div>
+<script type="text/javascript" src="/js/app/artefato/minuta-eletronica/destinatario.js"></script>
+<script type="text/javascript" src="/js/components/validation.js"></script>
+

@@ -1,0 +1,33 @@
+<?php
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+    $codigo       = array($row['sqDocumento'], $row['sqTipoDocumento'], $row['sqPessoa']);
+    $btDropdown   = null;
+    $btVisualizar = null;
+
+    if($row['deCaminhoImagem']) {
+        $btVisualizar = $view->actionButton('Visualizar', 'Documento.visualizar', array($row['sqAnexoComprovanteDocumento'], $row['sqPessoa']), 'eye-open');
+        $btDropdown[] = '<a href="javascript:Documento.deletarImagem(' . $row['sqDocumento'] . ', ' . $row['sqTipoDocumento'] . ', ' . $row['sqPessoaSgdoce'] . ');">Excluir imagem</a>';
+    }
+
+    $btDropdown[] = '<a href="javascript:Documento.deletar(' . $row['sqDocumento'] . ', ' . $row['sqTipoDocumento'] . ', ' . $row['sqPessoa'] . ', ' . $row['sqPessoaSgdoce'] . ');">Excluir registro</a>';
+
+    $button = $view->actionButton('Alterar', 'Documento.alterar', $codigo, 'pencil')
+        . $btVisualizar
+        . $view->actionButtonDropdown($btDropdown);
+
+    return '<div class="btn-group pull-left">' . $button . '</div>';
+};
+
+$configArray = array();
+$configArray['columns'][0]['column'] = 'noTipoDocumento';
+$configArray['columns'][1]['column'] = 'txValor';
+$configArray['columns'][2]['column'] = 'deCaminhoImagem';
+$configArray['columns'][3]['column'] = $acao;
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

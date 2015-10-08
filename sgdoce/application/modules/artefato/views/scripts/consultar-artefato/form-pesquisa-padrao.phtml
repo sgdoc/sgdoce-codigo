@@ -1,0 +1,72 @@
+<script type="text/javascript" src="/js/app/artefato/consultar-artefato/form.js"></script>
+<script type="text/javascript" src="/js/app/artefato/artefato/index.js"></script>
+<h1>Pesquisar Artefato</h1>
+<br />
+<?php echo $this->formHidden('update', $this->update); ?>
+<div class="alert alert-success hide"><button data-dismiss="alert" class="close">×</button><span class="updateForm"></span></div>
+<form class="form-horizontal" id="form-consultar-artefato-padrao" method="post" action="<?php echo $this->urlCurrent(array('action' => 'list-consultar-artefato-padrao')) ?>"    >
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Pelo menos um dos filtros
+            deve ser preenchido</p>
+    </div>
+    <fieldset>
+        <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label" for="select01"><span class="required"
+                                                              title="Required field"></span> Pesquisa Por:</label>
+                <?php
+                $tipoPesquisa = array('' => 'Selecione', '1' => 'Digital', '2' => 'Processo');
+                ?>
+            <div class="controls">
+                <?php echo $this->ComboCustom('tipoPesquisa', NULL, array('class' => ''), $tipoPesquisa); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="numero">Número</label>
+            <div class="controls">
+                <input type="text" class="span3" id="nuArtefato" name="nuArtefato" maxlength="30" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nomeRzSocial">Interessado</label>
+            <div class="controls">
+                <input type="text" class="span10" id="sqPessoaSgdoce" name="sqPessoaSgdoce" value="" maxlength="120" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="doc">CPF/CNPJ/Passaporte</label>
+            <div class="controls">
+                <input type="text" class="span3" id="nuCpfCnpjPassaporte" name="nuCpfCnpjPassaporte" value=""/>
+            </div>
+        </div>
+        <div class="form-actions">
+           <button class="btn btn-primary btn_pesquisar" id="btnPesquisar" ><i class="icon-search icon-white"></i> Pesquisar</button>
+           <button class="btn" name="limpar" id="limpar" >Limpar</button>
+        </div>
+    </fieldset>
+</form>
+<div class="control-group hidden">
+    <legend>Resultado da Pesquisa</legend>
+    <table id="table-consultar-artefato-padrao">
+        <thead>
+            <tr>
+                <th>Documento</th>
+                <th>Digital</th>
+                <th>Tipo</th>
+                <th>Número</th>
+                <th>Origem</th>
+                <th>Assunto</th>
+                <th>Interessado</th>
+                <th>CPF/CNPJ/Passaporte</th>
+                <th>Prazo</th>
+                <th>Prioridade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+    </table>
+    <br />
+    <div class="form-actions">
+<!--        <button class="btn btn-primary" type="button">Filtros</button>-->
+         <a title="Filtros" id="btnFiltro" class="btn btn-primary">Filtros</a>
+    </div>
+</div>

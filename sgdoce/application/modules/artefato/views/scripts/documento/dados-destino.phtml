@@ -1,0 +1,114 @@
+<script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/origem/origem.js', array('address' => 'js')); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/documento/origem.js', array('address' => 'js')); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/destino/destino.js', array('address' => 'js')); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/documento/destino.js', array('address' => 'js')); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->assetUrl('app/artefato/destino/encaminhado.js', array('address' => 'js')); ?>"></script>
+
+<?php
+$withoutNumber      = '';
+$automaticNumber    = '';
+$labelNumber        = 'Número';
+$sqArtefato         = ($this->data->getSqArtefato()) ? $this->data->getSqArtefato() : NULL;
+$nuArtefato         = null;
+$labelNumber        = 'Número';
+$procedenciaInterno = null;
+
+// Se Edição.
+if (!empty($sqArtefato)) {
+    $nuArtefato = $this->data->getNuArtefato();
+    $procedenciaInterno = $this->dadosOrigem[1]; // 1 = interno, 3 = externo
+    
+    if( $this->isMigracao ) {
+        $attrNuArtefato     = 'disabled="disabled"';
+        $withoutNumber      = "disabled='disabled'";
+        $automaticNumber    = "disabled='disabled'";
+    } else {
+        if( $procedenciaInterno == 1 ) {
+            // Documento Oficial
+            if( $this->isDocWVDuplicity ) {
+                // Com número
+                if( $nuArtefato ) {
+                    $automaticNumber    = "disabled='disabled'";
+                // Sem número
+                } else {
+                    $automaticNumber    = "checked='checked'";
+                }
+                $withoutNumber          = "disabled='disabled'";                
+            // Documento não oficial
+            } else {
+                // Com número
+                if( $nuArtefato ) {
+                    $automaticNumber    = "";
+                    $withoutNumber      = "";
+                // Sem número
+                } else {
+                    $withoutNumber      = "checked='checked'";
+                }                
+            }            
+            $attrNuArtefato     = 'disabled="disabled"';
+        } else if(  $procedenciaInterno == 3 ) {
+            // Com número
+            if( $nuArtefato ) {
+                $withoutNumber      = "";
+                $attrNuArtefato     = "";
+            // Sem número
+            } else {
+                $withoutNumber      = "checked='checked'";
+                $attrNuArtefato     = "disabled='disabled'";
+            }
+            $automaticNumber        = "disabled='disabled'";
+        }
+
+        $classNuArtefato    = '';
+
+        if ($this->isSIC){
+            $attrNuArtefato =  'mask="numeric"';
+            $labelNumber    =  'Protocolo CGU';
+            $classNuArtefato = 'canPaste';
+        }
+    }
+} else {
+    $attrNuArtefato     = "";
+    $withoutNumber      = "";
+    $automaticNumber    = "";    
+}
+
+?>
+
+<div class="tab-pane" id="dadosDestino">
+	<fieldset id="origem">
+		<legend>Origem</legend>
+		<?php echo $this->render('origem/dados-origem.phtml');?>
+
+                <div class="control-group">
+                    <label class="control-label"> <span class="required">* </span><?php echo $labelNumber; ?></label>
+                    <div class="controls">
+
+                        <input type="text" name="nuArtefato" <?php echo $attrNuArtefato; ?> id="nuArtefato"
+                               class="span4 inline required <?php echo $classNuArtefato; ?>" maxlength="200"
+                               value="<?php echo $nuArtefato; ?>" />
+
+                        <?php if( $nuArtefato && $procedenciaInterno == 1 ): ?>
+                            <?php echo $this->formHidden('nuArtefatoHidden', $nuArtefato, array('name'=>'nuArtefato')); ?>
+                        <?php else: ?>
+                            <?php echo $this->formHidden('nuArtefatoHidden', null, array('name'=>'')); ?>
+                        <?php endif; ?>
+
+                        <?php if (!$this->isSIC): ?>
+                            <label class="checkbox inline">
+                                <input id="optionsCheckbox1" type="checkbox" <?php echo $withoutNumber; ?> value="option1" name="numeracao">
+                                Documento sem número
+                            </label>
+                            <label class="checkbox inline">
+                                <input id="optionsCheckbox2" type="checkbox" <?php echo $automaticNumber; ?> value="option2" name="numeracao">
+                                Número Automático
+                            </label>
+                        <?php endif;?>
+                    </div>
+		</div>
+	</fieldset>
+	<fieldset id="destino">
+		<legend>Destino</legend>
+		<?php echo $this->render('destino/dados-destino.phtml');?>
+	</fieldset>
+</div>

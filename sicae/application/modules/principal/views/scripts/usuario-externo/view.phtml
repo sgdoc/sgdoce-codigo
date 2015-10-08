@@ -1,0 +1,74 @@
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <?php if ($this->data['nuCpf']): ?>
+            <?php $nomeLabel = "Nome do Usuário"; ?>
+            <div class="clearfix">
+                <?php if ($this->data['inNacionalidadeBrasileira']) :?>
+                    <dt>CPF</dt>
+                    <dd><?php echo $this->escape($this->maskNumber($this->data['nuCpf'], 'cpf')); ?></dd>
+                <?php else :?>
+                    <dt>Passaporte</dt>
+                    <dd><?php echo $this->escape($this->data['nuPassaporte']); ?></dd>
+                <?php endif; ?>
+            </div>    
+        <?php elseif ($this->data['nuCnpj']) :?>
+            <?php $nomeLabel = "Razão Social"; ?>
+            <div class="clearfix">
+                <dt>CNPJ</dt>
+                <dd><?php echo $this->escape($this->maskNumber($this->data['nuCnpj'], 'cnpj')); ?></dd>
+            </div>
+            <div class="clearfix">
+                <dt>Nome Fantasia</dt>
+                <dd><?php echo $this->escape($this->data['noFantasia']); ?></dd>
+            </div>
+        <?php endif; ?>
+        <div class="clearfix">
+            <dt><?php echo $nomeLabel; ?></dt>
+            <dd><?php echo $this->escape($this->data['noUsuarioExterno']); ?></dd>
+        </div>
+        <div class="clearfix">
+            <?php $ddd      = '(' . $this->data['nuDddTelefoneFixo'] . ') '; ?>
+            <?php $telefone = $this->data['nuTelefoneFixo']; ?> 
+                
+            <?php if (!$this->data['nuTelefoneFixo']) :?>
+                    <?php $ddd = $telefone = ''; ?>
+            <?php endif; ?>
+            
+            <?php if (strlen($this->data['nuTelefoneFixo']) >= 8) :?>
+                    <?php $telefone = substr($this->data['nuTelefoneFixo'], 0, 4) . '-' 
+                                    . substr($this->data['nuTelefoneFixo'], 4, 8); ?>
+            <?php endif; ?>
+            <dt>Telefone Fixo</dt>
+            <dd><?php echo $this->escape($ddd . $telefone); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>E-mail</dt>
+            <dd><?php echo $this->escape($this->data['txEmail']); ?></dd>
+        </div>
+        <div class="clearfix">
+            <?php $status = array('Inativo', 'Ativo', 'Pendente de Ativação');?>
+            <dt>Status</dt>
+            <dd><?php echo $status[$this->data['stRegistroAtivo']]; ?></dd>
+        </div>
+        <?php if (count($this->binds)): ?>
+            <h5>Perfis Atribuídos</h5>
+            <?php $binds = $this->binds; ?>
+            <?php while ($current = current($binds)): ?>
+                <table class="table table-bordered table-condensed table-striped">
+                    <tbody>
+                        <tr>
+                            <td colspan="3"><strong><?php echo $current['sgSistema'], ' - ', $current['noSistema'] ?></strong></td>
+                        </tr>
+                        <?php foreach ($binds as $key => $bind): ?>
+                            <?php if ($current['sgSistema'] !== $bind['sgSistema']){ break; }?>
+                            <tr>
+                                <td><?php echo $this->escape($bind['noPerfil']); ?></td>
+                            </tr>
+                            <?php unset($binds[$key]); ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endwhile; ?>
+        <?php endif; ?>
+    </dl>      
+</div>

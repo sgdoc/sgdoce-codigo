@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3>Adicionar Telefone</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div class="alert alert-error fade in hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Campos de preenchimento obrigatório não foram preenchidos.
+        </div>
+
+        <form class="form-horizontal" method="post" id="form-telefone-modal">
+            <br/>
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="sqTipoTelefone" ><span title="Required field" class="required">*</span> Tipo de Telefone</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                        echo $this->ComboCustom('sqTipoTelefone', $this->data->getSqTipoTelefone()->getSqTipoTelefone(), array('class' => 'required'), $this->cmb['sqTipoTelefone']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nuDdd"><span title="Required field" class="required">*</span> DDD</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuDdd', $this->data->getNuDDD(), array('class' => 'span2 required ddd', 'maxlength' => 3));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nuTelefone"><span title="Required field" class="required">*</span> Telefone</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuTelefone', $this->data->getNuTelefone(), array('class' => 'span5 required telefone', 'maxlength' => 8));
+                        ?>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarTelefone" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn" data-dismiss="modal" title="Fechar">Fechar</a>
+
+<?php
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/telefone/modal.js');
+
+    echo $this->headScript();
+?>

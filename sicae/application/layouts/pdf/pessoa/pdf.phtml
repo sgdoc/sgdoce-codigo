@@ -1,0 +1,77 @@
+<?php
+
+use Principal\Service\Pessoa;
+
+$assetUrl = new Core_View_Helper_AssetUrl();
+$assetUrl->setView($this);
+$path = APPLICATION_PATH . '/../public/';
+
+$this->headLink()
+        ->setStylesheet($path . $assetUrl->assetUrl('style.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-correct.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style-responsive.css', true, array('address' => 'asset')))
+        ->appendStylesheet($path . $assetUrl->assetUrl('style.css', true))
+        ->appendStylesheet($path . $assetUrl->assetUrl('pdf.css', true));
+
+echo $this->headLink();
+?>
+
+<page backtop="2mm" backbottom="4mm" backleft="3mm" backright="3mm">
+    <page_footer>
+        <div class="content">
+            <table class="table-footer">
+                <tr>
+                    <td class="data">
+                        Data: <?php echo date('d/m/Y') . ' às ' . date('H') . 'h' . date('i'); ?>
+                    </td>
+                    <td class="responsavel">
+                        Responsável: <?php echo \Core_Integration_Sica_User::getUserName(); ?>
+                    </td>
+                    <td class="paginacao">
+                        Página [[page_cu]] de [[page_nb]]
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </page_footer>
+    <div class="content">
+        <div>
+            <img src="<?php echo $path . $assetUrl->assetUrl('icons/marcaICMBioBig.png', true, array('address' => 'asset')) ?>" name="figura1" class="pull-left" width="100" border="0" />
+            <span align="center">
+                <h3>SICA-e - Sistema de Integra&ccedil;&atilde;o e Controle de Acesso</h3>
+                <?php
+                switch (\Zend_Controller_Front::getInstance()->getRequest()->getParam('sqTipoPessoa')) {
+                    case Pessoa::SQ_TIPO_PESSOA_FISICA:
+                        echo '<h4>Relat&oacute;rio de Cadastro de Pessoa F&iacute;sica</h4>';
+                        break;
+
+                    case Pessoa::SQ_TIPO_PESSOA_JURIDICA:
+                        echo '<h4>Relat&oacute;rio de Cadastro de Pessoa Jur&iacute;dica</h4>';
+                        break;
+
+                    default:
+                        echo '<h4>Relat&oacute;rio de Cadastro de Pessoa F&iacute;sica e Jur&iacute;dica</h4>';
+                        break;
+                }
+                ?>
+            </span>
+        </div>
+        <br />
+        <br />
+        <?php
+        switch (\Zend_Controller_Front::getInstance()->getRequest()->getParam('sqTipoPessoa')) {
+            case Pessoa::SQ_TIPO_PESSOA_FISICA:
+                echo $this->render('pessoa-fisica.phtml');
+                break;
+
+            case Pessoa::SQ_TIPO_PESSOA_JURIDICA:
+                echo $this->render('pessoa-juridica.phtml');
+                break;
+
+            default:
+                echo $this->render('pessoa-sem-classificacao.phtml');
+                break;
+        }
+        ?>
+    </div>
+</page>

@@ -1,0 +1,17 @@
+*system:    LIBCorp
+*version:   2.0.0
+*iteration: -
+*deliver:   08/06/2015 11:10
+
+*objective:
+- Separação do config e webservice
+
+*products:
+- Plano de Implantação
+- Código-fonte
+
+*new_functionality:
+-
+
+*changed_funcionality:
+-

@@ -1,0 +1,173 @@
+<?php
+    echo $this->headScript()
+            ->appendFile($this->baseUrl() . '/js/app/migracao/vinculo/index.js');
+
+    $url = "javascript:void(0);"; $disabled = "disabled='disabled'";
+
+    $listIcons = array(
+        \Core_Configuration::getSgdoceTipoArtefatoDespacho() => '<i class="icon icon-file" title="Documento"></i>',
+        \Core_Configuration::getSgdoceTipoArtefatoProcesso() => '<i class="icon icon-book" title="Processo"></i>',
+        \Core_Configuration::getSgdoceTipoArtefatoDocumento() => '<i class="icon icon-file" title="Documento"></i>',
+        \Core_Configuration::getSgdoceTipoArtefatoDespacho() => '<i class="icon icon-file" title="Documento"></i>'
+    );
+
+    $listTiposDocumentoArtefato = array(
+        \Core_Configuration::getSgdoceTipoArtefatoDespacho(),
+        \Core_Configuration::getSgdoceTipoArtefatoDossie(),
+        \Core_Configuration::getSgdoceTipoArtefatoDocumento()
+    );
+
+    $config = \Core_Registry::get('configs');
+?>
+
+<h1>Migração</h1>
+<div class="alert alert-info">
+    <button data-dismiss="alert" class="close">×</button>
+    Para iniciar as correções, é necessário começar pelos documentos vinculados para habilitar a ação de correção no principal.
+</div>
+<br />
+<table class="table table-bordered">
+    <tr>
+        <th>Processo/Documento</th>
+        <th width="100">Situação</th>
+        <th width="100">Ações</th>
+    </tr>
+    <?php if( count($this->listVinculos) ): ?>
+        <?php foreach( $this->listVinculos as $item ): ?>
+        <?php
+            $dUpload        = $disabled;
+            $dCorrigir      = $disabled;
+            $dVisualizar    = $disabled;
+
+            $sUpload        = true;
+            $sVisualizar    = true;
+
+            $urlUpload      = $url;
+            $urlVisualizar  = $url;
+            $urlCorrigir    = $url;
+
+            $labelAguardandoProcessamento = "";
+
+            if( in_array($item['sqTipoArtefato'], $listTiposDocumentoArtefato) ){
+
+                if(!$item['isOk']){
+                    $urlCorrigir = $this->url(array( 'controller' => 'documento',
+                                                     'action' => 'edit',
+                                                     'view' => 3,
+                                                     'id' => $item['sqArtefato'],
+                                                     'back' => '.migracao.vinculo.index.id.' . $this->id ));
+                }
+
+                if( !$item['isImageValid'] && ($item['inTentativa'] == $config['migration']['qtdeTentativa'] || $item['stProcessado'] ) ) {
+
+                    if( !$item['hasImage'] ){
+                        $urlUpload  = $this->url(array( 'module' => 'artefato',
+                                                        'controller' => 'imagem',
+                                                        'action' => 'index',
+                                                        'id' => $item['sqArtefato'],
+                                                        'back' => '.migracao.vinculo.index.id.' . $this->id ));
+                        $sUpload = true;
+                        $sVisualizar = false;
+                        $dUpload = "";
+                    } else {
+                        $sUpload = false;
+                    }
+                } else if( !$item['isImageValid'] ) {
+                    $urlUpload = $url;
+                    $sUpload = false;
+                    if( !is_null($item['stProcessado']) && $item['stProcessado'] == false ) {
+                        $labelAguardandoProcessamento = "<small class='text-error'>(Aguardando processamento da migração da imagem)</small>";
+                    }
+                } else {
+                    $sUpload = false;
+                }
+
+                if( $item['hasImage'] ) {
+                    $urlVisualizar  = "javascript:Vinculo.imageView(".$item['sqArtefato'].");";
+                    $dVisualizar = "";
+                }
+
+            } else if( $item['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoProcesso() ) {
+                $urlCorrigir = $this->url(array( 'controller' => 'processo',
+                                                 'action' => 'edit',
+                                                 'id' => $item['sqArtefato'],
+                                                 'back' => '.migracao.vinculo.index.id.' . $this->id ));
+            } else {
+                $urlCorrigir = $url;
+            }
+
+            $nuArtefato = $item['nuArtefato'];
+            $nuArtefatoNumber = str_replace(array(".", ",", "-", "/"), "", $nuArtefato);
+
+            // Define máscara.
+            switch(strlen($nuArtefatoNumber)){
+                case 17:
+                    $item['nuArtefato'] = $nuArtefatoNumber;
+                    $this->maskNumber->setMask('99999.999999/9999-99');
+                    break;
+                case 21:
+                    $item['nuArtefato'] = $nuArtefatoNumber;
+                    $this->maskNumber->setMask('nup');
+                    break;
+                default:
+                    $this->maskNumber->setMask('digital');
+            }
+
+        ?>
+            <tr>
+                <td>
+                    <span style="padding-left: <?php echo $item['padding']; ?>px">
+                        <?php if( isset($listIcons[$item['sqTipoArtefato']]) ): ?>
+                            <?php echo $listIcons[$item['sqTipoArtefato']]; ?>
+                        <?php endif; ?>
+                            <?php echo $this->maskNumber->filter($item['nuArtefato']); ?>
+                                <?php echo $labelAguardandoProcessamento; ?>
+                    </span>
+                </td>
+                <td>
+                    <?php if( $item['isChildOk'] && !$item['isOk'] ): $dCorrigir = ""; ?>
+                        <span class="label label-important"><small>Dados incorretos</small></span>
+                    <?php elseif( !$item['isChildOk'] && !$item['isOk'] ): $urlCorrigir = $url; ?>
+                        <span class="label"><small>Dados incorretos</small></span>
+                    <?php elseif( ($item['isOk'] && $item['hasImage']) && $item['isImageValid'] ||
+                            ($item['isOk'] && $item['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoProcesso()) ): $urlCorrigir = $url; ?>
+                        <i class='icon icon-check' title='Corrigido'></i>
+                    <?php endif; ?>
+
+                    <?php if( in_array($item['sqTipoArtefato'], $listTiposDocumentoArtefato) ): ?>
+                        <?php if( $item['isOk'] && !$item['hasImage'] ): ?>
+                            <span class="label label-important"><small>Não possui imagem</small></span>
+                        <?php elseif( $item['isOk'] && $item['hasImage'] && !$item['isImageValid']): ?>
+                            <span class="label label-important"><small>Imagem não validada</small></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                </td>
+                <td>
+                    <a href="<?php echo $urlCorrigir; ?>" <?php echo $dCorrigir; ?> class="btn btn-mini" title="Corrigir dados"><i class="icon-wrench"></i></a>
+                    <?php if(in_array($item['sqTipoArtefato'], $listTiposDocumentoArtefato)): ?>
+                        <?php if( $sVisualizar ): ?>
+                        <a href="<?php echo $urlVisualizar; ?>" <?php echo $dVisualizar; ?> class="btn btn-mini" title="Visualizar imagem"><i class="icon-eye-open"></i></a>
+                        <?php endif; ?>
+
+                        <?php if( $sUpload ): ?>
+                            <a href="<?php echo $urlUpload; ?>" <?php echo $dUpload; ?> class="btn btn-mini" title='Inserir imagem'><i class="icon-arrow-up"></i></a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</table>
+
+<div class="form-actions">
+    <?php if($this->urlBack): ?>
+    <a href="<?php echo $this->urlBack; ?>" class="btn btn-cancelar">
+        Voltar
+    </a>
+    <?php else: ?>
+    <a href="<?php echo $this->baseUrl("/artefato/area-trabalho/index/tipoArtefato/{$this->tipoArtefato}/caixa/caixaMigracao"); ?>" class="btn btn-cancelar">
+        Voltar
+    </a>
+    <?php endif; ?>
+</div>

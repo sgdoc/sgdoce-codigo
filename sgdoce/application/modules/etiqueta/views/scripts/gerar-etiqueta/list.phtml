@@ -1,0 +1,43 @@
+<?php
+$view = $this;
+$acao = function($row) use ($view) {
+    $btn = '';
+
+    if ($row['nuQuantidadeDisponivel'] > 0 && //regra #12161
+            $row['sqTipoEtiqueta'] != \Core_Configuration::getSgdoceTipoEtiquetaEletronica()){
+
+        //só pode imprimir se for sgi ou a etiqueta for da unidade da pessoa logada
+        if (($view->isUserSgi || $view->sqUnidadeLogada == $row['sqUnidadeOrg']) && $row['dtCriacao']) {
+            $btn = $view->actionButton('Imprimir', 'PesquisarEtiqueta.imprimir', array('sqLoteEtiqueta' => $row['sqLoteEtiqueta']),'print');
+        }
+    }
+
+    return $btn;
+};
+$fnNuInicial = function($row) use ($view) {
+    return ($row['dtCriacao']) ? $view->formatDigital($row['nuInicial'], $row['nuAno']) : str_pad($row['nuInicial'], 7, '0',STR_PAD_LEFT);
+};
+$fnNuFinal = function($row) use ($view) {
+    return ($row['dtCriacao']) ? $view->formatDigital($row['nuFinal'], $row['nuAno']) : str_pad($row['nuFinal'], 7, '0',STR_PAD_LEFT);
+};
+$fnComNup = function($row) {
+    return ($row['inLoteComNupSiorg']) ? 'Sim':'Não';
+};
+
+$configArray = array('columns'  => array(
+                              array('column' => 'sqLoteEtiqueta'),
+                              array('column' => 'noTipoEtiqueta'),
+                              array('column' => 'noUnidadeOrg'),
+                              array('column' => $fnNuInicial),
+                              array('column' => $fnNuFinal),
+                              array('column' => $fnComNup),
+                              array('column' => 'nuQuantidadeDisponivel'),
+                              array('column' => $acao)
+    )
+);
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data  = $parse->parse($this->result);
+
+echo json_encode($data);

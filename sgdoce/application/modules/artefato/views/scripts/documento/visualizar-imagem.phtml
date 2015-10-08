@@ -1,0 +1,73 @@
+<script type="text/javascript" src="/js/app/artefato/documento/view.js"></script>
+<h1>Visualizar Documento Eletrônico</h1>
+<br />
+<form class="form-horizontal">
+	<div class="">
+		<fieldset>
+			<div class="top-bar">
+				<p class="requiredLegend pull-left">
+					Campos obrigatórios <span class="required">*</span>
+				</p>
+			</div>
+			<BR />
+			<div class="form-horizontal">
+				<input id="sqArtefato" type="hidden" name="sqArtefato" value="<?php echo $this->params['id'];?>">
+					<input id="nuDigital" type="hidden" name="nuDigital"
+					value="<?php echo $this->params['nuDigitalValida'];?>">
+				<ul class="thumbnails">
+					<li class="span2"><a href="../img/800x600.gif"
+						class="thumbnail view-image"> <img
+							src="../img/133x89.gif" alt="" />
+							<div class="caption">
+								<span><b>Imagem 1</b> </span>
+							</div>
+					</a>
+					</li>
+					<li class="span2"><a href="../img/800x600.gif"
+						class="thumbnail view-image"> <img
+							src="../img/133x89.gif" alt="" />
+							<div class="caption">
+								<span><b>Imagem 2</b> </span>
+							</div>
+					</a>
+					</li>
+					<li class="span2"><a href="../img/800x600.gif"
+						class="thumbnail view-image"> <img
+							src="../img/133x89.gif" alt="" />
+							<div class="caption">
+								<span><b>Imagem 3</b> </span>
+							</div>
+					</a>
+					</li>
+				</ul>
+				<BR />
+			</div>
+		</fieldset>
+		<br>
+	</div>
+	<div class="form-actions">
+		<label class="checkbox"> <input type="checkbox" id="validaImagens" />
+			As imagens dos documentos conferem com os documentos originais
+		</label> <br /> <a class="btn btn-primary btn-concluir2"
+			id="btConcluir2" title="Concluir" disabled=""><i class=""></i>Concluir</a>
+		<a href="/artefato/documento/create" class="btn" id="cancelar"> <i
+			class="icon-remove"></i> Cancelar
+		</a>
+	</div>
+</form>
+<!-- <div class="modal hide fade" id="visualizarImagem"> -->
+<!-- 	<div class="modal-header"> -->
+<!-- 		<a class="close" data-dismiss="modal">×</a> -->
+<!-- 		<h3>Imagem</h3> -->
+<!-- 	</div> -->
+<!-- 	<div class="modal-body"> -->
+<!-- 		<form class="form-horizontal"> -->
+<!-- 			<fieldset> -->
+<!-- 				<img src="imagem1.jpg" width="500" /> -->
+<!-- 			</fieldset> -->
+<!-- 		</form> -->
+<!-- 	</div> -->
+<!-- 	<div class="modal-footer"> -->
+<!-- 		<a class="btn btn-primary" href="#" data-dismiss="modal">Fechar</a> -->
+<!-- 	</div> -->
+<!-- </div> -->

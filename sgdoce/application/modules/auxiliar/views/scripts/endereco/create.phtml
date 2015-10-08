@@ -1,0 +1,109 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal" title="Fechar">×</a>
+    <h3>Adicionar Endereço</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <div class="alert alert-error hide">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Campos de preenchimento obrigatório não foram preenchidos.
+        </div>
+
+        <form class="form-horizontal" method="post" id="form-endereco-modal" action="/auxiliar/endereco/upload-documento" enctype="multipart/form-data">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="sqTipoEndereco" ><span title="Required field" class="required">*</span> Tipo de Endereço</label>
+                    <div class="controls">
+                        <?php
+                            echo $this->formHidden('sqPessoa', $this->sqPessoa);
+                            echo $this->ComboCustom('sqTipoEndereco', $this->data->getSqTipoEndereco()->getSqTipoEndereco(), array('class' => 'required'), $this->cmb['sqTipoEndereco']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group" id="field-noContato">
+                    <label class="control-label" for="noContato"><span title="Required field" class="required">*</span> Nome do Contato</label>
+                    <div class="controls">
+                        <?php
+                            echo $this->formText('noContato', null, array('class' => 'input-medium required'));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="sqCep"><span title="Required field" class="required">*</span> CEP</label>
+                    <div class="controls">
+                        <div class="input-append">
+                            <?php
+                            echo $this->formText('sqCep', $this->data->getSqCep(), array('class' => 'input-medium required cep'));
+                            ?>
+                            <button type="button" class="btn right" id="btnCep" title="Pesquisar"><i class="icon-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="sqEstado"><span title="Required field" class="required">*</span> UF
+                    </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->ComboCustom('sqEstado', $this->data->getSqMunicipio()->getSqEstado()->getSqEstado(), array('class' => 'required', 'id' => 'sqEstadoEndereco'), $this->cmb['sqEstado']);
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="sqMunicipio"><span title="Required field" class="required">*</span> Município</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->ComboCustom('sqMunicipio', $this->data->getSqMunicipio()->getSqMunicipio(), array('class' => 'required', 'id' => 'sqMunicipioEndereco'), array('' => 'Selecione uma opçao'));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txEndereco"><span title="Required field" class="required">*</span> Logradouro
+                    </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('txEndereco', $this->data->getTxEndereco(), array('class' => 'span8 required', 'maxlength' => 55));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txComplemento">Complemento</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('txComplemento', $this->data->getTxComplemento(), array('class' => 'span8', 'maxlength' => 100));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="nuEndereco"><span title="Required field" class="required">*</span> Número</label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('nuEndereco', $this->data->getNuEndereco(), array('class' => 'required span3', 'maxlength' => 6));
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="noBairro"><span title="Required field" class="required">*</span> Bairro
+                    </label>
+                    <div class="controls">
+                        <?php
+                        echo $this->formText('noBairro', $this->data->getNoBairro(), array('class' => 'required span8', 'maxlength' => 100));
+                        ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
+            		<label class="control-label" for="txImagem">Imagem</label>
+            		<div class="controls">
+            			<input type="file" name="txImagem" id="txImagem" >
+            			<span class="help-block hide"></span>
+            		</div>
+            	</div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnAdicionarEndereco" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarEndereco" data-dismiss="modal" title="Fechar">Fechar</a>
+
+    <?php echo $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/endereco/modal.js'); ?>

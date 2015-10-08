@@ -1,0 +1,23 @@
+<?php 
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/volume/volume.js');
+	echo $this->headScript();
+?>
+<?php if($this->invalido): ?>
+    <script type="text/javascript">
+        Volume.fechar();
+    </script>
+<?php else: ?>    
+    <div class="modal-header">
+        <a title="Fechar" data-dismiss="modal" class="close">×</a>
+        <h1><?php echo $this->formTitle; ?></h1>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <?php echo $this->render('volume/' . $this->form);?>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btnAbriEncerrarVolume"><?php echo $this->btnAction; ?></button>
+        <a href="#" class="btn btnCancelar" data-dismiss="modal"><i class="icon-remove"></i> Cancelar</a>
+    </div> 
+<?php endif; ?>

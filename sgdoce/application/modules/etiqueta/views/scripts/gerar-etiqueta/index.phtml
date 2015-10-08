@@ -1,0 +1,93 @@
+<?php
+echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/etiqueta/gerar-etiqueta/index.js');
+?>
+<h1>Pesquisar Digital</h1>
+<div class="alert alert-error campos-obrigatorios hidden"></div>
+
+<form class="form-horizontal"  method="post" id="form_pesquisa_etiqueta"
+      action="<?php echo $this->urlCurrent(array('action' => 'list'))?>">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">Pelo menos um dos filtros deve ser preenchido.</p>
+                <div class="btn-group pull-right">
+                    <?php if ($this->isUserSgi): ?>
+                        <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn btn-primary" id="novo">
+                            Cadastrar
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset>
+        <legend>Filtros</legend>
+        <div class="control-group">
+            <label class="control-label">Tipo de Digital</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqTipoEtiqueta',
+                        false,
+                        array('class'=>'span3'),
+                        $this->arrTipoEtiqueta); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Unidade</label>
+            <div class="controls">
+                    <?php if ($this->isUserSgi): ?>
+                        <input type="hidden" name="sqUnidadeOrg" id="sqUnidadeOrg_hidden" value="0" />
+                        <input type="text" class="span6" name="sqUnidadeOrg" id="sqUnidadeOrg" />
+                    <?php else: ?>
+                        <input type="hidden" name="sqUnidadeOrg" value="<?php echo Core_Integration_Sica_User::getUserUnit(); ?>" />
+                        <input type="text" class="span6" disabled="disabled" value="<?php echo Core_Integration_Sica_User::getUserUnitName(); ?>"  />
+                    <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="inLoteComNupSiorg">Lote</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('inLoteComNupSiorg',
+                                              false,
+                                              array('class'=>'span3'),
+                                              array('T' => 'Todos', 1 => 'Com NUP', 0 => 'Sem NUP')); ?>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="btn_pesquisar">
+                <i class="icon-search icon-white"></i> Pesquisar
+            </button>
+            <button id="btn_clear" class="btn">Limpar</button>
+        </div>
+    </fieldset>
+</form>
+<form class="form-horizontal">
+    <div class="control-group" id="divGrid">
+        <fieldset>
+            <legend>Resultado da pesquisa</legend>
+        </fieldset>
+        <table id="grid_etiqueta">
+            <thead >
+                <tr>
+                    <th width="8%">Lote</th>
+                    <th width="10%">Tipo</th>
+                    <th width="29%">Unidade</th>
+                    <th width="10%">Início</th>
+                    <th width="10%">Fim</th>
+                    <th width="9%">Com NUP</th>
+                    <th width="17%">Digitais Disponíveis</th>
+                    <th width="7%" class="sorting_disabled">Ação</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="form-actions">
+            <a class="btn btn-primary" id="btn_filtros" href="javascript:void(0);">Filtros</a>
+            <?php if ($this->isUserSgi): ?>
+                <a href="<?php echo $this->urlCurrent(array('action' => 'create'))?>" class="btn">Cadastrar</a>
+            <?php endif; ?>
+        </div>
+    </div>
+</form>

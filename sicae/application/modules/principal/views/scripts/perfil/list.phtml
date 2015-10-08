@@ -1,0 +1,73 @@
+<?php
+$view = $this;
+$acao = function($row) use ($view) {
+    $toggleIcon = 'ativado';
+    $titleIcon  = 'Reativar';
+
+    $countUsers = ((int)$row['nuQuantidadeUsuario'] + (int)$row['nuQuantidadeUsuarioExterno']);
+
+    if ($row['stRegistroAtivo']) {
+        $toggleIcon = 'inativado';
+        $titleIcon  = 'Inativar';
+    }
+
+    $urlToggle = $view->urlCurrent(array(
+                    'controller' => 'perfil',
+                    'action'     => 'toggle-status',
+                    'id'         => $row['sqPerfil']
+    ));
+
+    $urlEdit = $view->urlCurrent(array(
+                    'controller' => 'perfil',
+                    'action'     => 'edit',
+                    'id'         => $row['sqPerfil']
+    ));
+
+    $buttons  = '<div class="btn-group">';
+    $buttons .= $view->actionButton('Alterar', $urlEdit , array(), 'pencil', NULL, array(), 'href');
+    $buttons .= $view->actionButton('Visualizar',
+                                    'Perfil.view',
+                                    array($row['sqPerfil']),
+                                    'eye-open');
+
+    $buttons .= $view->actionButton($titleIcon,
+                                    $urlToggle,
+                                    array(),
+                                    $toggleIcon,
+                                    NULL,
+                                    array('active'       => $row['stRegistroAtivo'],
+                                         'titleActive'   => 'Reativar',
+                                         'titleInactive' => 'Inativar',
+                                         'class'         => 'active-inactive-profile',
+                                         'id'            => $row['sqPerfil']
+                                    ),
+                                    'href', array('action'=>'toggle-status'));
+    if ($countUsers === 0) {
+        $buttons .= $view->actionButton('Remover', 'Perfil.remove', array($row['sqPerfil']), 'trash');
+    }
+    $buttons .= '</div>';
+
+    return $buttons;
+};
+
+$perfil = function($row) use ($view) {
+    return ($row['inPerfilExterno'] === FALSE)?'Sim':'Não';
+};
+
+$status = function($row) use ($view) {
+    return ($row['stRegistroAtivo'])?'Ativo':'Inativo';
+};
+
+$configArray = array(
+            'columns' => array(
+                array('column' => 'noPerfil'),
+                array('column' => $perfil),
+                array('column' => $status),
+                array('column' => $acao)
+            ));
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);
+

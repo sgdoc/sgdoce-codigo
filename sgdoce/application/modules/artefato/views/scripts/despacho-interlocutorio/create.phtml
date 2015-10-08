@@ -1,0 +1,82 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/despacho-interlocutorio/despacho.js');
+      $sqDespacho  = ($this->sqDespacho ? $this->sqDespacho : '');
+      $sqArtefato  = ($this->sqArtefato ? $this->sqArtefato : '');
+      $nuArtefato  = ($this->nuArtefato ? : '');
+?>
+<div class="modal-container-fluid container-fluid" style="padding-top: 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Cadastrar Despacho</h1>
+            <div class="alert alert-error campos-obrigatorios hidden"></div>
+            <div class="top-bar">
+                <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+            </div>
+            
+            <form class="form-horizontal"  method="post" id="form_novo_despacho"
+                  action="<?php echo $this->urlCurrent(array('action' => 'save'))?>">
+                <?php echo $this->formHidden('sqPessoaOperacao', \Core_Integration_Sica_User::getPersonId()); ?>
+            
+                <fieldset>
+                    <legend>Artefato <?php echo $nuArtefato; ?></legend>
+                    <div class="control-group">
+                        <label class="control-label"><span class="required">*</span>Destinatário</label>
+                        <div class="controls">
+                            <input type="hidden" name="sqUnidadeDestino" id="sqUnidadeDestino_hidden" value="" />
+                            <input type="text" class="span6 required" name="sqUnidadeDestino" id="sqUnidadeDestino" value="" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><span class="required">*</span>Despacho</label>
+                        <div class="controls">
+                            <textarea name="txDespacho" id="txDespacho" class="span6 required" rows="5" cols="40" maxlength="1000"><?php echo $this->txDespacho; ?></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><span class="required">*</span>Assinatura</label>
+                        <div class="controls">
+                            <input type="hidden" name="sqUnidadeAssinatura" id="sqUnidadeAssinatura" value="<?php echo $this->sqUnidadeAssinatura ?>" />
+                            <input type="hidden" name="sqPessoaAssinatura" id="sqPessoaAssinatura_hidden" value="" />
+                            <input type="text" class="span6 required" name="sqPessoaAssinatura" id="sqPessoaAssinatura" value="" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls radios-inline">
+                              <input type="radio" name="stCargoFuncao" value="1" checked="checked" class="required" id="stCargoFuncao1"/>
+                              <label for="stCargoFuncao1" >Cargo</label>
+                              <input type="radio" name="stCargoFuncao" value="2" class="required" id="stCargoFuncao2"/>
+                              <label for="stCargoFuncao2" >Função</label>
+                        </div>
+                    </div>
+                    <div id="divCargo" class="control-group">
+                        <label class="control-label"><span class="required">*</span> Cargo</label>
+                        <div class="controls">
+                            <?php echo $this->ComboCustom('sqCargoAssinatura',
+                                    $this->params['sqCargo'],
+                                    array('class'=>'span4 required'),
+                                    $this->arrCargo); ?>
+                        </div>
+                    </div>
+                    <div id="divFuncao" class="control-group hidden">
+                        <label class="control-label"><span class="required">*</span> Função</label>
+                        <div class="controls">
+                            <?php echo $this->ComboCustom('sqFuncaoAssinatura',
+                                    $this->params['sqFuncao'],
+                                    array('class'=>'span4'),
+                                    $this->arrFuncao); ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <input type="hidden" name="sqArtefato" id="sqArtefato" value="<?php echo $sqArtefato ?>" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="btn_salvar">Salvar</button>
+                        <button class="btn" id="cancelar"><i class="icon-remove"></i> Cancelar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<iframe
+        width="100%"
+        height="700px"
+        scrolling="no"
+        marginheight="0"
+        marginwidth="0"
+        class="system-iframe" frameborder="0" src="<?php echo $this->txUrl; ?>">
+</iframe>
+<style type="text/css">
+    /*<!--*/
+    #detalhe-erro {
+        -webkit-transition: opacity 0.35s, height 0.35;
+        -o-transition: opacity 0.35s, height 0.35s;
+        transition: opacity 0.35s, height 0.35s;
+    }
+    #detalhe-erro:not(.in) {
+        visibility: hidden;
+        height: 0 !important;
+    }
+    #btn-detalhe-erro {
+        color: #999;
+    }
+    /*-->*/
+</style>
+<script type="text/javascript">
+    //<!--
+    (function ($, window) {
+        'use strict';
+
+        var checkSeconds = 9000000,
+            sessionInterval = setInterval(function () {
+
+            var sessionCallback = function () {
+                var ajaxResponse = function (result) {
+                    var error = (typeof result === 'object' && 'error' in result) ? 
+                        result.error : 'Não foi possível recuperar se sua sessão no SICA-e está ativa.';
+
+                    if (error !== null) {
+                        clearInterval(sessionInterval);
+                        var html = '';
+                        html += '<p>'
+                        html += '    <i class="icon icon-warning-sign"></i>';
+                        html += '    Sua sessão expirou!';
+                        html += '</p>';
+                        html += '<button id="btn-detalhe-erro" onclick="$(this).hide()" type="button" class="btn btn-small btn-link text-muted" data-toggle="collapse" data-target="#detalhe-erro">';
+                        html += '    Detalhes…';
+                        html += '</button>';
+                        html += '<div id="detalhe-erro" class="collapse alert alert-error">';
+                        html += '    <button type="button" class="close" onclick="$(\'#detalhe-erro\').removeClass(\'in\');$(\'#btn-detalhe-erro\').show();">×</button>';
+                        html += '    ' + error;
+                        html += '</div>';
+                        Message.showAlert(html, function () {
+                            window.location.reload();
+                        });
+                    }
+                };
+                
+                var ajax = $.ajax({
+                    url: '/session.php',
+                    dataType: 'json',
+                    type: 'GET',
+                    cache: false
+                });
+
+                ajax.fail(function () {
+                    ajaxResponse();
+                });
+
+                ajax.done(function (result) {
+                    ajaxResponse(result || {});
+                });
+            };
+            if (typeof Message !== 'undefined') {
+                sessionCallback();
+            } else {
+                $.getScript("<?php echo $this->assetUrl('components/message.js', array('address' => 'asset')); ?>", sessionCallback);
+            }
+        }, checkSeconds);
+    }(jQuery, window, undefined));
+    //-->
+</script>

@@ -1,0 +1,122 @@
+<?php
+
+$view = $this;
+$acao = function($row) use ($view) {
+            $toggleIcon = 'ativado';
+            $titleIcon = 'Reativar';
+
+            if ($row['stRegistroAtivo']) {
+                $toggleIcon = 'inativado';
+                $titleIcon = 'Inativar';
+            }
+
+            $urlToggle = $view->urlCurrent(array(
+                'controller' => 'usuario-externo',
+                'action' => 'toggle-status',
+                'id' => $row['sqUsuarioExterno']
+                    ));
+
+            $buttonPerfil = $view->actionButton('Atribuir Perfil', 'UsuarioExterno.bind', array($row['sqUsuarioExterno']), 'user');
+
+            $buttonView = $view->actionButton('Visualizar', $view->urlCurrent(array('action' => 'view',
+                        'id' => $row['sqUsuarioExterno']
+                    )), array(), 'eye-open', null, array('data-toggle' => 'modal',
+                'data-target' => '#modal-view',
+                'data-keyboard' => 'false',
+                'data-backdrop' => 'static'
+                    ), 'href');
+
+            $buttonAtivar = $view->actionButton($titleIcon, $urlToggle, array(), $toggleIcon, null, array('active' => $row['stRegistroAtivo'] ? : 1,
+                'msgActive' => Core_Registry::getMessage()->translate('MN070'),
+                'msgInactive' => Core_Registry::getMessage()->translate('MN072'),
+                'titleActive' => 'Reativar',
+                'titleInactive' => 'Inativar',
+                'class' => 'active-inactive'), 'href', array('action'=>'toggle-status'));
+
+            $buttonReenvio = '';
+
+            if ($row['stRegistroAtivo'] == \Core_Configuration::getSicaeUsuarioExtStRegistroPendAtivacao()) {
+                $buttonAtivar  =
+                $buttonPerfil  = '';
+                $buttonReenvio = $view->actionButton('Reenviar e-mail de ativação', 'UsuarioExterno.resendMail', array($row['sqUsuarioExterno']), 'envelope');
+            }
+
+            return sprintf( '<div class="btn-group">%s%s%s%s</div>',
+                            $buttonPerfil,
+                            $buttonView,
+                            $buttonAtivar,
+                            $buttonReenvio );
+        };
+
+$array = array(
+    'columns' => array(
+        array(
+            'column' => function($row) {
+                return 'Pessoa ' . ($row['nuCpf'] || $row['nuPassaporte'] ? 'Física' : 'Jurídica');
+            },
+        ),
+        array(
+            'column' => 'noUsuarioExterno',
+        ),
+        array(
+            'column' => 'txEmail',
+        ),
+        array(
+            'column' => function($row) use($view) {
+                if ($row['inNacionalidadeBrasileira'] === FALSE) {
+                    return '<div class="center">' . $row['nuPassaporte'] . '</div>';
+                }
+
+                if ($row['nuCpf']) {
+                    return '<div class="center">' . $view->maskNumber($row['nuCpf'], 'cpf') . '</div>';
+                } else {
+                    return '<div class="center">' . $view->maskNumber($row['nuCnpj'], 'cnpj') . '</div>';
+                }
+            },
+        ),
+        array(
+            'column' => 'sgSistema',
+        ),
+        array(
+            'column' => function($row) use($view) {
+                $strRetornoStatus = 'Inativo';
+                if ($row['stRegistroAtivo'] == \Core_Configuration::getSicaeUsuarioExtStRegistroAtivo()) {
+                    $strRetornoStatus = 'Ativo';
+                } elseif ($row['stRegistroAtivo'] == \Core_Configuration::getSicaeUsuarioExtStRegistroPendAtivacao()) {
+                    $strRetornoStatus = 'Pendente de Ativação';
+                }
+
+                return $strRetornoStatus;
+            },
+        ),
+        array(
+            'column' => $acao
+        )
+    )
+);
+
+$resultData = $this->result["data"];
+$sqUsuario = null;
+$return = array();
+foreach ($resultData as $result) {
+    if ($sqUsuario == $result["sqUsuarioExterno"]) {
+        if (!strstr($return[$sqUsuario]["sgSistema"], $result["sgSistema"])) {
+            $return[$sqUsuario]["sgSistema"] = $return[$sqUsuario]["sgSistema"] . " " . $result["sgSistema"];
+        }
+    } else {
+        $return[$result["sqUsuarioExterno"]] = $result;
+    }
+    $sqUsuario = $result["sqUsuarioExterno"];
+}
+
+foreach ($return as $key => $value) {
+    $return[$key]['sgSistema'] = str_replace(' ', ', ', trim($value['sgSistema']));
+}
+
+$this->result["data"] = $return;
+
+$this->grid->setConfig($array);
+$data = $this->grid->parseData($this->result);
+
+$data['iTotalRecords'] = $this->total;
+echo json_encode($data);

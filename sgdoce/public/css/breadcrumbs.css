@@ -1,0 +1,91 @@
+ul.breadcrumbs{
+    margin:-1px 0 18px -1px;
+    padding:0;
+    line-height:0%;
+    font-size:0;
+}
+
+ul.breadcrumbs li{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    *display:inline; /* IE ONLY*/
+    position:relative;
+    zoom:1;
+    line-height:100%;
+    font-size:14px; /* 0.8em default to override font-size:0; on parent*/
+}
+
+ul.breadcrumbs li a{
+    display:inline-block;
+    *display:inline; /* IE ONLY*/
+    position:relative;
+    /*padding:5px 15px 5px 5px;*/
+    padding: 7px 14px;
+    font-size:0.9em;
+    zoom:1;
+    margin:0;
+    background:url(../../examples/images/icon-arrow-right.png) no-repeat right center;
+}
+
+ul.breadcrumbs li.last a{
+
+}
+
+/* Alternative Style */
+ul.breadcrumbs.alt1{
+    border:1px solid transparent;
+    font-size:0;
+}
+
+ul.breadcrumbs.alt1 li a{
+    padding:9px 25px 9px 15px;
+    background:url(../../examples/images/breadcrumbs-bg.gif) no-repeat right center;
+    text-decoration:none;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    font-size:12px;
+}
+
+ul.breadcrumbs.alt1 a:hover{
+    text-decoration: underline;
+}
+
+ul.breadcrumbs.alt1 li.first a{
+    border-left: 1px solid #ddd;
+}
+
+ul.breadcrumbs li.last a:hover{
+    text-decoration:underline;
+}
+
+ul.breadcrumbs.alt1 li.last a{
+    background:none;
+    border-right:1px solid #ddd;
+    background:none;
+
+}
+
+ul.breadcrumbs li.active a:hover{
+    cursor: default !important;
+    color: #333 !important;
+    text-decoration:none !important;
+}
+
+ul.breadcrumbs.alt1 li.active a{
+    cursor: default !important;
+    color: #333 !important;
+    text-decoration: none !important;
+}
+
+ul.breadcrumbs li.inactive a:hover{
+    cursor: default !important;
+    color: #398751;
+    text-decoration:none !important;
+}
+
+ul.breadcrumbs.alt1 li.inactive a{
+    cursor: default !important;
+    text-decoration: none !important;
+}

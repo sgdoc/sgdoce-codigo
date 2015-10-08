@@ -1,0 +1,48 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        $sqTemaVinculado = '';
+        switch ($row['tipo']) {
+            case 'U':
+                $sqTemaVinculado =  3;
+                break;
+            case 'E':
+                $sqTemaVinculado =  1;
+                break;
+            case 'I':
+                $sqTemaVinculado =  2;
+                break;
+            case 'C':
+                $sqTemaVinculado =  0;
+                break;
+        }
+        return
+//         $view->actionButton('Alterar', 'TemaTratado.Editar', array('sqArtefato' => $row['sqArtefato'],'codigo' => $row['codigo'],'sqTemaVinculado' => $sqTemaVinculado),'pencil')
+         $view->actionButton('Excluir', 'TemaTratado.deletar', array('sqArtefato' => $row['sqArtefato'],'codigo' => $row['codigo'],'sqTemaVinculado' => $sqTemaVinculado),'trash');
+    };
+    $tipo = function($row) use ($view) {
+        switch ($row['tipo']) {
+            case 'U':
+                return 'UNIDADE DE CONSERVAÇÃO';
+            break;
+            case 'E':
+                return 'ESPÉCIES';
+                break;
+            case 'I':
+                return 'EMPREENDIMENTO';
+                break;
+            case 'C':
+                return 'CAVERNA';
+                break;
+        }
+    };
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => 'nome'),
+                                  1 => array('column' => $tipo),
+                                  2 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

@@ -1,0 +1,28 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+
+        $rtn = $view->actionButton('Excluir', 'TipoPrioridade.deletar', array($row['sqTipoPrioridade']),'trash').
+               $view->actionButton('Alterar',  'TipoPrioridade.alterar', array($row['sqTipoPrioridade']),'pencil');
+
+        return $rtn;
+    };
+
+    $prioridade = function ($data) use ($view) {
+        return $view->marker($data['noPrioridade']
+                ,($data['sqPrioridade'] == 1) ? 'important' : (($data['sqPrioridade'] == 2) ? 'warning' : 'success')
+                ,'badge'
+                );
+    };
+
+    $configArray = array('columns' =>  array(
+                                  0 => array('column' => 'txTipoPrioridade'),
+                                  1 => array('column' => $prioridade),
+                                  2 => array('column' => $acao)
+    ));
+
+    $parse = new \Core_Grid_Parse($configArray);
+    $this->result['sEcho'] = $this->params['sEcho'];
+    $data  = $parse->parse($this->result);
+
+    echo json_encode($data);

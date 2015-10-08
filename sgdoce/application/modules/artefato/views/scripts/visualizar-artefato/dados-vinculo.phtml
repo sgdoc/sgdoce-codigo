@@ -1,0 +1,20 @@
+<?php $this->echoComponentResources('treeview'); ?>
+
+<br />
+<br />
+<br />
+<div id="treeview">
+    <?php echo $this->treeview($this->vinculos, $this->entityArtefato->getSqArtefato(), array(
+        'id'          => 'tree',
+        'hasActions'  => TRUE,
+        'hasLink'     => TRUE,
+        'linkHref'    => 'javascript:OpenLinkArtefato.visualizar(id)',
+        'childrenKey' => 'filhos',
+        'displayKey'  => 'nuArtefato',
+        'iconType'    => 'sqTipoVinculoArtefato'
+    ));
+
+    //a treeview e inicializada em public/js/app/artefato/visualizar-artefato/index.js
+
+    ?>
+</div>

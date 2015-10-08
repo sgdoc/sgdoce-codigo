@@ -1,0 +1,61 @@
+<?php
+
+$view = $this;
+$acao = function($row) use ($view) {
+            $toggleIcon = 'ativado';
+            $titleIcon = 'Reativar';
+
+
+            if ($row['stRegistroAtivo']) {
+                $toggleIcon = 'inativado';
+                $titleIcon = 'Inativar';
+            }
+
+            $urlToggle = $view->urlCurrent(array(
+                'controller' => 'sistema',
+                'action' => 'toggle-status',
+                'id' => $row['sqSistema']
+            ));
+
+            return '<div class="btn-group">' .
+                    $view->actionButton('Alterar', 'Sistema.edit', array($row['sqSistema']), 'pencil')
+                    . $view->actionButton('Visualizar', 'Sistema.view', array($row['sqSistema']), 'eye-open')
+                    . $view->actionButton($titleIcon, $urlToggle, array(), $toggleIcon, NULL, array('active' => $row['stRegistroAtivo'],
+                        'msgActive' => Core_Registry::getMessage()->translate('MN044'),
+                        'msgInactive' => Core_Registry::getMessage()->translate('MN046'),
+                        'titleActive' => 'Reativar',
+                        'titleInactive' => 'Inativar',
+                        'class' => 'active-inactive',
+                            ), 'href',array('action'=>'toggle-status'));
+            '</div>';
+        };
+
+$array = array(
+    'columns' => array(
+        array(
+            'column' => 'sgSistema',
+        ),
+        array(
+            'column' => 'noSistema',
+        ),
+        array(
+            'column' => 'noPessoa',
+        ),
+        array(
+            'column' => 'noArquitetura',
+        ),
+        array(
+            'column' => function($data) {
+                return $data['stRegistroAtivo'] ? 'Ativo' : 'Inativo';
+            }
+        ),
+        array(
+            'column' => $acao
+        )
+    )
+);
+
+$this->grid->setConfig($array);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

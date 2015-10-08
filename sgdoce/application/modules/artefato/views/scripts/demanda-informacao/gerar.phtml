@@ -1,0 +1,74 @@
+<?php
+	$this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/demanda-informacao/form.js');
+	echo $this->headScript();
+?>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h1>Gerar Demanda de Informação - <small><?php echo $this->nuArtefato($this->entArtefato); ?></small></h1>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal form-di-gerar" action="<?php echo $this->url(array('action' => 'save')); ?>" method="POST" enctype="application/x-www-form-urlencoded">
+            <?php if( $this->entPrazoPai !=  null ): ?>
+                <div class="control-group">
+                    <label class="control-label required">
+                        Conteúdo da Demanda Pai:
+                    </label>
+                    <div class="controls">
+                        <?php echo $this->formHidden('sqPrazoPai', $this->entPrazoPai->getSqPrazo()); ?>
+                        <?php echo $this->formTextarea('txSolicitacao', $this->entPrazoPai->getTxSolicitacao(), array('class' => 'span12 required', 'rows' => 4, 'disabled' => 'disabled')); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="control-group">
+                <label class="control-label required">
+                    <span class="required" title="Campo Obrigatório">*</span> Destino
+                </label>
+                <div class="controls">
+                    <?php echo $this->formHidden('sqArtefato', $this->entArtefato->getSqArtefato()); ?>
+                    <?php echo $this->formHidden('sqTipoPessoaOrigem', \Core_Configuration::getCorpTipoPessoaUnidadeOrg()); ?>
+                    <?php echo $this->formHidden('isResposta', FALSE); ?>
+                    <?php echo $this->formText('sqUnidadeOrgPessoaDestino', null, array('class' => 'span12 required', 'id' => 'sqUnidadeOrgPessoaDestino')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required">
+                    Nome do Destinatário
+                </label>
+                <div class="controls">
+                    <?php echo $this->formText('sqPessoaDestino', null, array('class' => 'span12', 'placeholder' => ' - nenhum - ', 'disabled' => 'disabled')); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="appendedInputButton"><span
+                    class="required" title="Required field">*</span> Data do Prazo</label>
+                <div class="controls">
+                    <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-startdate="<?php echo $this->entArtefato->getDtCadastro()->get(\Zend_Date::DATE_MEDIUM)?>" data-date-format="dd/mm/yyyy" class="input-append date">
+                        <input value="" class="input-small dateBR startDate required" maxlength="60"
+                            name="dtPrazo" mask="date" type="text"/>
+                            <a href="#" class="btn add-on right"><i class="icon-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label required"><span
+                    class="required" title="Required field">*</span>
+                    Conteúdo da solicitação
+                </label>
+                <div class="controls">
+                    <?php echo $this->formTextarea('txSolicitacao', null, array('class' => 'span12 required', 'rows' => 4)); ?>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluir" title="Concluir">Concluir</button>
+    <a href="#" class="btn btnCancelar" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        DemandaInformacao.Form.Events();
+        DemandaInformacao.Form.Gerar();
+    });
+</script>

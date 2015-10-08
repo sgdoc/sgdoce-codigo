@@ -1,0 +1,100 @@
+<?php echo $this->doctype(), PHP_EOL; ?>
+<html>
+    <head>
+        <title>ICMBio</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <?php
+        $urlSica = rtrim(Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOption('urlSica'), '/') . '/';
+        ?>
+        <base href="<?php echo $urlSica, $this->baseUrl(); ?>" data-url="<?php echo $urlSica; ?>"/>
+
+        <!-- CSS GERAL INICIO -->
+        <?php
+        $this->headLink()
+                ->setStylesheet($this->assetUrl('style.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('style-correct.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('style-responsive.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('style.css'))
+                ->appendStylesheet($this->assetUrl('nestedAccordion.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('datatable_bootstrap.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('jquery.simpleautocomplete.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('datepicker.css', array('address' => 'asset')))
+                ->appendStylesheet($this->assetUrl('asmSelect.css', array('address' => 'asset')));
+
+        echo $this->headLink();
+        ?>
+        
+		<!--[if IE 7]>
+			<link href="<?php echo $this->assetUrl('style-correct-ie.css', array('address' => 'asset')); ?>" rel="stylesheet" />
+		<![endif]-->
+        
+        <!-- CSS GERAL FIM -->
+
+        <!-- JAVASCRIPT INICIO -->
+        <?php
+        $this->headScript()->setFile($this->assetUrl('library/jquery.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootstrap.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/bootbox.min.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('sica/principal/init.js'));
+        $this->headScript()->appendFile($this->assetUrl('components/load.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/menu.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('all-message.js'));
+
+        echo $this->headScript();
+        ?>
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="<?php echo $this->assetUrl('library/html5.js', array('address' => 'asset')) ?>"></script>
+        <![endif]-->
+        <!-- JAVASCRIPT FIM -->
+
+        <!-- ICONS INICIO -->
+        <link rel="shortcut icon" href="assets/ico/favicon.ico">
+        <!-- ICONS FIM -->
+
+    </head>
+
+    <body>
+
+        <!-- NAVBAR INICIO -->
+        <?php echo $this->userMenu() ?>
+        <!-- NAVBAR FIM -->
+
+        <!-- CONTAINER INICIO -->
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <?php echo $this->systemMenu() ?>
+                </div>
+                <div class="span9">
+                    <?php
+                    echo $this->navigation()
+                            ->breadcrumbs()
+                            ->setMinDepth(0)
+                            ->setPartial(array('breadcrumb.phtml', 'principal'));
+                    ?>
+                    <?php echo $this->pageTitle() ?>
+                    <?php echo $this->userMessageStack() ?>
+                    <?php echo $this->layout()->content ?>
+                </div>
+            </div>
+        </div>
+        <?php
+        $this->headScript()->setFile($this->assetUrl('library/jquery.dataTables.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/grid.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.meio.mask.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/asmSelect.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/mask.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/message.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('library/jquery.validate.js', array('address' => 'asset')));
+        $this->headScript()->appendFile($this->assetUrl('components/validation.js', array('address' => 'asset')));
+
+        echo $this->headScript();
+        echo $this->usuario()->modalAlterarSenha();
+        echo $this->Perfil()->modalSelecionarPerfil();
+        ?>
+        <!-- CONTAINER FIM -->
+    </body>
+</html>

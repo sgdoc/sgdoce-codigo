@@ -1,0 +1,90 @@
+<?php
+
+$view = $this;
+
+$status = function($row) use ($view) {
+    $arrFlags = array();
+
+    if($row['sqTipoHistoricoArquivo'] == \Core_Configuration::getSgdoceTipoHistoricoArquivoEmprestado()){
+        $arrFlags[] = '<span title="Emprestado"><i class="icon icon-bell"></i></span>';
+    }
+
+    $html = join(' ', $arrFlags);
+
+    return $html;
+};
+
+$acaoArquivo = function($row) use ($view) {
+    $arrSqArtefato = array('sqArtefato' => $row['sqArtefato']);
+
+    $arrBtn = array(
+        $view->actionButton('Visualizar', 'Arquivo.view', $arrSqArtefato, 'eye-open')
+    );
+
+    if (!$row['emprestado']) {
+        $arrBtn[] = $view->actionButton('Desarquivar', 'Arquivo.unarchive', $arrSqArtefato, 'share');
+        $arrBtn[] = $view->actionButton('Emprestar'  , 'Arquivo.lend'     , $arrSqArtefato, 'circle-arrow-up');
+    }else{
+        $arrBtn[] = $view->actionButton('Devolver', 'Arquivo.returning', $arrSqArtefato, 'circle-arrow-down');
+    }
+
+
+    return $view->buttonGroup(join(' ', $arrBtn), 7);
+};
+
+$nuArtefato = function($row) use($view) {
+    return ($row['nuArtefato']) ?
+                ($row['coAmbitoProcesso'] == 'F') ?
+                    $view->maskNumber($row['nuArtefato'], '99999.999999/9999-99') : $row['nuArtefato'] : '';
+};
+
+$dtArquivamento = function($row) {
+    return $row['dtArquivamento']->get(Zend_Date::DATETIME_MEDIUM);
+};
+
+$acoesMultiplasArquivo = function($row) use ($view) {
+    $disabled = '';
+    if ($row['emprestado']) {
+        $disabled = 'disabled="disabled"';
+    }
+    return '<input type="checkbox" class="multipleAction" name="sqArtefato[]" value="' . $row['sqArtefato'] . '" ' . $disabled . ' />';
+};
+
+
+if ($this->dto->getTipoArtefato() == \Core_Configuration::getSgdoceTipoArtefatoProcesso()) { //processo
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplasArquivo),
+            array('column' => $status),
+            array('column' => $nuArtefato),
+            array('column' => $dtArquivamento),
+            array('column' => 'txClassificacao'),
+            array('column' => 'nuCaixa'),
+            array('column' => 'noUnidadeOrgCaixa'),
+            array('column' => 'txMovimentacao'),
+            array('column' => $acaoArquivo)
+        )
+    );
+} else {
+    $configArray = array(
+        'columns' => array(
+            array('column' => $acoesMultiplasArquivo),
+            array('column' => $status),
+            array('column' => function($row) {
+                return ($row['nuDigital']) ? $row['nuDigital'] : '';
+            }),
+            array('column' => $dtArquivamento),
+            array('column' => 'txClassificacao'),
+            array('column' => 'noTipoDocumento'),
+            array('column' => 'nuCaixa'),
+            array('column' => 'noUnidadeOrgCaixa'),
+            array('column' => 'txMovimentacao'),
+            array('column' => $acaoArquivo)
+        )
+    );
+}
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

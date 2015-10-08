@@ -1,0 +1,25 @@
+<?php
+
+$view = $this;
+
+$acao = function($row) use ($view) {
+    return $view->actionButton('Visualizar', 'PesquisarCaixaArquivo.handleModalImagemArtefato', array($row['sqArtefato']), 'list-alt');
+};
+
+$fnDocumento = function($row){
+    return $row['nuArtefato'];
+};
+
+$configArray = array('columns' => array(
+        array('column' => 'txClassificacao'),
+        array('column' => $fnDocumento),
+        array('column' => 'noPessoaOrigem'),
+        array('column' => 'txAssunto'),
+        array('column' => 'noTipoDocumento'),
+        array('column' => $acao)
+        ));
+
+$this->grid->setConfig($configArray);
+$data = $this->grid->parseData($this->result);
+
+echo json_encode($data);

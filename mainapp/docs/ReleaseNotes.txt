@@ -1,0 +1,17 @@
+*system:    MainApp
+*version:   2.0.0
+*iteration: -
+*deliver:   08/06/2015 17:00
+
+*objective:
+- Separação do config, data, layout e webservice
+
+*products:
+- Plano de Implantação
+- Código-fonte
+
+*new_functionality:
+-
+
+*changed_funcionality:
+-

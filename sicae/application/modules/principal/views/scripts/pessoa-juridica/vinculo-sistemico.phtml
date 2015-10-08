@@ -1,0 +1,56 @@
+
+<?php $arrSistema = array(); ?>
+<form class="form-horizontal" method="post">
+    <fieldset>
+        <div class="control-group">
+            <div class="span6">
+                <button type="button" class="btn btn-mini" id="btn-add-endereco" data-toggle="modal" title="Adicionar"><i class="icon-plus"></i></button>
+            </div>
+            <?php foreach ($this->data->getSqPessoa()->getSqVinculoSistemico() as $sqVinculo) : ?>
+                <?php if (!in_array($sqVinculo->getSqTipoVinculoSistemico()->getSqSistema()->getSqSistema(), $arrSistema)): ?>
+                    <table class="table table-bordered table-striped table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <?php echo $sqVinculo->getSqTipoVinculoSistemico()->getSqSistema()->getSgSistema(); ?>
+                                    &ndash;
+                                    <?php echo $sqVinculo->getSqTipoVinculoSistemico()->getSqSistema()->getNoSistema(); ?>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Vínculo Sistêmico</b></td>
+                            </tr>
+
+                            <?php foreach ($this->data->getSqPessoa()->getSqVinculoSistemico() as $sqVinculo2) : ?>
+                                <?php
+                                if ($sqVinculo->getSqTipoVinculoSistemico()->getSqSistema()->getSqSistema()
+                                        == $sqVinculo2->getSqTipoVinculoSistemico()->getSqSistema()->getSqSistema()):
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $sqVinculo2->getSqTipoVinculoSistemico()->getNoTipoVinculoSistemico(); ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php $arrSistema[] = $sqVinculo->getSqTipoVinculoSistemico()->getSqSistema()->getSqSistema(); ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </fieldset>
+    <br/>
+    <div class="form-actions">
+        <a class="btn buttons" href="#dado-bancario" title="Anterior">
+            <span class="icon-chevron-left"></span> Anterior
+        </a>
+        <a title="" class="btn disabled">
+            Próxima <span class="icon-chevron-right"></span>
+        </a>
+        </button>
+        <a class="btn btnCancelar" href="<?php echo $this->urlCurrent(array('controller' => 'pessoa', 'action' => 'index')) ?>" >
+            <i class="icon-remove"></i> Cancelar
+        </a>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+<form class="form-horizontal" method="post" action="<?php echo $this->urlCurrent(array('controller' => 'telefone', 'action' => 'list')) ?>" id="form-telefone">
+    <fieldset>
+        <legend>Telefones</legend>
+        <div class="control-group">
+            <div class="span6">
+                <button type="button" class="btn btn-mini" id="btn-add-telefone" data-toggle="modal" title="Adicionar">
+                    <i class="icon-plus"></i>
+                </button>
+            </div>
+            <?php
+            echo $this->formHidden('sqPessoa', $this->data->getSqPessoa()->getSqPessoa());
+            ?>
+            <table id="table-telefone">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>DDD</th>
+                        <th>Telefone</th>
+                        <th width="60px">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </fieldset>
+    <br/>
+</form>
+<!--MODAL ADICIONAR TELEFONE-->
+<div class="modal hide fade" id="modal-telefone"></div>
+<script src="<?php echo $this->assetUrl('sica/telefone/index.js') ?>" type="text/javascript"></script>

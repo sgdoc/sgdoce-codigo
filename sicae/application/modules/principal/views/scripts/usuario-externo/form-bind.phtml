@@ -1,0 +1,33 @@
+<script src="<?php echo $this->assetUrl('sica/usuario-externo/bind.js');?>" type="text/javascript"></script>
+<div class="row-fluid">
+    <form class="form-horizontal" method="post" id="form-bind-profile" action="<?php echo $this->urlCurrent(array('action' => 'save-bind-profile'));?>">
+        <div class="control-group">
+            <label class="control-label">
+                <?php echo $this->formHidden('tpOperacao', $this->tpOperacao);?>
+                <span class="required">*</span> Sistema
+            </label>
+            <div class="controls">
+                <?php if ($this->disable): ?>
+                    <?php $currentSistema = '';?>
+                    <?php foreach ($this->sistemas as $sistema): ?>
+                        <?php if ($sistema['sqSistema'] == $this->sistema): ?>
+                            <?php $currentSistema = $sistema['sgSistema'] . ' - ' . $sistema['noSistema'];?>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                    <?php echo $this->formText('sqSistema', $currentSistema, array('id'      => 'sqSistemaText',
+                                                                                   'class'   => 'input-xlarge',
+                                                                                   'disable' => TRUE));?>
+                    <?php echo $this->formHidden('sqSistema', $this->sistema, array(), $this->sistemas);?>
+                <?php else: ?>
+                    <?php echo $this->comboSistema('sqSistema', $this->sistema, array('class' => 'required'), $this->sistemas);?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="control-group" id="perfis">
+            <?php if ($this->perfis): ?>
+                <?php echo $this->render('usuario-externo/table-perfis.phtml');?>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>

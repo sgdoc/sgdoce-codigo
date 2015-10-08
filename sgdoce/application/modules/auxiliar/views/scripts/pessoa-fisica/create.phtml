@@ -1,0 +1,35 @@
+<?php
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-fisica/form.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-fisica/justificativa.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/app/auxiliar/pessoa-fisica/form-control.js');
+    $this->headScript()->prependFile($this->baseUrl() . '/js/library/jquery.simpleautocomplete.js');
+
+
+    echo $this->headScript();
+?>
+
+<div class="alert alert-success fade in hide msgSalvar">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+	Dados salvos com sucesso.
+</div>
+
+<h1>Cadastrar Pessoa Física</h1>
+
+<br/>
+
+<?php
+    echo $this->partial('/pessoa-fisica/form.phtml', array(
+        'user'      => $this->user,
+        'pessoa'      => $this->pessoa,
+        'data'      => $this->data,
+        'comboDas'  => $this->comboDas,
+        'listaPais' => $this->listaPais,
+        'dataPost'  => $this->dataPost,
+        'sqPessoaSgdoce' => $this->sqPessoaSgdoce,
+        'listaDocumentos' => $this->listaDocumentos,
+        'campoPessoa' => $this->campoPessoa,
+        'campoCpf' => $this->campoCpf,
+        'form' => $this->form
+    ));
+ ?>

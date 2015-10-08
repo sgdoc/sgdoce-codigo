@@ -1,0 +1,70 @@
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <div class="clearfix">
+            <dt>Sigla</dt>
+            <dd><?php echo $this->data['sgSistema'] ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Sistema</dt>
+            <dd><?php echo $this->escape($this->data['noSistema']) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>URL</dt>
+            <dd><?php echo $this->data['txUrl'] ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Descrição</dt>
+            <dd><?php echo nl2br($this->escape($this->data['txDescricao'])) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Tipo de Arquitetura</dt>
+            <dd><?php echo $this->escape($this->data['noArquitetura']) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Tipo de Leiaute</dt>
+            <dd> <?php echo $this->escape($this->data['noLeiaute']) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Nome do Responsável</dt>
+            <dd> <?php echo $this->escape($this->data['noPessoa']) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>CPF do Responsável</dt>
+            <dd><?php echo $this->escape($this->maskNumber($this->data['nuCpf'], 'cpf')) ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Telefone Institucional</dt>
+            <dd>
+                <?php $ddd = '(' . $this->data['nuDdd'] . ') '; ?>
+                <?php $telefone = $this->data['nuTelefone']; ?>
+
+                <?php if (strlen($this->data['nuTelefone']) >= 5) { ?>
+                    <?php $telefone = substr($this->data['nuTelefone'], 0, 4) . '-' . substr($this->data['nuTelefone'], 4); ?>
+                <?php } else { ?>
+                    <?php $telefone = $this->data['nuTelefone']; ?>
+                <?php } ?>
+
+                <?php if (!$this->data['nuTelefone']): ?>
+                    <?php $ddd = ''; ?>
+                    <?php $telefone = ''; ?>
+                <?php endif; ?>
+
+                <?php echo $this->escape($ddd . $telefone); ?>
+            </dd>
+        </div>
+        <div class="clearfix">
+            <dt>E-mail</dt>
+            <dd><?php echo $this->data['txEmail'] ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>URL do Help</dt>
+            <dd><?php echo $this->data['txUrlHelp'] ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Imagem</dt>
+            <dd>
+                <img class="thumbnail" src="<?php echo $this->urlCurrent(array('action' => 'render-logo', 'id' => $this->data['sqSistema'])) ?>" alt="<?php echo $this->data['txEnderecoImagem'] ?>" /></p>
+            </dd>
+        </div>
+    </dl>
+</div>

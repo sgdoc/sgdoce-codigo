@@ -1,0 +1,35 @@
+div.autocomplete {
+    overflow-x: 'auto';
+    font-size: 11px;
+    position:absolute;
+    background: white;
+}
+
+div.autocomplete ul li.sel {
+    background-color: #B4D5FE;
+}
+
+div.autocomplete ul li {
+    color: #303030;
+    cursor: pointer;
+    padding-left: 5px;
+    line-height: 25px;
+}
+
+li { line-height: 20px; }
+
+div.autocomplete ul {
+    list-style: none outside none;
+    margin: 0px;
+    padding: 0;
+}
+
+input.autocomplete:focus {
+    background-image: url(../img/autocomplete.gif);
+    background-position: 2px 50%;
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+input.autocomplete:focus.loading {
+    background-image: url(../img/autocomplete-loading.gif);
+}

@@ -1,0 +1,48 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+        return $view->actionButton('Excluir', 'Interessado.deletar', array('sqArtefato' => $row['sqArtefato']
+                                                                             ,'sqPessoaSgdoce' => $row['sqPessoaSgdoce']),'trash');
+    };
+    $acaoDocumento = function($row) use ($view) {
+        $docMask = $row['nuCpfCnpjPassaporte'];
+        if (strlen($row['nuCpfCnpjPassaporte']) == 11) {
+            $docMask = $view->maskNumber($row['nuCpfCnpjPassaporte'], '999.999.999-99');
+        } else if (strlen($row['nuCpfCnpjPassaporte']) == 14) {
+            $docMask = $view->maskNumber($row['nuCpfCnpjPassaporte'], '99.999.999/9999-99');
+        }
+
+        return $docMask;
+    };
+
+    $acaoTipoDocumento = function($data) use ($view) {
+        $tipoDocumento  = '';
+        switch ($data['sqTipoPessoa']) {
+            case \Core_Configuration::getSgdoceTipoPessoaPessoaFisica():
+                if($data['sqPais'] == 1 || $data['sqPais'] == ''){
+                    $tipoDocumento  = 'CPF';
+                }else{
+                    $tipoDocumento  = 'Passaporte';
+                }
+            break;
+            case \Core_Configuration::getSgdoceTipoPessoa_pessoa_juridica():
+                $tipoDocumento  = 'CNPJ';
+                break;
+            default:
+                $tipoDocumento = '';
+            break;
+        }
+        return $tipoDocumento;
+    };
+
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => 'noPessoa'),
+                                  1 => array('column' => $acaoTipoDocumento ),
+                                  2 => array('column' => $acaoDocumento),
+                                  3 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

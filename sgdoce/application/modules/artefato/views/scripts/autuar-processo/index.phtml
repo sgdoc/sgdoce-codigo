@@ -1,0 +1,21 @@
+<h1>Validar Processo</h1>
+<br />
+<form class="form-horizontal form-processo-eletronico"
+    name="form-create"
+    action="<?php echo $this->url(array('action'=>'save-artefato-processo')) ?>"
+    method="post">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+    <br />
+    <?php echo $this->formHidden('dtArtefato', new \Zend_Date()); ?>
+    <?php echo $this->render('processo-eletronico/basico.phtml',array('municipio' => $this->municipio , 'coAmbitoProcesso'=>$this->coAmbitoProcesso));?>
+    <div class="form-actions" id="formButtonsPrincipal">
+	    <button class="btn btn-primary">Validar</button>
+        <a href="#" class="btn" id="cancelar"> <i class="icon-remove"></i>Cancelar</a>
+    </div>
+</form>
+<script type="text/javascript" src="/js/app/artefato/autuar-processo/processo-eletronico.js"></script>
+<script type="text/javascript" src="/js/app/artefato/autuar-processo/nu-processo.js"></script>

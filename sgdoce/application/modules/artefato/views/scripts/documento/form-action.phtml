@@ -1,0 +1,19 @@
+
+<div class="form-actions" id="formButtonsPrincipal">
+    <button  id="btnAnterior" class="btn btn_prev" type="button" disabled="disabled">
+        <span class="icon-chevron-left"></span> Anterior
+    </button>
+    <button id="btnProximo" class="btn btn_next btn-primary"  type="button">
+         Próxima <span class="icon-chevron-right icon-search icon-white"></span>
+    </button>
+    <button class="btn btn-concluir">Concluir</button>
+    <?php if(!$this->urlBack): ?>
+    <button id="cancelarDoc" class="btn"  type="button">
+        <i class="icon-remove"></i> Cancelar
+    </button>
+    <?php else: ?>
+    <a href="<?php echo $this->urlBack; ?>" class="btn btn-cancelar">
+        <i class="icon-remove"></i> Cancelar
+    </a>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,254 @@
+<script type="text/javascript" src="/js/app/artefato/consultar-artefato/form.js"></script>
+<script type="text/javascript" src="/js/app/artefato/artefato/index.js"></script>
+<h1>Pesquisar Artefato</h1>
+<br />
+<div class="alert alert-success hide">
+    <a class="close" href="#" data-dismiss="alert" title="Fechar">×</a>
+    Cadastro realizado com sucesso.
+</div>
+<form class="form-horizontal" id="form-consultar-artefato-avancado" method="post" action="<?php echo $this->urlCurrent(array('action' => 'list-consultar-artefato-avancado'))?>">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Pelo menos um dos filtros
+            deve ser preenchido</p>
+        <div class="btn-group pull-right">
+            <a class="btn" id="btnPesquisaPadrao" title="Pesquisa Simples">Pesquisa Simples</a>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Filtros (Pesquisa avançada)</legend>
+       <div class="control-group campos-esconder">
+            <label class="control-label" for="select01"><span class="required"
+                title="Required field"></span> Pesquisa Por:</label>
+            <?php
+                $tipoPesquisa = array('' => 'Selecione' ,'1' => 'Digital' ,'2' =>'Processo');
+            ?>
+            <div class="controls">
+                <?php echo $this->ComboCustom('tipoPesquisa', NULL, array('class'=>''),$tipoPesquisa); ?>
+            </div>
+        </div>
+         <div class="control-group campos-esconder">
+            <label class="control-label" for="numero">Número</label>
+            <div class="controls">
+                <input type="text" class="span3" id="nuArtefato" name="nuArtefato" maxlength="30" />
+            </div>
+        </div>
+        <div id="divInteressado" class="control-group campos-esconder">
+            <label class="control-label" for="nomeRzSocial">Interessado</label>
+            <div class="controls">
+                <input type="text" class="span11" id="sqPessoaSgdoce" name="sqPessoaSgdoce" value="" maxlength="120" />
+            </div>
+        </div>
+        <div id="divCpfCnpjPassaporte" class="control-group campos-esconder">
+            <label class="control-label" for="doc">CPF/CNPJ/Passaporte</label>
+            <div class="controls">
+                <input type="text" class="span3" id="nuCpfCnpjPassaporte" name="nuCpfCnpjPassaporte" value=""/>
+            </div>
+        </div>
+        <div id="divTipoInformacao" class="control-group">
+            <label class="control-label" for="digital">Tipo de Informação</label>
+            <div class="controls">
+                <select id="tipoInformacao" name="tipoInformacao">
+                    <option value="">Selecione uma opção</option>
+                    <option value="1">Comentário</option>
+                    <option value="2">Despacho</option>
+                    <option value="3">Outros</option>
+                </select>
+            </div>
+        </div>
+        <div id="divTexto" class="control-group">
+            <label class="control-label" for="texto">Texto</label>
+            <div class="controls">
+                <input type="text" class="span11" id="txComentario" name="txComentario" value="" maxlength="500"/>
+            </div>
+        </div>
+        <div id="divTipoDocumento" class="control-group campos-esconder">
+             <label class="control-label" for="tipoDoc">Tipo Documento</label>
+             <div class="controls">
+                <input type="text" class="span6" id="tipoDocumento" name="tipoDocumento" value="" maxlength="250"/>
+            </div>
+        </div>
+        <div id="divTituloDossie" class="control-group campos-esconder">
+            <label class="control-label" for="TipoDossie">Título do Dossiê</label>
+            <div class="controls">
+                <input type="text" class="span6" id="txTituloDossie" name="txTituloDossie" value="" maxlength="250"/>
+            </div>
+        </div>
+        <div id="divNumDocumento" class="control-group campos-esconder">
+            <label class="control-label" for="TipoDossie">Número do Documento</label>
+            <div class="controls">
+                <input type="text" class="span4" id="nuTipoDossie" name="nuTipoDossie" value="" maxlength="30"/>
+            </div>
+        </div>
+        <div id="divOrigem" class="control-group campos-esconder">
+            <label class="control-label" for="TipoDossie">Origem</label>
+            <div class="controls">
+                <input type="text" class="span4" id="sqPessoaFuncao" name="sqPessoaFuncao" value="" maxlength="30" />
+            </div>
+        </div>
+        <div id="divData" class="control-group">
+            <label class="control-label" for="data">Data</label>
+            <div class="controls">
+                <select class="span4" id="dataCombo" name="dataCombo">
+                    <option value="0" selected>Selecione uma opção</option>
+                    <option value="1">Data da autuação</option>
+                    <option value="2">Data de entrada</option>
+                    <option value="3">Data do documento</option>
+                    <option value="4">Data do cadastro</option>
+                    <option value="5">Data do prazo</option>
+                    <option value="6">Data do despacho</option>
+                    <option value="7">Data do comentário</option>
+                </select>
+            </div>
+        </div>
+        <div id="divPeriodo" class="control-group">
+            <label class="control-label" for="appendedInputButton"><span
+             class="required" title="Required field">*</span> Período</label>
+            <div class="controls">
+                 <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date" id="dataInicio">
+                     <input class="input-small dateBr required" mask="date" type="text" name="dtArtefatoInicio" id="dtArtefatoInicio"  value="">
+                    <span class="btn add-on right "><i class="icon-calendar"></i></span>
+                </div>
+                &nbsp; a &nbsp;
+                <div data-date="<?php echo \Zend_Date::now()->get('dd/MM/yyyy')?>" data-date-format="dd/mm/yyyy" class="input-append date" id="dataFim">
+                     <input class="input-small dateBr" mask="date" type="text" name="dtArtefatoFim" id="dtArtefatoFim"  value="">
+                     <span class="btn add-on right"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div id="divAssunto" class="control-group campos-esconder">
+            <label class="control-label">Assunto</label>
+            <div class="controls">
+                <input type="text" class="span11" id="txAssunto" name="txAssunto" value="" maxlength="250">
+            </div>
+        </div>
+        <div id="divAssunotoComplementar" class="control-group campos-esconder">
+            <label class="control-label">Assunto Complementar</label>
+            <div class="controls">
+                <input type="text" class="span11" id="txAssuntoComplementar" name="txAssuntoComplementar" value="" maxlength="250">
+            </div>
+        </div>
+        <div id="divAssinatura" class="control-group">
+            <label class="control-label">Assinatura</label>
+            <div class="controls">
+                <input type="text" class="span8" id="txAssinatura" name="txAssinatura" value="" maxlength="120">
+            </div>
+        </div>
+        <div id="divCargo" class="control-group campos-esconder">
+            <label class="control-label">Cargo</label>
+            <div class="controls">
+                <input type="text" class="span8" id="txCargo" name="txCargo" value="" maxlength="20">
+            </div>
+        </div>
+        <div id="divDestino" class="control-group campos-esconder">
+            <label class="control-label">Destino</label>
+            <div class="controls">
+                <input type="text" class="span8" id="txDestino" name="txDestino" value="">
+            </div>
+        </div>
+        <div id="divEncaminhamento" class="control-group campos-esconder">
+            <label class="control-label">Encaminhado para</label>
+            <div class="controls">
+                <input type="text" class="span11" id="txEncaminhadoPara" name="txEncaminhadoPara" value="">
+            </div>
+        </div>
+        <div id="divRecebido" class="control-group campos-esconder">
+            <label class="control-label">Recebido por</label>
+            <div class="controls">
+                <input type="text" class="span11" id="txRecebidoPor" name="txRecebidoPor" value="" maxlength="200">
+            </div>
+        </div>
+        <div id="divEnderecamento" class="control-group campos-esconder">
+            <label class="control-label">Endereçamento</label>
+            <div class="controls">
+                <input type="text" class="span8" id="txEnderecamento" name="txEnderecamento" value="" maxlength="25">
+            </div>
+        </div>
+        <div id="divPrioridade" class="control-group campos-esconder">
+            <label class="control-label" for="digital">Prioridade</label>
+            <div class="controls">
+                <?php echo $this->ComboCustom('sqPrioridade' , 'data[sqPrioridade]' ,
+						       array('class' => 'span4 '), $this->tipoPrioridade)?>
+            </div>
+        </div>
+        <div id="divReferencia" class="control-group campos-esconder">
+            <label class="control-label">Referência</label>
+            <div class="controls">
+                <input type="text" class="span6" id="txReferencia" name="txReferencia" value="" maxlength="250">
+            </div>
+        </div>
+        <div id="divUnidadeAfetada" class="control-group campos-esconder">
+            <label class="control-label">Unidade Afetada</label>
+            <div class="controls">
+                <?php echo $this->formText('sqNomeUnidade', NULL , array('class'=> 'span8', 'maxlength' => 25));?>
+            </div>
+        </div>
+        <div id="divEmpreendimentos" class="control-group campos-esconder">
+            <label class="control-label">Empreeendimento</label>
+            <div class="controls">
+                  <?php echo $this->formText('sqNomeEmpreendimento', NULL , array('class'=> 'span11', 'maxlength' => 25));?>
+            </div>
+        </div>
+        <div id="divTipoEspecie" class="control-group campos-esconder">
+            <label class="control-label">Tipo de Espécie</label>
+            <div class="controls">
+                <?php echo $this->formText('sqNomeEspecie', NULL , array('class'=> 'span8', 'maxlength' => 25));?>
+            </div>
+        </div>
+        <div id="divCavernas" class="control-group campos-esconder">
+            <label class="control-label ">Cavernas</label>
+            <div class="controls">
+                <?php echo $this->formText('sqNomeCaverna', NULL , array('class'=> 'span8', 'maxlength' => 25));?>
+            </div>
+        </div>
+        <br />
+        <div class="form-actions">
+            <button class="btn btn-primary btn_pesquisar" id="btnPesquisar" > <i class="icon-search icon-white"></i> Pesquisar</button>
+            <button class="btn" name="limpar" id="limpar" >Limpar</button>
+
+        </div>
+    </fieldset>
+</form>
+<div class="control-group rstSemTipoInfo hide">
+    <legend>Resultado da Pesquisa</legend>
+        <table id="table-consultar-artefato-avancado">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Digital</th>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Origem</th>
+                    <th>Assunto</th>
+                    <th>Interessado</th>
+                    <th>CPF/CNPJ/Passaporte</th>
+<!--                <th>Movimentação</th>-->
+                    <th>Prazo</th>
+                    <th>Prioridade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+        </table>
+<div class="form-actions">
+     <a title="Filtros" id="btnFiltro" class="btn btn-primary">Filtros</a>
+</div>
+</div>
+<div class="control-group rstComTipoInfo hide">
+    <legend>Resultado da Pesquisa</legend>
+    <table id="table-consultar-artefato-avancado-tipo-info">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Digital</th>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Origem</th>
+                    <th>Assunto</th>
+                    <th width="350">Texto</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+    </table>
+    <div class="form-actions">
+        <button class="btn btn-primary" type="button">Filtros</button>
+    </div>
+</div>

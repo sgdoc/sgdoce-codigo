@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>VISUALIZAR DOCUMENTOS</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+
+        <h4>Caixa Nº <?php echo $this->caixa->getNuCaixa(); ?></h4>
+
+        <form class="form-horizontal"  method="post" id="form_caixa_artefato"
+            action="<?php echo $this->urlCurrent(array('action' => 'list-artefato-arquivado'))?>">
+            <?php echo $this->formHidden('sqCaixa', $this->caixa->getSqCaixa()); ?>
+        </form>
+
+        <table id="grid_caixa_artefato">
+            <thead >
+                <tr>
+                    <th>Classificação</th>
+                    <th>Documento</th>
+                    <th>Origem</th>
+                    <th>Assunto</th>
+                    <th>Tipologia</th>
+                    <th width="7%" class="sorting_disabled">Ação</th>
+                </tr>
+            </thead>
+        </table>
+
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btnConcluirClassificacao" title="Concluir">Concluir</button>
+    <a href="#" class="btn btnCancelarClassificacao" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>
+<script type="text/javascript">
+    Grid.load($('#form_caixa_artefato'), $('#grid_caixa_artefato'));
+</script>

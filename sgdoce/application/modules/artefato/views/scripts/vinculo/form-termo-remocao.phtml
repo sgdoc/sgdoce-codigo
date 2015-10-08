@@ -1,0 +1,121 @@
+<?php echo $this->headScript()->appendFile($this->baseUrl() . '/js/app/artefato/vinculo/form-termo.js'); ?>
+<form class="form-horizontal"  method="post" id="form-termo-juntada" action="<?php echo $this->urlCurrent(array('action' => 'list')) ?>">
+    <div class="modal-header">
+        <a title="Fechar" data-dismiss="modal" class="close">×</a>
+        <h1>Termo de Desapensação</h1>
+        <div class="alert alert-error campos-obrigatorios hidden"></div>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="top-bar">
+                    <p class="requiredLegend pull-left">Campos obrigatórios *</p>
+                </div>
+            </div>
+        </div>
+
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label">
+                    <span class="required">*</span> Nº do Despacho Interlocutório
+                </label>
+                <div class="controls input-append span8">
+                    <input type="text" class="span7 required" name="sqDespachoInterlocutorio" id="sqDespachoInterlocutorio" mask="numeric" />
+                    <a href="javascript:void(0);" class="btn add-on right btn-search-despacho-interlocutorio"><i class="icon-search"></i></a>
+                    <span class="help-block aviso">Informe o nº do despacho</span>
+                </div>
+            </div>
+
+            <div class="div-content-body hide">
+                <div class="control-group">
+                    <label class="control-label">Modelo de termo</label>
+                    <div class="controls">
+                        <input type="hidden" name="sq_tipo_vinculo_artefato" id="sq_tipo_vinculo_artefato" value="<?php echo $this->data->tOper; ?>" />
+                        <input type="text" class="span6" disabled="true" value="<?php echo ucfirst($this->data->tOper); ?>"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Número do processo Anexador</label>
+                    <div class="controls">
+                        <input type="hidden" name="sq_artefato" id="sq_artefato" value="<?php echo $this->data->parent->getSqArtefato(); ?>" />
+                        <input type="text" class="span6" disabled="true" value="<?php echo $this->nuArtefato($this->data->parent); ?>"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Número(s) do(s) processo(s) anexado(s)</label>
+                    <?php if( is_array($this->data->child) ): ?>
+                    <div class="controls">
+                        <?php $labelChilds = ""; foreach( $this->data->child as $child  ): ?>                            
+                            <?php $labelChilds .= $this->nuArtefato($child) . ", "; ?>
+                            <input type="hidden" name="sq_artefato[]" id="sq_artefato" value="<?php echo $child->getSqArtefato(); ?>" />
+                        <?php endforeach; ?>
+                        <?php $labelChilds = rtrim(trim($labelChilds), ","); ?>
+                        <textarea class="span6" disabled="true"><?php echo $labelChilds; ?></textarea>
+                    </div>
+                    <?php else: ?>
+                    <div class="controls">
+                        <input type="hidden" name="sq_artefato" id="sq_artefato" value="<?php echo $this->data->child->getSqArtefato(); ?>" />
+                        <input type="text" class="span6" disabled="true" value="<?php echo $this->nuArtefato($this->data->child); ?>"/>
+                    </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Data Pedido</label>
+                    <div class="controls">
+                        <input class="input-small dateBR dtDespacho" type="text"  disabled="true"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"> Setor</label>
+                    <div class="controls">
+                        <input type="text" disabled="true" class="span10 noUnidadeAssinatura" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"><span class="required">*</span> Assinante</label>
+                    <div class="controls">
+                        <input type="hidden" name="sqAssinante" id="sqAssinante_hidden" value="0" />
+                        <input type="text" class="span6 required" name="sqAssinante" id="sqAssinante" />
+                    </div>
+                    <div class="controls radios-inline">
+                        <input type="radio" name="stCargoFuncao" value="1" checked="checked" class="required" id="stCargoFuncao1"/>
+                        <label for="stCargoFuncao1" >Cargo</label>
+                        <input type="radio" name="stCargoFuncao" value="2" class="required" id="stCargoFuncao2"/>
+                        <label for="stCargoFuncao2" >Função</label>
+                    </div>
+                </div>
+                <div id="divCargo" class="control-group">
+                    <label class="control-label"><span class="required">*</span> Cargo</label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqCargo',
+                                null,
+                                array('class'=>'span4 required'),
+                                $this->arrCargo); ?>
+                    </div>
+                </div>
+                <div id="divFuncao" class="control-group hidden">
+                    <label class="control-label"><span class="required">*</span> Função</label>
+                    <div class="controls">
+                        <?php echo $this->ComboCustom('sqFuncao',
+                                null,
+                                array('class'=>'span4'),
+                                $this->arrFuncao); ?>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer div-content-body hide">
+        <button class="btn btn-primary" type="button" id="btn-gerar-termo-juntada">
+            <i class="icon-search icon-white"></i>
+            Gerar Termo
+        </button>
+    </div>
+</form>

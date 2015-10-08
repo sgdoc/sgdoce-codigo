@@ -1,0 +1,51 @@
+<?php $this->echoComponentResources('treeview'); ?>
+
+<h1>Árvore de Vínculos</h1>
+
+<br />
+<br />
+<br />
+<div class="form-horizontal">
+    <div id="treeview">
+        <?php echo $this->treeview($this->data->artefatos, $this->data->sqArtefato, array(
+            'id'          => 'tree',
+            'hasActions'  => true,
+            'hasLink'     => false,
+            'childrenKey' => 'filhos',
+            'displayKey'  => 'nuArtefato',
+            'iconType'    => 'sqTipoVinculoArtefato'
+        )); ?>
+    </div>
+
+    <div class="form-actions">
+        <?php if($this->backUrl): ?>
+            <a class="btn" title="Voltar" href="<?php echo $this->backUrl; ?>">
+                <i class="icon-remove"></i>
+                Cancelar
+            </a>
+        <?php else: ?>
+            <button class="btn btn-primary" id="btn_back">
+                <i class="icon-remove"></i>
+                Cancelar
+            </button>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#tree").treeview({
+            collapsed: false,
+            animated: "fast",
+            control: "#sidetreecontrol",
+            persist: "location"
+        });
+    });
+    $('#btn_back').on('click',function(){
+       if( history.back() == undefined ){
+           window.close();
+       } else {
+           history.back();
+       }
+    });
+</script>

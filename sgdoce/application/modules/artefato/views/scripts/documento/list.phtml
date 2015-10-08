@@ -1,0 +1,28 @@
+<?php
+    $view = $this;
+    $acao = function($row) use ($view) {
+
+            $rtn =
+            $view->actionButton('Alterar',  'ModeloMinuta.alterar', array($row['sqModeloDocumento'],$row['sqPadraoModeloDocumento']),'pencil').
+            $view->actionButton('Visualizar',
+                                     $view->urlCurrent(array('action' => 'download-modelo')),
+                                     array('codigo' => $row['sqModeloDocumento']),
+                                     'eye-open',
+                                     NULL,
+                                     array(),
+                                     'href') .
+             $view->actionButton('Excluir', 'ModeloMinuta.deletar', array($row['sqModeloDocumento']),'trash');
+        return $rtn;
+    };
+
+    $configArray = array('columns'  => array(
+                                  0 => array('column' => 'noPadraoModeloDocumento'),
+                                  1 => array('column' => 'noTipoDocumento'),
+                                  2 => array('column' => 'txAssunto'),
+                                  3 => array('column' => $acao)
+    ));
+
+    $this->grid->setConfig($configArray);
+    $data  = $this->grid->parseData($this->result);
+
+    echo json_encode($data);

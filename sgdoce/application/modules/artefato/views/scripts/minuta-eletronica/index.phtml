@@ -1,0 +1,33 @@
+<script type="text/javascript" src="/js/app/artefato/minuta-eletronica/index.js"></script>
+
+<h1>Cadastrar Minuta Eletrônica</h1>
+
+<br/>
+<form class="form-horizontal" action="<?php echo $this->urlCurrent(array('action' => 'save-artefato'))?>" method="post" id="form-artefato">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+    <fieldset>
+        <input class="span6" type="hidden" id="semUnidadeExercicio" value="<?php echo $this->semUnidadeExercicio?>" />
+        <br/>
+        <div class="control-group">
+            <label class="control-label" for="select01"><span class="required" title="Required field">*</span> Tipo de Documento</label>
+            <div class="controls">
+                <input class="required span6" type="text" name="sqTipoDocumento" id="sqTipoDocumento" value="" />
+            </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="select01"><span class="required" title="Required field">*</span> Assunto</label>
+          <div class="controls">
+            <input class="required span6" type="text" name="sqAssunto" id="sqAssunto" value="" />
+          </div>
+        </div>
+        <br/>
+        <div class="form-actions">
+            <button class="btn btn-primary">Próxima</button>
+             <a href="" class="btn" id="cancelar"> <i
+                    class="icon-remove"></i> Cancelar
+            </a>
+        </div>
+    </fieldset>
+</form>

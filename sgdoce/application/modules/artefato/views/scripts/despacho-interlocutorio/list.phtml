@@ -1,0 +1,71 @@
+<?php
+$view = $this;
+
+$fnTxDespachoFormatter = function ($row) use ($view) {
+    return mb_substr($row['txDespacho'], 0, $view->dto->limitComment, 'utf-8') .
+           (mb_strlen($row['txDespacho'], 'utf-8') > $view->dto->limitComment ? '<b>&hellip;</b>' : NULL);
+};
+$fnAcao = function ($row) use ($view){
+
+    $hasDemandaDespacho = FALSE;
+    foreach ($view->dto->demandaAberta as $demanda) {
+        if ($demanda['sqTipoAssuntoSolicitacao'] === Core_Configuration::getSgdoceTipoAssuntoSolicitacaoDespacho()) {
+            $hasDemandaDespacho = TRUE;
+        }
+    }
+
+    $arrBtn = array(
+        'view'  => $view->actionButton('Visualizar' , 'DespachoModal.view'  , array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'eye-open'  ),
+        'print' => $view->actionButton('Imprimir'   , 'DespachoModal.print' , array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'print')
+    );
+
+    if (true === $view->dto->hasPermission) {
+
+        /**
+         * Só mostra os botões para os meus despachos
+         *
+         * Os botões não são sinomino de ação. O despacho só podem sofrer ação
+         * se a data do despacho for maior que a data do último tramite do artefato
+         */
+
+        /**
+         * O despacho deve ter sido feito pela pessoa logada bem como o ultimo tramite
+         * deve ser menor que a data do despacho para poder alterar/excluri
+         */
+        if ($row['sqPessoaOperacao'] == Core_Integration_Sica_User::getPersonId()
+                && $row['dtDespacho']->compare($view->dto->ultimoTramite->getDtTramite()) > 0 ) {
+            $arrBtn['del'] = $view->actionButton('Excluir', 'DespachoModal.confirmDelete', array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'trash'   );
+            $arrBtn['up'] = $view->actionButton('Alterar', 'DespachoModal.edit'  , array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'pencil'  );
+        }
+    }
+    
+    if (\Zend_Registry::get('isUserSgi') && $hasDemandaDespacho ) {
+        if (!isset($arrBtn['del'])) {
+            $arrBtn['del'] = $view->actionButton('Excluir', 'DespachoModal.confirmDelete', array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'trash'   );
+        }
+        if (!isset($arrBtn['up'])) {
+            $arrBtn['up'] = $view->actionButton('Alterar', 'DespachoModal.edit'  , array('sqDespachoInterlocutorio' => $row['sqDespachoInterlocutorio']), 'pencil'  );
+        }
+    }
+
+    return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+$fnDateFormatter = function ($row) {
+    return $row ? $row['dtDespacho']->get( 'dd/MM/yyyy HH:mm:ss') : NULL;
+};
+
+$configArray = array('columns'  => array(
+               array('column' => 'sqDespachoInterlocutorio'),
+               array('column' => $fnDateFormatter),
+               array('column' => $fnTxDespachoFormatter),
+               array('column' => 'noAssinatura'),
+               array('column' => 'noOrigem'),
+               array('column' => 'noEncaminhado'),
+               array('column' => $fnAcao)
+    )
+);
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

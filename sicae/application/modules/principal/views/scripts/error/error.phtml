@@ -1,0 +1,32 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h2 class="pagination-centered"><?php echo $this->message ?></h2>
+
+            <?php if (isset($this->exception)): ?>
+
+                <h3>Exception information:</h3>
+                <p>
+                    <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+                </p>
+
+                <h3>Stack trace:</h3>
+                <pre><?php echo $this->exception->getTraceAsString() ?>
+                </pre>
+
+                <h3>Request Parameters:</h3>
+                <pre><?php echo $this->escape(var_export($this->request->getParams(), TRUE)) ?>
+                </pre>
+
+            <?php endif ?>
+            <br />
+            <br />
+            <br />
+            <div class="modal-footer">
+                <a id="" class="btn btn-primary" href="javascript: history.back(); ">Voltar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

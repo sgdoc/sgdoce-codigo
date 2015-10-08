@@ -1,0 +1,37 @@
+<script type="text/javascript" src="/js/components/validation.js"></script>
+<script type="text/javascript" src="/js/app/artefato/autuar-processo/tema-tratado.js"></script>
+<div class="modal-header">
+    <a title="Fechar" data-dismiss="modal" class="close">×</a>
+    <h3>Adicionar Tema Tratado</h3>
+</div>
+<div class="modal-body">
+    <div class="row-fluid">
+        <form class="form-horizontal" id="form-tema-tratado-modal" method="post">
+            <fieldset>
+                <div class="control-group">
+                        <label for="sq_estado" class="control-label">
+                            <span class="required" title="">* </span>Tema Vinculado
+                        </label>
+                        <div class="controls">
+                            <?php echo $this->formSelect('sqTemaVinculado',
+                                            NULL,
+                                            array('class'=>'required'),
+                                            array(''=>'Selecione...') + $this->temaVinculado);?>
+                        </div>
+                    </div>
+                    <div class="control-group hidden nome-especifico">
+                        <label for="" class="control-label">
+                            <span class="required" title="">* </span>Nome Específico
+                        </label>
+                        <div class="controls hidden tema div-tema">
+                            <?php echo $this->formText('sqNomeEspecifico', NULL,  array('class' => 'required','maxlength' => 60)); ?>
+                        </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnConcluirTema" data-dismiss="modal" title="Concluir">Concluir</a>
+    <a href="#" class="btn btnCancelarTema" data-dismiss="modal" title="Cancelar"><i class="icon-remove"></i> Cancelar</a>
+</div>

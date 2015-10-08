@@ -1,0 +1,34 @@
+<?php
+$view = $this;
+
+$dtFormatter = function ($row) {
+    return $row ? $row['dtComentario']->toString( 'dd/MM/yyyy HH:mm:ss') : NULL;
+};
+
+$txComentarioFormatter = function ($row) use ($view) {
+    return substr($row['txComentario'], 0, $view->limitComment) .
+           (mb_strlen($row['txComentario']) > $view->limitComment ? '<b>&hellip;</b>' : NULL);
+};
+
+$setoFormatter = function ($contect) {
+    return $contect['noUnidadeOrg'];
+};
+
+$acao = function($row) use ($view) {
+    $arrBtn['view'] = $view->actionButton('Visualizar', 'VisualizarArtefato.viewComentario', array('sqComentarioArtefato' => $row['sqComentarioArtefato']), 'eye-open');
+    return $view->buttonGroup(join(' ',$arrBtn),count($arrBtn));
+};
+
+$configArray = array('columns'  => array(
+        array('column' => $dtFormatter),
+        array('column' => $txComentarioFormatter),
+        array('column' => 'noPessoa'),
+        array('column' => $setoFormatter),
+        array('column' => $acao)
+)
+);
+
+$this->grid->setConfig($configArray);
+$data  = $this->grid->parseData($this->result);
+
+echo json_encode($data);

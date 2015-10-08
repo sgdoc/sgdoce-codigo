@@ -1,0 +1,86 @@
+<fieldset>
+    <div class="control-group">
+        <label class="control-label" for="cnpj">
+            <span class="required">*</span> CNPJ
+        </label>
+        <div class="controls">
+            <?php echo $this->formHidden('sqTipoPessoa', 2); ?>
+            <?php echo $this->formHidden('dtCadastro', $this->dtCadastro); ?>
+            <?php echo $this->formHidden('sqUsuarioExterno', $this->data->getSqUsuarioExterno()); ?>
+            <?php $attr = $this->data->getSqUsuarioExterno() ? array('class' => 'input-medium required cnpj', 'disabled' => 'disabled') : array('class' => 'input-medium required cnpj', 'autocomplete' => 'off'); ?>
+            <?php echo $this->formText('nuCnpj', $this->data->getSqUsuarioPessoaJuridica()->getNuCnpj(), $attr); ?>
+            <span class="help-block aviso">Esta informação será utilizada para recuperação de senha.</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="razaoSocial">
+            <span class="required">*</span> Razão Social
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('noUsuarioExterno', $this->data->getNoUsuarioExterno(), array('class' => 'span8 required', 'maxlength' => 250, 'autocomplete' => 'off')); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="nmEmpresa">
+            <span class="required">*</span> Nome Fantasia
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('noFantasia', $this->data->getSqUsuarioPessoaJuridica()->getNoFantasia(), array('class' => 'span8 required', 'maxlength' => 250, 'autocomplete' => 'off')); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="email">
+            <span class="required">*</span> E-mail
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('txEmail', $this->data->getTxEmail(), array('class' => 'span6 required email', 'maxlength' => 100, 'autocomplete' => 'off')); ?>
+
+            <?php if ($this->data->getSqUsuarioExterno()) { ?>
+                <span class="help-block aviso">Ao alterar o e-mail, seu login de acesso será alterado.</span>
+            <?php } else { ?>
+                <span class="help-block aviso">Seu e-mail será seu login de acesso ao sistema.</span>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="confirmEmail">
+            <span class="required">*</span> Confirmar E-mail
+        </label>
+        <div class="controls">
+            <?php echo $this->formText('txEmailConfirmado', $this->data->getTxEmail(), array('class' => 'span6 required email', 'maxlength' => 100, 'autocomplete' => 'off')); ?>
+        </div>
+    </div>
+    <?php if (!$this->data->getSqUsuarioExterno()): ?>
+        <div class="control-group">
+            <label class="control-label" for="senha">
+                <span class="required" title="Campo Obrigatório"
+>*</span> Senha
+            </label>
+            <div class="controls">
+                <?php echo $this->formPassword('txSenha', $this->data->getTxSenha(), array('class' => 'span3 required validatePassword', 'maxlength' => 32)); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="confimSenha">
+                <span class="required">*</span> Confirmar Senha
+            </label>
+            <div class="controls">
+                <?php echo $this->formPassword('txSenhaConfirmado', $this->data->getTxSenha(), array('class' => 'span3 required validatePassword', 'maxlength' => 32)); ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</fieldset>
+
+<br />
+<div class="form-actions">
+    <a href="#" class="btn disabled"><i class="icon-chevron-left"></i> Anterior</a>
+    <a href="#2" class="btn btn-primary btn_next_wizard" data-toggle="tab">Próximo <i class="icon-chevron-right icon-white"></i></a>
+
+    <?php if ($this->data->getSqUsuarioExterno()) { ?>
+        <a data-toggle="modal" class="btn concluir">Concluir</a>
+    <?php } ?>
+
+    <button  id="btnConcluir" class="btn cancelar" type="button">
+        <i class="icon-remove"></i>  Cancelar
+    </button>
+</div>

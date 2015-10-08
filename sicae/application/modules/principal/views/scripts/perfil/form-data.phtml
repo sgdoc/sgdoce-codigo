@@ -1,0 +1,136 @@
+<form class="form-horizontal" method="post" name="form-create-perfil"
+    action="<?php echo $this->url(array('controller'=>'perfil', 'action'=>'save')); ?>">
+    <?php echo $this->formHidden('sqPerfil', $this->data->getSqPerfil()); ?>
+    <?php echo $this->formHidden('funcionalidades', $this->data->getFuncionalidades()); ?>
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">
+            Campos obrigatórios <span class="required">*</span>
+        </p>
+    </div>
+    <br />
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="sistema"><span class="required"
+                title="Campo Obrigatório"
+>*</span> Sistema</label>
+            <div class="controls">
+                <?php echo $this->comboSistema(
+                                'sqSistema',
+                                $this->data->getSqSistema()->getSqSistema(),
+                                array('class' => 'required span9 sistema-load-menu'),
+                                $this->sistemas
+                );
+                ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="perfil"> <span class="required"
+                title="Campo Obrigatório"
+>*</span> Perfil
+            </label>
+            <div class="controls">
+                <?php echo $this->formText('noPerfil', $this->data->getNoPerfil(), array('class' => 'required span9', 'maxlength' => '50')); ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="perfilExterno">
+            <span class="required" title="Campo Obrigatório"
+>*</span> Perfil Interno?
+            </label>
+            <div class="controls">
+                <input type="radio" checked="checked" class="required" name="inPerfilExterno" value="0"
+                <?php echo ($this->data->getInPerfilExterno() == '0')?'checked="checked"':NULL?>
+                /> Sim
+                <input type="radio" class="required" name="inPerfilExterno" value="1"
+                    <?php echo ($this->data->getInPerfilExterno() == '1')?'checked="checked"':NULL?> />
+                N&atilde;o
+            </div>
+        </div>
+        <?php $hide = ($this->data->getInPerfilExterno() == '0' || $this->data->getSqSistema()->getSqSistema() === NULL)?'':'hide'?>
+        <div id="tipoPerfil" class="control-group <?php echo $hide; ?>">
+            <label for="tpPerfil" class="control-label">
+                <span title="Campo Obrigatório"
+ class="required">*</span> Tipo de Perfil
+            </label>
+            <div class="controls">
+                <?php echo $this->comboCustom(
+                                'sqTipoPerfil',
+                                $this->data->getSqTipoPerfil()->getSqTipoPerfil(),
+                                array('class' => 'required span9'),
+                                $this->tiposPerfil
+                );
+                ?>
+            </div>
+        </div>
+        <?php $hide = ($this->data->getInPerfilExterno() == '1')?'':'hide'?>
+        <div id="perfilPadrao" class="control-group <?php echo $hide; ?>">
+            <label for="perfilPadrao" class="control-label">
+                <span title="Campo Obrigatório"
+ class="required">*</span> Perfil Externo Padrão?
+            </label>
+            <div class="controls">
+                <input type="radio" class="required" name="perfilPadraoExterno" value="1"
+                <?php echo ($this->perfilPadraoExterno == '1'
+                                || ($this->data->getSqPerfil() == $this->data->getSqSistema()->getSqPerfilExternoPadrao()->getSqPerfil()))?'checked="checked"':''?>/> Sim
+                <input type="radio" class="required" name="perfilPadraoExterno" value="0"
+                 <?php echo ($this->perfilPadraoExterno == '0'
+                                || ($this->data->getSqPerfil() != $this->data->getSqSistema()->getSqPerfilExternoPadrao()->getSqPerfil()))?'checked="checked"':''?>/> N&atilde;o
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="menuAcesso" class="control-label">
+                <span title="Campo Obrigatório"
+ class="required">*</span> Menu de Acesso
+            </label>
+            <div class="controls">
+            <?php if (count($this->menu) > 0) :?>
+                <?php //if (!empty($this->menuAcesso)):?>
+
+                <?php echo $this->comboMenu(
+                            'sqMenu',
+                            (count($this->menuAcesso) > 1) ?
+                                '0':
+                                !empty($this->menuAcesso[0]['sqMenu']) ?
+                                    $this->menuAcesso[0]['sqMenu'] :
+                                    '0',
+                            array('class' => 'required span9 sistema-load-menu'),
+                            $this->menu,
+                            'sqMenu',
+                            TRUE
+            );
+            ?>
+            <?php else :?>
+            <?php echo $this->comboMenu(
+                            'sqMenu',
+                            NULL,
+                            array('class' => 'required span9 sistema-load-menu', 'disabled' => 'disabled'),
+                            $this->menu
+            );
+            ?>
+            <?php endif; ?>
+            </div>
+        </div>
+        <br />
+        <table id="perfilLista"
+            class="table table-striped table-bordered hide">
+            <thead>
+                <tr>
+                    <th width="1%"><input type="checkbox" class="checkboxAll"></th>
+                    <th>Menu / Funcionalidade</th>
+                </tr>
+            </thead>
+            <tbody aria-relevant="all" aria-live="polite" role="alert">
+            </tbody>
+        </table>
+        <div class="form-actions">
+            <button class="btn btn-primary btn-concluir">Concluir</button>
+            <a title="Cancelar" href="<?php
+            $urlCancelOptions = array('action' => 'index');
+            if ($this->data->getSqSistema()->getSqSistema()) {
+                $urlCancelOptions['sqSistema'] = $this->data->getSqSistema()->getSqSistema();
+            }
+            echo $this->urlCurrent($urlCancelOptions);
+            ?>" class="btn btn_voltar"><i class="icon-remove"></i> Cancelar</a>
+        </div>
+    </fieldset>
+</form>

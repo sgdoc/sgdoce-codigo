@@ -1,0 +1,855 @@
+<?php if(!empty($this->data['viewFor'])): ?>
+<h1>Assinar Minuta</h1>
+
+<div class="top-bar">
+        &nbsp;
+</div>
+<?php endif; ?>
+
+<?php
+
+$inRodape = NULL;
+$inInteressado = FALSE;
+
+//cabecalho
+$inNumDoc   = FALSE;
+$inAnoDoc   = FALSE;
+$inSetorDoc = FALSE;
+$inDataDoc  = FALSE;
+$inAssunto  = FALSE;
+
+// destinatario
+$inDestInt = FALSE;
+$inVarDest = FALSE;
+$inUniDest = FALSE;
+$inNomUnid = FALSE;
+$inTipUnid = FALSE;
+$inNomDest = FALSE;
+
+// assinatura
+$inSetorAss = NULL;
+$inCargoAss = NULL;
+$inSetorCab = NULL;
+$inEndCab   = NULL;
+$inTelCab   = NULL;
+$inEmailCab = NULL;
+
+foreach ($this->data['arrDestino'] as $kDest => $dDest) {
+    if ($kDest === 'qtdDestinatario') {
+        if ($dDest > 1) {
+            $inVarDest = TRUE;
+        }
+        elseif ($dDest == 1) {
+            $inUniDest = TRUE;
+        }
+    }
+}
+
+foreach($this->data['arrCampo'] as $key => $data) {
+
+    foreach($data as $key2 => $data2){
+        // rodape
+        if ($data2 === 'Rodapé') {
+            $inRodape = TRUE;
+        }
+
+        // interessado
+        if ($data2 === 'Interessado') {
+            $inInteressado = $data['inVisivelDocumento'];
+        }
+
+        // cabecalho
+        if(substr(strtolower($data2),0,10) == 'nº do doc'){
+            $inNumDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'ano'){
+            $inAnoDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'sigla do s'){
+            $inSetorDoc = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'data'){
+            $inDataDoc = TRUE;
+        }
+
+        // destinatario
+        if(substr(strtolower($data2),0,10) == 'destino in'){
+            $inDestInt = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'Vários des'){
+            $inVarDest = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'Único dest'){
+            $inUniDest = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'nome da un'){
+            $inNomUnid = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'tipo da un'){
+            $inTipUnid = TRUE;
+        }
+        if(substr(strtolower($data2),0,10) == 'nome do de'){
+            $inNomDest = TRUE;
+        }
+
+        // cargo assinatura
+        if ($data2 === 17) {
+            $inCargoAss = TRUE;
+        }
+
+        //assunto
+        if(strtolower($data['noCampo']) == 'assunto'){
+            $inAssunto = TRUE;
+        }
+
+        //setor assinatura
+        if ($data2 === 18) {
+            $inSetorAss = TRUE;
+        }
+
+        #setor cabecalho
+        if($data2 === 23){
+            $inSetorCab = TRUE;
+        }
+
+        #endereco cabecalho
+        if($data2 === 24){
+            $inEndCab = TRUE;
+        }
+
+        #telefone cabecalho
+        if($data2 === 25){
+            $inTelCab = TRUE;
+        }
+
+        #email cabecalho
+        if($data2 === 26){
+            $inEmailCab = TRUE;
+        }
+    }
+}
+
+?>
+
+<page backtop="0mm" backbottom="44mm" backleft="0mm" backright="0mm">
+<?php if(empty($this->data['viewFor'])): ?>
+    <page_footer>
+    <?php if($inRodape): ?>
+        <div class="rodape-separator"></div>
+
+        <table class="rodape">
+            <tr>
+                <td class="rodape-left">
+
+                    <?php if(!empty($this->data['arrRodape']['deImagemRodape'])): ?>
+                        <?php
+                        $path = current(explode ('application', __DiR__))
+                            . 'data'           . DIRECTORY_SEPARATOR
+                            . 'upload'         . DIRECTORY_SEPARATOR
+                            . 'rodape' . DIRECTORY_SEPARATOR;
+                        $nome = $this->data['arrRodape']['deImagemRodape'];
+                        $extensao = substr($this->data['arrRodape']['deImagemRodape'], -3);
+                        ?>
+                        <img src="data:image/<?php echo $extensao;?>;base64,
+                            <?php echo base64_encode(file_get_contents($path . $nome)); ?>"
+                             name="logo" title="logo" width="120" height="120" border="0" />
+                    <?php endif; ?>
+
+                </td>
+                <td class="rodape-right">
+                    <b>
+                        <?php if(!empty($this->data['arrRodape']['noPessoa'])): ?>
+                            <?php echo $this->data['arrRodape']['noPessoa'] ?> <br />
+                        <?php endif; ?>
+                        <?php if(!empty($this->data['arrRodape']['txEndereco'])): ?>
+                            Endereço:
+                            <?php echo $this->data['arrRodape']['txEndereco'] ?> <br />
+                        <?php endif; ?>
+                        <?php if(!empty($this->data['arrRodape']['coCep'])): ?>
+                            CEP:
+                            <?php
+                                $cepRodape = $this->data['arrRodape']['coCep'];
+                                $cepRodape = substr($cepRodape, 0, 5) . '-' . substr($cepRodape, 5, 3);
+                                echo $cepRodape;
+                            ?> <br />
+                        <?php endif; ?>
+                        <?php if(!empty($this->data['arrRodape']['nuTelefone'])): ?>
+                            Telefone:
+                            <?php
+                                $telRodape = (string)$this->data['arrRodape']['nuTelefone'];
+                                $telDDDRodape = (string)$this->data['arrRodape']['nuDdd'];
+                                $telRodapeNum = substr($telRodape, -8);
+                                $telRodapeNum1 = substr($telRodapeNum, -8, 4);
+                                $telRodapeNum2 = substr($telRodapeNum, -4, 4);
+                                echo '(' . $telDDDRodape . ')' . ' ' . $telRodapeNum1 . '-' . $telRodapeNum2;
+                            ?>
+                        <?php endif; ?>
+                        <?php if(!empty($this->data['arrRodape']['txEnderecoEletronico'])): ?>
+                            Email:
+                            <?php echo $this->data['arrRodape']['txEnderecoEletronico'] ?> <br />
+                        <?php endif; ?>
+
+                    </b>
+                </td>
+            </tr>
+        </table>
+    <?php endif; ?>
+
+        <div style="text-align:right;">[[page_cu]]</div>
+    </page_footer>
+<?php endif; ?>
+
+<?php if(!empty($this->data['viewFor'])): ?>
+<div class="content-geral">
+<?php endif; ?>
+
+    <div class="content">
+        <div id="header">
+            <p class="smallMargin">
+<!-- cabeçalho -->
+                <?php if($this->data['arrOrigem']['sqCabecalho']) :?>
+
+                <?php if(!empty($this->data['arrOrigem']['deArquivoImagem'])): ?>
+                    <img src="img/<?php echo $this->data['arrOrigem']['deArquivoImagem'] ?>"
+                        name="logo" alt="logo" title="logo" width=120 height=120 border=0>
+                <?php endif; ?>
+
+            <p class="smallMargin">
+                <b>
+                <?php if(!empty($this->data['arrOrigem']['txCabecalho'])
+                                                         && $this->data['arrOrigem']['txCabecalho'] !== 'Nenhum'): ?>
+                    <?php echo $this->data['arrOrigem']['txCabecalho'] ?>
+                <?php endif; ?> </b>
+            </p>
+            <span class="smallMargin" class="alignCenter">
+                <?php $virgula = null;
+                    $cabeçalho = "";
+                    if(!empty($this->data['arrOrigem']['noPessoa']) && $inSetorCab): ?>
+                        <?php $cabeçalho = $this->data['arrOrigem']['noPessoa'];
+                        $virgula = ', ';
+                         ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['txEndereco']) && $inEndCab): ?>
+                        <?php $cabeçalho .= $virgula . 'Endereco: ' .$this->data['arrOrigem']['txEndereco'];
+                        $virgula = ', ';
+                        ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['nuEndereco']) && $inEndCab): ?>
+                        <?php $cabeçalho .= $virgula . 'Número: ' .$this->data['arrOrigem']['nuEndereco'];
+                        $virgula = ', ';
+                        ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['nuTelefone']) && $inTelCab): ?>
+                        <?php
+                            $telCabecalho = (string)$this->data['arrOrigem']['nuTelefone'];
+                            $telDDDRodape = (string)$this->data['arrOrigem']['nuDdd'];
+                            $telCabecalhoNum = substr($telCabecalho, -8);
+                            $telCabecalhoNum1 = substr($telCabecalhoNum, -8, 4);
+                            $telCabecalhoNum2 = substr($telCabecalhoNum, -4, 4);
+                            $cabeçalho .= $virgula . 'Número: ' . '(' . $telDDDRodape . ')' . ' ' . $telCabecalhoNum1 . '-' . $telCabecalhoNum2;
+                            $virgula = ', ';
+                            ?>
+                    <?php endif; ?>
+                    <?php if(!empty($this->data['arrOrigem']['txEmail']) && $inEmailCab): ?>
+                        <br /><?php $cabeçalho .= $virgula . '<br /> Email: ' .$this->data['arrOrigem']['txEmail'] ?>
+                    <?php
+                    endif;
+                    echo $cabeçalho;
+                    ?>
+            </span>
+            <!-- cabeçalho -->
+
+            <?php endif;?>
+		</p>
+
+    	<p class="smallMargin">
+    <!-- 	-->
+    	</p>
+	</div>
+
+        <p id="titulo-left">
+
+        <?php if(!empty($this->data['arrOrigem']['noTipoDocumento'])): ?>
+            <?php echo $this->data['arrOrigem']['noTipoDocumento'] ?>
+        <?php endif; ?>
+
+        <?php if($inNumDoc): ?>
+            N&#186;
+        <?php endif; ?>
+
+        <?php if(!empty($this->data['arrOrigem']['nuArtefato'])): ?>
+            <?php echo $this->data['arrOrigem']['nuArtefato'] ?>
+        <?php endif; ?>
+                      <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inAnoDoc): ?>
+		                /<?php echo $this->data['arrOrigem']['dtArtefato']->get('Y') ?>
+                      <?php endif; ?>
+
+                      <?php if(!empty($this->data['arrOrigem']['noPessoa']) && $inSetorDoc): ?>
+		               - <?php echo $this->data['arrOrigem']['noPessoa'] ?>
+                      <?php endif; ?>
+	</p>
+
+        <p id="date">
+
+
+
+        <?php if(!empty($this->data['arrOrigem']['noMunicipio']) && $inDataDoc): ?>
+            <?php echo $this->data['arrOrigem']['noMunicipio'] ?>
+            ,
+        <?php endif; ?>
+
+            <?php if(!empty($this->data['arrOrigem']['dtArtefato']) && $inDataDoc): ?>
+                <?php $data = $this->data['arrOrigem']['dtArtefato'];?>
+                <?php echo $data->get('d') ?> de
+                <?php echo Zend_Locale_Data::getContent(Zend_Locale::findLocale(), 'month', (int) $data->get('M')); ?> de
+                <?php echo $data->get('Y') ?>.
+            <?php endif; ?>
+
+	</p>
+
+        <div class="clear">&nbsp;</div>
+        <div class="clear">&nbsp;</div>
+        <div class="clear">&nbsp;</div>
+
+        <p id="to">
+
+           <?php if(!empty($this->data['arrOrigem']['noCargoInterno'])): // modelo ?>
+                 <?php echo $this->data['arrOrigem']['noCargoInterno'] ?>
+                 <br />
+            <?php endif; ?>
+
+        <?php if ($inDestInt): ?>
+
+
+        <?php
+
+            /*  1 - Se selecionado
+
+                -um destinatário
+                -destinatário interno
+                -tipo da unidade
+                -nome da unidade
+                -nome do destinatário:
+
+                Mostrar:
+
+                    <cargo-interno> / Nome da Unidade
+                    A/C: Nome do destinatário
+             */
+            if ($inUniDest && $inDestInt && $inTipUnid && $inNomUnid && $inNomDest
+                && !empty($this->data['arrDestino'][0]['noPessoa'])
+                && $this->data['arrDestino'][0]['sqTipoPessoa'] == 1) {
+
+                    if (!empty($this->data['arrDestino'][0]['noCargoInterno'])) {
+                        echo $this->data['arrDestino'][0]['noCargoInterno'] . ' ' .
+                              $this->data['arrDestino'][0]['noUnidadeOrg'] . '<br />';
+                    }
+                    elseif (!empty($this->data['arrDestino'][0]['noUnidadeOrg'])) {
+                        echo $this->data['arrDestino'][0]['noUnidadeOrg'] . '<br />';
+                    }
+
+                    if (!empty($this->data['arrDestino'][0]['noPessoa'])) {
+                        echo 'A/C: ' . $this->data['arrDestino'][0]['noPessoa'];
+                    }
+            } elseif (!$inUniDest && $inDestInt && $inTipUnid && $inNomUnid && $inNomDest
+                && !empty($this->data['arrDestino'][0]['noPessoa'])
+                && $this->data['arrDestino'][0]['sqTipoPessoa'] == 1) {
+
+                if (!empty($this->data['arrDestino'][0]['noCargoInterno'])) {
+                    echo $this->data['arrDestino'][0]['noCargoInterno'] . ' ' . $this->data['arrDestino'][0]['noUnidadeOrg'] . '<br />';
+                } elseif (!empty($this->data['arrDestino'][0]['noUnidadeOrg'])) {
+                    echo $this->data['arrDestino'][0]['noUnidadeOrg'] . '<br />';
+                }
+
+                if (!empty($this->data['arrDestino'][0]['noPessoa'])) {
+                    $arrDestinos = array();
+                    foreach ($this->data['arrDestino'] as $destino) {
+                        if (isset($destino['noPessoa'])){
+                            $arrDestinos[$destino['noPessoa']] = $destino['noPessoa'];
+                        }
+                    }
+                    $stringDestinos = implode(", ", $arrDestinos);
+                    echo 'A/C: ' . $stringDestinos;
+                }
+            }
+
+            /*  2 - Se selecionado
+
+                -um destinatário
+                -destinatário interno
+                -tipo da unidade
+                -nome da unidade
+
+                Mostrar:
+
+                    <cargo-interno> / Nome da Unidade
+            */
+            elseif ($inUniDest && $inDestInt && $inTipUnid && $inNomUnid
+                && !empty($this->data['arrDestino'][0]['noPessoa'])
+                && $this->data['arrDestino'][0]['sqTipoPessoa'] == 4) {
+
+                    if (!empty($this->data['arrDestino'][0]['noCargoInterno'])) {
+                        echo $this->data['arrDestino'][0]['noCargoInterno'] . ' ' .
+                              $this->data['arrDestino'][0]['noPessoa'] . '<br />';
+                    }
+                    elseif (!empty($this->data['arrDestino'][0]['noPessoa'])) {
+                        echo $this->data['arrDestino'][0]['noPessoa'];
+                    }
+            }
+
+            /*  3 - Se selecionado
+
+                -um destinatário
+                -destinatário interno
+                -tipo da Unidade:
+
+                Mostrar
+
+                    <cargo-interno> / Tipo da Unidade
+            */
+            elseif ($inTipUnid && !empty($this->data['arrDestino'][0]['noTipoUnidadeOrg2'])
+                && empty($this->data['arrDestino'][0]['noUnidadeOrg'])) {
+                $arrDestinos = array();
+                foreach ($this->data['arrDestino'] as $destino) {
+                    if (isset($destino['noTipoUnidadeOrg2'])){
+                        $arrDestinos[$destino['noTipoUnidadeOrg2']] = $destino['noTipoUnidadeOrg2'];
+                    }
+                }
+                $stringDestinos = implode(", ", $arrDestinos);
+
+                if (!empty($this->data['arrDestino'][0]['noCargoInterno'])) {
+                    echo $this->data['arrDestino'][0]['noCargoInterno'] . ' ' .
+                        $stringDestinos . '<br />';
+                }
+                elseif (!empty($this->data['arrDestino'][0]['noPessoa'])) {
+                    echo $stringDestinos;
+                }
+            }
+
+        ?>
+
+        <?php else: ?>
+
+            <?php if(!empty($this->data['arrDestino'][0]['noTratamento'])): ?>
+                  <?php echo $this->data['arrDestino'][0]['noTratamento'] ?>
+                  <br />
+             <?php endif; ?>
+             <?php if(!empty($this->data['arrDestino'][0]['txPosTratamento'])): ?>
+                 <?php echo $this->data['arrDestino'][0]['txPosTratamento'] ?>
+                 <br />
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['noPessoa'])): ?>
+                    <b><?php echo $this->data['arrDestino'][0]['noPessoa'] ?> </b> <br />
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['noCargo'])): ?>
+                <?php echo $this->data['arrDestino'][0]['noCargo'] ?>       <br />
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['noUnidadeOrg'])): ?>
+                <?php echo $this->data['arrDestino'][0]['noUnidadeOrg'] ?>       <br />
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['noMunicipio'])): ?>
+                <?php echo $this->data['arrDestino'][0]['noMunicipio'] ?> -
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['noEstado'])): ?>
+                <?php echo $this->data['arrDestino'][0]['noEstado'] ?>          <br />
+            <?php endif; ?>
+            <?php if(!empty($this->data['arrDestino'][0]['coCep'])): ?>
+                <?php
+                    $cep = $this->data['arrDestino'][0]['coCep'];
+                    $cep = substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+                    echo $cep;
+                ?> <br />
+            <?php endif; ?>
+
+        <?php endif; ?>
+        </p>
+
+        <!-- Assunto -->
+            <?php if(!empty($this->data['arrOrigem']['txAssunto']) && $inAssunto): ?>
+                ASSUNTO :
+                    <?php echo $this->data['arrOrigem']['txAssunto'] ?>
+            <?php endif; ?>
+        <!-- Interessado(s) -->
+        <?php if(($inInteressado) && !empty($this->data['arrInteressado']) && count($this->data['arrInteressado']) > 0): ?>
+            <?php $countInteressados = count($this->data['arrInteressado']); ?>
+            <?php $cont = 1; ?>
+            <div class="" style="text-align: left;">
+                Interessado(s):
+                <?php foreach($this->data['arrInteressado'] as $dadosInteressado): ?>
+                    <?php if(!empty($dadosInteressado['noPessoa'])): ?>
+                            <?php echo $dadosInteressado['noPessoa'] ?><?php if($cont < $countInteressados): ?>, <?php endif; ?>
+                            <?php $cont++ ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if(!empty($this->data['arrOrigem']['txReferencia'])): ?>
+           <div style="text-align: justify;">
+
+                Ref: <?php echo nl2br($this->data['arrOrigem']['txReferencia']); ?>
+            </div>
+            <br /><br />
+        <?php endif; ?>
+
+        <?php
+        if(!empty($this->data->arrDestino[0]['noVocativo'])): ?>
+        <!-- senhor (a) -->
+        <span class="marginLeft">&nbsp;</span>
+        <?php
+        $textoVocativo = $this->data->arrDestino[0]['noVocativo'];
+        if($this->data->arrDestino[0]['txPosVocativo']){
+            $textoVocativo .= ' ' . $this->data->arrDestino[0]['txPosVocativo'];
+        }
+        ?>
+        <p class="posVocativo">
+            <span class="marginLeft">&nbsp;</span>
+           <br />
+           <?php echo $textoVocativo .','; ?>
+       </p>
+        <?php endif; ?>
+
+	<p class="alignJustify ajustaBox" style="">
+            <span class="marginLeft">&nbsp;</span>
+                <?php if(!empty($this->data['arrOrigem']['txTextoArtefato'])): ?>
+                    <table class="tableTexto">
+                    <tr>
+                       <td style="text-align: justify;">
+                    <?php
+                        $textoAtual = str_replace(array('\n','\r' ,'\r\n','\<br>', '\<br><br>'),'<br/>', $this->data['arrOrigem']['txTextoArtefato']);
+                        echo nl2br($textoAtual) ?>
+                       </td>
+                    </tr>
+                    </table>
+                <?php endif; ?>
+                <br />
+            <p>
+                <!-- Descrição do prazo -->
+                <?php if(!empty($this->data['arrOrigem']['txDescricaoPrazo'])): ?>
+                    <?php echo nl2br($this->data['arrOrigem']['txDescricaoPrazo']); ?>,
+                <?php endif; ?>
+
+                <!-- Imprime dias corridos -->
+                <?php if(empty($this->data['arrOrigem']['inDiasCorridos']) && !empty($this->data['arrOrigem']['nuDiasPrazo']) ): ?>
+                    <?php
+                    $qtdDiasCorridos = $this->data['arrOrigem']['nuDiasPrazo'];
+                    $dtArtefato = $this->data['arrOrigem']['dtArtefato']->add($qtdDiasCorridos, Zend_Date::DAY );
+                    echo $dtArtefato->get('dd/MM/YYYY');
+                    ?>
+                <?php endif; ?>
+
+                <!-- Imprime dias uteis -->
+                <?php if(!empty($this->data['arrOrigem']['inDiasCorridos']) && !empty($this->data['arrOrigem']['nuDiasPrazo']) ): ?>
+                    <?php $arrFeriados = $this->data['feriados']; ?>
+                    <?php $helperDiasUteis = new Sgdoce_View_Helper_DiasUteis(); ?>
+                    <?php echo $helperDiasUteis->diasUteis(
+                           $this->data['arrOrigem']['dtArtefato']->get('dd/MM/YYYY'),
+                           $this->data['arrOrigem']['nuDiasPrazo'],
+                           $arrFeriados); ?>
+                <?php endif; ?>
+
+                <!-- Imprime data marcada -->
+                <?php if(!empty($this->data['arrOrigem']['dtPrazo'])): ?>
+                    <?php echo $this->data['arrOrigem']['dtPrazo']->get('dd/MM/YYYY') ?>
+                <?php endif; ?>
+            </p>
+	</p>
+</div>
+    <br />
+
+<!-- FECHO -->
+
+        <div id="fecho">
+            <?php if(!empty($this->data['arrOrigem']['noFecho'])): ?>
+                <span class="marginLeft">&nbsp;</span>
+                <?php echo $this->data['arrOrigem']['noFecho'] . ',' ?>
+                <br /><br /><br />
+            <?php endif; ?>
+        </div>
+
+        <div id="signature">
+            <p class="mediumMargin">
+
+            <?php if(!empty($this->data['arrAssinatura'])): ?>
+
+                <?php
+                    $contS = 0;
+                ?>
+
+                <?php foreach($this->data['arrAssinatura'] as $dado): ?>
+
+                    <?php
+                        if($contS !== 0):
+                    ?>
+
+                        <?php if(!empty($dado['noTipoMotivacao']) && $dado['sqTipoMotivacao'] > 1): ?>
+                        <br />
+                                <?php echo $dado['noTipoMotivacao'] ?>
+                        <?php elseif(!empty($dado['deMotivacao'])): ?>
+                                <br />
+                                <?php echo $dado['deMotivacao'] ?>
+                        <?php endif; ?>
+                                <br /><br />
+
+                    <?php
+                        endif;
+                        $contS++;
+                    ?>
+
+                    <?php if(!empty($dado['noPessoa'])): ?>
+                        <b>
+                            <?php echo $dado['noPessoa'] ?>
+                        </b> <br />
+                    <?php endif; ?>
+                    <?php if(!empty($dado['noCargo']) && $inCargoAss): ?>
+                            <?php echo $dado['noCargo'] ?>
+                    <?php endif; ?>
+                    <?php if(!empty($dado['noUnidadeOrg']) && $inSetorAss): ?>
+                            /
+                            <?php echo $dado['noUnidadeOrg'] ?>
+
+                    <?php endif; ?>
+                    <br />
+                <?php endforeach; ?>
+            <?php endif; ?>
+		</p>
+        </div>
+
+        <?php if($inRodape): ?>
+
+        <div id="rodape-view">
+            <table class="table-rodape">
+                <tr>
+                    <td class="rodape-left">
+
+                        <?php if(!empty($this->data['arrRodape']['deImagemRodape'])): ?>
+                            <img src="/artefato/artefato/render-image/sqArtefato/<?php echo $this->data['arrOrigem']['sqArtefato']; ?>"
+                                                                name="logo" title="logo" width="120" height="120" border="0">
+                        <?php endif; ?>
+
+                    </td>
+                    <td class="rodape-right">
+                        <b>
+                            <?php if(!empty($this->data['arrRodape']['noPessoa'])): ?>
+                                <?php echo $this->data['arrRodape']['noPessoa'] ?> <br />
+                            <?php endif; ?>
+                            <?php if(!empty($this->data['arrRodape']['txEndereco'])): ?>
+                                &nbsp;Endereço:
+                                <?php echo $this->data['arrRodape']['txEndereco'] ?> <br />
+                            <?php endif; ?>
+                            <?php if(!empty($this->data['arrRodape']['coCep'])): ?>
+                                &nbsp;CEP:
+                                <?php
+                                    $cepRodape = $this->data['arrRodape']['coCep'];
+                                    $cepRodape = substr($cepRodape, 0, 5) . '-' . substr($cepRodape, 5, 3);
+                                    echo $cepRodape;
+                                ?> <br />
+                            <?php endif; ?>
+                            <?php if(!empty($this->data['arrRodape']['nuTelefone'])): ?>
+                                &nbsp;Telefone:
+                                <?php
+                                    $telRodape = (string)$this->data['arrRodape']['nuTelefone'];
+                                    $telDDDRodape = (string)$this->data['arrRodape']['nuDdd'];
+                                    $telRodapeNum = substr($telRodape, -8);
+                                    $telRodapeNum1 = substr($telRodapeNum, -8, 4);
+                                    $telRodapeNum2 = substr($telRodapeNum, -4, 4);
+                                    echo '(' . $telDDDRodape . ')' . ' ' . $telRodapeNum1 . '-' . $telRodapeNum2;
+                                ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <?php endif; ?>
+                            <?php if(!empty($this->data['arrRodape']['txEnderecoEletronico'])): ?>
+                                Email:
+                                <?php echo $this->data['arrRodape']['txEnderecoEletronico'] ?> <br />
+                            <?php endif; ?>
+
+                        </b>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <?php endif; ?>
+
+<?php if(!empty($this->data['viewFor'])): ?>
+</div>
+
+<div class="form-actions">
+    <label class="pull-left span6"> <input type="checkbox" name=""
+        id="deAcordo"
+        onClick="
+                    if(this.checked == true){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary';
+                    }else if (this.checked == false){
+                        document.getElementById('btn-assinar').className = 'btn btn-assinar btn-primary disabled';
+                    }
+                " /> De acordo com o conteúdo do documento.
+    </label>
+    <?php
+        $view = $this->view;
+        $sqArtefato = $this->data['arrOrigem']['sqArtefato'];
+        $url = "/artefato/visualizar-caixa-minuta/assinar-minuta/sqArtefato/{$sqArtefato}/view/{$view}";
+    ?>
+    <a class="btn btn-assinar btn-primary disabled" id="btn-assinar" href="<?php echo $url; ?>">
+        Assinar
+    </a>
+    <a class="btn" href="/artefato/visualizar-caixa-minuta/visualizar-minuta/sqArtefato/<?php echo $this->data['arrOrigem']['sqArtefato']?>">
+        <i class="icon-pdf"></i>
+        Gerar PDF
+    </a>
+    <a class="btn" href="javascript:history.back()"><i class="icon-remove"></i> Cancelar</a>
+</div>
+
+<?php endif; ?>
+
+</page>
+
+<style type="text/css">
+<!--
+.content-geral {
+    border: 1px solid #ddd;
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.content,
+.rodape { /*size: 8.27in 11.69in;*/
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    font-size: 10pt;
+/*    border: 1px solid grey;*/
+}
+
+#header {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: "Times New Roman";
+    font-size: 9pt;
+}
+
+#titulo-left {
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+#titulo-right {
+    text-align: right;
+    margin-right: 30px;
+    margin-bottom: 80px;
+}
+
+#titulo-center {
+    text-align: center;
+    margin-center: 30px;
+    margin-bottom: 80px;
+}
+
+#date {
+    text-align: right;
+    margin-right: 30px;
+    margin-bottom: 0px;
+}
+
+#to { /*	margin-bottom: 50px;*/
+
+}
+
+table {
+    width: 100%;
+    border: solid 1px black;
+}
+
+th {
+    border: solid 1px black;
+}
+
+td {
+    border: solid 1px black;
+}
+
+#att {
+    margin-left: 50px;
+    margin-bottom: 70px;
+}
+
+#signature {
+    text-align: center;
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    margin-top: 15px;
+}
+
+#fecho {
+    text-align: left;
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+    margin-top: 15px;
+}
+
+.smallMargin {
+    margin: 0 0 4px 0;
+    padding: 0;
+    font-size: 12px
+}
+
+.mediumMargin {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.marginLeft {
+    margin-left: 50px;
+}
+
+.justify {
+    text-align: justify;
+}
+
+alignCenter {
+    text-align: center;
+}
+
+.rodape-separator {
+    width: 600px;
+    border: 1px solid #ccc;
+    margin: 40px 0 0 70px;
+}
+
+#rodape-view {
+    margin-right: 0.79in;
+    margin-left: 0.79in;
+}
+
+.table-rodape {
+    border: 0px;
+    border-top: 1px solid #ccc;
+
+    font-size: 10pt;
+}
+
+td.rodape-left {
+    float: left;
+    width: 100px;
+    border: 0px;
+}
+
+td.rodape-right {
+    border: 0px;
+    padding: 10px 5px 5px 20px;
+    width: 400;
+    float: left;
+}
+
+.ajustaBox {
+    word-break: break-all;
+    text-align: justify;
+}
+
+.posVocativo {
+   margin-left: 60px;
+}
+
+.tableTexto ,td, tr{
+    border: 0px;
+}
+-->
+</style>

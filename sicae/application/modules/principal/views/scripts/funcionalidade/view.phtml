@@ -1,0 +1,40 @@
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <div class="clearfix">
+            <dt>Sistema</dt>
+            <dd><?php
+                echo $this->escape($this->data->getSqMenu()->getSqSistema()->getSgSistema()
+                        . '-' . $this->data->getSqMenu()->getSqSistema()->getNoSistema());
+                ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Menu de Acesso</dt>
+            <dd><?php echo $this->escape($this->data->getSqMenu()->getNoMenu()); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Nome da Funcionalidade</dt>
+            <dd><?php echo $this->escape($this->data->getNoFuncionalidade()); ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Funcionalidade Principal?</dt>
+            <dd><?php echo $this->data->getInFuncionalidadePrincipal() ? 'Sim' : 'Não' ?></dd>
+        </div>
+        <div class="clearfix">
+            <dt>Rota Principal</dt>
+            <dd><?php echo $this->data->getSqRotaPrincipal()->getTxRota(); ?></dd>
+        </div>
+        <hr />
+        <?php if ($this->data->getRotas()->count()) : ?>
+            <div class="clearfix">
+                <dt>Rotas da Funcionalidade</dt>
+                <dd>
+                    <ul>
+                        <?php foreach ($this->data->getRotas() as $rota): ?>
+                            <li><?php echo $this->escape($rota->getTxRota()) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </dd>
+            </div>
+        <?php endif; ?>
+    </dl>
+</div>

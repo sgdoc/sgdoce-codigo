@@ -1,0 +1,126 @@
+/* Example tokeninput style #2: Icmbio style */
+ul.token-input-list-icmbio {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 1%;
+    width: 48.7179%;
+    border: 1px solid #CCCCCC;
+    cursor: text;
+    font-size: 12px;
+    font-family: Verdana;
+    min-height: 1px;
+    z-index: 999;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    list-style-type: none;
+    /*clear: left;*/
+}
+
+ul.token-input-list-icmbio li input {
+    border: 0;
+    width: 100px;
+    padding: 3px 8px;
+    background-color: white;
+    margin: 2px 0;
+    -webkit-appearance: caret;
+}
+
+li.token-input-token-icmbio {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 15px;
+    margin: 3px;
+    padding: 1px 3px;
+    background-color: #D3E0C6;
+    color: #0B552B;
+    cursor: default;
+    border: 1px solid #D3E0C6;
+    font-size: 11px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    float: left;
+    white-space: nowrap;
+}
+
+li.token-input-token-icmbio p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+li.token-input-token-icmbio span {
+    color: #0B552B;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li.token-input-selected-token-icmbio span {
+    color: #D3E0C6;
+}
+
+li.token-input-selected-token-icmbio {
+    background-color: #0B552B;
+    border: 1px solid #3b5998;
+    color: #fff;
+}
+
+li.token-input-input-token-icmbio {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-icmbio {
+    position: absolute;
+    width: 400px;
+    background-color: #fff;
+    overflow: hidden;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    cursor: default;
+    font-size: 11px;
+    font-family: Verdana;
+    z-index: 1;
+}
+
+div.token-input-dropdown-icmbio p {
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    color: #777;
+}
+
+div.token-input-dropdown-icmbio ul {
+    margin: 0;
+    padding: 0;
+}
+
+div.token-input-dropdown-icmbio ul li {
+    background-color: #fff;
+    padding: 3px;
+    margin: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-icmbio ul li.token-input-dropdown-item-icmbio {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-icmbio ul li.token-input-dropdown-item2-icmbio {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-icmbio ul li em {
+    font-weight: bold;
+    font-style: normal;
+}
+
+div.token-input-dropdown-icmbio ul li.token-input-selected-dropdown-item-icmbio {
+    background-color: #D3E0C6;
+    color: #0B552B;
+}

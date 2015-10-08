@@ -1,0 +1,191 @@
+<?php
+$regex       = '/^([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})([0-9]{2})$/';
+$replacement = '$1.$2.$3/$4-$5';
+$exist       = FALSE;
+
+?>
+<script>
+$(function(){
+    if($('#form-cadastrar-artefato ul.tabsForm li#botao_aba7').hasClass('active')){
+        $(".btnfecharModalIntDest").attr('href','#modal-interessado');
+    }
+    if($('#form-cadastrar-artefato ul.tabsForm li#botao_aba5').hasClass('active')){
+        $(".btnfecharModalIntDest").attr('href','#modal-destinatario');
+    }
+});
+</script>
+
+<div class="modal-header">
+    <a href="#" class="close btnfecharModalIntDest" data-toggle="modal"
+        title="Fechar" data-dismiss="modal">×</a>
+	<h3>Visualizar Pessoa Jurídica</h3>
+</div>
+<div class="modal-body">
+	<div class="row-fluid">
+		<form class="form-horizontal visualizar">
+			<div class="control-group">
+				<label class="control-label" for="cpf">CNPJ</label>
+				<div class="controls">
+					<span class="checkbox inline"><?php echo $this->maskNumber($this->entity->getNuCnpj(),'cnpj');?>
+					</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="cpf">Razão Social</label>
+				<div class="controls">
+					<span class="checkbox inline"><?php echo $this->entity->getNoPessoa();?>
+					</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="cpf">Nome Fantasia</label>
+				<div class="controls">
+					<span class="checkbox inline"><?php echo $this->entity->getNoFantasia();?>
+					</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="cpf">Inscrição Estadual</label>
+				<div class="controls">
+					<?php
+                        foreach($this->entity->getSqDocumento() as $documento) {
+                            echo '<span class="checkbox inline">' . $documento->getTxValor() . '</span>';
+                        }
+					?>
+				</div>
+			</div>
+			<fieldset>
+				<legend>Endereço</legend>
+				<?php $complemento = $this->endereco->getTxComplemento() ? $this->endereco->getTxComplemento() : '';?>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Tipo de Endereço</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getSqTipoEndereco()->getNoTipoEndereco(); ?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">CEP</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getSqCep();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Logradouro</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getTxEndereco();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Complemento</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getTxComplemento();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Número</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getNuEndereco();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Bairro</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getNoBairro();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">UF</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getSqMunicipio()->getSqEstado()->getNoEstado();?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Município</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->endereco->getSqMunicipio()->getNoMunicipio();?>
+						</span>
+					</div>
+				</div>
+			</fieldset>
+			<?php
+			$exist = TRUE;
+                   ?>
+			<?php if(isset($this->matrizFilial[0][0])) { ?>
+			<fieldset>
+				<legend>Matriz</legend>
+				<div class="control-group">
+					<label class="control-label" for="cpf">CNPJ</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo preg_replace($regex, $replacement, $this->matrizFilial[0][0]->getNuCnpj());?>
+						</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="cpf">Razão Social</label>
+					<div class="controls">
+						<span class="checkbox inline"><?php echo $this->matrizFilial[0][0]->getNoPessoa(); ?>
+						</span>
+					</div>
+				</div>
+			</fieldset>
+			<?php
+			$exist = TRUE;
+                        } ?>
+			<?php if(isset($this->matrizFilial[1])) {
+			    $exist = TRUE;
+			    ?>
+			<fieldset>
+				<legend>Filiais</legend>
+				<table
+					class="table table-bordered table-striped table-condensed table-hover">
+					<thead>
+						<tr>
+							<th>CNPJ</th>
+							<th>Razão Social</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						foreach($this->matrizFilial as $key => $value) {
+        if($key !== 0) {
+            $concat = array();
+
+            if($this->sqPessoa == $value[0]->getSqPessoa()->getSqPessoa()) {
+                $concat['nuCnpj']   = "<b>" . preg_replace($regex, $replacement, $value[0]->getNuCnpj()) . "</b>";
+                $concat['noPessoa'] = "<b>filial " . $key . " - " . $value[0]->getNoPessoa() . "</b>";
+            } else {
+                $concat['nuCnpj']   = preg_replace($regex, $replacement, $value[0]->getNuCnpj());
+                $concat['noPessoa'] = "filial " . $key . " - " . $value[0]->getNoPessoa();
+            }
+            ?>
+						<tr>
+							<td><?php echo $concat['nuCnpj']; ?></td>
+							<td><?php echo $concat['noPessoa']; ?></td>
+						</tr>
+						<?php
+        }
+    }
+    ?>
+					</tbody>
+				</table>
+			</fieldset>
+			<?php }
+			if($exist == FALSE){
+echo 'Dados não Cadastrados no Corporativo.';
+}
+?>
+		</form>
+	</div>
+</div>
+<div class="row-fluid"></div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-primary btnfecharModalIntDest"
+        data-toggle="modal" data-dismiss="modal">Fechar</a>
+</div>

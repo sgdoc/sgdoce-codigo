@@ -1,0 +1,273 @@
+<?php
+    $params = array(
+        'new'       => $this->new,
+        'data'      => $this->data,
+        'user'      => $this->user,
+        'listaPais' => $this->listaPais,
+        'dataPost'  => $this->dataPost,
+        'sqPessoaSgdoce' => $this->sqPessoaSgdoce,
+        'listaDocumentos' => $this->listaDocumentos,
+        'txInformacaoComplementar' => $this->txInformacaoComplementar,
+        'campoPessoa' => $this->campoPessoa,
+        'campoCpf' => $this->campoCpf,
+        'form' => $this->form
+    );
+?>
+
+<ul class="nav nav-tabs" id="tabPessoaFisica">
+    <li class="active"><a href="#tab-dados-basicos" data-toggle="tab">Dados Básicos</a></li>
+    <li><a href="#tab-documentos" data-toggle="tab">Documentos</a></li>
+    <li><a href="#tab-enderecos" data-toggle="tab">Endereços</a></li>
+    <li><a href="#tab-contatos" data-toggle="tab">Contatos</a></li>
+</ul>
+    <input type="hidden" id="pessoa" value="<?php echo $this->pessoa;?>">
+<div class="tab-content">
+    <div class="top-bar">
+        <p class="requiredLegend pull-left">Campos obrigatórios <span class="required">*</span></p>
+    </div>
+
+    <br/>
+
+    <!-----Dados Básicos------>
+    <div class="tab-pane active" id="tab-dados-basicos">
+        <?php echo $this->partial('/pessoa-fisica/partial/dados-basicos.phtml', $params); ?>
+    </div>
+
+    <!-----DOCUMENTOS------>
+    <div class="tab-pane" id="tab-documentos">
+        <?php echo $this->partial('/pessoa-fisica/partial/documentos.phtml', $params); ?>
+    </div>
+
+    <!-----ENDEREÇOS------>
+    <div class="tab-pane" id="tab-enderecos">
+        <?php echo $this->partial('/pessoa-fisica/partial/enderecos.phtml', $params); ?>
+    </div>
+
+    <!-----CONTATO------>
+    <div class="tab-pane" id="tab-contatos">
+        <?php echo $this->partial('/pessoa-fisica/partial/contato-telefone.phtml', $params); ?>
+        <?php echo $this->partial('/pessoa-fisica/partial/contato-email.phtml', $params); ?>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-actions">
+            <a href="#" class="btn disabled btn-nav btn-prev" data-toggle="tab"><i class="icon-chevron-left"></i> Anterior</a>
+            <a href="#" class="btn btn-primary btn-nav btn-next" data-toggle="tab">Próxima <i class="icon-chevron-right icon-white"></i></a>
+            <a class="btn btn-concluir" id="btnConcluir">Concluir</a>
+            <a class="btn" id="btnIntegrationInfoconv"><i class="icon-receita"></i> Sincronizar RF</a>
+            <a href="#" class="btn btn-fechar-janela"><i class="icon-remove"></i> Cancelar</a>
+            <!-- Gatilho para modal -->
+            <a class="btn btn-modal hide" data-toggle="modal"></a>
+        </div>
+    </div>
+</div>
+
+<!--MODAL CONCLUIR-->
+<div class="modal fade hide" id="modalConcluir">
+    <div class="modal-header">
+        <a class="btn-fechar-concluir close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Operação realizada com sucesso.</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" role="button" class="btn btn-primary btn-fechar-concluir">Fechar</a>
+    </div>
+</div>
+
+<!--MODAL UPLOAD-->
+<div class="modal fade hide" id="modalUpload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Upload</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Upload em andamento. Por favor aguarde!</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" role="button" class="btn btn-primary btn-fechar-concluir">Fechar</a>
+    </div>
+</div>
+
+<!--MODAL AUTORIZAR ASSINATURA-->
+<div class="modal fade hide" id="modalCpf">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>O CPF informado já existe. Deseja alterar as informações?</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-toggle="modal">Sim</a>
+        <a href="#" class="btn" data-dismiss="modal"><i class="icon-remove"></i> Não</a>
+    </div>
+</div>
+
+<!--MODAL NOME PESSOA-->
+<div class="modal fade hide" id="modalNomePessoa">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Confirmação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>O Nome informado já existe. Deseja alterar as informações?</p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-toggle="modal">Sim</a>
+        <a href="#" class="btn" data-dismiss="modal"><i class="icon-remove"></i> Não</a>
+    </div>
+</div>
+
+<?php
+    $hasCadastroSemCpf = false;
+    $disabled          = null;
+
+    if(
+        $this->data
+        && $this->data->getSqPessoaFisica()
+        && $this->data->getSqPessoaFisica()->getSqCadastroSemCpf()->getSqCadastroSemCpf()
+    ) {
+        $disabled          = ' readonly="readonly" disabled="disabled"';
+        $hasCadastroSemCpf = $this->data->getSqPessoaFisica()->getSqCadastroSemCpf();
+    }
+?>
+
+<!--MODAL ADICIONAR DOCUMENTO-->
+<div class="modal hide fade" id="modalDocumento"></div>
+
+<?php if($hasCadastroSemCpf) { ?>
+<!--MODAL JUSTIFICATIVA CPF-->
+<div class="modal hide fade" id="modalJustificativa">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Visualizar Justificativa</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Você, <?php echo $this->user['name'] ?>, está cadastrando uma pessoa no ambiente corporativo do ICMBio sem o número do CPF. Esta informação será registrada para análise posterior.</p>
+                    <br/>
+                    <div class="control-group">
+                        <label class="control-label">Autorizado por</label>
+                        <div class="controls">
+                            <input type="text" class="span8" value="<?php echo $hasCadastroSemCpf->getSqPessoaAutoriza()->getSqPessoaFisica()->getNoPessoaFisica();?>" <?php echo $disabled; ?> />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">CPF do Usuário Interno</label>
+                        <div class="controls">
+                            <input type="text" class="span8 obrigatorio cpf" mask="cpf" value="<?php echo $hasCadastroSemCpf->getSqPessoaAutora()->getSqPessoaFisica()->getNuCpf();?>" <?php echo $disabled; ?> />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Nome do Usuário Interno</label>
+                        <div class="controls">
+                            <input type="text" maxlength="32" class="span8" value="<?php echo $hasCadastroSemCpf->getSqPessoaAutora()->getNoPessoa(); ?>" <?php echo $disabled; ?> />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Justificativa</label>
+                        <div class="controls">
+                            <textarea class="span11" rows="4" <?php echo $disabled; ?>><?php echo $hasCadastroSemCpf->getTxJustificativa(); ?></textarea>
+                            <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-fechar-justificativa" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>
+<?php } else { ?>
+<!--MODAL JUSTIFICATIVA CPF-->
+<div class="modal hide fade" id="modalJustificativa">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Fechar">×</a>
+        <h3>Autorizar Justificativa</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <form class="form-horizontal">
+                <fieldset>
+                    <p>Você, <?php echo $this->user['name'] ?>, está cadastrando uma pessoa no ambiente corporativo do ICMBio sem o número do CPF.</p>
+<!--                     <p id="labelInformarSenha">Favor informar "Login" e "Senha" do Chefe do setor para autorização da justificativa.</p> -->
+                    <br/>
+<!--                     <div id="divCredenciais"> -->
+<!--                         <div class="control-group"> -->
+<!--                             <label class="control-label" for="sqResponsavel" > -->
+<!--                                 <span class="required" title="Required field">*</span> Responsável -->
+<!--                             </label> -->
+<!--                             <div class="controls"> -->
+<!--                                 <select id="sqResponsavel" name="sqResponsavel" class="obrigatorio"> -->
+<!--                                     <option value="">Selecione uma opção</option> -->
+                                    <?php //foreach($this->comboDas as $key => $value): ?>
+<!--                                    <option value="<?php //echo $key; ?>"><?php echo $value; ?></option> -->
+                                    <?php //endforeach; ?>
+<!--                                 </select> -->
+                                <!--span class="help-block hide">Campo de preenchimento obrigatório.</span-->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <div class="control-group"> -->
+<!--                             <label class="control-label" for="nuCpfResponsavel"> -->
+<!--                                 <span class="required">*</span> Login -->
+<!--                             </label> -->
+<!--                             <div class="controls"> -->
+<!--                                 <input type="text" class="span8 obrigatorio cpf" mask="cpf" id="nuCpfResponsavel" name="nuCpfResponsavel" value="" /> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <div class="control-group"> -->
+<!--                             <label class="control-label" for="txSenhaResponsavel" > -->
+<!--                                 <span class="required">*</span>  Senha -->
+<!--                             </label> -->
+<!--                             <div class="controls"> -->
+<!--                                 <input type="password" maxlength="32" class="span8 obrigatorio" id="txSenhaResponsavel" name="txSenhaResponsavel" value="" /> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+                    <div class="control-group">
+                        <label class="control-label" for="justificativa">
+                            <span class="required" title="Required field">*</span> Justificativa
+                        </label>
+                        <div class="controls">
+                            <textarea name="txJustificativa" id="txJustificativa" class="span11 obrigatorio" rows="4"></textarea>
+                            <span class="help-block hide">Campo de preenchimento obrigatório.</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-concluir-salvar" id="btn-concluir-justificativa">Concluir</a>
+        <a href="#" class="btn btn-fechar-justificativa" data-dismiss="modal">Fechar</a>
+    </div>
+</div>
+<?php } ?>

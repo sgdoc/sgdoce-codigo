@@ -1,0 +1,208 @@
+<?php
+
+$view = $this;
+
+# @todo buscar no sicae.configuracao
+$arrTipoArtefato = $this->arrTipoArtefato;
+
+/* template do menu multiplas escolhas */
+$template['menu'] = '
+        <div class="btn-group pull-right ctn-action">
+        <button title="Opções" data-toggle="dropdown" class="btn btn-mini dropdown-toggle btnAcoesMult">
+            <i class="icon-cog"></i>
+        </button>
+        <ul class="dropdown-menu">%s</ul>
+    </div>';
+
+/* template do item de menu */
+$template['item'] = '<li><a data-sqArtefato-child="%%s" data-action="%s" data-sqartefato-parent="%%s" data-has-term="%%s" data-nuartefato="%%s" class="elmAction">%s</a></li>';
+
+/* textos usados no menu */
+$template['action']  = array(
+    'T_ANEXAR'              => array('label' => 'Anexar',       'action' => 'anexar'),
+    'T_ANEXAR_PROCESSO'     => array('label' => 'Anexar',       'action' => 'anexarProcesso'),
+    'T_APENSAR'             => array('label' => 'Apensar',      'action' => 'apensar'  ),
+    'T_APENSAR_PROCESSO'    => array('label' => 'Apensar',      'action' => 'apensarProcesso'  ),
+    'T_INSERIR_PECA'        => array('label' => 'Inserir Peça', 'action' => 'inserirPeca'),
+    'T_DESANEXAR'           => array('label' => 'Desanexar',    'action' => 'desanexar'),
+    'T_DESANEXAR_PROCESSO'  => array('label' => 'Desanexar',    'action' => 'desanexarProcesso'),
+    'T_DESAPENSAR'          => array('label' => 'Desapensar',   'action' => 'desapensar'),
+    'T_DESAPENSAR_PROCESSO' => array('label' => 'Desapensar',   'action' => 'desapensarProcesso'),
+    'T_REMOVER_PECA'        => array('label' => 'Remover Peça', 'action' => 'removerPeca'),
+);
+
+/*
+ * opcoes do menu
+ *
+ * [documento][documento][anexo: false][apenso: false][0] = anexar
+ * [documento][documento][anexo: false][apenso: false][1] = apensar
+ * */
+if($view->permissionAction[$template['action']['T_ANEXAR']['action']]){
+    $permission[$arrTipoArtefato['DOCUMENTO']][$arrTipoArtefato['DOCUMENTO']][/* false */ 0][/* false */ 0][0] = sprintf($template['item'], $template['action']['T_ANEXAR']['action'], $template['action']['T_ANEXAR']['label']);
+}
+if($view->permissionAction[$template['action']['T_APENSAR']['action']]){
+    $permission[$arrTipoArtefato['DOCUMENTO']][$arrTipoArtefato['DOCUMENTO']][/* false */ 0][/* false */ 0][1] = sprintf($template['item'], $template['action']['T_APENSAR']['action'], $template['action']['T_APENSAR']['label']);
+}
+/* [documento][documento][anexo: true][apenso: false][0] = apensar */
+if($view->permissionAction[$template['action']['T_DESANEXAR']['action']]){
+    $permission[$arrTipoArtefato['DOCUMENTO']][$arrTipoArtefato['DOCUMENTO']][/* true */ 1][/* false */ 0][0] = sprintf($template['item'], $template['action']['T_DESANEXAR']['action'], $template['action']['T_DESANEXAR']['label']);
+}
+/* [documento][documento][anexo: false][apenso: true][0] = apensar */
+if($view->permissionAction[$template['action']['T_DESAPENSAR']['action']]){
+    $permission[$arrTipoArtefato['DOCUMENTO']][$arrTipoArtefato['DOCUMENTO']][/* true */ 0][/* false */ 1][0] = sprintf($template['item'], $template['action']['T_DESAPENSAR']['action'], $template['action']['T_DESAPENSAR']['label']);
+}
+/*
+ * [processo][processo][anexo: false][apenso: false][0] = anexar
+ * [processo][processo][anexo: false][apenso: false][1] = apensar
+ *  */
+if($view->permissionAction[$template['action']['T_ANEXAR_PROCESSO']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['PROCESSO']][/* false */ 0][/* false */ 0][0] = sprintf($template['item'], $template['action']['T_ANEXAR_PROCESSO']['action'],  $template['action']['T_ANEXAR_PROCESSO']['label']);
+}
+if($view->permissionAction[$template['action']['T_APENSAR_PROCESSO']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['PROCESSO']][/* false */ 0][/* false */ 0][1] = sprintf($template['item'], $template['action']['T_APENSAR_PROCESSO']['action'], $template['action']['T_APENSAR_PROCESSO']['label']);
+}
+
+/* [processo][processo][anexo: true][apenso: false][0] = apensar */
+if($view->permissionAction[$template['action']['T_DESANEXAR_PROCESSO']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['PROCESSO']][/* true */ 1][/* false */ 0][0] = sprintf($template['item'], $template['action']['T_DESANEXAR_PROCESSO']['action'], $template['action']['T_DESANEXAR_PROCESSO']['label']);
+}
+/* [processo][documento][anexo: false][apenso: true][0] = apensar */
+if($view->permissionAction[$template['action']['T_DESAPENSAR_PROCESSO']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['PROCESSO']][/* true */ 0][/* false */ 1][0] = sprintf($template['item'], $template['action']['T_DESAPENSAR_PROCESSO']['action'], $template['action']['T_DESAPENSAR_PROCESSO']['label']);
+}
+
+/* [processo][processo][anexo: false][apenso: false][0] = inserir peça */
+if($view->permissionAction[$template['action']['T_INSERIR_PECA']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['DOCUMENTO']][/* true */ 0][/* false */ 0][0] = sprintf($template['item'], $template['action']['T_INSERIR_PECA']['action'], $template['action']['T_INSERIR_PECA']['label']);
+}
+/*
+ * [processo][processo][anexo: true][apenso: true][0] = remove peça
+ */
+if($view->permissionAction[$template['action']['T_REMOVER_PECA']['action']]){
+    $permission[$arrTipoArtefato['PROCESSO']][$arrTipoArtefato['DOCUMENTO']][/* true */ 0][/* true */ 1][0] = sprintf($template['item'], $template['action']['T_REMOVER_PECA']['action'], $template['action']['T_REMOVER_PECA']['label']);
+}
+
+$action = function ($row) use($arrTipoArtefato, $view, $template, $permission) {
+    
+    $arrSqArtefatoVinculo = array($row['sqArtefatoVinculo']);
+    
+    $iconUp = $view->actionButton('Subir', 'vGrid.up_row', $arrSqArtefatoVinculo, 'arrow-up');
+    $iconDown = $view->actionButton('Baixar', 'vGrid.down_row', $arrSqArtefatoVinculo, 'arrow-down');
+    
+    $options = array();
+    $arrBtn = array();
+
+    $isAttached = (integer) $row['isAnexado'];
+    $isLinked   = (integer) $row['isApensado'];
+
+    $source = $view->sqArtefatoTipoSource;
+    $target = $row['sqTipoArtefato'];
+    
+    //se o vinculo for de 1ª Peça não pode fazer nada
+    if($row['isPrimeiraPeca']){
+        $arrPerm = array();
+    } else {
+        $arrPerm = (
+                isset($permission[$source][$target]) &&
+                isset($permission[$source][$target][$isAttached][$isLinked])
+             )
+             ? $permission[$source][$target][$isAttached][$isLinked]
+             : array();
+    }
+    /* determina se havera preenchimento de termo de anexacao/desanexacao */
+    $hasTerm = ($arrTipoArtefato['PROCESSO'] == $view->sqArtefatoTipoSource) && ($target == $arrTipoArtefato['PROCESSO']);
+
+    if( $row['isVinculo'] && !$row['isPrimeiraPeca'] ) {        
+        $hasMoreThanOne = ($row['nuFvalue'] != $row['nuLvalue']);
+        // Posição 1 e 2 da listagem não tem opção de subir
+        if( $hasMoreThanOne && $row['nuLvalue'] != $row['nuOrdem'] ){
+            $arrBtn[] = $iconDown;
+        }        
+        if( $hasMoreThanOne ) {
+            
+            if( !$view->isProcesso && $row['nuOrdem'] != 1 ){
+                $arrBtn[] = $iconUp;
+            }     
+            // Posição 1 e 2 da listagem não tem opção de subir para processo
+            if( $view->isProcesso && !in_array($row['nuOrdem'], array(1,2)) ){
+                $arrBtn[] = $iconUp;
+            }
+        }            
+    }
+    
+    if (!$arrPerm) {
+        return $view->buttonGroup(join(' ', $arrBtn), 2);
+    }
+    
+    foreach ($arrPerm as $tpl) {
+        $nuArtefato = (!$row['nuDigital']) ? $row['nuArtefato'] : $row['nuDigital'];
+        $options[] = sprintf($tpl, $row['sqArtefato'], $view->params['sqArtefatoParent'], $hasTerm, $nuArtefato);
+    }
+    
+    $arrBtn[] = $view->actionButtonDropdown($options);
+    
+    return $view->buttonGroup(join(' ', $arrBtn), 3);
+};
+
+$isVinculo = function ($row) {
+    return $row['isVinculo'] ? 'Sim' : 'Não';
+};
+
+$nuDigital = function ($row) use ($view) {
+    return str_replace(
+        $view->params['nuArtefato'],
+        sprintf('<abbr title="termo encontrado"><strong>%s</strong></abbr>', $view->params['nuArtefato']),
+        $row['nuDigital']
+    );
+};
+
+$nuArtefato = function ($row) use ($view) {
+    return str_replace(
+        $view->params['nuArtefato'],
+        sprintf('<abbr title="termo encontrado"><strong>%s</strong></abbr>', $view->params['nuArtefato']),
+        $row['nuArtefato']
+    );
+};    
+
+$checkbox = function ($row) use($arrTipoArtefato, $view, $template, $permission) {
+    $source = $view->sqArtefatoTipoSource;
+    $target = $row['sqTipoArtefato'];
+    $checkbox = "";
+    $nuArtefato = (!$row['nuDigital']) ? $row['nuArtefato'] : $row['nuDigital'];
+    
+    if( $row['sqTipoArtefato'] == \Core_Configuration::getSgdoceTipoArtefatoProcesso() ) {
+        if( $row['isVinculo'] ) {
+            $action = 'desapensarMultiProc';
+        } else {
+            $action = 'apensarMultiProc';
+        }
+        /* determina se havera preenchimento de termo de anexacao/desanexacao */
+        $hasTerm    = ($arrTipoArtefato['PROCESSO'] == $view->sqArtefatoTipoSource) && ($target == $arrTipoArtefato['PROCESSO']);
+        $input      = '<input name="vinculo[]" type="checkbox" data-sqArtefato-child="%s" data-action="%s" data-sqartefato-parent="%s" data-has-term="%s" data-nuartefato="%s" data-isvinculo="%s"  />';
+        $checkbox   = sprintf($input, $row['sqArtefato'], $action, $view->params['sqArtefatoParent'], $hasTerm, $nuArtefato, $row['isVinculo']);
+    } else {
+        $input      = '<input name="" type="checkbox" disabled="disabled" />';
+        $checkbox   = $input;
+    }
+    
+    return $checkbox;
+};
+    
+$configArray = array('columns'  => array(
+        array('column' => $checkbox),
+        array('column' => 'nuOrdem'),
+        array('column' => $nuDigital),
+        array('column' => $nuArtefato),
+        array('column' => 'noTipoDocumento'),
+        array('column' => 'txAssunto'),
+        array('column' => 'txMovimentacao'),
+        array('column' => $isVinculo),
+        array('column' => $action)
+    )
+);
+
+$parse = new \Core_Grid_Parse($configArray);
+$this->result['sEcho'] = $this->params['sEcho'];
+$data  = $parse->parse($this->result);
+
+echo json_encode($data);
