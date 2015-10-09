@@ -12,10 +12,10 @@
 ## Hosts
 
 ```
-sgodce.localhost     127.0.0.1
-sicae.localhost      127.0.0.1
-static.cdn.localhost 127.0.0.1
-ws.localhost         127.0.0.1
+127.0.0.1	sgdoce.localhost
+127.0.0.1	sicae.localhost
+127.0.0.1	static.cdn.localhost
+127.0.0.1	ws.localhost
 ```
 
 ## VHosts
@@ -24,7 +24,7 @@ ws.localhost         127.0.0.1
 
 ```xml
 <virtualHost *:80>
-    ServerName sgodce.localhost
+    ServerName sgdoce.localhost
     DocumentRoot /var/www/sgdoce-codigo/sgdoce/public
     ErrorLog /var/log/apache2/sgdoce.error.log
     CustomLog /var/log/apache2/sgdoce.log combined
